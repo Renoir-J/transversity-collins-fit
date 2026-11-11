@@ -54,6 +54,7 @@ jobs:
       - name: Snakemake closure, replicas and artifacts
         run: |
           snakemake --snakefile workflow/Snakefile --cores 2 --config run_dir=runs/ci mode=closure
+          python scripts/check_cached_workflow.py runs/ci
           python -m collinsflow.cli readiness > runs/ci/production-readiness.json && exit 1 || test "$?" -eq 2
       - name: Upload run evidence
         if: always()
