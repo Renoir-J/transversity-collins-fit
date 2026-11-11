@@ -77,7 +77,8 @@ def environment(root, julia):
     version = subprocess.run([julia, "--startup-file=no", "--version"], capture_output=True,
                              text=True, check=True, timeout=60).stdout.strip()
     details = {"python": platform.python_version(), "platform": platform.platform(), "julia": version,
-               "threads": {key: os.environ.get(key, "unspecified") for key in
+               # Numerical workers are explicitly launched with these values; the coordinator may differ.
+               "threads": {key: "1" for key in
                            ("JULIA_NUM_THREADS", "OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS")}}
     for name in ("requirements.lock", "numerics/Manifest.toml"):
         details[name] = file_hash(Path(root) / name) if (Path(root) / name).exists() else "MISSING"

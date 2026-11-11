@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from collinsflow.provenance import computational_sources
+from collinsflow.provenance import computational_sources, environment, digest, source_fingerprint, verify_receipt
 
 ROOT = Path(workflow.basedir).parent
 SPEC = json.loads((ROOT / "config/workflow.json").read_text())
@@ -14,6 +14,10 @@ CODE = [str(path) for path in computational_sources(ROOT)]
 rule all:
     input:
         f"{RUN}/receipts/products.json"
+    run:
+        # Always verify cached artifacts at the terminal target, even when no stage needs rebuilding.
+        verify_receipt(input[0], "synthetic_closure" if MODE == "closure" else "production",
+                       source_fingerprint(ROOT), digest(environment(ROOT, JULIA)))
 
 rule stage:
     input:
