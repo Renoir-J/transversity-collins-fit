@@ -56,7 +56,7 @@ def audit():
         present = [p for p in repo.rglob("*") if p.is_file() and ".git" not in p.parts
                    and "__pycache__" not in p.parts]
         for path in present:
-            if path.suffix in {".py", ".f", ".f90", ".cc", ".cpp", ".h", ".wl", ".wls", ".md"}:
+            if path.suffix.lower() in {".py", ".f", ".f90", ".cc", ".cpp", ".h", ".wl", ".wls", ".md"}:
                 payload = path.read_bytes()
                 files.append({"repo": name, "path": path.relative_to(repo).as_posix(),
                               "sha256_worktree": hashlib.sha256(payload).hexdigest(),

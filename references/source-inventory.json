@@ -1,5 +1,5 @@
 {
-  "audited_at": "2026-11-11T10:46:20.485883+00:00",
+  "audited_at": "2026-11-11T11:50:41.830883+00:00",
   "coverage_definition": "Inventory of acquired files; review scope is specified in code-review.json",
   "repositories": [
     {
@@ -3687,6 +3687,13 @@
     },
     {
       "repo": "hoppet",
+      "path": "src/dglap_objects.F90",
+      "sha256_worktree": "fe9044ab4e36f46a31237106d1c855691c65fc84e9bb8ea7653d4a008506bbe0",
+      "lines": 1782,
+      "bytes": 70447
+    },
+    {
+      "repo": "hoppet",
       "path": "src/evolution.f90",
       "sha256_worktree": "a60911cde9a543353130af27dbbb126eca73aab9a9bd8656004aa090436d2bd1",
       "lines": 943,
@@ -3782,6 +3789,13 @@
       "sha256_worktree": "c81bc0b8e0de2980b91cb611dc4ee658811aecedb4fae8112b02cd3cb9ecbc26",
       "lines": 319,
       "bytes": 12204
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/pdf_tabulate.F90",
+      "sha256_worktree": "c823272c580d4b2f5c1f55555bdd149f6b876aa627e5b2db382f1a2b749adc66",
+      "lines": 1983,
+      "bytes": 82894
     },
     {
       "repo": "hoppet",
@@ -4545,6 +4559,13 @@
       "sha256_worktree": "98ee034c0440ddc02479494cb71b1e10c68c7c0d9be6cdfa516e1d4ef6d4c6e8",
       "lines": 12,
       "bytes": 216
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/inc/pdf_tabulate_OrderNNN.F90",
+      "sha256_worktree": "d46f16aacad37775c2a5e008e85ca9414dbd17f1eccd5afbdbbb8a71a42d5dc6",
+      "lines": 226,
+      "bytes": 9890
     },
     {
       "repo": "hoppet",
