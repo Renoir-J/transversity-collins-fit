@@ -1,0 +1,43 @@
+import json
+from pathlib import Path
+from collinsflow.provenance import computational_sources, environment, digest, source_fingerprint, verify_receipt
+
+ROOT = Path(workflow.basedir).parent
+SPEC = json.loads((ROOT / "config/workflow.json").read_text())
+STAGES = {stage["id"]: stage for stage in SPEC["stages"]}
+MODE = config.get("mode", "closure")
+RUN = config.get("run_dir", "runs/closure")
+JULIA = config.get("julia", "julia")
+# Fingerprint file contents, not just mtimes: changing any code/config/fixture rebuilds descendants.
+CODE = [str(path) for path in computational_sources(ROOT)]
+
+rule all:
+    input:
+        f"{RUN}/receipts/products.json"
+    run:
+        # Always verify cached artifacts at the terminal target, even when no stage needs rebuilding.
+        verify_receipt(input[0], "synthetic_closure" if MODE == "closure" else "production",
+                       source_fingerprint(ROOT), digest(environment(ROOT, JULIA)))
+
+rule stage:
+    input:
+        parents=lambda w: [f"{RUN}/receipts/{parent}.json" for parent in STAGES[w.stage]["needs"]],
+        source=CODE
+    output:
+        receipt=f"{RUN}/receipts/{{stage}}.json"
+    wildcard_constraints:
+        stage="|".join(STAGES)
+    params:
+        mode=MODE,
+        run=RUN,
+        julia=JULIA,
+        root=str(ROOT)
+    threads: 1
+    resources:
+        mem_mb=2048
+    retries: 0
+    shell:
+        "cd {params.root:q} && OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 JULIA_NUM_THREADS=1 "
+        "python -m collinsflow.cli stage {wildcards.stage:q} --mode {params.mode:q} "
+        "--run-dir {params.run:q} --julia {params.julia:q}"
+

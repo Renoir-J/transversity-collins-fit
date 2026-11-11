@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-11",
+  "decision_id": "ADR-001",
+  "decision_status": "ACCEPTED_BY_USER",
+  "implementation_status": "CLOSURE_IMPLEMENTED_PRODUCTION_BLOCKED",
+  "architecture": {
+    "numerical_language": "Julia",
+    "orchestration_language": "Python",
+    "dag_runner": "Snakemake",
+    "numerical_python_callbacks": 0,
+    "job_granularity": "Complete fit, replica, chain or validation job, rather than individual predictions or quadrature nodes",
+    "julia_responsibilities": [
+      "parameter transformations and transversity/Collins input parametrizations",
+      "evolution-operator application and parameter-dependent evolution where required",
+      "SIDIS, SIA, hadron-in-jet and tensor-moment numerical adapters",
+      "quadrature, residuals, nuisance profiling, chi-square and normalized likelihood",
+      "validated derivatives, multistart optimization and uncertainty calculations"
+    ],
+    "python_responsibilities": [
+      "source retrieval, data normalization, validation receipts and reports",
+      "Snakemake dependency, resource, retry and update orchestration",
+      "legacy Python reference programs in isolated validation jobs"
+    ],
+    "symbolic_responsibilities": "Keep FeynFacet Wolfram/Mathematica and existing toolchain; version numerical coefficient exports for Julia",
+    "proposed_job_contract": {
+      "input": "Versioned JSON specification plus non-executable array artifacts with explicit dtype, shape, units and hashes",
+      "output": "Predictions, fit or validation arrays and a fresh atomic JSON receipt",
+      "numerical_api": [
+        "predict!(output, parameters, immutable_context)",
+        "objective(parameters, immutable_context)",
+        "value_and_gradient!(gradient, parameters, immutable_context)"
+      ],
+      "status": "Complete Julia job CLI implemented for finite-kernel synthetic closure; production admission blocked"
+    },
+    "runtime": "Linux or WSL2 Linux filesystem",
+    "precision": "Float64 reference; complex arithmetic where Mellin inversion requires it; reduced precision only after separate validation",
+    "environment_lock_requirements": [
+      "Julia Project.toml and Manifest.toml",
+      "Python/Snakemake environment lock",
+      "Fortran compiler, flags, BLAS and bridge build hash",
+      "container or complete environment digest"
+    ],
+    "parallelism": "Process-isolated legacy Fortran contexts by default; audit mutable SAVE state before sharing one library across Julia threads; cap BLAS/OpenMP threads per Snakemake job"
+  },
+  "fortran_policy": {
+    "reference_snapshot": "external/hoppet, pinned by references/source-inventory.json",
+    "upstream_checkout_mutation": false,
+    "development_location": "Future project-owned bridge or reviewed fork; keep the pinned upstream reference unchanged",
+    "module_actions": [
+      {
+        "id": "retain_evolution",
+        "action": "RETAIN",
+        "sources": [
+          "external/hoppet/src/evolution.f90",
+          "external/hoppet/src/runge_kutta.f90"
+        ],
+        "reason": "Retain the compiled evolution solver and stepper as a numerical reference; replacement requires profiling evidence and equivalence checks"
+      },
+      {
+        "id": "retain_convolution",
+        "action": "RETAIN",
+        "sources": [
+          "external/hoppet/src/convolution.f90",
+          "external/hoppet/src/interpolation.f90"
+        ],
+        "reason": "Retain existing grid, endpoint and distribution handling; Julia may apply an exported operator without reimplementing its construction"
+      },
+      {
+        "id": "retain_coupling",
+        "action": "RETAIN",
+        "sources": [
+          "external/hoppet/src/qcd_coupling.f90",
+          "external/hoppet/src/new_as.f90",
+          "external/hoppet/src/special_functions.f90"
+        ],
+        "reason": "Retain coupling, threshold and special-function behavior under the selected physics contract"
+      },
+      {
+        "id": "optimize_tabulation",
+        "action": "OPTIMIZE",
+        "sources": [
+          "external/hoppet/src/pdf_tabulate.F90",
+          "external/hoppet/src/streamlined_interface.f90"
+        ],
+        "symbols": [
+          "PreEvolvePdfTable",
+          "hoppetPreEvolve",
+          "hoppetCachedEvolve"
+        ],
+        "work": "Reuse pre-evolution and grid setup, build or export fixed evolution operators, batch initial distributions and evaluations, and reuse work buffers after profiling",
+        "qualification": "Cached evolution exists; exporting a transversity operator and a batched bridge is not yet implemented"
+      },
+      {
+        "id": "optimize_bridge_and_state",
+        "action": "OPTIMIZE",
+        "sources": [
+          "external/hoppet/src/streamlined_interface.f90",
+          "external/hoppet/src/hoppet.h"
+        ],
+        "work": "Add a narrow ISO_C_BINDING/bind(C) bridge with explicit shapes, ownership, errors and context isolation; do not pass AD dual numbers to a Float64 ABI",
+        "qualification": "The current streamlined interface has module SAVE state; concurrent shared-context calls are not assumed safe"
+      },
+      {
+        "id": "reconstruct_missing_physics",
+        "action": "RECONSTRUCT_JULIA",
+        "sources": [],
+        "missing_source": "KPSY15 author-modified HOPPET and original fitting program have not been located",
+        "work": "Implement the paper-defined transversity kernels, chosen Collins collinear evolution approximation and their Julia operator adapters as reconstruction, with independent analytic and numerical checks",
+        "qualification": "Do not identify upstream polarized evolution with the missing transversity modification, or reuse a transversity kernel for Collins evolution without justification"
+      },
+      {
+        "id": "conditional_hotspot_rewrite",
+        "action": "CONDITIONAL_REWRITE_JULIA",
+        "sources": [
+          "external/hoppet/src/evolution.f90",
+          "external/hoppet/src/convolution.f90",
+          "external/hoppet/src/interpolation.f90"
+        ],
+        "trigger": "A measured hotspot or required unsupported derivative remains after cache, batching and allocation improvements",
+        "work": "Replace only the isolated hotspot behind the same API; retain the original backend for A/B validation and rollback",
+        "acceptance": "G2, G2AD, G2PERF and G3 must pass; record either a measured end-to-end benefit or a documented derivative/maintenance benefit within the frozen performance budget"
+      }
+    ],
+    "new_julia_modules": [
+      "parametrizations",
+      "process_adapters",
+      "operator_application",
+      "likelihood",
+      "inference"
+    ],
+    "compiler_policy": "Record optimization flags; do not enable fast-math or reduced precision by default; validate any reassociation or precision change separately"
+  },
+  "evolution_derivatives": {
+    "preferred_route": "When the evolution settings are fixed, construct h(Q;theta)=U(Q,Q0)h0(theta) and apply U in generic Julia arithmetic",
+    "jvp": "delta_h=U*delta_h0",
+    "vjp": "cotangent_h0=transpose(U)*cotangent_h for real discretized distributions",
+    "fixed_operator_conditions": [
+      "alpha_s",
+      "Q0",
+      "heavy-flavor thresholds and matching",
+      "evolution scales",
+      "kernel, scheme and perturbative order",
+      "grid and interpolation"
+    ],
+    "parameter_dependent_operator": "If any operator setting is fitted, include (dU/dtheta)*h0 using a validated sensitivity or derivative implementation; never silently stop that gradient or freeze the operator",
+    "fallback": "A foreign-function operation must supply and validate backend-compatible derivative rules; finite differences can be a named reference or temporary optimizer route, not misreported as AD",
+    "higher_order": "First-order custom rules do not establish Hessian support; validate Hessian-vector products independently before covariance uses them"
+  },
+  "automatic_differentiation": {
+    "initial_candidate": "ForwardDiff for the small-parameter generic Julia implementation",
+    "other_candidates": [
+      "Enzyme",
+      "appropriate reverse-mode backend after mutation and API compatibility checks"
+    ],
+    "backend_selection": "Compare correctness, gradient wall time and allocation on the same parameter fixtures; no unmeasured winner",
+    "foreign_code": "ForwardDiff does not automatically differentiate Fortran; Enzyme differentiation of foreign source requires a compatible LLVM/compiler route or explicit rules, not merely a compiled shared library",
+    "quadrature": "Use validated fixed nodes for the optimizer where suitable; compare against independent adaptive/high-precision integration and node refinement",
+    "type_policy": "Parametrizations, buffers and arithmetic must accept AD-compatible numeric types; isolate fixed Float64 foreign calls outside the differentiable operator application"
+  },
+  "validation": {
+    "settings_status": "PROPOSED_ENGINEERING_SETTINGS_TO_CALIBRATE_AND_FREEZE_AFTER_PILOT",
+    "policy": "Pilot calibration is explicit and versioned; production gates use a frozen policy hash; an agent cannot relax a failed gate",
+    "fixtures": {
+      "seed": 20261111,
+      "parameter_points_min": 12,
+      "directions_per_point_min": 8,
+      "coverage": [
+        "published or reconstructed baseline",
+        "valid randomized interior parameters",
+        "small-x and large-x endpoints",
+        "scale and flavor-threshold neighborhoods",
+        "small asymmetries and cancellation",
+        "SIDIS, SIA, STAR 200/510 and lattice moments",
+        "nuisance and parameter-dependent covariance when used"
+      ],
+      "parameter_coordinates": "Dimensionless unconstrained coordinates with fixed documented scales/transforms; include the transform Jacobian in all derivatives",
+      "data_status": "Fixtures require normalized data or explicitly labeled analytic/synthetic cases; none are claimed executed here"
+    },
+    "physics": {
+      "gate": "G2",
+      "point_max_abs_asymmetry": 0.0001,
+      "point_max_sigma_fraction": 0.05,
+      "point_rule": "Both bounds must hold for available experimental bins; zero-sigma or non-data fixtures need explicit observable-specific bounds",
+      "delta_chi2_refinement_max": 0.1,
+      "checks": [
+        "same-contract Fortran/Julia or independent-route predictions",
+        "grid, scale-step and quadrature convergence",
+        "analytic kernel moments and independent x-space/Mellin evolution in matching domains",
+        "spin signs, flavor order, z and mass factors, units and bin integration",
+        "selected-order Soffer treatment and input constraints",
+        "tensor-charge moments including scale dependence, never spurious charge conservation",
+        "Collins evolution approximation explicitly separate from transversity",
+        "cache reuse versus clean recomputation after changing every dependency"
+      ],
+      "baseline_qualification": "KPSY15 is a reconstruction until the missing code is recovered; do not require JAM Gaussian/log-log predictions to equal a CSS model"
+    },
+    "gradients": {
+      "gate": "G2AD",
+      "comparison": "abs(d_AD-d_ref) <= atol + rtol*max(abs(d_AD),abs(d_ref)) in scaled coordinates",
+      "atol": 1e-06,
+      "rtol": 0.0001,
+      "central_difference_steps": [
+        0.01,
+        0.001,
+        0.0001,
+        1e-05,
+        1e-06
+      ],
+      "finite_difference_requirement": "Require a stable step-size plateau and a numerical integration error budget small enough for the derivative test; failure to resolve a plateau is not a pass",
+      "checks": [
+        "component and randomized directional derivatives of predictions and objective",
+        "independent AD backends where supported",
+        "U linearity, JVP/VJP directional checks and adjoint dot-product identity",
+        "gradients after quadrature and evolution-grid refinement",
+        "nuisance profiling and covariance normalization derivatives when applicable",
+        "Hessian-vector finite differences and symmetry if covariance uses a Hessian"
+      ],
+      "adjoint_dot_atol": 1e-10,
+      "adjoint_dot_rtol": 1e-08,
+      "refinement_rtol": 0.001,
+      "boundaries": "Use interior points or smooth unconstrained transforms; invalid-domain inputs must fail explicitly rather than be clipped into misleading derivatives"
+    },
+    "performance": {
+      "gate": "G2PERF",
+      "accuracy_matched": true,
+      "warmup_and_compilation_separate": true,
+      "warm_samples_min": 20,
+      "warm_summary": [
+        "median",
+        "p95",
+        "allocations",
+        "peak_memory"
+      ],
+      "workloads": [
+        "operator construction and cache-hit application separately",
+        "single prediction and all-bin objective",
+        "objective plus gradient",
+        "fixed-budget pilot optimization",
+        "replica throughput at fixed core count",
+        "posterior ESS per second if Bayesian mode is enabled"
+      ],
+      "controls": [
+        "same physics contract, data, parameters, tolerance, precision and seed",
+        "same hardware, compiler and BLAS settings",
+        "record cold start, package loading, JIT, I/O and warm execution separately",
+        "limit nested Julia/BLAS/OpenMP threads under Snakemake resources",
+        "separate same-algorithm language comparison from precomputation/algorithm improvements"
+      ],
+      "comparison_baseline": "Retained same-contract reference or uncached implementation; use Python only if physics and accuracy match; unavailable baselines remain N/A",
+      "warm_time_regression_fraction_max": 0.1,
+      "regression_rule": "Proposed 10% regression budget versus an established accepted baseline; freeze workload-specific time and memory limits after pilot. First implementation needs a calibrated absolute budget, not a fictitious speedup",
+      "full_fit_followup": "After G4, report end-to-end multistart/replica runtime and final fit agreement; a fast isolated kernel is insufficient evidence",
+      "report_status_here": "NOT_RUN"
+    },
+    "inference": {
+      "gates": [
+        "G3",
+        "G4",
+        "G5"
+      ],
+      "checks": [
+        "noise-free recovery and noisy pseudoexperiment coverage",
+        "misspecified-model and endpoint stress cases",
+        "same-data multistart agreement including alternate minima",
+        "backend changes preserve predictions, objective and physical moments within frozen numerical/statistical budgets",
+        "replica distribution or posterior agreement within sampling uncertainty rather than identical random trajectories",
+        "B3/B4 lattice pair and process holdouts retain original interpretation"
+      ]
+    },
+    "required_reports": [
+      "benchmark-report.json",
+      "cache-validation-report.json",
+      "gradient-validation-report.json",
+      "performance-report.json",
+      "performance-budget.json",
+      "closure-report.json"
+    ],
+    "report_state_here": "SPECIFICATION_ONLY_NOT_EXECUTED"
+  },
+  "references": [
+    {
+      "title": "Julia performance tips",
+      "url": "https://docs.julialang.org/en/v1/manual/performance-tips/"
+    },
+    {
+      "title": "Julia C/Fortran interface",
+      "url": "https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/"
+    },
+    {
+      "title": "ForwardDiff limitations",
+      "url": "https://juliadiff.org/ForwardDiff.jl/stable/user/limitations/"
+    },
+    {
+      "title": "Optimization.jl AD choices",
+      "url": "https://docs.sciml.ai/Optimization/stable/API/ad/"
+    },
+    {
+      "title": "Enzyme LLVM-based differentiation",
+      "url": "https://enzyme.mit.edu/"
+    },
+    {
+      "title": "Snakemake rules",
+      "url": "https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html"
+    }
+  ]
+}

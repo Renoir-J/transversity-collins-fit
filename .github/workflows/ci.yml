@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      JULIA_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v3.0.3
+        with:
+          version: '1.12.6'
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
+        with:
+          delete-old-caches: 'false'
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+          julia --project=numerics -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
+      - name: Source and data checks
+        run: |
+          ruff check src tests scripts/make_closure_fixture.py
+          python -m pytest -q
+          python scripts/plan_workflow.py validate
+          python scripts/check_repository.py
+          julia --project=numerics numerics/test/runtests.jl
+      - name: Fortran batch bridge
+        run: |
+          make -C fortran
+          julia --project=numerics numerics/bin/check_bridge.jl "$PWD/fortran/libcollins_operator.so" bridge-validation.json
+      - name: Snakemake closure, replicas and artifacts
+        run: |
+          snakemake --snakefile workflow/Snakefile --cores 2 --config run_dir=runs/ci mode=closure
+          python scripts/check_cached_workflow.py runs/ci
+          python -m collinsflow.cli readiness > runs/ci/production-readiness.json && exit 1 || test "$?" -eq 2
+      - name: Upload run evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: closure-validation-${{ github.sha }}
+          path: |
+            runs/ci
+            bridge-validation.json
+          retention-days: 30
+

@@ -1,0 +1,1610 @@
+{
+  "schema_version": 1,
+  "scope": "synthetic_closure",
+  "theory_version": "synthetic-algebra-v1",
+  "physics_qualification": "No real cross sections; workflow closure only",
+  "parameters": [
+    {
+      "name": "synthetic_hu",
+      "transform": "exp"
+    },
+    {
+      "name": "synthetic_hd",
+      "transform": "identity"
+    },
+    {
+      "name": "synthetic_Cfav",
+      "transform": "identity"
+    },
+    {
+      "name": "synthetic_Cunf",
+      "transform": "identity"
+    }
+  ],
+  "initial": [
+    -0.5108256237659907,
+    -0.2,
+    0.2,
+    -0.15
+  ],
+  "truth_theta": [
+    -0.3285040669720361,
+    -0.28,
+    0.24,
+    -0.19
+  ],
+  "independent_predictions": [
+    0.1948,
+    0.1899,
+    0.18474285714285713,
+    0.17936363636363636,
+    0.17379130434782608,
+    0.16805,
+    0.16215999999999997,
+    0.15613846153846153,
+    0.15,
+    0.14375714285714286,
+    0.1374206896551724,
+    0.13099999999999998,
+    0.12450322580645158,
+    0.11793749999999996,
+    0.11130909090909091,
+    0.1046235294117647,
+    0.059145555555555555,
+    0.06073711111111112,
+    0.06236809523809523,
+    0.0640331313131313,
+    0.06572777777777777,
+    0.06744833333333333,
+    0.0691916888888889,
+    0.07095521367521368,
+    0.07273666666666667,
+    0.07453412698412698,
+    0.076345938697318,
+    0.07817066666666667,
+    0.08000706093189963,
+    0.08185402777777777,
+    0.08371060606060607,
+    0.08557594771241829,
+    0.1948,
+    0.1899,
+    0.18474285714285713,
+    0.17936363636363636,
+    0.17379130434782608,
+    0.16805,
+    0.16215999999999997,
+    0.15613846153846153,
+    0.15,
+    0.14375714285714286,
+    0.1374206896551724,
+    0.13099999999999998,
+    0.12450322580645158,
+    0.11793749999999996,
+    0.11130909090909091,
+    0.1046235294117647,
+    0.1948,
+    0.1899,
+    0.18474285714285713,
+    0.17936363636363636,
+    0.17379130434782608,
+    0.16805,
+    0.16215999999999997,
+    0.15613846153846153,
+    0.15,
+    0.14375714285714286,
+    0.1374206896551724,
+    0.13099999999999998,
+    0.12450322580645158,
+    0.11793749999999996,
+    0.11130909090909091,
+    0.1046235294117647,
+    0.9473684210526315,
+    1.152
+  ],
+  "bins": [
+    {
+      "point_id": "synthetic_SIDIS:0",
+      "sign": 1,
+      "denominator": 1.0555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.0555555555555556
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.4444444444444444
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.0030864197530864196
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:1",
+      "sign": 1,
+      "denominator": 1.1111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.1111111111111112
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.3888888888888889
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.012345679012345678
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:2",
+      "sign": 1,
+      "denominator": 1.1666666666666667,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.1666666666666667
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.33333333333333337
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.027777777777777776
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:3",
+      "sign": 1,
+      "denominator": 1.2222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.2222222222222223
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.2777777777777778
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.04938271604938271
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:4",
+      "sign": 1,
+      "denominator": 1.2777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.2777777777777777
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.2222222222222222
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.0771604938271605
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:5",
+      "sign": 1,
+      "denominator": 1.3333333333333333,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.3333333333333333
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.16666666666666669
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.1111111111111111
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:6",
+      "sign": 1,
+      "denominator": 1.3888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.3888888888888888
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.1111111111111111
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.15123456790123457
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:7",
+      "sign": 1,
+      "denominator": 1.4444444444444444,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.4444444444444444
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.05555555555555558
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.19753086419753085
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:8",
+      "sign": 1,
+      "denominator": 1.5,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.5
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.0
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.25
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:9",
+      "sign": 1,
+      "denominator": 1.5555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.5555555555555556
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.05555555555555558
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.308641975308642
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:10",
+      "sign": 1,
+      "denominator": 1.6111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.6111111111111112
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.11111111111111116
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.37345679012345684
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:11",
+      "sign": 1,
+      "denominator": 1.6666666666666665,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.6666666666666665
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.16666666666666663
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.4444444444444444
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:12",
+      "sign": 1,
+      "denominator": 1.7222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.7222222222222223
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.2222222222222222
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.5216049382716049
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:13",
+      "sign": 1,
+      "denominator": 1.7777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.7777777777777777
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.2777777777777778
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.6049382716049383
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:14",
+      "sign": 1,
+      "denominator": 1.8333333333333335,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.8333333333333335
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.33333333333333337
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.6944444444444445
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIDIS:15",
+      "sign": 1,
+      "denominator": 1.8888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.8888888888888888
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.38888888888888884
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.7901234567901234
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:0",
+      "sign": 1,
+      "denominator": 1.0555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.0555555555555556
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.03333333333333333
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.0030864197530864196
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:1",
+      "sign": 1,
+      "denominator": 1.1111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.1111111111111112
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.06666666666666667
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.012345679012345678
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:2",
+      "sign": 1,
+      "denominator": 1.1666666666666667,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.1666666666666667
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.09999999999999999
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.027777777777777776
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:3",
+      "sign": 1,
+      "denominator": 1.2222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.2222222222222223
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.13333333333333333
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.04938271604938271
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:4",
+      "sign": 1,
+      "denominator": 1.2777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.2777777777777777
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.16666666666666666
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.0771604938271605
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:5",
+      "sign": 1,
+      "denominator": 1.3333333333333333,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.3333333333333333
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.19999999999999998
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.1111111111111111
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:6",
+      "sign": 1,
+      "denominator": 1.3888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.3888888888888888
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.23333333333333334
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.15123456790123457
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:7",
+      "sign": 1,
+      "denominator": 1.4444444444444444,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.4444444444444444
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.26666666666666666
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.19753086419753085
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:8",
+      "sign": 1,
+      "denominator": 1.5,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.5
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.3
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.25
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:9",
+      "sign": 1,
+      "denominator": 1.5555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.5555555555555556
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.3333333333333333
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.308641975308642
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:10",
+      "sign": 1,
+      "denominator": 1.6111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.6111111111111112
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.3666666666666667
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.37345679012345684
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:11",
+      "sign": 1,
+      "denominator": 1.6666666666666665,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.6666666666666665
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.39999999999999997
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.4444444444444444
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:12",
+      "sign": 1,
+      "denominator": 1.7222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.7222222222222223
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.4333333333333333
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.5216049382716049
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:13",
+      "sign": 1,
+      "denominator": 1.7777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.7777777777777777
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.4666666666666667
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.6049382716049383
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:14",
+      "sign": 1,
+      "denominator": 1.8333333333333335,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.8333333333333335
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.5
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.6944444444444445
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_SIA:15",
+      "sign": 1,
+      "denominator": 1.8888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 3,
+          "right": 3,
+          "weight": 1.8888888888888888
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "weight": -0.5333333333333333
+        },
+        {
+          "left": 4,
+          "right": 4,
+          "weight": 0.7901234567901234
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:0",
+      "sign": 1,
+      "denominator": 1.0555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.0555555555555556
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.4444444444444444
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.0030864197530864196
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:1",
+      "sign": 1,
+      "denominator": 1.1111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.1111111111111112
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.3888888888888889
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.012345679012345678
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:2",
+      "sign": 1,
+      "denominator": 1.1666666666666667,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.1666666666666667
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.33333333333333337
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.027777777777777776
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:3",
+      "sign": 1,
+      "denominator": 1.2222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.2222222222222223
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.2777777777777778
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.04938271604938271
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:4",
+      "sign": 1,
+      "denominator": 1.2777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.2777777777777777
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.2222222222222222
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.0771604938271605
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:5",
+      "sign": 1,
+      "denominator": 1.3333333333333333,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.3333333333333333
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.16666666666666669
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.1111111111111111
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:6",
+      "sign": 1,
+      "denominator": 1.3888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.3888888888888888
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.1111111111111111
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.15123456790123457
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:7",
+      "sign": 1,
+      "denominator": 1.4444444444444444,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.4444444444444444
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.05555555555555558
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.19753086419753085
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:8",
+      "sign": 1,
+      "denominator": 1.5,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.5
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.0
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.25
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:9",
+      "sign": 1,
+      "denominator": 1.5555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.5555555555555556
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.05555555555555558
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.308641975308642
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:10",
+      "sign": 1,
+      "denominator": 1.6111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.6111111111111112
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.11111111111111116
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.37345679012345684
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:11",
+      "sign": 1,
+      "denominator": 1.6666666666666665,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.6666666666666665
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.16666666666666663
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.4444444444444444
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:12",
+      "sign": 1,
+      "denominator": 1.7222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.7222222222222223
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.2222222222222222
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.5216049382716049
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:13",
+      "sign": 1,
+      "denominator": 1.7777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.7777777777777777
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.2777777777777778
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.6049382716049383
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:14",
+      "sign": 1,
+      "denominator": 1.8333333333333335,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.8333333333333335
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.33333333333333337
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.6944444444444445
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_200:15",
+      "sign": 1,
+      "denominator": 1.8888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.8888888888888888
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.38888888888888884
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.7901234567901234
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:0",
+      "sign": 1,
+      "denominator": 1.0555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.0555555555555556
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.4444444444444444
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.0030864197530864196
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:1",
+      "sign": 1,
+      "denominator": 1.1111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.1111111111111112
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.3888888888888889
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.012345679012345678
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:2",
+      "sign": 1,
+      "denominator": 1.1666666666666667,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.1666666666666667
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.33333333333333337
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.027777777777777776
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:3",
+      "sign": 1,
+      "denominator": 1.2222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.2222222222222223
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.2777777777777778
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.04938271604938271
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:4",
+      "sign": 1,
+      "denominator": 1.2777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.2777777777777777
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.2222222222222222
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.0771604938271605
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:5",
+      "sign": 1,
+      "denominator": 1.3333333333333333,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.3333333333333333
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.16666666666666669
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.1111111111111111
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:6",
+      "sign": 1,
+      "denominator": 1.3888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.3888888888888888
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.1111111111111111
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.15123456790123457
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:7",
+      "sign": 1,
+      "denominator": 1.4444444444444444,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.4444444444444444
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.05555555555555558
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.19753086419753085
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:8",
+      "sign": 1,
+      "denominator": 1.5,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.5
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": 0.0
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.25
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:9",
+      "sign": 1,
+      "denominator": 1.5555555555555556,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.5555555555555556
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.05555555555555558
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.308641975308642
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:10",
+      "sign": 1,
+      "denominator": 1.6111111111111112,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.6111111111111112
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.11111111111111116
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.37345679012345684
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:11",
+      "sign": 1,
+      "denominator": 1.6666666666666665,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.6666666666666665
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.16666666666666663
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.4444444444444444
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:12",
+      "sign": 1,
+      "denominator": 1.7222222222222223,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.7222222222222223
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.2222222222222222
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.5216049382716049
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:13",
+      "sign": 1,
+      "denominator": 1.7777777777777777,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.7777777777777777
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.2777777777777778
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.6049382716049383
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:14",
+      "sign": 1,
+      "denominator": 1.8333333333333335,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.8333333333333335
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.33333333333333337
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.6944444444444445
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_STAR_510:15",
+      "sign": 1,
+      "denominator": 1.8888888888888888,
+      "linear": [],
+      "bilinear": [
+        {
+          "left": 1,
+          "right": 3,
+          "weight": 1.8888888888888888
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "weight": -0.38888888888888884
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "weight": 0.7901234567901234
+        }
+      ]
+    },
+    {
+      "point_id": "synthetic_lattice:0",
+      "sign": 1,
+      "denominator": 1.0555555555555556,
+      "linear": [
+        {
+          "index": 1,
+          "weight": 1
+        },
+        {
+          "index": 2,
+          "weight": -1
+        }
+      ],
+      "bilinear": []
+    },
+    {
+      "point_id": "synthetic_lattice:1",
+      "sign": 1,
+      "denominator": 1.1111111111111112,
+      "linear": [
+        {
+          "index": 1,
+          "weight": 1
+        },
+        {
+          "index": 2,
+          "weight": -2
+        }
+      ],
+      "bilinear": []
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "architecture_decision": "ADR-001",
+  "production_ready": false,
+  "scheme": "MSbar",
+  "tensor_charge_scale_GeV": 2.0,
+  "asymmetry_unit": "fraction",
+  "primary_inference": "multistart_with_parametric_replicas",
+  "numerical_precision": "Float64",
+  "production_kernel": null,
+  "production_data": null,
+  "independent_physics_benchmark": null,
+  "frozen_production_policy": null,
+  "missing_prerequisites": [
+    "Historical KPSY reconstruction or recovered author code with independent benchmarks",
+    "Reviewed normalized experiment data with resolved overlap and covariance",
+    "Process-accurate bin-integrated SIDIS/SIA/STAR kernels and matching conventions",
+    "Validated Collins evolution approximation, separate from transversity",
+    "Independent integration and evolution refinement fixtures for each process",
+    "Pilot-calibrated frozen production gradient/performance/closure policy"
+  ],
+  "synthetic_profile": {
+    "scope": "synthetic_closure",
+    "data": "fixtures/closure/data.json",
+    "kernel": "fixtures/closure/kernel.json",
+    "seed": 20261111,
+    "replicas": 32,
+    "physics_results": false
+  }
+}
+

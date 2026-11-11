@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-11",
+  "normalized_for_production": false,
+  "required_fields": [
+    "source_publication",
+    "source_table",
+    "source_version",
+    "source_sha256",
+    "process",
+    "observable",
+    "hadron_species",
+    "target",
+    "units",
+    "central_value",
+    "statistical_error",
+    "systematic_components",
+    "covariance_status",
+    "bin_edges",
+    "bin_averages",
+    "cuts",
+    "angle_convention",
+    "depolarization_removed",
+    "event_sample_id",
+    "overlap_group",
+    "inclusion_reason"
+  ],
+  "policy": {
+    "missing_covariance": "record unavailable; use one disjoint projection for primary fit and alternatives as sensitivity studies",
+    "publication_update": "replace overlapping samples rather than append",
+    "lattice": "one independent basis per correlated ensemble; do not count delta_u, delta_d, and delta_u-d independently",
+    "preliminary": "excluded from primary final-data fit by default; separate exploratory scenario"
+  },
+  "datasets": [
+    {
+      "id": "KPSY15_baseline",
+      "paper": "1505.05589",
+      "processes": [
+        "SIDIS",
+        "SIA"
+      ],
+      "status": "paper specification read; exact original fitting code not located",
+      "role": "historical benchmark",
+      "new_since_KPSY15": false
+    },
+    {
+      "id": "HERMES2020",
+      "paper": "2007.07755",
+      "process": "SIDIS",
+      "status": "primary paper cached; JAM tables acquired, not yet normalized",
+      "role": "replace overlapping older HERMES bins",
+      "new_since_KPSY15": true,
+      "flags": [
+        "3D binning",
+        "depolarization convention",
+        "correlated projections"
+      ]
+    },
+    {
+      "id": "COMPASS_deuteron_2022_published",
+      "paper": "2401.00309",
+      "process": "SIDIS",
+      "status": "published partial-2022 sample; primary paper read; tables need normalization",
+      "role": "candidate update conditional on hadron-species model",
+      "new_since_KPSY15": true,
+      "flags": [
+        "unidentified charged hadrons",
+        "2022 partial sample overlaps complete sample"
+      ]
+    },
+    {
+      "id": "COMPASS_deuteron_2022_complete",
+      "paper": "2610.36224",
+      "process": "SIDIS",
+      "status": "preliminary conference result; primary paper read; numerical tables not verified",
+      "role": "exploratory replacement scenario only",
+      "new_since_KPSY15": true,
+      "replaces": "COMPASS_deuteron_2022_published",
+      "flags": [
+        "all results preliminary",
+        "full 2022 statistics",
+        "h+/- mixture required"
+      ]
+    },
+    {
+      "id": "BESIII_3650",
+      "paper": "1507.06824",
+      "process": "SIA",
+      "status": "primary paper cached; JAM table catalogue acquired",
+      "role": "low-Q candidate update",
+      "new_since_KPSY15": true,
+      "flags": [
+        "3.65 GeV",
+        "low-Q power corrections",
+        "hadron-frame observable",
+        "units and acceptance"
+      ]
+    },
+    {
+      "id": "Belle2019",
+      "paper": "1909.01857",
+      "process": "SIA",
+      "status": "primary paper and appendix tables read; machine normalization pending",
+      "role": "candidate update with supported pion channels",
+      "new_since_KPSY15": true,
+      "flags": [
+        "thrust axis vs hadron frame",
+        "overlap with earlier charged-pion samples",
+        "pi0 optional; eta requires new FF parameters"
+      ]
+    },
+    {
+      "id": "STAR_200",
+      "paper": "2205.11800",
+      "process": "pp_hadron_in_jet",
+      "sqrt_s_GeV": 200,
+      "status": "paper/cuts read; current official machine tables not imported",
+      "role": "main new jet constraint",
+      "flags": [
+        "2012 and 2015 samples",
+        "anti-kt R=0.6",
+        "DeltaR_h_min=0.05",
+        "combined results overlap component-year results",
+        "pT,z,jT projections correlated"
+      ]
+    },
+    {
+      "id": "STAR_510",
+      "paper": "2507.16355",
+      "process": "pp_hadron_in_jet",
+      "sqrt_s_GeV": 510,
+      "status": "paper and supplement read; HEPData cited by paper, record retrieval returned 403; tables not imported",
+      "role": "main high-energy new jet constraint",
+      "flags": [
+        "2017 sample",
+        "anti-kt R=0.5",
+        "0<eta<0.9",
+        "DeltaR_h_min=0.02",
+        "jT_max=min((0.0093+0.2982*z)*pTjet,2.5 GeV)",
+        "publication polarization uncertainty must be checked against official tables"
+      ]
+    },
+    {
+      "id": "lattice_Alexandrou2020",
+      "paper": "1909.00485",
+      "process": "tensor_charge",
+      "observable": "gT=u-d",
+      "value": 0.936,
+      "uncertainty": 0.025,
+      "scheme": "MSbar",
+      "mu_GeV": 2,
+      "status": "primary paper Table XI and JAM default selection identified; exact JAM xlsx cross-check pending",
+      "role": "historical lattice scenario",
+      "flags": [
+        "same ensemble flavor components correlated",
+        "JAM3D22 is phenomenology, not a lattice computation"
+      ]
+    },
+    {
+      "id": "lattice_alternatives",
+      "papers": [
+        "1806.09006",
+        "1805.10507",
+        "1903.06487"
+      ],
+      "process": "tensor_charge",
+      "status": "identified through JAM references; not all original numerical inputs reviewed",
+      "role": "alternative-ensemble sensitivity studies; no naive independent averaging"
+    }
+  ]
+}

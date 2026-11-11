@@ -1,0 +1,45 @@
+[
+  {
+    "title": "Project roadmap: transversity and Collins global-fit workflow",
+    "milestone": 0,
+    "labels": ["tracking"],
+    "body": "Accepted architecture: ADR-001, Julia numerical core with Python/Snakemake complete-job orchestration.\n\nMilestones: M0 reproducible runtime; M1 experimental data; M2 independently validated physics; M3 B0–B4 and V1 fits/products; M4 NLO matching.\n\nThe initial implementation must demonstrate a labeled synthetic closure run, gradients, nuisance covariance, multistart fitting, replicas, process holdouts, atomic receipts, update invalidation and Linux CI. It must not claim a KPSY reproduction or a real-data extraction.\n\nProduction remains blocked until all scientific admission criteria in config/physics-contract.json are met. Track concrete acceptance evidence in the linked milestone issues; CI artifacts retain run receipts and plots."
+  },
+  {
+    "title": "Implement and validate the Julia/Snakemake closure runtime",
+    "milestone": 0,
+    "labels": ["workflow", "validation", "status:todo"],
+    "body": "Deliver the Julia package, complete-job CLI, 12-stage Snakemake DAG, content-addressed cache, fail-closed scope-bound receipts, covariance/nuisance likelihood, AD checks, optimization, replicas, update planning and labeled products.\n\nAcceptance: Python and Julia tests pass; independent synthetic golden predictions, finite-difference gradient plateaus, HVP and operator adjoint checks; noise-free/noisy/misspecified pilot closure; multistart and replicas; Linux CI. A synthetic run does not satisfy production G2/G3. Include Fortran Float64 batch ABI validation; no AD through the foreign ABI."
+  },
+  {
+    "title": "Acquire and normalize current SIDIS, SIA and STAR measurements",
+    "milestone": 1,
+    "labels": ["data", "status:todo"],
+    "body": "Use config/data-registry.json and the public-paper/code source audit. Obtain machine-readable latest SIDIS/SIA, STAR 200 and 510 GeV measurements and original lattice inputs.\n\nAcceptance: immutable raw hashes and source/table/version; reviewed signs/depolarization and fraction conversion; all bin edges/cuts, hadron identities and jet definitions; resolved covariance and overlap. COMPASS full-2022 preliminary replaces partial-2022 when selected; never append both. Do not relabel unidentified h± as pions. Select disjoint primary projections if the joint covariance is unavailable."
+  },
+  {
+    "title": "Recover or independently reconstruct KPSY15 evolution and historical baseline",
+    "milestone": 2,
+    "labels": ["physics", "blocked:science"],
+    "body": "The original fitting program and author-modified HOPPET have not been located. Preserve that qualification. Public HOPPET polarized evolution is not the missing transversity implementation.\n\nAcceptance: paper-defined CSS approximate NLL-prime contract, separate transversity and chosen Collins evolution, alpha_s/threshold/grid conventions; analytic moments and independent x-space/Mellin comparisons; historical 262-point/13-parameter benchmark against published precision (chi² 218.407), with explicit reconstruction limits. Do not use JAM Gaussian/log-log predictions as identical KPSY goldens."
+  },
+  {
+    "title": "Build production bin-integrated process kernels and certify derivatives",
+    "milestone": 2,
+    "labels": ["physics", "validation", "blocked:science"],
+    "body": "Implement SIDIS, SIA, STAR200/510 and tensor-moment kernels behind the versioned numerical artifact contract. Compute ratio of integrated polarized/unpolarized cross sections; preserve flavor order, angle/spin, mass and z factors, jet axis/R and acceptance.\n\nAcceptance: independent integrations, grid/quadrature refinements, complete cache mutation tests, same-contract physics comparisons, gradient step-size plateaus and refinements, JVP/VJP and validated HVP; frozen G2/G2AD/G2PERF criteria. Fortran references remain pinned; optimize batching/state isolation before selective measured hotspot rewrites."
+  },
+  {
+    "title": "Run certified B0–B4 fits, uncertainty coverage and V1 sensitivity",
+    "milestone": 3,
+    "labels": ["physics", "validation", "blocked:science"],
+    "body": "Depends on production data and process/evolution admission. Run historical baseline, updated leptonic data, STAR200, STAR510, then paired no-lattice/with-lattice fits; V1 covers cuts, sea/endpoints, Soffer and nonperturbative assumptions.\n\nAcceptance: multistart convergence, replica stability and calibrated interval coverage, holdouts, truncated/full tensor charges with endpoint decomposition, grids, bin predictions, chi² breakdown, publication figures and a reproducible release manifest. Frequentist replicas are not posterior samples; no importance reweighting of replicas."
+  },
+  {
+    "title": "Match FeynFacet NLO hard functions to the hadron-in-jet observable",
+    "milestone": 4,
+    "labels": ["physics", "blocked:science"],
+    "body": "Retain FeynFacet Wolfram/toolchain and pinned coefficient exports. Inclusive transverse spin-transfer hard functions alone do not define the finite-R hadron-in-jet Collins observable.\n\nAcceptance: jet/matching/soft factors, subtraction and plus distributions, common numerator/denominator order and scales, spin normalization, regulator and finite-R/axis treatment; analytic cancellations and independent numerical checks. Follow FeynFacet readiness/check instructions before calculations. NLO remains a separate fit family until validated."
+  }
+]
+

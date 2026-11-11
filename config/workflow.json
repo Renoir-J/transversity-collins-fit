@@ -1,0 +1,369 @@
+{
+  "schema_version": 2,
+  "as_of": "2026-11-11",
+  "status": "CLOSURE_IMPLEMENTED_PRODUCTION_BLOCKED",
+  "objective": "Joint extraction of collinear quark transversity and pion Collins TMD fragmentation with SIDIS, e+e-, STAR hadron-in-jet, and optional lattice tensor-charge constraints.",
+  "execution": {
+    "coordinator": "Python",
+    "deterministic_runner": "Snakemake",
+    "numerical_backend": "Julia",
+    "architecture_decision": "ADR-001",
+    "numerical_specification": "config/numerical-backends.json",
+    "decision_document": "docs/numerical-workflow.md",
+    "job_boundary": "One Julia process per complete fit, replica, chain or validation job; no Python calls inside the numerical loop",
+    "symbolic_backend": "Retain FeynFacet Wolfram/Mathematica stages; export versioned numerical coefficients",
+    "legacy_backend": "Pinned Fortran reference libraries behind a C-interoperable interface; derivatives require an explicit validated route",
+    "physics_runtime": "Linux container or WSL2 Linux filesystem",
+    "agent_calls_in_optimizer": 0,
+    "agent_development_attempt_limit": 3
+  },
+  "scope": {
+    "default_hadrons": [
+      "pi+",
+      "pi-",
+      "pi0"
+    ],
+    "unidentified_hadrons": "Require a cross-section weighted mixture adapter; never relabel h+/- as pi+/-.",
+    "primary_inference": "multi-start optimization plus covariance-aware replicas",
+    "optional_inference": "Bayesian posterior after closure and prior sensitivity checks",
+    "not_yet_implemented": [
+      "process-accurate production theory adapters and KPSY reconstruction",
+      "HOPPET transversity/Collins operator builder and certified physics bridge",
+      "normalized latest experimental data with resolved covariance and overlaps",
+      "production gradient/performance/coverage certification",
+      "Bayesian posterior and importance reweighting execution",
+      "publication physics grids and figures"
+    ]
+  },
+  "conventions": {
+    "pdf_scheme": "MSbar",
+    "tensor_charge_mu_GeV": 2,
+    "collins_sign": "Explicit per-process and per-publication convention map",
+    "sidis_qT": "P_hT/z",
+    "jet_jT": "hadron momentum transverse to the published jet axis",
+    "collins_collinear_input": "renormalized twist-3 first-moment convention, with explicit z powers and mass factors",
+    "unit_of_asymmetry": "fraction"
+  },
+  "baselines": [
+    {
+      "id": "KPSY15",
+      "paper": "1505.05589",
+      "n_points": 262,
+      "n_parameters": 13,
+      "chi2": 218.407,
+      "confidence": "published tolerance bands; preserve original convention",
+      "evolution": "CSS approximate NLL-prime; modified HOPPET; original fit code not located"
+    },
+    {
+      "id": "JAM3D22",
+      "paper": "2205.00999",
+      "evolution": "Gaussian TMD plus log-log parameter dependence in released default branch; separate Mellin LO branch exists",
+      "use": "independent benchmark and data source; not KPSY replacement"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "B0",
+      "datasets": [
+        "legacy_sidis",
+        "legacy_sia"
+      ],
+      "lattice": false,
+      "purpose": "historical KPSY benchmark"
+    },
+    {
+      "id": "B1",
+      "datasets": [
+        "updated_sidis",
+        "updated_sia"
+      ],
+      "lattice": false,
+      "purpose": "new leptonic data impact"
+    },
+    {
+      "id": "B2",
+      "datasets": [
+        "updated_sidis",
+        "updated_sia",
+        "STAR_200"
+      ],
+      "lattice": false,
+      "purpose": "200 GeV jet impact"
+    },
+    {
+      "id": "B3",
+      "datasets": [
+        "updated_sidis",
+        "updated_sia",
+        "STAR_200",
+        "STAR_510"
+      ],
+      "lattice": false,
+      "purpose": "cross-energy universality and evolution"
+    },
+    {
+      "id": "B4",
+      "parent": "B3",
+      "lattice": true,
+      "purpose": "lattice impact, always paired with B3"
+    },
+    {
+      "id": "V1",
+      "parent": "B4",
+      "purpose": "cuts, sea, endpoint flexibility, Soffer and nonperturbative model sensitivity"
+    },
+    {
+      "id": "NLO",
+      "parent": "B3",
+      "purpose": "FeynFacet hard functions only after jet matching, subtraction, scale, and spin-convention checks"
+    }
+  ],
+  "update_policy": {
+    "new_nonoverlapping_data": "reweight only an actual posterior with unchanged likelihood, theory and priors; otherwise refit",
+    "replacement_data": "remove replaced likelihood before adding new; refit when original posterior information is inadequate",
+    "theory_or_prior_change": "new fit family; invalidate affected kernels and all downstream results",
+    "importance_ess_fraction_min": 0.3,
+    "ess_threshold_status": "initial engineering setting to calibrate with closure",
+    "replicas_are_not_posterior_samples": true
+  },
+  "gates": [
+    {
+      "id": "G0",
+      "condition": "source versions and scientific contract fixed"
+    },
+    {
+      "id": "G1",
+      "condition": "data units, signs, binning, covariance and overlap resolved"
+    },
+    {
+      "id": "G2",
+      "condition": "old benchmarks, two integration routes and parameter-change cache tests pass"
+    },
+    {
+      "id": "G2AD",
+      "condition": "scaled-parameter gradient checks, evolution JVP/VJP tests and numerical-refinement checks pass under frozen acceptance settings"
+    },
+    {
+      "id": "G2PERF",
+      "condition": "accuracy-matched cold and warm performance measurements, allocation and parallel-resource reports pass the pilot-frozen budget; unavailable comparisons are explicit"
+    },
+    {
+      "id": "G3",
+      "condition": "level-0 and level-1 closure plus misspecified-model stress test pass"
+    },
+    {
+      "id": "G4",
+      "condition": "multistart agreement and replica stability; or posterior convergence and calibration pass"
+    },
+    {
+      "id": "G5",
+      "condition": "all ablations, complete x-integral decomposition and process holdouts documented"
+    }
+  ],
+  "numerical_acceptance": {
+    "benchmark_point_max_abs_asymmetry": 0.0001,
+    "benchmark_point_max_sigma_fraction": 0.05,
+    "precision_rule": "satisfy both bounds; calibrate against source precision before freezing",
+    "delta_chi2_from_numerical_refinement_max": 0.1,
+    "posterior_rhat_max": 1.01,
+    "posterior_bulk_tail_ess_min": 1000,
+    "thresholds_status": "proposed acceptance settings, not claims from papers"
+  },
+  "stages": [
+    {
+      "id": "contract",
+      "gate": "G0",
+      "needs": [],
+      "outputs": [
+        "physics-contract.json",
+        "conventions.json"
+      ],
+      "owner": "physicist plus coordinator"
+    },
+    {
+      "id": "sources",
+      "needs": [
+        "contract"
+      ],
+      "outputs": [
+        "sources.lock.json",
+        "source-review.json"
+      ],
+      "owner": "retrieval and code audit"
+    },
+    {
+      "id": "data",
+      "needs": [
+        "sources"
+      ],
+      "outputs": [
+        "normalized-data",
+        "covariance",
+        "overlap-graph.json"
+      ],
+      "owner": "data adapter",
+      "gate": "G1"
+    },
+    {
+      "id": "theory",
+      "needs": [
+        "contract",
+        "sources"
+      ],
+      "outputs": [
+        "process-adapters",
+        "evolution-benchmarks"
+      ],
+      "owner": "theory implementation"
+    },
+    {
+      "id": "benchmark",
+      "needs": [
+        "data",
+        "theory"
+      ],
+      "outputs": [
+        "benchmark-report.json"
+      ],
+      "owner": "independent verifier",
+      "gate": "G2"
+    },
+    {
+      "id": "kernels",
+      "needs": [
+        "benchmark"
+      ],
+      "outputs": [
+        "content-addressed-kernels",
+        "evolution-operator-manifest.json",
+        "cache-validation-report.json"
+      ],
+      "owner": "Julia numerical runner with retained Fortran operator builder"
+    },
+    {
+      "id": "gradient_validation",
+      "needs": [
+        "benchmark",
+        "kernels"
+      ],
+      "outputs": [
+        "gradient-validation-report.json"
+      ],
+      "owner": "independent Julia gradient verifier",
+      "gate": "G2AD"
+    },
+    {
+      "id": "performance_validation",
+      "needs": [
+        "gradient_validation"
+      ],
+      "outputs": [
+        "performance-report.json",
+        "performance-budget.json"
+      ],
+      "owner": "controlled Julia and Fortran benchmark runner",
+      "gate": "G2PERF"
+    },
+    {
+      "id": "closure",
+      "needs": [
+        "performance_validation"
+      ],
+      "outputs": [
+        "closure-report.json"
+      ],
+      "owner": "independent verifier",
+      "gate": "G3"
+    },
+    {
+      "id": "fit",
+      "needs": [
+        "closure",
+        "kernels"
+      ],
+      "outputs": [
+        "best-fit",
+        "replicas-or-posterior",
+        "run-receipts"
+      ],
+      "owner": "deterministic numerical runner",
+      "gate": "G4"
+    },
+    {
+      "id": "ablate",
+      "needs": [
+        "fit"
+      ],
+      "outputs": [
+        "scenario-comparisons",
+        "cut-scans",
+        "process-holdouts"
+      ],
+      "owner": "deterministic numerical runner"
+    },
+    {
+      "id": "products",
+      "needs": [
+        "ablate"
+      ],
+      "outputs": [
+        "h1-grids",
+        "Collins-grids",
+        "tensor-charges",
+        "per-bin-predictions",
+        "figures",
+        "reproduction-package"
+      ],
+      "owner": "report builder",
+      "gate": "G5"
+    }
+  ],
+  "receipts": {
+    "required": [
+      "stage",
+      "input_hashes",
+      "code_commit",
+      "environment_digest",
+      "seed",
+      "started_at",
+      "completed_at",
+      "outputs",
+      "checks",
+      "architecture_decision",
+      "backend_versions",
+      "compiler_and_flags",
+      "precision",
+      "thread_and_process_counts",
+      "validation_policy_hash",
+      "status"
+    ],
+    "statuses": [
+      "PENDING",
+      "RUNNING",
+      "PASS",
+      "FAIL",
+      "BLOCKED"
+    ],
+    "atomic_write": true,
+    "fail_stops_descendants": true,
+    "failed_checks_cannot_be_relaxed_by_agent": true
+  },
+  "cache_key": [
+    "theory_version",
+    "scheme",
+    "spin_convention",
+    "perturbative_order",
+    "resummation_order",
+    "PDF_FF_set_and_member",
+    "all_scales",
+    "all_bins_and_cuts",
+    "jet_axis_and_R",
+    "quadrature",
+    "architecture_decision",
+    "backend_and_bridge_version",
+    "compiler_flags_and_precision",
+    "evolution_kernels_thresholds_and_initial_scale",
+    "AD_backend_and_derivative_rule_version",
+    "parameter_hash_if_parameter_dependent"
+  ]
+}

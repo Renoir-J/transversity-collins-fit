@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "AD_route": "Julia operator application",
+  "HOPPET_transversity_operator_builder": "NOT_IMPLEMENTED",
+  "scope": "synthetic_bridge_ABI",
+  "max_abs_error": 2.7755575615628914e-17
+}

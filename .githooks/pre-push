@@ -1,0 +1,9 @@
+#!/bin/sh
+branch=$(git symbolic-ref --short HEAD)
+if [ "$branch" = "main" ]; then
+  echo 'Push a feature branch and merge a passing PR. Bootstrap main is configured before enabling this hook.' >&2
+  exit 1
+fi
+python scripts/plan_workflow.py validate || exit 1
+python scripts/check_repository.py || exit 1
+

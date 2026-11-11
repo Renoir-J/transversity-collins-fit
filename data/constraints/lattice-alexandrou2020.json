@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "scope": "production",
+  "datasets": [
+    {
+      "id": "Alexandrou2020_isovector_tensor_cB211",
+      "publication": "arXiv:1909.00485v2",
+      "table": "Table XI / Table 11, cB211.072.64, isovector g_T",
+      "version": "v2",
+      "source_url": "https://arxiv.org/html/1909.00485v2",
+      "source_sha256": "05b17f0d379c29caae2ce4fab2fb100bfbd3a6349d207965218425b9d166d24b",
+      "covariance_status": "published_uncorrelated",
+      "selection_reason": "Use only the reported isovector charge; do not also add correlated u/d charges from this ensemble",
+      "overlap_group": "Alexandrou_cB211.072.64_tensor",
+      "reported_error_model": "Gaussian approximation to the quoted total one-sigma uncertainty; no u/d covariance inferred"
+    }
+  ],
+  "points": [
+    {
+      "id": "Alexandrou2020:gT_isovector",
+      "dataset_id": "Alexandrou2020_isovector_tensor_cB211",
+      "process": "lattice",
+      "hadron": "none",
+      "unit": "fraction",
+      "convention": "MSbar_mu_2GeV_integral_h1u_minus_h1ubar_minus_h1d_plus_h1dbar",
+      "value": 0.936,
+      "bins": {"mu_GeV": [2.0, 2.0]}
+    }
+  ],
+  "covariance": [[0.000625]],
+  "nuisance_design": [[]]
+}
+
