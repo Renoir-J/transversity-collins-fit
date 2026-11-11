@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-11",
+  "scope": "Eight public repositories inventoried at fixed commits. Close reading covers the fitting/evolution/observable/control-flow files listed below, not every notebook, historical variant, grid file or every third-party dependency. The SoLID projection candidate was checked remotely for provenance and excluded as an original KPSY implementation. No full physics fit or NLO derivation was reproduced.",
+  "primary": [
+    {
+      "repo": "FeynFacet",
+      "files": [
+        "AGENTS.md",
+        "README.md",
+        "docs/CONVENTIONS.md",
+        "Processes/HadronicTransfer/README.md",
+        "Processes/HadronicTransfer/4-Transfer.wl",
+        "Coefficients/README.md",
+        "Checks/run_process.py",
+        "Checks/validation-settings.wl",
+        "Checks/file_checksums.py"
+      ],
+      "read_depth": "documentation and runner fully; scientific stage and validation settings targeted",
+      "reuse": "fixed programs, fresh kernels, failure gates, receipts, coefficient normalization"
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "files": [
+        "fitlib/maxlike.py",
+        "fitlib/resman.py",
+        "fitlib/parman.py",
+        "tools/config.py",
+        "tools/reader.py",
+        "tools/residuals.py",
+        "qcdlib/core.py",
+        "qcdlib/pdf1.py",
+        "qcdlib/pdf2.py",
+        "qcdlib/ff1.py",
+        "qcdlib/ff2.py",
+        "qcdlib/kernels.py",
+        "qcdlib/dglap.py",
+        "obslib/sidis/collins0.py",
+        "obslib/sidis/residuals.py",
+        "obslib/sia/collins0.py",
+        "obslib/sia/residuals.py",
+        "obslib/moments/residuals.py",
+        "obslib/AN_pp/AN_theory0_hadinjet.py",
+        "obslib/AN_pp/residuals.py",
+        "database/AN_pp/README.md",
+        "database/lattice/README.md",
+        "JAM3D_Library.ipynb"
+      ],
+      "read_depth": "observable and moment formulas, dispatch and configuration branches inspected; large fitting and kernel files targeted"
+    },
+    {
+      "repo": "jam3dlib",
+      "files": [
+        "tmd.py",
+        "readme.md",
+        "data/input-JAM3D_2022.py"
+      ],
+      "read_depth": "wrapper fully; fit configuration targeted, including active step selections"
+    },
+    {
+      "repo": "jam3d",
+      "files": [
+        "fitlib/resman.py",
+        "obslib/sidis/collins0.py",
+        "obslib/sia/collins0.py",
+        "database/lattice/README.md"
+      ],
+      "read_depth": "historical core compared against dev library; inventory and selected core differences"
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "files": [
+        "README.md"
+      ],
+      "read_depth": "provenance checked; 2008 Torino implementation, not a KPSY15 fitter"
+    },
+    {
+      "repo": "hoppet",
+      "files": [
+        "README.md",
+        "src",
+        "docs/manual"
+      ],
+      "read_depth": "README and targeted transversity/Collins source search; no 2015 author-modified kernel located"
+    },
+    {
+      "repo": "PhysMaster",
+      "files": [
+        "README.md",
+        "core/supervisor.py",
+        "core/theoretician.py",
+        "core/mcts.py",
+        "prompts/critic_system_prompt.txt"
+      ],
+      "read_depth": "README fully and targeted core-loop, reward, termination and prompt inspection"
+    },
+    {
+      "repo": "tParton",
+      "files": [
+        "README.md",
+        "paper.md",
+        "src/tparton/m_evolution.py",
+        "src/tparton/t_evolution.py"
+      ],
+      "read_depth": "README and paper fully; evolution signatures, splitting functions and inverse Mellin implementation targeted",
+      "reuse": "independent transversity evolution candidate; not validated here and not the KPSY original"
+    }
+  ],
+  "findings": [
+    {
+      "id": "C1",
+      "status": "confirmed source behavior",
+      "path": "external/jam3d_dev_lib/fitlib/resman.py",
+      "line": 81,
+      "detail": "version defaults to 0; published wrapper config has no version override; selects pdf1/ff1. Separate version JAM20+ selects pdf2/ff2."
+    },
+    {
+      "id": "C2",
+      "status": "confirmed source and paper match",
+      "path": "external/jam3d_dev_lib/qcdlib/core.py",
+      "line": 13,
+      "detail": "default collinear scale dependence is log(log(Q2/lambda2)/log(Q20/lambda2)) added to shape parameters, not CSS TMD evolution or the separate Mellin solver."
+    },
+    {
+      "id": "C3",
+      "status": "reproduced with synthetic backend",
+      "path": "external/jam3d_dev_lib/obslib/AN_pp/residuals.py",
+      "line": 57,
+      "detail": "AUTCollins with both pT and eta specified has no computation branch; test observes KeyError for empty storage. Does not establish an error in published fitted results."
+    },
+    {
+      "id": "C4",
+      "status": "reproduced with synthetic backend",
+      "path": "external/jam3d_dev_lib/obslib/AN_pp/residuals.py",
+      "line": 79,
+      "detail": "cache membership tests four fields but writes and reads five; repeated identical evaluations recompute denominator. Complete bin cuts also must enter any replacement cache key."
+    },
+    {
+      "id": "C5",
+      "status": "confirmed convention",
+      "path": "external/jam3d_dev_lib/obslib/AN_pp/AN_theory0_hadinjet.py",
+      "line": 41,
+      "detail": "jperp2==0 means a jT-integrated observable; it must not be mapped to a physical differential jT=0 point."
+    },
+    {
+      "id": "C6",
+      "status": "confirmed convention",
+      "path": "external/jam3d_dev_lib/obslib/sidis/residuals.py",
+      "line": 83,
+      "detail": "COMPASS Collins sign includes -1; older HERMES uses depolarization factor whereas HERMES2020 branch does not. Per-publication metadata is required."
+    },
+    {
+      "id": "C7",
+      "status": "confirmed convention",
+      "path": "external/jam3d_dev_lib/obslib/sia/residuals.py",
+      "line": 93,
+      "detail": "non-BESIII outputs are multiplied by 100. Unit conversion cannot be inferred globally."
+    },
+    {
+      "id": "C8",
+      "status": "observed runtime failure",
+      "path": "external/FeynFacet/feynfacet.py",
+      "line": 21,
+      "detail": "Native Windows Python cannot import fcntl; Linux/WSL2 runtime needed before toolchain readiness can be assessed."
+    },
+    {
+      "id": "C9",
+      "status": "verified canonical source integrity",
+      "path": "references/source-inventory.json",
+      "detail": "402 FeynFacet Git blobs match SHA256SUMS; Windows CRLF accounts for all observed checkout hash differences."
+    },
+    {
+      "id": "C10",
+      "status": "public search unsuccessful, not proof of absence",
+      "paper": "1505.05589",
+      "detail": "Original KPSY minimizer scripts and authors' modified HOPPET not located. Upstream HOPPET and Torino parametrization are separate resources; numerical reconstruction should be labelled reconstruction."
+    }
+  ]
+}

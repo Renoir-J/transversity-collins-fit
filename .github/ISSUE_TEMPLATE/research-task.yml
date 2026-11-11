@@ -1,0 +1,23 @@
+name: Research or implementation task
+description: Track one reviewable scientific or software deliverable
+title: '[Task] '
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective and output
+      description: State a concrete deliverable and its scientific scope.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: Give independent references, numerical criteria, tests and required receipts.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and blockers
+

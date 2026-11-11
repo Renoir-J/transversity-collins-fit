@@ -1,0 +1,176 @@
+{
+  "retrieved_at": "2026-11-11T10:36:26.149742+00:00",
+  "papers": [
+    {
+      "arxiv": "1505.05589",
+      "version": "1505.05589v1",
+      "url": "https://arxiv.org/html/1505.05589v1",
+      "sha256": "65bfdfaa9b221741b9d724fd637f85f6595cb7ccfdeead1874963ab09e9e5cb2",
+      "bytes": 1239637,
+      "text_chars": 198570,
+      "status": "cached"
+    },
+    {
+      "arxiv": "1507.06824",
+      "version": "1507.06824v1",
+      "url": "https://arxiv.org/html/1507.06824v1",
+      "sha256": "8a4c7002f862622aee5bc4650a9e1255a88d09863582993757888d3606ea0789",
+      "bytes": 213277,
+      "text_chars": 26164,
+      "status": "cached"
+    },
+    {
+      "arxiv": "1707.00913",
+      "version": "1707.00913v1",
+      "url": "https://arxiv.org/html/1707.00913v1",
+      "sha256": "058a20eb093a4cd1092936b4efdf24f1c099ff8bd0dbe3368f106c221aa70064",
+      "bytes": 243967,
+      "text_chars": 42910,
+      "status": "cached"
+    },
+    {
+      "arxiv": "1909.00485",
+      "version": "1909.00485v2",
+      "url": "https://arxiv.org/html/1909.00485v2",
+      "sha256": "05b17f0d379c29caae2ce4fab2fb100bfbd3a6349d207965218425b9d166d24b",
+      "bytes": 436916,
+      "text_chars": 79378,
+      "status": "cached"
+    },
+    {
+      "arxiv": "1909.01857",
+      "version": "1909.01857v1",
+      "url": "https://arxiv.org/html/1909.01857v1",
+      "sha256": "c504675476ca540a426d294006330ebc19f93b4269d4502dd717c613f29c979b",
+      "bytes": 884429,
+      "text_chars": 97204,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2002.08384",
+      "version": "2002.08384v2",
+      "url": "https://arxiv.org/html/2002.08384v2",
+      "sha256": "6f2e8dcc69ec899f2ca55fab39d310a3989ecade3ed761102a37261603604732",
+      "bytes": 234110,
+      "text_chars": 27963,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2007.07755",
+      "version": "2007.07755v1",
+      "url": "https://arxiv.org/html/2007.07755v1",
+      "sha256": "16f52b92664f6367c93b3113a69e002eb7efdb3749f1e6d1c20d75e442ac0c2e",
+      "bytes": 1095216,
+      "text_chars": 218118,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2205.00999",
+      "version": "2205.00999v2",
+      "url": "https://arxiv.org/html/2205.00999v2",
+      "sha256": "469151f780683a90d3e18e43d74215e1af6bbdf3a724d3a59563450c9cdf42bb",
+      "bytes": 590158,
+      "text_chars": 90025,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2205.11800",
+      "version": "2205.11800v2",
+      "url": "https://arxiv.org/html/2205.11800v2",
+      "sha256": "b8274f773a9573ac8504ad7c9243750dc4d99a7b6fc20bcf5491092b7178ccf1",
+      "bytes": 621295,
+      "text_chars": 97138,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2401.00309",
+      "version": "2401.00309v1",
+      "url": "https://arxiv.org/html/2401.00309v1",
+      "sha256": "9ef05003da2e2ef6f92e036e57b7958909bfbef3e086ebdbc9985ce9c6b762da",
+      "bytes": 434121,
+      "text_chars": 31007,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2506.21959",
+      "version": "2506.21959v1",
+      "url": "https://arxiv.org/html/2506.21959v1",
+      "sha256": "203d2f631b3327ddd3c20fa9b8d96e6499a25848b4deb73c53336b165c248a96",
+      "bytes": 205530,
+      "text_chars": 31195,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2507.16355",
+      "version": "2507.16355v2",
+      "url": "https://arxiv.org/html/2507.16355v2",
+      "sha256": "80480e5e5449179a35fa207f12c51ffbc15becee420769b3b5d2dabd0b0e1d2b",
+      "bytes": 359627,
+      "text_chars": 37729,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2512.19799",
+      "version": "2512.19799v2",
+      "url": "https://arxiv.org/html/2512.19799v2",
+      "sha256": "3b1fedcda0c7c71623750d289a690f02c5008ee23b4b281d9c75ecc383fd9978",
+      "bytes": 436938,
+      "text_chars": 50636,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2603.22471",
+      "version": "2603.22471v1",
+      "url": "https://arxiv.org/html/2603.22471v1",
+      "sha256": "c514e1ca14c65f0545c24e1afc541956a47d2827085b36fe7775159597ba02ce",
+      "bytes": 165322,
+      "text_chars": 24727,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2603.26990",
+      "version": "2603.26990v1",
+      "url": "https://arxiv.org/html/2603.26990v1",
+      "sha256": "b8a26b78cbe87eab7b0dca28a7e3b9189a539a0264808f4679b1b88eef7f1688",
+      "bytes": 1433955,
+      "text_chars": 89908,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2609.35958",
+      "version": "2609.35958v1",
+      "url": "https://arxiv.org/html/2609.35958v1",
+      "sha256": "1ad854c95325758d1da9eba182d7f3eceddcacb2b6c1277b47f11db891f46c4c",
+      "bytes": 1414221,
+      "text_chars": 123613,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2610.16733",
+      "version": "2610.16733v1",
+      "url": "https://arxiv.org/html/2610.16733v1",
+      "sha256": "31453b517200f095f6c7f6c3de2af3b4422f9549b0c69b6e52472fdcc75722af",
+      "bytes": 1929264,
+      "text_chars": 203969,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2610.31745",
+      "version": "2610.31745v1",
+      "url": "https://arxiv.org/html/2610.31745v1",
+      "sha256": "d5f4d260d905c670031bd3b2f8ba7da535fd07b303f0b7a184a796b7c9334b41",
+      "bytes": 964401,
+      "text_chars": 154370,
+      "status": "cached"
+    },
+    {
+      "arxiv": "2610.36224",
+      "version": "2610.36224v1",
+      "url": "https://arxiv.org/html/2610.36224v1",
+      "sha256": "6ef61cb43bd9d32786280e7ed94c1be8b4802f715e32179c7ab85a49aac6f5d2",
+      "bytes": 91828,
+      "text_chars": 16101,
+      "status": "cached"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-11",
+  "decision_id": "ADR-001",
+  "status": "PASS_DESIGN_CHECKS_ONLY",
+  "architecture": {
+    "numerical_backend": "Julia",
+    "coordinator": "Python",
+    "dag_runner": "Snakemake"
+  },
+  "checks": {
+    "config_json_parse": "PASS",
+    "design_validation": "PASS",
+    "dependency_plan": "PASS",
+    "stages": 12,
+    "scenarios": 7,
+    "dataset_candidates": 10,
+    "negative_cases": [
+      {
+        "check": "reject_backend_mismatch",
+        "status": "PASS"
+      },
+      {
+        "check": "reject_fit_bypassing_validation",
+        "status": "PASS"
+      },
+      {
+        "check": "reject_wrong_gradient_gate",
+        "status": "PASS"
+      },
+      {
+        "check": "reject_missing_cache_report",
+        "status": "PASS"
+      },
+      {
+        "check": "reject_inner_loop_python_callback",
+        "status": "PASS"
+      },
+      {
+        "check": "reject_upstream_reference_mutation",
+        "status": "PASS"
+      }
+    ],
+    "fortran_reference_paths_exist": "PASS",
+    "page_saved_and_read_back": "PASS",
+    "page_previous_unmodified_blocks_preserved": 108,
+    "page_block_count": 123,
+    "page_native_layout_preview": "NOT_PERFORMED"
+  },
+  "commands": [
+    "python scripts/plan_workflow.py validate",
+    "python scripts/plan_workflow.py plan --target products",
+    "In-memory malformed-spec checks against scripts/plan_workflow.py:validate"
+  ],
+  "production_implementation": false,
+  "upstream_fortran_modified": false,
+  "physics_equivalence": "NOT_RUN",
+  "gradient_validation": "NOT_RUN",
+  "performance_benchmarks": "NOT_RUN",
+  "closure_and_fit": "NOT_RUN",
+  "threshold_status": "PROPOSED; pilot calibration and a frozen validation policy are required before production",
+  "research_page": "https://chatgpt.com/space/page_b154ab4fd11c819183553e02ea97830b"
+}

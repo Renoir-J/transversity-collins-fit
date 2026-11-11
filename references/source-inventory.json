@@ -1,0 +1,5222 @@
+{
+  "audited_at": "2026-11-11T10:46:20.485883+00:00",
+  "coverage_definition": "Inventory of acquired files; review scope is specified in code-review.json",
+  "repositories": [
+    {
+      "name": "FeynFacet",
+      "origin": "https://github.com/qcdphysics/FeynFacet.git",
+      "commit": "e68bc3b51517dce9342310315ec4d3fd49a12bc9",
+      "tracked_files": 403,
+      "materialized_files": 403,
+      "snapshot": "full",
+      "windows_reserved_source_omitted": []
+    },
+    {
+      "name": "jam3d",
+      "origin": "https://github.com/QCDHUB/jam3d.git",
+      "commit": "331f65606b2e33a511510be361021b7cff8ea410",
+      "tracked_files": 3570,
+      "materialized_files": 616,
+      "snapshot": "sparse; source and selected data only",
+      "windows_reserved_source_omitted": [
+        "qcdlib/aux.py"
+      ]
+    },
+    {
+      "name": "jam3d_dev_lib",
+      "origin": "https://github.com/pitonyak25/jam3d_dev_lib.git",
+      "commit": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "tracked_files": 11392,
+      "materialized_files": 650,
+      "snapshot": "sparse; source and selected data only",
+      "windows_reserved_source_omitted": [
+        "qcdlib/aux.py"
+      ]
+    },
+    {
+      "name": "jam3dlib",
+      "origin": "https://github.com/QCDHUB/jam3dlib.git",
+      "commit": "29b4b3515c429512ab7cdbc1db6ebc3ff2b741dc",
+      "tracked_files": 20,
+      "materialized_files": 20,
+      "snapshot": "full",
+      "windows_reserved_source_omitted": []
+    },
+    {
+      "name": "tmd-parametrizations",
+      "origin": "https://github.com/prokudin/tmd-parametrizations.git",
+      "commit": "bb99c27f0e1b7f80186013ca9e206153e1900346",
+      "tracked_files": 39,
+      "materialized_files": 39,
+      "snapshot": "full",
+      "windows_reserved_source_omitted": []
+    },
+    {
+      "name": "hoppet",
+      "origin": "https://github.com/hoppet-code/hoppet.git",
+      "commit": "feda4f2f64d0131f489ad1cf7728ec6be186cc56",
+      "tracked_files": 586,
+      "materialized_files": 315,
+      "snapshot": "sparse; source and selected data only",
+      "windows_reserved_source_omitted": []
+    },
+    {
+      "name": "PhysMaster",
+      "origin": "https://github.com/sjtu-sai-agents/PhysMaster.git",
+      "commit": "3150c10de379f78f8a3b91c3ddc9aee8cb16c6a3",
+      "tracked_files": 85,
+      "materialized_files": 45,
+      "snapshot": "sparse; source and selected data only",
+      "windows_reserved_source_omitted": []
+    },
+    {
+      "name": "tParton",
+      "origin": "https://github.com/mikesha2/tParton.git",
+      "commit": "43c928a51acf8f6ab6f1b67c4f0ca758206dfb4d",
+      "tracked_files": 192,
+      "materialized_files": 192,
+      "snapshot": "full",
+      "windows_reserved_source_omitted": []
+    }
+  ],
+  "source_files": [
+    {
+      "repo": "FeynFacet",
+      "path": "AGENTS.md",
+      "sha256_worktree": "1cee4cef745585d6104f9788edbae2219debea02d9fa6ca3ff1584eb76a42ac4",
+      "lines": 46,
+      "bytes": 2764
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "feynfacet.py",
+      "sha256_worktree": "2077139cdecfcbe4474debf3903ae7450614b2ede66a74b73d306e4cae8beb3a",
+      "lines": 269,
+      "bytes": 13756
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Paths.example.wl",
+      "sha256_worktree": "96ea9239121f71a58fa56032971195a87011f1a7a2e6f99e1cbe06e6a21d06d9",
+      "lines": 20,
+      "bytes": 936
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "README.md",
+      "sha256_worktree": "4e49409130e8c0942d6d771544861b9fb50e4b6dc18b1ecf2d97d17af3d97436",
+      "lines": 258,
+      "bytes": 15591
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Start.wl",
+      "sha256_worktree": "933ff614185cab1de3429c5f80f27e5090df5e64f7ba965578ac971191d83b9f",
+      "lines": 90,
+      "bytes": 3323
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/AversaEndpoints.wls",
+      "sha256_worktree": "fe4cddcfb12aee13465c99274ee944f4281951bbfa17a2da46623f62b3c4fb56",
+      "lines": 110,
+      "bytes": 6524
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/check_kira.py",
+      "sha256_worktree": "59b7f9bbb00c39da468f651d84aad42716b0a7c771144b19f4b0eff1920dcc68",
+      "lines": 102,
+      "bytes": 4532
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/check_kira_arithmetic.py",
+      "sha256_worktree": "b0defd2b142cc17a54199e5847146d63d56a3b2e58a81a19672ca8091f20bd63",
+      "lines": 36,
+      "bytes": 1661
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/check_lepton_scales.wls",
+      "sha256_worktree": "d17f3ed4930b01d78e21231ea67b550df4648cd3f464240e63eaa8566b14013b",
+      "lines": 72,
+      "bytes": 4684
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/check_toolchain.wls",
+      "sha256_worktree": "c12bdca62ce7d7727eb1bd94c2447e3f38c7b121a81cb8ab6e1e55addfd972f7",
+      "lines": 142,
+      "bytes": 8074
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/collect_coefficients.wls",
+      "sha256_worktree": "7446a883b5ed0119c42fb4cfa5984f49018bf9e2d4df35a1fc61c7c4b115a745",
+      "lines": 321,
+      "bytes": 27786
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/compare_coefficient_tables.wls",
+      "sha256_worktree": "7380203958615a31b5407984e0e85d74b5c2edb9a1ce3c37e652516ca47b92a2",
+      "lines": 34,
+      "bytes": 2406
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/file_checksums.py",
+      "sha256_worktree": "a390be68f8b99f6cdfd6c2a526643b0303ac2996805e2dcd2e76eb9fdcdf170e",
+      "lines": 74,
+      "bytes": 3049
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/kira_mod_mul.cpp",
+      "sha256_worktree": "5b2cdfa0755c3319e74b1ede0dea38fb18d978abfa88e8672d617104ff26f425",
+      "lines": 38,
+      "bytes": 1306
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/make_evaluator.wls",
+      "sha256_worktree": "a61ae75c5516c7f0970257a548fc1a057c9fc8018c8fda65a69785be093504b1",
+      "lines": 771,
+      "bytes": 38850
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/make_notebooks.wls",
+      "sha256_worktree": "84b977267bbdfe019fece95cc26f368626d91f0ca405feb37c27d165f5048d80",
+      "lines": 32,
+      "bytes": 1903
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/QGExchange.wls",
+      "sha256_worktree": "798a546a619e109104b3c500951b01044c2d866cb2c391b4d4803d26e40e928c",
+      "lines": 76,
+      "bytes": 5143
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/README.md",
+      "sha256_worktree": "4ac26a3d670d238dbf4d441cd937bc2ff602c461cb93b9efb085bda59421e551",
+      "lines": 340,
+      "bytes": 17205
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/run_process.py",
+      "sha256_worktree": "109f9cae8bb3e8f991ebbb9fdf1d8a2c7cfd5ca00a695a3fd9203b7b04b6f767",
+      "lines": 157,
+      "bytes": 8821
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/run_recorded_step.py",
+      "sha256_worktree": "7c49c777623cea44f61f2671213a20b5a190a4b6c8e265b3abed3a18d92b744a",
+      "lines": 236,
+      "bytes": 12270
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/run_step.wls",
+      "sha256_worktree": "199b1a0cf21c0584029e293d0d9866c13860a373cebf2fc27a09d8c47e9d7510",
+      "lines": 120,
+      "bytes": 8720
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/ScriptArguments.wl",
+      "sha256_worktree": "f6c3f26deafed408351f6c7b5b1323fe126e57c5e9ba9282666cec92d11237bc",
+      "lines": 18,
+      "bytes": 945
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_algebra_reuse.wls",
+      "sha256_worktree": "6fc43cac77708602c5bb4d1fc9c5644a9a374903a99d0a19c12fb8fb7ea7ac86",
+      "lines": 31,
+      "bytes": 2230
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_distributions.wls",
+      "sha256_worktree": "1571dd49f521ba7b0e4c96173820bc27667ec5592b3d7db8fd151e5d40694ef5",
+      "lines": 98,
+      "bytes": 5631
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_kira_installer.py",
+      "sha256_worktree": "8765c170080cbc6f79a5d75525b1474d90de52cec658114a1a15b8e384b13c10",
+      "lines": 375,
+      "bytes": 21007
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_masters.wls",
+      "sha256_worktree": "fe83c8f4e5e416ae9209a4cff73bfefb1df1e2adbafb16c32da7347b12e72067",
+      "lines": 102,
+      "bytes": 6095
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_preprocessing.wls",
+      "sha256_worktree": "01e60e315c3ebc955c3b6c464d9574d21877132babc916c7bf6bff7f9ac3a846",
+      "lines": 52,
+      "bytes": 3453
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_script_arguments.wls",
+      "sha256_worktree": "6177d6c897eebee31846cb7fc1b9f5f4c15b6c06a2cc58282287f2a4d9bdfa60",
+      "lines": 30,
+      "bytes": 1972
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_sparse.wls",
+      "sha256_worktree": "80d13029c1232404ea83e89d8ae7ec30c1e6429f523f01592d4f211797ccd77a",
+      "lines": 33,
+      "bytes": 2326
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/test_toolchain_runner.py",
+      "sha256_worktree": "245cd03032de08bc43dc756879069717ba7f4c75deb71e9ac379e4d128b88bcb",
+      "lines": 168,
+      "bytes": 7809
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/UnresolvedLimits.wls",
+      "sha256_worktree": "1cb6d7db9696e026a218e2c6f4fdcc53f241b4467bad45b2e93924e8cb0fa44d",
+      "lines": 158,
+      "bytes": 9947
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/validation-settings.wl",
+      "sha256_worktree": "9511695e89b4a864d3eb423a3dc5c0485862b6465e4d0020333433015740f634",
+      "lines": 157,
+      "bytes": 10754
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/Collins.wl",
+      "sha256_worktree": "8d07e5ce2bc3d726f68220974241969348b55a387521e05602195e1a905081e5",
+      "lines": 190,
+      "bytes": 13202
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/evaluate.py",
+      "sha256_worktree": "e905d07311296ebca4b40d10c69048566ba19de935d1729135c27ec2439a78a9",
+      "lines": 10387,
+      "bytes": 833257
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/LeptonOffDiagonal.wl",
+      "sha256_worktree": "eaeaae83f30ce10479f73d308ce74afdeeee0b068f1f413b04b641985a8e02ac",
+      "lines": 87,
+      "bytes": 6108
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/LeptonQuark.wl",
+      "sha256_worktree": "79a620b61358f248f1ea010b6c2dd37e03c771f9ef31b8a72d26a0b356c83dd2",
+      "lines": 56,
+      "bytes": 3873
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/LeptonScaleResidues.wl",
+      "sha256_worktree": "48422a8ccaf8bd63c6916d1da810c46ac5cbeeac71fea1b2926634cc3259c767",
+      "lines": 47,
+      "bytes": 2705
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/PartonicBorn.wl",
+      "sha256_worktree": "cc9ef28bb808ab170659766cf853b41c0c6064835101ecf70459d895325516dc",
+      "lines": 123,
+      "bytes": 8230
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/ProtonProton.wl",
+      "sha256_worktree": "dacc1c8826936c3796286c082850670482e2de1824225bd5435c84ab052be280",
+      "lines": 7583,
+      "bytes": 543546
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/ProtonProtonTransfer.wl",
+      "sha256_worktree": "6472c2e63e6500ac3a14791bc598463466dd150ac68a8b6c0877b15e9d00e0ac",
+      "lines": 1559,
+      "bytes": 110761
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/ProtonProtonTT.wl",
+      "sha256_worktree": "a3fd9ce2b3b2e1c5c89ac0d2aabe299682bb0f78b8eb3e1646b13ec38176e7cb",
+      "lines": 702,
+      "bytes": 49919
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/README.md",
+      "sha256_worktree": "0169c44b1ca56484ffefdeeadcc0c0ce11dcf0024f87f825e4adcbff6f37ce45",
+      "lines": 220,
+      "bytes": 12589
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Coefficients/TMD.wl",
+      "sha256_worktree": "85b575bdd2dad9116295875e10c6a1a30c1c0260383aeca753925684ade2257a",
+      "lines": 18,
+      "bytes": 1037
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "docs/CONVENTIONS.md",
+      "sha256_worktree": "8fed62b87e2c8a9611f5ee2992e9ecdabd8007e5d4a449b4f2483deb46db655e",
+      "lines": 141,
+      "bytes": 8301
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "docs/INSTALL-macOS.md",
+      "sha256_worktree": "eeb3ecfba494f6961737e1c2bb5527e4e3f0a9d8c81282847a902ffbd2c30b6b",
+      "lines": 194,
+      "bytes": 9088
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "docs/INSTALL.md",
+      "sha256_worktree": "3b632c462c9ff37237bdb934476f40092d4ea0f6536a8b2cdf6240809eab026b",
+      "lines": 117,
+      "bytes": 4376
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "docs/KIRA-CORRECTNESS.md",
+      "sha256_worktree": "2352a00cd065e3d9ac6955b1c381cc2181f0da2ad1e1094dc10dbca3cb9327f8",
+      "lines": 56,
+      "bytes": 3326
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "docs/RESOURCES.md",
+      "sha256_worktree": "cfa8163de211aa8081075443097f9fd65e4c79ad64692399aae68c4736d8b27b",
+      "lines": 36,
+      "bytes": 1837
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "docs/TRANSVERSE-PP.md",
+      "sha256_worktree": "8700373e1ebd7f3aed2ff11dc5517376f63669dee84319143616f5bd16b8ce62",
+      "lines": 210,
+      "bytes": 12574
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/AlgebraReuse.wl",
+      "sha256_worktree": "2080f667a26a746fa925069cd45159bb7e1c4e9de1a3f16b9abb9c84a113e75e",
+      "lines": 68,
+      "bytes": 3522
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Amplitudes.wl",
+      "sha256_worktree": "316d705f8f145f31a473eba40b5a7de0fa759ef8da97bf65cec7866c712e6321",
+      "lines": 166,
+      "bytes": 10049
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Compare.wl",
+      "sha256_worktree": "188df4a2835e97a26a719e4f90250957184545a8b927cf432b8bb7fdb9f3a2ee",
+      "lines": 40,
+      "bytes": 1865
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Distributions.wl",
+      "sha256_worktree": "589e9e65554ef8b968d94c41436ff36bab090d3097c7e550ac3c46fef2398281",
+      "lines": 188,
+      "bytes": 11706
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Factorization.wl",
+      "sha256_worktree": "65ccb6b4728bc1771ab68dc1376f4f1662b14180a324a575b4d6956b66c3532e",
+      "lines": 50,
+      "bytes": 2447
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/FeynFacet.wl",
+      "sha256_worktree": "105911f6b5e5c384bc46230eb5702498864375c3a9519c892d383b7ecc3f215b",
+      "lines": 24,
+      "bytes": 929
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/FORM.wl",
+      "sha256_worktree": "2a5bb24558a5bf2c9bb5a060cadbc4013f5904ced34feae7fbffeefb84d70102",
+      "lines": 204,
+      "bytes": 13708
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Kira.wl",
+      "sha256_worktree": "f9bd7396cf3af8655f308104701968c8ba30b1d40f2243bf2e1343c5226c72bf",
+      "lines": 85,
+      "bytes": 4639
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/LeptonScaleDependence.wl",
+      "sha256_worktree": "6c10dee1e185482607a66964dba9f9f2862cc5eaaf902e6b5166dc419d92bd9d",
+      "lines": 69,
+      "bytes": 3156
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Masters.wl",
+      "sha256_worktree": "986a2111abec8880d5f4823e9858722960cd7ac87b4712ea2ae2c862053fae0c",
+      "lines": 182,
+      "bytes": 11310
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Preprocessing.wl",
+      "sha256_worktree": "957c01ac12c895de0a1d48c24fdf211e8fa60cc13fafa3f82dab50dd71f3f982",
+      "lines": 141,
+      "bytes": 8456
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Tools.wl",
+      "sha256_worktree": "c645f7f7312da9dee9d7338cce2e28443188b25744216362fdd85d876edc3533",
+      "lines": 284,
+      "bytes": 18212
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "FeynFacet/Tracer.wl",
+      "sha256_worktree": "46afcd216c56530767df7142e92e2289d25f35a06bd901008a292c5552d36379",
+      "lines": 55,
+      "bytes": 2759
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Reference/pp-fortran-values.wl",
+      "sha256_worktree": "4535654496d314335f2c0e16dd36b0481138a541ba04978dac50add4af43eb27",
+      "lines": 313,
+      "bytes": 105491
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Reference/pp-transverse-fortran.wl",
+      "sha256_worktree": "5a30dfab51e723614f6fe7268295282454f63fe600f357ba1ec4299fad076e9f",
+      "lines": 863,
+      "bytes": 71065
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "site/build.py",
+      "sha256_worktree": "d56d141ae7b5cf5ebc3f58b6d6dc37e74f78c8321b80573c37bf1b9f3148a668",
+      "lines": 1056,
+      "bytes": 75222
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "site/make_figures.wls",
+      "sha256_worktree": "49620f932df925037cabceb5d48d8b0e74b82a58bc8945555e728b98ff5b2624",
+      "lines": 280,
+      "bytes": 19765
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "site/make_tmd_figures.py",
+      "sha256_worktree": "2a255c7c6538740122359e72b8ab7302a499f467fb1b6d6342db75fd62f27e1e",
+      "lines": 49,
+      "bytes": 1806
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "tools/install_kira.py",
+      "sha256_worktree": "1aaca4293b87bfaac8536d474bd16932b61891e2387fc473ee5324e449029d03",
+      "lines": 305,
+      "bytes": 16959
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/kira/derive_expectations.py",
+      "sha256_worktree": "8bad6cf294c71b8550154972c9edd8197f08a22700426d7600c8eed7aa00c61e",
+      "lines": 41,
+      "bytes": 1513
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/kira/README.md",
+      "sha256_worktree": "8d6d5d9de1370524f7f046d6e54e5c3c52f29dccefcf9feac90ac45ed8a55a60",
+      "lines": 90,
+      "bytes": 3584
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/native/TransferRouteFORM.wls",
+      "sha256_worktree": "0e1a3310dbde33cc3cf502961187e40c8e1d27daaf1a13b7ea8fe49c57d26d18",
+      "lines": 138,
+      "bytes": 10905
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/native/TransferRouteTracer.wls",
+      "sha256_worktree": "dc6bcd6f407a06a8b4bc9471c6f3b400c431feaaa5e4c113f57b7522c9d54d20",
+      "lines": 113,
+      "bytes": 7758
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/transfer/CompareIndependentCrossing.wls",
+      "sha256_worktree": "674d9d1f1bb0c34737004b948950f16c16fed4c2e7f3468ab2e145d5f02eddcc",
+      "lines": 87,
+      "bytes": 5409
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Checks/transfer/IndependentAssembly.wls",
+      "sha256_worktree": "2bf40093f8b6eead8936f8c960625f62225e19d43f054ef29cce6bb8212bcbe8",
+      "lines": 330,
+      "bytes": 21295
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/1-Amplitudes.wl",
+      "sha256_worktree": "8bde9d4269ee6fc7b063843ccb3c781e8479e29398dc2280618fa88d131a99af",
+      "lines": 125,
+      "bytes": 6396
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/2-Algebra-FeynCalc.wl",
+      "sha256_worktree": "2553e1705d89582fa48d9c68deabe45cf8d02527a8ea8ce61b13236b3b41ac89",
+      "lines": 242,
+      "bytes": 17219
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/2-Algebra-FORM.wl",
+      "sha256_worktree": "74e2d318ed76bb5161af63b5389f2bfe6035210ce40515053344c6bf209bc5a7",
+      "lines": 84,
+      "bytes": 4448
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/2-Algebra-Tracer.wl",
+      "sha256_worktree": "ee0d4bbdcd32b63ace08dd7ff3a825bcbdfb2b3ee187793955a05e5a36227cf3",
+      "lines": 172,
+      "bytes": 11084
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/3-Reduce.wl",
+      "sha256_worktree": "3546b5125517c1811198b5062d2d35cca711162094e429462f55ef37ed32db09",
+      "lines": 286,
+      "bytes": 21025
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/4-Unpolarized.wl",
+      "sha256_worktree": "eeb9c5bc9b945e27bec1aeae3ccc73859f012fbc7dc1802ac7d274a013353891",
+      "lines": 219,
+      "bytes": 13912
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/5-Transverse.wl",
+      "sha256_worktree": "0335335b076d6e8e51c891153740dc3b584d4f920f03c012e622c7865b0249cb",
+      "lines": 184,
+      "bytes": 11411
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/6-ResolvedBorn.wl",
+      "sha256_worktree": "95dc4517fbc4fd453709957c62adcaba9437b885cba5f69842382f24c0688951",
+      "lines": 132,
+      "bytes": 9133
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/README.md",
+      "sha256_worktree": "02c344c824a94674ba8d196436c13d33df3d84e4d72cc334d50ecb3a79324a43",
+      "lines": 69,
+      "bytes": 5211
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/1-Amplitudes.wl",
+      "sha256_worktree": "43e9b225d06485eb1b3b255abc58f9d096716a85c9f454f638c2eeb34fbb9f5e",
+      "lines": 100,
+      "bytes": 6338
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/2-Algebra-FeynCalc.wl",
+      "sha256_worktree": "64caf72e5bac06ed55c9b79a52a05706915d7910855de1206cbbda949d34963d",
+      "lines": 441,
+      "bytes": 34291
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/2-Algebra-FORM.wl",
+      "sha256_worktree": "20bc7a5e2c0cac0b47cae8125c49f93d73d568298b0d97e70524011342fe4cb2",
+      "lines": 525,
+      "bytes": 46224
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/2-Algebra-Tracer.wl",
+      "sha256_worktree": "dca24bdd9f55278c131b4c40ed86d13ded398218476c7bd2a5c0337bc621171e",
+      "lines": 573,
+      "bytes": 51371
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/3-Reduce.wl",
+      "sha256_worktree": "98acfe11737abd89c90e2fa8bc8af6e03fcaf6bc34b5889f841a385ac0118fec",
+      "lines": 520,
+      "bytes": 42482
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/4-Unpolarized.wl",
+      "sha256_worktree": "11286dba960a07ef3efa3be1a18e0fc66d9771fc817ae4d04b35b8bb279e9bb1",
+      "lines": 287,
+      "bytes": 23634
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/5-Polarized.wl",
+      "sha256_worktree": "b91d277646bd803b4058c1233aa222c939c105f2d9ba620f7095766171e84af2",
+      "lines": 289,
+      "bytes": 24257
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/classes.wl",
+      "sha256_worktree": "f544b9485dbde3ecb5e0a63e6de01852c1727c85cb10f846538aac267d9d3f26",
+      "lines": 54,
+      "bytes": 3705
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/README.md",
+      "sha256_worktree": "d3b6c56bc674232c57c1a7ce6e9442fa3c050692803e85720e4fbe0b0fff3ee7",
+      "lines": 94,
+      "bytes": 9206
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/1-Amplitudes.wl",
+      "sha256_worktree": "314b995e9abcf084eb0f3614001c692d44a72b08eef6bf400627f4a6d8ec46e3",
+      "lines": 116,
+      "bytes": 7786
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/2-Algebra-FeynCalc.wl",
+      "sha256_worktree": "36f5541cb3fc8ee0420d9eb565f9e7a8c62f7bced57428027e5abf0c38412aa2",
+      "lines": 537,
+      "bytes": 48036
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/2-Algebra-FORM.wl",
+      "sha256_worktree": "4f3b8337779d9721970d1eb8b1cf88bfda173becd4b6be9cf2d8522f6aa20155",
+      "lines": 618,
+      "bytes": 63882
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/2-Algebra-Tracer.wl",
+      "sha256_worktree": "4eaecbd7fd0d80980a351c191c21a683939f1bdec8d4f0b301a782ee427fc829",
+      "lines": 663,
+      "bytes": 67092
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/3-Reduce.wl",
+      "sha256_worktree": "889c0cd0ff3423dead7d8fc6cdb4f193a7ade98f92efad7687628a9c6aaf53ed",
+      "lines": 520,
+      "bytes": 43087
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/4-Transfer.wl",
+      "sha256_worktree": "319508fa129505a7035599e3b2d08db603c034d225d0b232b32003cf4aaa91cf",
+      "lines": 286,
+      "bytes": 24144
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/5-Crossing.wl",
+      "sha256_worktree": "5290107a84f95463116f95a979b8c3a86925776ddb341b9f2bc45f285bc33117",
+      "lines": 390,
+      "bytes": 44620
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/classes.wl",
+      "sha256_worktree": "a4243d233c832517f6b7fe442cebcf8c54ecab65f71e4455a1c88e8339b73c20",
+      "lines": 72,
+      "bytes": 4828
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/README.md",
+      "sha256_worktree": "63ac6b7dcc775ea4a05c29491b247496ab269ae3f85c8511d8f29796eb7d8c85",
+      "lines": 281,
+      "bytes": 21049
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/1-Amplitudes.wl",
+      "sha256_worktree": "9b22d517e230d7cebc48b05c02281b627300c394f8ecdd0d4ff1b752ced5a6c4",
+      "lines": 101,
+      "bytes": 6468
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/2-Algebra-FeynCalc.wl",
+      "sha256_worktree": "b3bf383178c7320e16cd006c754054372abec2b1235f165a4a5fba034a4e9591",
+      "lines": 556,
+      "bytes": 50690
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/2-Algebra-FORM.wl",
+      "sha256_worktree": "5ffb9c768c4e4e22881341c8cd8129b5c41707f6ecae3b8f3155e4b8b7411140",
+      "lines": 629,
+      "bytes": 63091
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/2-Algebra-Tracer.wl",
+      "sha256_worktree": "aed16914b9d1cd233cb6002ec46169be11fe0c96274b11813688b50b456dfed3",
+      "lines": 689,
+      "bytes": 70425
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/3-Reduce.wl",
+      "sha256_worktree": "f38b881f8a3f6f5cb05caa63ad5f37cf7f1f6e7746dd13febcc8df078cca7a40",
+      "lines": 521,
+      "bytes": 43275
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/4-Transverse.wl",
+      "sha256_worktree": "f1656fa62ca3eafd88b1cd99f98e9ed9bd7ea1f3fd139a6ef1fd8212aa2a3ea0",
+      "lines": 316,
+      "bytes": 26880
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/classes.wl",
+      "sha256_worktree": "950c2f7c994a40b999164b7b25f7d0676856481fc631f199c7bc1a5e6d5cb0b9",
+      "lines": 45,
+      "bytes": 3056
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/README.md",
+      "sha256_worktree": "0d0dff40c52695b6a2f161b86c835502e53a2c1e99b507439e2166521d6798c3",
+      "lines": 168,
+      "bytes": 12439
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/1-Amplitudes.wl",
+      "sha256_worktree": "22b62295daa3a69749bbaa196af2eeda6d64e1d0dd1d35ab10a0249ed0f472cb",
+      "lines": 72,
+      "bytes": 4847
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/2-Algebra-FeynCalc.wl",
+      "sha256_worktree": "bfa21a720416fc5df37f49d4601aee21e066d5edc20faff42e829b42f0891965",
+      "lines": 210,
+      "bytes": 15596
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/2-Algebra-FORM.wl",
+      "sha256_worktree": "14e81dfbd05454d32acac4c7999f483db214f938797d91f32d59b17b2e89b273",
+      "lines": 83,
+      "bytes": 4071
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/2-Algebra-Tracer.wl",
+      "sha256_worktree": "a94dd5fc614e6eb45bdae81d943b430b423d757e447cc1a834c073a0f1eabd18",
+      "lines": 139,
+      "bytes": 8297
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/3-Reduce.wl",
+      "sha256_worktree": "b723eb93e7b49f4c0284993234ff55d6044d859e9ff700abdcaff5c6294c59c7",
+      "lines": 229,
+      "bytes": 14157
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/4-Unpolarized.wl",
+      "sha256_worktree": "45410b41848d80895f92a2d6db5fadda502f55917228e2a5661f5ef0c89c1b86",
+      "lines": 169,
+      "bytes": 12423
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/5-Polarized.wl",
+      "sha256_worktree": "07a34978a02d7fe1b4ec8ef5b95fb4940879c2061a6e17eac4021d264c59a0f8",
+      "lines": 167,
+      "bytes": 11711
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/README.md",
+      "sha256_worktree": "3c1075db10962efc75b80a0dfff3d463728ebbeb459fca66490d5ef0344d6c98",
+      "lines": 80,
+      "bytes": 5606
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/1-Amplitudes.wl",
+      "sha256_worktree": "327fb3acc75a2aa8e259a97eebf6e4c74457aa928818aea68b3db690630e81c6",
+      "lines": 125,
+      "bytes": 6187
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/2-Algebra-FeynCalc.wl",
+      "sha256_worktree": "e749c3a1fc258c3ac870f86fab0c33f65b7a8fe2604b18308c89929fb07f283b",
+      "lines": 245,
+      "bytes": 14467
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/2-Algebra-FORM.wl",
+      "sha256_worktree": "b944df4658ef33855e80ffa68bde3f2e66fe4b2cec890bb1e619891256706559",
+      "lines": 87,
+      "bytes": 3836
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/2-Algebra-Tracer.wl",
+      "sha256_worktree": "b3dfb70c32ce86bfdb9c0efd67d7b43e370104cdba69eaea6e1566b18c50a706",
+      "lines": 196,
+      "bytes": 12409
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/3-Reduce.wl",
+      "sha256_worktree": "fd3e2a5ed9db1b7a38b8432b3b53d2affe642899392f01566f97592b6842135a",
+      "lines": 286,
+      "bytes": 20191
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/4-Unpolarized.wl",
+      "sha256_worktree": "cddb3cbfda4ccf03be51d14a936ce58180be7e588208c15deebf1161553f1ea3",
+      "lines": 219,
+      "bytes": 13734
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/5-Polarized.wl",
+      "sha256_worktree": "b6c2b300c7a35e52fbf02d38ae7422ad6a681b1f55da0ee4381517033dbe4c63",
+      "lines": 194,
+      "bytes": 10723
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/README.md",
+      "sha256_worktree": "675dedbb14e926cb7c6d785c6743416d165b055d9500529eb32846b8aafaf31a",
+      "lines": 84,
+      "bytes": 5146
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/PartonicBorn/1-Born.wl",
+      "sha256_worktree": "bc266b5c389f7e42677a24b4819cbc6fb63883899d480861281ce318a378ffe4",
+      "lines": 177,
+      "bytes": 12844
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/PartonicBorn/2-Algebra-FORM.wl",
+      "sha256_worktree": "d765001532e4e7d41aad1aa159430adc70f92c896ec1f4336dee7716e9fb911b",
+      "lines": 125,
+      "bytes": 8946
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/PartonicBorn/2-Algebra-Tracer.wl",
+      "sha256_worktree": "cef872373fd6aa0a459be81e8ea585dccf77469b544bcfb656dbfbbfbfa984da",
+      "lines": 263,
+      "bytes": 19539
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/PartonicBorn/README.md",
+      "sha256_worktree": "10294d1626ceecafb621a406f6ff520fc8b25c4e4f911c038df7c49964987424",
+      "lines": 121,
+      "bytes": 8255
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/1-Amplitudes.wl",
+      "sha256_worktree": "5db401a0b8a43aa3d9ab07284b2f249ec5749164969dc2a4638cb930f681717f",
+      "lines": 192,
+      "bytes": 12854
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/2-Algebra-FeynCalc.wl",
+      "sha256_worktree": "f396c6ef113ce034c0d03913b678640e41e1644b1e58e8555f8c608e32c02993",
+      "lines": 185,
+      "bytes": 11248
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/2-Algebra-FORM.wl",
+      "sha256_worktree": "8d7f5650d82787a8028496599d4539df0fc04667777818fe68db0b9c5f6a092d",
+      "lines": 89,
+      "bytes": 4914
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/2-Algebra-Tracer.wl",
+      "sha256_worktree": "3736792850c38808c3757183a9d7a7d76a4ffadb931886f273ae089582c34688",
+      "lines": 158,
+      "bytes": 9616
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/3-Integrals.wl",
+      "sha256_worktree": "63a7206b27780d6b5180914e4312cc6b387d09ea338a44c02a6b2b7388e771f4",
+      "lines": 215,
+      "bytes": 13468
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/4-Soft.wl",
+      "sha256_worktree": "ac3abe79a6105859d70d5e7b2315658126b6c0e26bca425990321ac273c732b8",
+      "lines": 77,
+      "bytes": 3266
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/5-Beam.wl",
+      "sha256_worktree": "afa2cfc8ffed51a1fbc084e600521a1db54e5bb5f710143adb8ce4ba74622967",
+      "lines": 129,
+      "bytes": 7510
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/README.md",
+      "sha256_worktree": "4629140e333352af42abb574600c81f4313794ddda9adf40657a6e11a883fafa",
+      "lines": 84,
+      "bytes": 6090
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/form/common.h",
+      "sha256_worktree": "705b5afd4e5fa56f4d7170403b668686234822ed15c074b8ce4860dd9cdbae84",
+      "lines": 95,
+      "bytes": 4534
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/reference/Draft-transverse.wl",
+      "sha256_worktree": "b6fc7b99eb1c81f6e8a54249442a931c85c8c10f37b36a8154f5e908eb59e8ee",
+      "lines": 28,
+      "bytes": 1993
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Collins/reference/HSV2015-unpolarized.wl",
+      "sha256_worktree": "c14329a19351de7ddb4024f75699263afe03de7ff44bde970a3deb4d1f25adf6",
+      "lines": 35,
+      "bytes": 2173
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/Hadronic/form/common.h",
+      "sha256_worktree": "a2ba072477e82d4ef7ba0970230f0a0976fc22e1c93d78a83e7454d96232e313",
+      "lines": 248,
+      "bytes": 13503
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/form/common.h",
+      "sha256_worktree": "15b3b7636d7e9c8fa7b8278ecdd31ae793ac3869d114f431daff420430f9de01",
+      "lines": 313,
+      "bytes": 17397
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTransfer/reference/Yuan-2008-Collins-hard-factors.wl",
+      "sha256_worktree": "53565964637e6acf36506829a6219558314d70d0be73f88dfbd145708b24a314",
+      "lines": 42,
+      "bytes": 2226
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/form/common.h",
+      "sha256_worktree": "aae1926b0d1807bf6bacea8d5ea322103449589a7dc73517ab4869178322bd7a",
+      "lines": 287,
+      "bytes": 15560
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/HadronicTT/reference/SSV-born.wl",
+      "sha256_worktree": "7e89094ffa319a4ee0a1ece1105e680163d63633739509d923a18b9f5cf2494e",
+      "lines": 43,
+      "bytes": 2082
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/form/common.h",
+      "sha256_worktree": "5a1e98c9559de871670aa4bc825ba0471489d38e37d3d3a0d1d593ae633d3f28",
+      "lines": 94,
+      "bytes": 4622
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/reference/HSV2015-offdiagonal.wl",
+      "sha256_worktree": "3a960f9e28fbe0549bfc45539141f663695af462c5cfa5879a66bbc6a6daebcc",
+      "lines": 36,
+      "bytes": 2833
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonOffDiagonal/reference/HSV2017-offdiagonal.wl",
+      "sha256_worktree": "11b2ef600c1ca404d69457f3f139b98436ff1f87043617296bc2e28470c9fb53",
+      "lines": 35,
+      "bytes": 2566
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/form/common.h",
+      "sha256_worktree": "f36046b7dde4172f9eea3d90c713f27fd06beda9000a9e1ea08827f4c835b0f8",
+      "lines": 84,
+      "bytes": 3958
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/reference/HSV2015-unpolarized.wl",
+      "sha256_worktree": "c14329a19351de7ddb4024f75699263afe03de7ff44bde970a3deb4d1f25adf6",
+      "lines": 35,
+      "bytes": 2173
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/LeptonQuark/reference/HSV2017-polarized.wl",
+      "sha256_worktree": "053be7639ae2585f123db944b939c79fc882266d007f437bcd1186348f28930e",
+      "lines": 30,
+      "bytes": 1997
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/PartonicBorn/form/common.h",
+      "sha256_worktree": "1e395d7f642d010eb35b7411bb1b04df48ed3d0a3858822d08a5cef4d3abaf89",
+      "lines": 189,
+      "bytes": 9970
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/form/common.h",
+      "sha256_worktree": "2c2177634f04c6e7a0b95105892216a6fd3b80c267dc39e6c8c9d3378c15165c",
+      "lines": 83,
+      "bytes": 3651
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Processes/TMD/reference/Luo2020.wl",
+      "sha256_worktree": "7c31f4b370bf9536c07dd510214d4b79debd862d8db1e106d8314befea746b24",
+      "lines": 36,
+      "bytes": 2241
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Reference/fortran/driver.f",
+      "sha256_worktree": "2f0b71e5d32c14b97d93dde3f21dc41da208a21bb8ad48201c176883767026d4",
+      "lines": 53,
+      "bytes": 1745
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Reference/fortran/README.md",
+      "sha256_worktree": "63bf3555031cf1eed3de5eb10fe449033120c92de407f855796ed346435138db",
+      "lines": 184,
+      "bytes": 11848
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "Reference/fortran/transcribe_transpol.py",
+      "sha256_worktree": "82b4f9de8f7051a5313f2ef69a4f7531324fb3d72ed677756140d2e566e7b847",
+      "lines": 826,
+      "bytes": 41639
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "site/figures/captions.md",
+      "sha256_worktree": "24e80ba9b6effba6d2ee06308033bc6f72e3c99886bb12a5ae6530c2d3513905",
+      "lines": 90,
+      "bytes": 5900
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "site/figures/diagrams/index.wl",
+      "sha256_worktree": "2798bd696f83b7414a169ccdac22bb40e64a3623a98a73498d4ac2415bfcbe49",
+      "lines": 150,
+      "bytes": 10206
+    },
+    {
+      "repo": "FeynFacet",
+      "path": "tools/patches/README.md",
+      "sha256_worktree": "0f837a733154b8d0b2f0d53dc186d08990dc21986729c880fd366b5fa7be84f4",
+      "lines": 28,
+      "bytes": 1710
+    },
+    {
+      "repo": "jam3d",
+      "path": "readme.md",
+      "sha256_worktree": "0bbb9d841ade47231dbb3817b365e6d1ac5da4ca5c2c4ab7a3860868c9287dbd",
+      "lines": 6,
+      "bytes": 79
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/README.md",
+      "sha256_worktree": "e349168aa73c74a58fcb0da7f8e39695b283c6bd7184e2a0bf1b2d3fc6d8bde6",
+      "lines": 23,
+      "bytes": 258
+    },
+    {
+      "repo": "jam3d",
+      "path": "docs/conf.py",
+      "sha256_worktree": "6c556a75416505257d99b8e70a9c196e7548fff35f1c5b44ad02a253a6b49a33",
+      "lines": 188,
+      "bytes": 5738
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/README.md",
+      "sha256_worktree": "5eb21a3bbd6403eba7980a12eab45b136b3b98978f52894e7ff72f95e810653a",
+      "lines": 6,
+      "bytes": 93
+    },
+    {
+      "repo": "jam3d",
+      "path": "fitlib/input.py",
+      "sha256_worktree": "851f08368d26ad7ebf5d55d906478bd992ee0640fefb9faa2a2d6697a10cd85c",
+      "lines": 959,
+      "bytes": 83266
+    },
+    {
+      "repo": "jam3d",
+      "path": "fitlib/input_dglap.py",
+      "sha256_worktree": "e853cbf1f8d8f0f33d975bb6d4576d2b3d3da4c28234b3c3e1a6cc35655911c7",
+      "lines": 1187,
+      "bytes": 99649
+    },
+    {
+      "repo": "jam3d",
+      "path": "fitlib/input_evo.py",
+      "sha256_worktree": "b31bac0effe928271d1deee6e73214e47de00eaa3659e5d1430b2cdac5d3fbc1",
+      "lines": 993,
+      "bytes": 85297
+    },
+    {
+      "repo": "jam3d",
+      "path": "fitlib/maxlike.py",
+      "sha256_worktree": "8b42a40b8fcf6640da081fe8113c03673e529fb4871f6d714e0390e119e6992b",
+      "lines": 399,
+      "bytes": 14864
+    },
+    {
+      "repo": "jam3d",
+      "path": "fitlib/parman.py",
+      "sha256_worktree": "2f383983ffab38f8a289683397e4d7ca62ff64aabe88ea869f03ecc413dc48ec",
+      "lines": 441,
+      "bytes": 21545
+    },
+    {
+      "repo": "jam3d",
+      "path": "fitlib/resman.py",
+      "sha256_worktree": "58cc3bd5d3361dc7af1e407a44fa96a7acdfb38a4c7eda7aa22062f725f614ef",
+      "lines": 438,
+      "bytes": 21464
+    },
+    {
+      "repo": "jam3d",
+      "path": "fitlib/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/alphaS.py",
+      "sha256_worktree": "2b5244074ca50121cfc400e4f6d4599472471c0a667f4a7e8cf4e99a89f6535a",
+      "lines": 140,
+      "bytes": 3641
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/core.py",
+      "sha256_worktree": "dd9ad196913d2686e7ba66ed9bcdd16fdc329ddf94e45ed4160cfa719ddbf785",
+      "lines": 138,
+      "bytes": 4715
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/dglap.py",
+      "sha256_worktree": "221360bad553879a1f914e860ef46c9cb95ea77eac6db0d5182fd25d4c72bc0d",
+      "lines": 426,
+      "bytes": 14611
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/ff0.py",
+      "sha256_worktree": "66041ff7c878cf69649172a0b291915034bdc9ecd3c1a94e0cde299415b17883",
+      "lines": 84,
+      "bytes": 2961
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/ff1.py",
+      "sha256_worktree": "288dad250d5a1da140b62e2f7c9a5efa0382ebc65329b009bedd7836d28c1553",
+      "lines": 85,
+      "bytes": 2882
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/ff2.py",
+      "sha256_worktree": "a75ad28ffaf6d993d95afb1508b8eba9dada432f25600acd17d02aead1f494b4",
+      "lines": 311,
+      "bytes": 11823
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/interpolator.py",
+      "sha256_worktree": "1115a775c1ca144b76d0675febb76c92949dfc855eeab2d16d62306f9d83cb55",
+      "lines": 42,
+      "bytes": 1174
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/kernels.py",
+      "sha256_worktree": "842def8dab1c9566a1fb817499791d15887b21fd62ab227a117498ce436002f7",
+      "lines": 359,
+      "bytes": 12736
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/mellin.py",
+      "sha256_worktree": "799c851ff5ba98002143ad483b6bf43e9765d7ea48fb7847afde4fc138e85c2e",
+      "lines": 50,
+      "bytes": 1501
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/pdf0.py",
+      "sha256_worktree": "3ab20d504dc5cd8cdfd7dc046ee942faf5cfc2418e294eb2bc79f0ab8c5b5155",
+      "lines": 92,
+      "bytes": 2774
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/pdf1.py",
+      "sha256_worktree": "0a21096e8bd954aa973fa59a62da208b94ecb6ca79833c270cde6e0861ff3684",
+      "lines": 84,
+      "bytes": 2476
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/pdf2.py",
+      "sha256_worktree": "da3734885972eb56af7f72dc8f196b54e12373b99a61894d520e0e140e98b08d",
+      "lines": 339,
+      "bytes": 12676
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/ppdf0.py",
+      "sha256_worktree": "f81890bc7da8fe19cd519bb1d9f6d2568acb6380a5b5316453d8ebfe51661cf1",
+      "lines": 76,
+      "bytes": 2101
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/rfilter.py",
+      "sha256_worktree": "bff6b727b0d633c4744524909be2ba3458ec95a65d341994befb47dc03d834c9",
+      "lines": 122,
+      "bytes": 3568
+    },
+    {
+      "repo": "jam3d",
+      "path": "qcdlib/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/bar.py",
+      "sha256_worktree": "0b3272aaab2c2aadaa1a6c21a61985a375e7df3b67f4fec51f0c1df93aab7ba4",
+      "lines": 22,
+      "bytes": 472
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/config.py",
+      "sha256_worktree": "e3384ae2067e2f5a64ccbe5b019bf59c6cc5a95650d92b50e5741ff9052924c2",
+      "lines": 28,
+      "bytes": 432
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/inputmod.py",
+      "sha256_worktree": "0d8d19cf29ecb638ef456643421201537a2bcc1924d49e555f76b0076a5378c6",
+      "lines": 59,
+      "bytes": 1826
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/mcproc.py",
+      "sha256_worktree": "946415cdcc69379560d3b07b5f67994b5b375edb2f7cabdd4757ed4457fc9c76",
+      "lines": 95,
+      "bytes": 2660
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/mcstat.py",
+      "sha256_worktree": "725ff56107691faa2aed0c32d375fe391a7735dd24908e4c25bbe136a0329578",
+      "lines": 202,
+      "bytes": 6493
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/multiproc.py",
+      "sha256_worktree": "7c40fba119db106b4815e6360836330bad0bc6550a99a98590e23e0eeae1ffdb",
+      "lines": 42,
+      "bytes": 1247
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/parallel.py",
+      "sha256_worktree": "75305c0d454d85cbc39efa00863ef1e3e39349964309996b381fd553373fc6a0",
+      "lines": 332,
+      "bytes": 7901
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/randomstr.py",
+      "sha256_worktree": "b20b359b830cfb677158d24bbeab31159fb27344eb52021f5922b6f3bf462119",
+      "lines": 16,
+      "bytes": 241
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/reader.py",
+      "sha256_worktree": "c6cd31b6cbb622879ecc2643cbc1fc372dff4f2d448726720878a99f7de16f15",
+      "lines": 46,
+      "bytes": 1473
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/README.md",
+      "sha256_worktree": "2e677d814c456f87368c95c7acc66573d6a9bbc6335a8d60ad2b30bf7c753c01",
+      "lines": 29,
+      "bytes": 593
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/residuals.py",
+      "sha256_worktree": "6fb064309c1b65425e61ef03f767a3d711cff28fb62a9da816f9534f460c2317",
+      "lines": 511,
+      "bytes": 17806
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/storage.py",
+      "sha256_worktree": "8b8826e1a40f59e434c7167a37be4b33b045fe48f8db1eeea003100fc0a6e375",
+      "lines": 42,
+      "bytes": 1108
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/tools.py",
+      "sha256_worktree": "5653d99174355a3bfd39d8c27193caeca739b23037b786c83361b9cd64d331c5",
+      "lines": 64,
+      "bytes": 1122
+    },
+    {
+      "repo": "jam3d",
+      "path": "tools/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/ANgam_pp/README.md",
+      "sha256_worktree": "ca34478f7b8d572da004547b3c5ab71dd52ed12135cd76b4791496dc6edf82f3",
+      "lines": 28,
+      "bytes": 1559
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/AN_ep/README.md",
+      "sha256_worktree": "1526d216501768612f8ce43ab1003c0d2a8d3e3a2df5665c865da592fe5afb5e",
+      "lines": 25,
+      "bytes": 1528
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/AN_pp/README.md",
+      "sha256_worktree": "02a729ac41dd495a18911170b2eb7b808196503433a0e5f5e2931c1a6ec2aeba",
+      "lines": 23,
+      "bytes": 1973
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/dy/README.md",
+      "sha256_worktree": "ccb08e805d4c7c0cec75ed6e55f51f37e148dbe52ff234aa2dd66b99a8420d32",
+      "lines": 17,
+      "bytes": 789
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/lattice/README.md",
+      "sha256_worktree": "9e5b32031c7eb2f2361ff397149c97f582acaaaa5df7105a1e971038a1115b6d",
+      "lines": 17,
+      "bytes": 876
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/sia/README.md",
+      "sha256_worktree": "45cef75b2558609f2899388f343377261d410d0850c3a59b67884a965b75cc90",
+      "lines": 34,
+      "bytes": 2416
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/sidis/info.py",
+      "sha256_worktree": "57c093fc9483fcffea9775f5dd5793b6ee3d397b702d59107e14d830e66ad93f",
+      "lines": 98,
+      "bytes": 2690
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/sidis/README.md",
+      "sha256_worktree": "ca76239f8fe101d18d26fc42354f4bdd37926c249533188c3ff786354af45cf3",
+      "lines": 250,
+      "bytes": 26220
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/Soffer_Bound/interpolator.py",
+      "sha256_worktree": "1115a775c1ca144b76d0675febb76c92949dfc855eeab2d16d62306f9d83cb55",
+      "lines": 42,
+      "bytes": 1174
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/Soffer_Bound/pdf0_SB.py",
+      "sha256_worktree": "c5f2fe02980fa37c7378503f4d28813a942799bd1ee76bd0bc033c60d94f5cd3",
+      "lines": 31,
+      "bytes": 699
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/Soffer_Bound/ppdf0_SB.py",
+      "sha256_worktree": "c54f48cc3468f0e5a75e28aa014005acb714bf8027e15643de87fc174aaf9380",
+      "lines": 31,
+      "bytes": 743
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/Soffer_Bound/README.md",
+      "sha256_worktree": "dfb08e247a755bd1a20e2a0bdbeb613d346f0aeb5de5da38e40a872ecde90903",
+      "lines": 5,
+      "bytes": 262
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/wz/README.md",
+      "sha256_worktree": "23daf2ca482f80e4ee2dfd2b16ba25d8a05db66db5f8c02bcd728d86f5ed448b",
+      "lines": 16,
+      "bytes": 669
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/AN_pp/src/AN_pp_data.py",
+      "sha256_worktree": "aec032482de4c2f3d466afa530a304cb870c1b024a136fdf8a8780d7141cc4c0",
+      "lines": 44,
+      "bytes": 1629
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/sidis/src/AUTcollins/converter.py",
+      "sha256_worktree": "48b63f4dfcad470de4e5727335ef1d8f617fb822e9417f8146cd732ee1077dfa",
+      "lines": 83,
+      "bytes": 2132
+    },
+    {
+      "repo": "jam3d",
+      "path": "database/sidis/src/EIC_unpolarized/converter.py",
+      "sha256_worktree": "e67227ab068e025bf668714ded0e6c27719e85fc85b6658a3bb4a95a500d167c",
+      "lines": 34,
+      "bytes": 751
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/dev/input00.py",
+      "sha256_worktree": "d4ee6f3de9f536440e57fb88a1aeb3c6a414cb429f8e3014e5540961d9738a36",
+      "lines": 66,
+      "bytes": 3218
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/dev/input10.py",
+      "sha256_worktree": "3ae892abefd56e68b3c94f829693288e27f57a3cae560f47449004bf73977542",
+      "lines": 259,
+      "bytes": 20079
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/dev/readme.md",
+      "sha256_worktree": "4d39d73044b660c7170b941a60bfea05ae8a46eec3dcc00660efa704d67b55c3",
+      "lines": 9,
+      "bytes": 93
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/example00/input.py",
+      "sha256_worktree": "04f1fb5ccc0ba8a5130601d74d81ba3d23c08285de488544c43ae1deecfc4cb4",
+      "lines": 64,
+      "bytes": 3843
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/example00/inputnoq2.py",
+      "sha256_worktree": "0370c3b1c54a5807636a8647bf78a5282920bca0ce7d930c15c155e3f234e5b9",
+      "lines": 65,
+      "bytes": 3835
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/example01/input.py",
+      "sha256_worktree": "28a73d508c2c276b134014be876269abaeb1a4bc76518dab7a857d450ab1c726",
+      "lines": 399,
+      "bytes": 35005
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/example02/input.py",
+      "sha256_worktree": "65595efb38c5a242c0365a98fe7bbc354b9f195cd7854e9f38d11e83c06dcc9f",
+      "lines": 75,
+      "bytes": 3841
+    },
+    {
+      "repo": "jam3d",
+      "path": "extraction/example03/input.py",
+      "sha256_worktree": "1f5b02cdedf2a06fbf93c983c1c9d1c541c713611f88fb39de12c64042fa4c4d",
+      "lines": 425,
+      "bytes": 36118
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/ANgam_pp/AN_theory0.py",
+      "sha256_worktree": "d3411437bb4d7796da60e667d70dde3b5df7af605a06a88840ca69cd5acd590c",
+      "lines": 432,
+      "bytes": 14196
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/ANgam_pp/AN_theory0_Real.py",
+      "sha256_worktree": "32d3de5193c644478d7ad5ead582d1a54e36ae0e0daeba6d26a732f371f5b882",
+      "lines": 340,
+      "bytes": 8875
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/ANgam_pp/AN_theory0_SFP.py",
+      "sha256_worktree": "710acbc4ea5ad6a029cdbe8862a8939ef0f91a0ce9d06738f39835ab52826fba",
+      "lines": 372,
+      "bytes": 10954
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/ANgam_pp/reader.py",
+      "sha256_worktree": "b49e7ff5fca261047fe30c98d318a976cec1f1e1ec2ccfe1027c1398a4c26520",
+      "lines": 16,
+      "bytes": 280
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/ANgam_pp/residuals.py",
+      "sha256_worktree": "18dfe6dca5459fd694c08664c5b11c4530dbc033c4be9521cbfb7714e676a2f1",
+      "lines": 131,
+      "bytes": 4740
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/ANgam_pp/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/AN_theory0.py",
+      "sha256_worktree": "d00159bcef9cc57f5061ad111e6f19e0fde540d8631e044e474676e64f619e93",
+      "lines": 372,
+      "bytes": 16429
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/AN_theory0_DP.py",
+      "sha256_worktree": "c7326e20e0ad83e7db7b49c4eba860ba1f536181b7e99e897a69397137f62091",
+      "lines": 424,
+      "bytes": 10633
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/AN_theory0_MM1.py",
+      "sha256_worktree": "be147921745c937a8bf7b829bbd641dc401324bb59357a87ea24e4a15aa3244e",
+      "lines": 265,
+      "bytes": 10323
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/AN_theory_JM.py",
+      "sha256_worktree": "3812346699108e4eacb9e4304ffaf5a69623c950b24433691e0e76cf4eccfab7",
+      "lines": 307,
+      "bytes": 9794
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/input.py",
+      "sha256_worktree": "4d58d675edb1d4fe6d78d7fabcbd21be14cc5804890d3be9b8de4808f3b6544b",
+      "lines": 620,
+      "bytes": 56356
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/input_ep.py",
+      "sha256_worktree": "030e1eb5957570a8da6c91482a633cf9ede481c52fecb3df96cf966fefad1bc4",
+      "lines": 621,
+      "bytes": 56357
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/reader.py",
+      "sha256_worktree": "e9c3fcd6285b6ebaff4a9b226d746bfdfb21aef1b74201778c5a156a2055efb6",
+      "lines": 17,
+      "bytes": 319
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/residuals.py",
+      "sha256_worktree": "5ca20d15a917c1abb3580789694207d2335bbbfd7a483defe030d248cad3d3df",
+      "lines": 131,
+      "bytes": 4707
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_ep/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_theory0.py",
+      "sha256_worktree": "79b99290bc258b92c88d30127f5915f3a13865d099d509f698ea6731f00b1dd2",
+      "lines": 729,
+      "bytes": 21608
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_theory_Qs.py",
+      "sha256_worktree": "0c580e8ce3b8e9edafa753c11b05eee9d6f9fd498779d47f3e96746d933fffe2",
+      "lines": 768,
+      "bytes": 22520
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/reader.py",
+      "sha256_worktree": "b49e7ff5fca261047fe30c98d318a976cec1f1e1ec2ccfe1027c1398a4c26520",
+      "lines": 16,
+      "bytes": 280
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/residuals.py",
+      "sha256_worktree": "a1d6cdd3d614b52d2f52c0d01b651dfd20ba9d78abf00ca623c1684b83899e7c",
+      "lines": 141,
+      "bytes": 5273
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/dy/reader.py",
+      "sha256_worktree": "3dd996dba8db4873bf62afa8ee62d13e0f1056b8e0f5d44d309b999b88024517",
+      "lines": 32,
+      "bytes": 843
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/dy/residuals.py",
+      "sha256_worktree": "a40e26a4a67f91a3bbf6c1459c8c2126baa8e7f1f9b3981c3541675ed2a2c44f",
+      "lines": 186,
+      "bytes": 6356
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/dy/sivers0.py",
+      "sha256_worktree": "09165e14d595b94eb0b521c9dc66f470d131febb71e2ece306bf0e1b16aa1fa3",
+      "lines": 157,
+      "bytes": 5469
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/dy/upol0.py",
+      "sha256_worktree": "dddac48dfab6f1c6a4997f31d07e63721eb24bce32de62b44fa5cf6427995506",
+      "lines": 112,
+      "bytes": 3088
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/dy/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/global/input.py",
+      "sha256_worktree": "a6097d1f78ac922b93870100ddf1b2df4d8c7e622fdc7e3fc68a1b9e5743e506",
+      "lines": 755,
+      "bytes": 66425
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/global/input_an.py",
+      "sha256_worktree": "90601be7659dd6ee1072ebaa31d4a33fa4eaa2ca59cafad604c96774ca7bab9c",
+      "lines": 582,
+      "bytes": 49930
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/global/input_an_aUTspS.py",
+      "sha256_worktree": "f541b77408834cf7aad389e3cbd3b706aabfd3085009b1f22f68e57d53804e45",
+      "lines": 582,
+      "bytes": 49927
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/global/input_aUTspS.py",
+      "sha256_worktree": "28d9b891cf14b2ea816086d84b41b585c5a9a11246235098c06c616cabfe4822",
+      "lines": 583,
+      "bytes": 50129
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/global/input_sia_sidis.py",
+      "sha256_worktree": "88cd1671cef2e776599d779871c98150e428d79991c85cd5d80f2ef4ea85e55a",
+      "lines": 582,
+      "bytes": 49977
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/global/input_sidis.py",
+      "sha256_worktree": "c0b340a040aa3a029615b09a80a433d5a1efeab7b51b5da028e9453200a6a47f",
+      "lines": 582,
+      "bytes": 49932
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/idis/stfuncs.py",
+      "sha256_worktree": "575b75f725bfbe7c7e3df0732fcc91acc922b9206363410080800b6224075527",
+      "lines": 123,
+      "bytes": 3515
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/idis/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/moments/reader.py",
+      "sha256_worktree": "d997833c6ae12f9965216db7a8c9ffd35b314d66ff460236ca78d4a01c967357",
+      "lines": 29,
+      "bytes": 650
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/moments/README.md",
+      "sha256_worktree": "7c1e65363a3be1d75d2babef4be0a6129dc4362c75d3c0b00cd9b5fe2983eac7",
+      "lines": 3,
+      "bytes": 28
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/moments/residuals.py",
+      "sha256_worktree": "51b8d3a457dd0a285fa4994c37279fb8fbecafdcb671dfaa952f695c517797a6",
+      "lines": 169,
+      "bytes": 6289
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/moments/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sia/collins0.py",
+      "sha256_worktree": "799e4d32a6cb0aca3dcc96b1e1a7de72d706a2d0de76d87d9df51f7762bdc548",
+      "lines": 135,
+      "bytes": 3440
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sia/reader.py",
+      "sha256_worktree": "7f011f6df7b86717afc7f7adb12d65dcf04baeaf10c2940654659e3452a77b01",
+      "lines": 47,
+      "bytes": 1807
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sia/residuals.py",
+      "sha256_worktree": "4a823cc73528cca9587bd134ea1c3f70140914a47bbbf2132e3edd7d889bdd25",
+      "lines": 218,
+      "bytes": 9608
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sia/stfuncs.py",
+      "sha256_worktree": "a45271e86463c59e73003ff4d9940eb3c6c0a8023755e769570fbe320b3a5066",
+      "lines": 121,
+      "bytes": 3764
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sia/stfuncs0.py",
+      "sha256_worktree": "43e1f3cbbc946bca4dd18d59dcbef952b0cd002ed26661c8bf8c3168125b9089",
+      "lines": 134,
+      "bytes": 3397
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sia/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/aUTsPs0.py",
+      "sha256_worktree": "b8409fc20048df4434c4f828e8b532b6f66f5f9ab0efa20f588bec8359908b4d",
+      "lines": 125,
+      "bytes": 3170
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/boermulders0.py",
+      "sha256_worktree": "07a8703db38dd0fc8a90b90ac893237f9135be819aaf172124a894469fbd0f2d",
+      "lines": 127,
+      "bytes": 3607
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/cahn0.py",
+      "sha256_worktree": "82b29e9a37d6da3682531db23742c8c5eb081b1ea615dcdd44ace3e1bc7a7977",
+      "lines": 156,
+      "bytes": 4598
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/cahn0_AR.py",
+      "sha256_worktree": "b85f4bb5010f386f1cd4ded0b1e8a8e8e409ac2b0592828ee71f5857bf134536",
+      "lines": 158,
+      "bytes": 4684
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/cahn0_BG.py",
+      "sha256_worktree": "988a122c1ea34aff61ad33c07ae2b6d51cf4b2f4aaf0b53f9fe8692a56b51bd5",
+      "lines": 121,
+      "bytes": 3535
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/collins0.py",
+      "sha256_worktree": "1ca1c714af5795ccf9194fe65498019e7af6e97575fb62da448f7ed32f48c495",
+      "lines": 128,
+      "bytes": 3363
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/input_cos2_AR.py",
+      "sha256_worktree": "a40b1cda6f40771def1bf0ec7fd8e9eaf4f73b7b9ed6af172500cfec848b05c0",
+      "lines": 258,
+      "bytes": 24269
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/input_sivers.py",
+      "sha256_worktree": "99339a417576dc7319b703308960a1a72df6867023261510939e001754dc915b",
+      "lines": 274,
+      "bytes": 23716
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/reader.py",
+      "sha256_worktree": "85fe550c3b61b8e18f48cf756c95d8e9cc2408e29b3ad78daa8e3a18b6b185d2",
+      "lines": 75,
+      "bytes": 2483
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/residuals.py",
+      "sha256_worktree": "ad5b55cef28d314419931e689b07520af4263236c8732ea9119eec88b9e4d157",
+      "lines": 508,
+      "bytes": 29707
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/residuals_AR1.py",
+      "sha256_worktree": "99562722be082c5655625c6eeea26b62609e0147a5968a9af9ed2193f1e1195b",
+      "lines": 434,
+      "bytes": 25039
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/residuals_BG.py",
+      "sha256_worktree": "d6cf339838a6ba8dec86b8ed291fb6c45d1e85e8abdada92f22c29dfc3e05dc4",
+      "lines": 381,
+      "bytes": 22463
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/residuals_DP.py",
+      "sha256_worktree": "f586b0e65d01b3688b954a2758ccf6f6858de410acca4c8ccbdc7ad713dc38ab",
+      "lines": 430,
+      "bytes": 24849
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/sivers0.py",
+      "sha256_worktree": "2d1b455f2e943390ac41546416520d7950ae599fd75ef4a69a5cf7ce75b42784",
+      "lines": 123,
+      "bytes": 3307
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/upol0.py",
+      "sha256_worktree": "abc9368004d03e5b06d5809417cd359c1ecb9bf2a203b06499ee01a9ae0cfd40",
+      "lines": 147,
+      "bytes": 4483
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/sidis/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/Soffer_Bound/reader.py",
+      "sha256_worktree": "b49e7ff5fca261047fe30c98d318a976cec1f1e1ec2ccfe1027c1398a4c26520",
+      "lines": 16,
+      "bytes": 280
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/Soffer_Bound/residuals.py",
+      "sha256_worktree": "eb8c3fa551ac935f421b06d3665aef943a9d3e9410c9f10e2971ddb041b4cf16",
+      "lines": 176,
+      "bytes": 6444
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/Soffer_Bound/SB0.py",
+      "sha256_worktree": "a26183c26ae1a3f81cf6f0f317339e4355ffb8d456c3fd491e072d0d34212e3e",
+      "lines": 21,
+      "bytes": 414
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/Soffer_Bound/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/wz/reader.py",
+      "sha256_worktree": "eca1c241e066ad46182598d2f69742fde0053be0137585d7c05d94964bae79ab",
+      "lines": 31,
+      "bytes": 761
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/wz/residuals.py",
+      "sha256_worktree": "42f14f71207ff1420a5ae14b850d6e9dd82bd0c05a15b6a96191b20b0945e28e",
+      "lines": 179,
+      "bytes": 6180
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/wz/sivers0.py",
+      "sha256_worktree": "322684a261505c0743446c94897bf37705b9bdb81554ca01aeb9abb08b63b63c",
+      "lines": 276,
+      "bytes": 10122
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/wz/upol0.py",
+      "sha256_worktree": "61fc285bb6f21f110cef6e5c40aefd7ed487944d4bb76d12bdec2a6c927ac594",
+      "lines": 231,
+      "bytes": 7430
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/wz/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_old/AN_theory_051818.py",
+      "sha256_worktree": "636ba2acb1707b1a75d7be1f67203bd556fca9b4595cbe7608581d28420e2924",
+      "lines": 580,
+      "bytes": 19704
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_old/AN_theory_052218.py",
+      "sha256_worktree": "5126300dde9b078e4b7b3f9947b4e2d5c931f096b858204d7c007e96136ef348",
+      "lines": 584,
+      "bytes": 19897
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_old/AN_theory_120518.py",
+      "sha256_worktree": "3b8b45b8b5cd91d05d59bda52b67e3c584ef60e88746944ebc02f7701abb1d24",
+      "lines": 627,
+      "bytes": 21223
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v0.py",
+      "sha256_worktree": "9dad44dfefbdbbbd0d21cf6a0d5656a7405a1675db1861f0d4cdc3288f37d6b3",
+      "lines": 385,
+      "bytes": 20385
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v1.py",
+      "sha256_worktree": "59f39ac9a6e171c6cb63fc53bf44752b22228b30760f5ee79fb585a195872c7f",
+      "lines": 476,
+      "bytes": 18325
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v2.py",
+      "sha256_worktree": "636ba2acb1707b1a75d7be1f67203bd556fca9b4595cbe7608581d28420e2924",
+      "lines": 580,
+      "bytes": 19704
+    },
+    {
+      "repo": "jam3d",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v3.py",
+      "sha256_worktree": "82e3cfc24951d89fd1be72e27d2ae484d9a9af6874e8855ae04cf8a1fe067e57",
+      "lines": 662,
+      "bytes": 17283
+    },
+    {
+      "repo": "jam3d",
+      "path": "simulation/example00/README.md",
+      "sha256_worktree": "e93ab4c0f92f0334f5910db36f7e9c8c235e108a709dcf50a289dae18beb9855",
+      "lines": 25,
+      "bytes": 809
+    },
+    {
+      "repo": "jam3d",
+      "path": "simulation/example00/simulation.py",
+      "sha256_worktree": "1eef71b94dacda023bbcc63e3ecfed9f1f7f4a1eed1c50dcc676b48ccc330f4e",
+      "lines": 91,
+      "bytes": 4748
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/README.md",
+      "sha256_worktree": "e349168aa73c74a58fcb0da7f8e39695b283c6bd7184e2a0bf1b2d3fc6d8bde6",
+      "lines": 23,
+      "bytes": 258
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "docs/conf.py",
+      "sha256_worktree": "6c556a75416505257d99b8e70a9c196e7548fff35f1c5b44ad02a253a6b49a33",
+      "lines": 188,
+      "bytes": 5738
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/README.md",
+      "sha256_worktree": "5eb21a3bbd6403eba7980a12eab45b136b3b98978f52894e7ff72f95e810653a",
+      "lines": 6,
+      "bytes": 93
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "fitlib/input.py",
+      "sha256_worktree": "851f08368d26ad7ebf5d55d906478bd992ee0640fefb9faa2a2d6697a10cd85c",
+      "lines": 959,
+      "bytes": 83266
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "fitlib/input_dglap.py",
+      "sha256_worktree": "e853cbf1f8d8f0f33d975bb6d4576d2b3d3da4c28234b3c3e1a6cc35655911c7",
+      "lines": 1187,
+      "bytes": 99649
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "fitlib/input_evo.py",
+      "sha256_worktree": "b31bac0effe928271d1deee6e73214e47de00eaa3659e5d1430b2cdac5d3fbc1",
+      "lines": 993,
+      "bytes": 85297
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "fitlib/maxlike.py",
+      "sha256_worktree": "097f5371dcd5b42bc6a8ded6829f9dcb7d7b3f80c43ded460ec6dbf4401c0644",
+      "lines": 398,
+      "bytes": 14666
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "fitlib/parman.py",
+      "sha256_worktree": "db43c53b7cd4eb305fd6deb89087249361e51490f5305d551b1f582c34f0fe48",
+      "lines": 452,
+      "bytes": 21948
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "fitlib/resman.py",
+      "sha256_worktree": "cce4e75bc945e9b4d35e64c7e465c6394198116889e6b63412ead9e0e28ce14a",
+      "lines": 438,
+      "bytes": 21530
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "fitlib/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "LHAPDF_tables/README.md",
+      "sha256_worktree": "2b106a601600740da4a88971ef760ccba1ea8c3ce83b4694ef55be17509f1b6a",
+      "lines": 3,
+      "bytes": 229
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/adaptive_quad.py",
+      "sha256_worktree": "deb907481c3bb736da2e70f82174dbf39a3b8a0c5b8c940a88001318a2d398ca",
+      "lines": 36,
+      "bytes": 1085
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/alphaS.py",
+      "sha256_worktree": "2b5244074ca50121cfc400e4f6d4599472471c0a667f4a7e8cf4e99a89f6535a",
+      "lines": 140,
+      "bytes": 3641
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/constants.py",
+      "sha256_worktree": "42b8487d4b0e99fe0c67a83c11eedd85f3b592cf5f94ae04f36862ad90a5f09a",
+      "lines": 54,
+      "bytes": 620
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/core.py",
+      "sha256_worktree": "762fe646174ad20b2a452f02f42fb242e3f8495c184c967300e861924608c6cc",
+      "lines": 163,
+      "bytes": 4758
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/dglap.py",
+      "sha256_worktree": "221360bad553879a1f914e860ef46c9cb95ea77eac6db0d5182fd25d4c72bc0d",
+      "lines": 426,
+      "bytes": 14611
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/ff0.py",
+      "sha256_worktree": "4273588f224038dc369906cffee090b35926607fb0f305c3a48ab9dd9a65dba5",
+      "lines": 94,
+      "bytes": 3523
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/ff1.py",
+      "sha256_worktree": "aad984cd3318ae43cd34270e758b2f5a4ffd0a73a55c20d23bcb6cf08e48e759",
+      "lines": 86,
+      "bytes": 2955
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/ff1_test.py",
+      "sha256_worktree": "f8ea87033a92a65180baa8e040eb923650b66f280fd908ba2a22b24ee9cb2ee2",
+      "lines": 86,
+      "bytes": 2953
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/ff2.py",
+      "sha256_worktree": "a75ad28ffaf6d993d95afb1508b8eba9dada432f25600acd17d02aead1f494b4",
+      "lines": 311,
+      "bytes": 11823
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/interpolator.py",
+      "sha256_worktree": "8102f6fd6bf90fffa3e0e96c1b73eae26d26e2e6ccae4f6450f4f19b1f2cb2ed",
+      "lines": 46,
+      "bytes": 1319
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/kernels.py",
+      "sha256_worktree": "842def8dab1c9566a1fb817499791d15887b21fd62ab227a117498ce436002f7",
+      "lines": 359,
+      "bytes": 12736
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/mellin.py",
+      "sha256_worktree": "799c851ff5ba98002143ad483b6bf43e9765d7ea48fb7847afde4fc138e85c2e",
+      "lines": 50,
+      "bytes": 1501
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/pdf0.py",
+      "sha256_worktree": "25eba0cf6c3b0f01febeff49f638c09ec4cab7d2ae788fa8407c6d5966d423a4",
+      "lines": 95,
+      "bytes": 2924
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/pdf1.py",
+      "sha256_worktree": "2c70e79265c3925fe253aac957b5b76e343e70a06f0726b974b48dc113123687",
+      "lines": 85,
+      "bytes": 2548
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/pdf1_test.py",
+      "sha256_worktree": "cfb72145e887c72445749ec17fcd92376b0ef939ef0eb8223314aac46cebca81",
+      "lines": 85,
+      "bytes": 2546
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/pdf2.py",
+      "sha256_worktree": "da3734885972eb56af7f72dc8f196b54e12373b99a61894d520e0e140e98b08d",
+      "lines": 339,
+      "bytes": 12676
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/ppdf0.py",
+      "sha256_worktree": "f81890bc7da8fe19cd519bb1d9f6d2568acb6380a5b5316453d8ebfe51661cf1",
+      "lines": 76,
+      "bytes": 2101
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/rfilter.py",
+      "sha256_worktree": "bff6b727b0d633c4744524909be2ba3458ec95a65d341994befb47dc03d834c9",
+      "lines": 122,
+      "bytes": 3568
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/special.py",
+      "sha256_worktree": "5b76378320a918c86b083db05b4775362c79c9f723261e29f267bfd4044def27",
+      "lines": 30,
+      "bytes": 766
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/bar.py",
+      "sha256_worktree": "0b3272aaab2c2aadaa1a6c21a61985a375e7df3b67f4fec51f0c1df93aab7ba4",
+      "lines": 22,
+      "bytes": 472
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/config.py",
+      "sha256_worktree": "e3384ae2067e2f5a64ccbe5b019bf59c6cc5a95650d92b50e5741ff9052924c2",
+      "lines": 28,
+      "bytes": 432
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/inputmod.py",
+      "sha256_worktree": "0d8d19cf29ecb638ef456643421201537a2bcc1924d49e555f76b0076a5378c6",
+      "lines": 59,
+      "bytes": 1826
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/mcproc.py",
+      "sha256_worktree": "946415cdcc69379560d3b07b5f67994b5b375edb2f7cabdd4757ed4457fc9c76",
+      "lines": 95,
+      "bytes": 2660
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/mcstat.py",
+      "sha256_worktree": "725ff56107691faa2aed0c32d375fe391a7735dd24908e4c25bbe136a0329578",
+      "lines": 202,
+      "bytes": 6493
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/multiproc.py",
+      "sha256_worktree": "7c40fba119db106b4815e6360836330bad0bc6550a99a98590e23e0eeae1ffdb",
+      "lines": 42,
+      "bytes": 1247
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/parallel.py",
+      "sha256_worktree": "75305c0d454d85cbc39efa00863ef1e3e39349964309996b381fd553373fc6a0",
+      "lines": 332,
+      "bytes": 7901
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/randomstr.py",
+      "sha256_worktree": "b20b359b830cfb677158d24bbeab31159fb27344eb52021f5922b6f3bf462119",
+      "lines": 16,
+      "bytes": 241
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/reader.py",
+      "sha256_worktree": "c6cd31b6cbb622879ecc2643cbc1fc372dff4f2d448726720878a99f7de16f15",
+      "lines": 46,
+      "bytes": 1473
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/README.md",
+      "sha256_worktree": "2e677d814c456f87368c95c7acc66573d6a9bbc6335a8d60ad2b30bf7c753c01",
+      "lines": 29,
+      "bytes": 593
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/residuals.py",
+      "sha256_worktree": "6fb064309c1b65425e61ef03f767a3d711cff28fb62a9da816f9534f460c2317",
+      "lines": 511,
+      "bytes": 17806
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/storage.py",
+      "sha256_worktree": "8b8826e1a40f59e434c7167a37be4b33b045fe48f8db1eeea003100fc0a6e375",
+      "lines": 42,
+      "bytes": 1108
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/tools.py",
+      "sha256_worktree": "5653d99174355a3bfd39d8c27193caeca739b23037b786c83361b9cd64d331c5",
+      "lines": 64,
+      "bytes": 1122
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "tools/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/ANgam_pp/README.md",
+      "sha256_worktree": "ca34478f7b8d572da004547b3c5ab71dd52ed12135cd76b4791496dc6edf82f3",
+      "lines": 28,
+      "bytes": 1559
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/AN_ep/README.md",
+      "sha256_worktree": "1526d216501768612f8ce43ab1003c0d2a8d3e3a2df5665c865da592fe5afb5e",
+      "lines": 25,
+      "bytes": 1528
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/AN_pp/README.md",
+      "sha256_worktree": "9cc350443456df5039e90c8026aac0fa6184bc173ca14984f10a273dcae36862",
+      "lines": 66,
+      "bytes": 6515
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/dy/README.md",
+      "sha256_worktree": "ccb08e805d4c7c0cec75ed6e55f51f37e148dbe52ff234aa2dd66b99a8420d32",
+      "lines": 17,
+      "bytes": 789
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/g1T_WW/interpolator.py",
+      "sha256_worktree": "1115a775c1ca144b76d0675febb76c92949dfc855eeab2d16d62306f9d83cb55",
+      "lines": 42,
+      "bytes": 1174
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/g1T_WW/ppdf0_WW.py",
+      "sha256_worktree": "93fc8b604b15f1649736a957f7a3659f7172a8e7ef2fe32829c2f4037acd3155",
+      "lines": 33,
+      "bytes": 889
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/lattice/README.md",
+      "sha256_worktree": "9e5b32031c7eb2f2361ff397149c97f582acaaaa5df7105a1e971038a1115b6d",
+      "lines": 17,
+      "bytes": 876
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/sia/README.md",
+      "sha256_worktree": "45cef75b2558609f2899388f343377261d410d0850c3a59b67884a965b75cc90",
+      "lines": 34,
+      "bytes": 2416
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/sidis/info.py",
+      "sha256_worktree": "57c093fc9483fcffea9775f5dd5793b6ee3d397b702d59107e14d830e66ad93f",
+      "lines": 98,
+      "bytes": 2690
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/sidis/README.md",
+      "sha256_worktree": "85ffe106f2e6b60843a02ce49ce27b3d798565e509809b8d2c215ae96f1e95e4",
+      "lines": 226,
+      "bytes": 24948
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/Soffer_Bound/interpolator.py",
+      "sha256_worktree": "1115a775c1ca144b76d0675febb76c92949dfc855eeab2d16d62306f9d83cb55",
+      "lines": 42,
+      "bytes": 1174
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/Soffer_Bound/pdf0_SB.py",
+      "sha256_worktree": "c5f2fe02980fa37c7378503f4d28813a942799bd1ee76bd0bc033c60d94f5cd3",
+      "lines": 31,
+      "bytes": 699
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/Soffer_Bound/ppdf0_SB.py",
+      "sha256_worktree": "c54f48cc3468f0e5a75e28aa014005acb714bf8027e15643de87fc174aaf9380",
+      "lines": 31,
+      "bytes": 743
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/Soffer_Bound/README.md",
+      "sha256_worktree": "dfb08e247a755bd1a20e2a0bdbeb613d346f0aeb5de5da38e40a872ecde90903",
+      "lines": 5,
+      "bytes": 262
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/wz/README.md",
+      "sha256_worktree": "23daf2ca482f80e4ee2dfd2b16ba25d8a05db66db5f8c02bcd728d86f5ed448b",
+      "lines": 16,
+      "bytes": 669
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/AN_pp/src/AN_pp_data.py",
+      "sha256_worktree": "aec032482de4c2f3d466afa530a304cb870c1b024a136fdf8a8780d7141cc4c0",
+      "lines": 44,
+      "bytes": 1629
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/sidis/src/AUTcollins/converter.py",
+      "sha256_worktree": "48b63f4dfcad470de4e5727335ef1d8f617fb822e9417f8146cd732ee1077dfa",
+      "lines": 83,
+      "bytes": 2132
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "database/sidis/src/EIC_unpolarized/converter.py",
+      "sha256_worktree": "e67227ab068e025bf668714ded0e6c27719e85fc85b6658a3bb4a95a500d167c",
+      "lines": 34,
+      "bytes": 751
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/dev/input00.py",
+      "sha256_worktree": "d4ee6f3de9f536440e57fb88a1aeb3c6a414cb429f8e3014e5540961d9738a36",
+      "lines": 66,
+      "bytes": 3218
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/dev/input10.py",
+      "sha256_worktree": "3ae892abefd56e68b3c94f829693288e27f57a3cae560f47449004bf73977542",
+      "lines": 259,
+      "bytes": 20079
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/dev/readme.md",
+      "sha256_worktree": "4d39d73044b660c7170b941a60bfea05ae8a46eec3dcc00660efa704d67b55c3",
+      "lines": 9,
+      "bytes": 93
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/example00/input.py",
+      "sha256_worktree": "04f1fb5ccc0ba8a5130601d74d81ba3d23c08285de488544c43ae1deecfc4cb4",
+      "lines": 64,
+      "bytes": 3843
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/example00/inputnoq2.py",
+      "sha256_worktree": "0370c3b1c54a5807636a8647bf78a5282920bca0ce7d930c15c155e3f234e5b9",
+      "lines": 65,
+      "bytes": 3835
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/example01/input.py",
+      "sha256_worktree": "28a73d508c2c276b134014be876269abaeb1a4bc76518dab7a857d450ab1c726",
+      "lines": 399,
+      "bytes": 35005
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/example02/input.py",
+      "sha256_worktree": "65595efb38c5a242c0365a98fe7bbc354b9f195cd7854e9f38d11e83c06dcc9f",
+      "lines": 75,
+      "bytes": 3841
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "extraction/example03/input.py",
+      "sha256_worktree": "1f5b02cdedf2a06fbf93c983c1c9d1c541c713611f88fb39de12c64042fa4c4d",
+      "lines": 425,
+      "bytes": 36118
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/ANgam_pp/AN_theory0.py",
+      "sha256_worktree": "d3411437bb4d7796da60e667d70dde3b5df7af605a06a88840ca69cd5acd590c",
+      "lines": 432,
+      "bytes": 14196
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/ANgam_pp/AN_theory0_Real.py",
+      "sha256_worktree": "32d3de5193c644478d7ad5ead582d1a54e36ae0e0daeba6d26a732f371f5b882",
+      "lines": 340,
+      "bytes": 8875
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/ANgam_pp/AN_theory0_SFP.py",
+      "sha256_worktree": "710acbc4ea5ad6a029cdbe8862a8939ef0f91a0ce9d06738f39835ab52826fba",
+      "lines": 372,
+      "bytes": 10954
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/ANgam_pp/reader.py",
+      "sha256_worktree": "b49e7ff5fca261047fe30c98d318a976cec1f1e1ec2ccfe1027c1398a4c26520",
+      "lines": 16,
+      "bytes": 280
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/ANgam_pp/residuals.py",
+      "sha256_worktree": "18dfe6dca5459fd694c08664c5b11c4530dbc033c4be9521cbfb7714e676a2f1",
+      "lines": 131,
+      "bytes": 4740
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/ANgam_pp/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/AN_theory0.py",
+      "sha256_worktree": "d00159bcef9cc57f5061ad111e6f19e0fde540d8631e044e474676e64f619e93",
+      "lines": 372,
+      "bytes": 16429
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/AN_theory0_DP.py",
+      "sha256_worktree": "c7326e20e0ad83e7db7b49c4eba860ba1f536181b7e99e897a69397137f62091",
+      "lines": 424,
+      "bytes": 10633
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/AN_theory0_MM1.py",
+      "sha256_worktree": "be147921745c937a8bf7b829bbd641dc401324bb59357a87ea24e4a15aa3244e",
+      "lines": 265,
+      "bytes": 10323
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/AN_theory_JM.py",
+      "sha256_worktree": "3812346699108e4eacb9e4304ffaf5a69623c950b24433691e0e76cf4eccfab7",
+      "lines": 307,
+      "bytes": 9794
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/input.py",
+      "sha256_worktree": "4d58d675edb1d4fe6d78d7fabcbd21be14cc5804890d3be9b8de4808f3b6544b",
+      "lines": 620,
+      "bytes": 56356
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/input_ep.py",
+      "sha256_worktree": "030e1eb5957570a8da6c91482a633cf9ede481c52fecb3df96cf966fefad1bc4",
+      "lines": 621,
+      "bytes": 56357
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/reader.py",
+      "sha256_worktree": "e9c3fcd6285b6ebaff4a9b226d746bfdfb21aef1b74201778c5a156a2055efb6",
+      "lines": 17,
+      "bytes": 319
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/residuals.py",
+      "sha256_worktree": "5ca20d15a917c1abb3580789694207d2335bbbfd7a483defe030d248cad3d3df",
+      "lines": 131,
+      "bytes": 4707
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_ep/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0.py",
+      "sha256_worktree": "f1eda2baa1b5cbbc1aed1e713de405a0d28fd05490d28bb13c206427c67007e9",
+      "lines": 736,
+      "bytes": 22731
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0_6_28_21.py",
+      "sha256_worktree": "7432edc5be1f4854b69d0e7f71fb7935811c4a12ef4265be1f62855fbbab09cb",
+      "lines": 728,
+      "bytes": 21581
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0_hadinjet.py",
+      "sha256_worktree": "f1a4296a36242308c3f4f029182c1f797e0ad6f6e113df6d0382c883a9465c1f",
+      "lines": 524,
+      "bytes": 15777
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0_interpolation.py",
+      "sha256_worktree": "966071d9cc9dbe336f11ebfd8a573c6fc07ab3cb2251adc240427f2515e1ef6f",
+      "lines": 801,
+      "bytes": 24839
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0_jit.py",
+      "sha256_worktree": "ee0ad72dcd7bb803762587693089fb25eacd58e304b250b3f7bcab026132aaaf",
+      "lines": 764,
+      "bytes": 23087
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0_jit_adap_quad.py",
+      "sha256_worktree": "e929597d074e7578756364a96c5eeb13796728d773cef34462d20ed81dc5dd0f",
+      "lines": 741,
+      "bytes": 22791
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0_orig.py",
+      "sha256_worktree": "2c0c3f6741dc486078f49eb1716a164fd9ad812700c61935cec4b472e32e782d",
+      "lines": 732,
+      "bytes": 22636
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory0_speedup.py",
+      "sha256_worktree": "f634dc2e9b2895ec71e2ad9960416504a9c15329dcfaa48138da3f8e5cd13d39",
+      "lines": 737,
+      "bytes": 22608
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_theory_Qs.py",
+      "sha256_worktree": "0c580e8ce3b8e9edafa753c11b05eee9d6f9fd498779d47f3e96746d933fffe2",
+      "lines": 768,
+      "bytes": 22520
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/reader.py",
+      "sha256_worktree": "9f2f0c1a2e6fd2e246593772924a139fa0e2f3e18f8ce0dfde4fd21b8dd2988b",
+      "lines": 19,
+      "bytes": 392
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/residuals.py",
+      "sha256_worktree": "76d6e860cb08b6bd0af21b86625bb8235274f55be614724c6ad9690135b68037",
+      "lines": 256,
+      "bytes": 10558
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/residuals_accuracy.py",
+      "sha256_worktree": "6653d2f9ecc219235658da2bacb682432551c329a12a2c0ddfc83be8ff1a4800",
+      "lines": 204,
+      "bytes": 8061
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/residuals_speedup.py",
+      "sha256_worktree": "f2b9ec7d01c755df31f90a58e2765fdd3ec05edfabda634e842ed40c9eff8c38",
+      "lines": 351,
+      "bytes": 13558
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/dy/reader.py",
+      "sha256_worktree": "3dd996dba8db4873bf62afa8ee62d13e0f1056b8e0f5d44d309b999b88024517",
+      "lines": 32,
+      "bytes": 843
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/dy/residuals.py",
+      "sha256_worktree": "a40e26a4a67f91a3bbf6c1459c8c2126baa8e7f1f9b3981c3541675ed2a2c44f",
+      "lines": 186,
+      "bytes": 6356
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/dy/sivers0.py",
+      "sha256_worktree": "09165e14d595b94eb0b521c9dc66f470d131febb71e2ece306bf0e1b16aa1fa3",
+      "lines": 157,
+      "bytes": 5469
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/dy/upol0.py",
+      "sha256_worktree": "dddac48dfab6f1c6a4997f31d07e63721eb24bce32de62b44fa5cf6427995506",
+      "lines": 112,
+      "bytes": 3088
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/dy/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/global/input.py",
+      "sha256_worktree": "a6097d1f78ac922b93870100ddf1b2df4d8c7e622fdc7e3fc68a1b9e5743e506",
+      "lines": 755,
+      "bytes": 66425
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/global/input_an.py",
+      "sha256_worktree": "90601be7659dd6ee1072ebaa31d4a33fa4eaa2ca59cafad604c96774ca7bab9c",
+      "lines": 582,
+      "bytes": 49930
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/global/input_an_aUTspS.py",
+      "sha256_worktree": "f541b77408834cf7aad389e3cbd3b706aabfd3085009b1f22f68e57d53804e45",
+      "lines": 582,
+      "bytes": 49927
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/global/input_aUTspS.py",
+      "sha256_worktree": "28d9b891cf14b2ea816086d84b41b585c5a9a11246235098c06c616cabfe4822",
+      "lines": 583,
+      "bytes": 50129
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/global/input_sia_sidis.py",
+      "sha256_worktree": "88cd1671cef2e776599d779871c98150e428d79991c85cd5d80f2ef4ea85e55a",
+      "lines": 582,
+      "bytes": 49977
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/global/input_sidis.py",
+      "sha256_worktree": "c0b340a040aa3a029615b09a80a433d5a1efeab7b51b5da028e9453200a6a47f",
+      "lines": 582,
+      "bytes": 49932
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/idis/stfuncs.py",
+      "sha256_worktree": "43b6b5ca71068dd9c779b39b43acd1574a8fc42d1e31f74f6d2da118e5eeb8a0",
+      "lines": 125,
+      "bytes": 3591
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/idis/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/moments/reader.py",
+      "sha256_worktree": "d997833c6ae12f9965216db7a8c9ffd35b314d66ff460236ca78d4a01c967357",
+      "lines": 29,
+      "bytes": 650
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/moments/README.md",
+      "sha256_worktree": "7c1e65363a3be1d75d2babef4be0a6129dc4362c75d3c0b00cd9b5fe2983eac7",
+      "lines": 3,
+      "bytes": 28
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/moments/residuals.py",
+      "sha256_worktree": "51b8d3a457dd0a285fa4994c37279fb8fbecafdcb671dfaa952f695c517797a6",
+      "lines": 169,
+      "bytes": 6289
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/moments/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sia/collins0.py",
+      "sha256_worktree": "799e4d32a6cb0aca3dcc96b1e1a7de72d706a2d0de76d87d9df51f7762bdc548",
+      "lines": 135,
+      "bytes": 3440
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sia/reader.py",
+      "sha256_worktree": "7f011f6df7b86717afc7f7adb12d65dcf04baeaf10c2940654659e3452a77b01",
+      "lines": 47,
+      "bytes": 1807
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sia/residuals.py",
+      "sha256_worktree": "4a823cc73528cca9587bd134ea1c3f70140914a47bbbf2132e3edd7d889bdd25",
+      "lines": 218,
+      "bytes": 9608
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sia/stfuncs.py",
+      "sha256_worktree": "a45271e86463c59e73003ff4d9940eb3c6c0a8023755e769570fbe320b3a5066",
+      "lines": 121,
+      "bytes": 3764
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sia/stfuncs0.py",
+      "sha256_worktree": "43e1f3cbbc946bca4dd18d59dcbef952b0cd002ed26661c8bf8c3168125b9089",
+      "lines": 134,
+      "bytes": 3397
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sia/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/aUTsPs0.py",
+      "sha256_worktree": "b8409fc20048df4434c4f828e8b532b6f66f5f9ab0efa20f588bec8359908b4d",
+      "lines": 125,
+      "bytes": 3170
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/boermulders0.py",
+      "sha256_worktree": "07a8703db38dd0fc8a90b90ac893237f9135be819aaf172124a894469fbd0f2d",
+      "lines": 127,
+      "bytes": 3607
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/cahn0.py",
+      "sha256_worktree": "82b29e9a37d6da3682531db23742c8c5eb081b1ea615dcdd44ace3e1bc7a7977",
+      "lines": 156,
+      "bytes": 4598
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/cahn0_AR.py",
+      "sha256_worktree": "b85f4bb5010f386f1cd4ded0b1e8a8e8e409ac2b0592828ee71f5857bf134536",
+      "lines": 158,
+      "bytes": 4684
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/cahn0_BG.py",
+      "sha256_worktree": "988a122c1ea34aff61ad33c07ae2b6d51cf4b2f4aaf0b53f9fe8692a56b51bd5",
+      "lines": 121,
+      "bytes": 3535
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/collins0.py",
+      "sha256_worktree": "1ca1c714af5795ccf9194fe65498019e7af6e97575fb62da448f7ed32f48c495",
+      "lines": 128,
+      "bytes": 3363
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/input_cos2_AR.py",
+      "sha256_worktree": "a40b1cda6f40771def1bf0ec7fd8e9eaf4f73b7b9ed6af172500cfec848b05c0",
+      "lines": 258,
+      "bytes": 24269
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/input_sivers.py",
+      "sha256_worktree": "99339a417576dc7319b703308960a1a72df6867023261510939e001754dc915b",
+      "lines": 274,
+      "bytes": 23716
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/reader.py",
+      "sha256_worktree": "85fe550c3b61b8e18f48cf756c95d8e9cc2408e29b3ad78daa8e3a18b6b185d2",
+      "lines": 75,
+      "bytes": 2483
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/residuals.py",
+      "sha256_worktree": "ec155359ac827ed54489f19d1ba6739082981b26e22a3fa7c3affb1ae77ca556",
+      "lines": 506,
+      "bytes": 29836
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/residuals_AR1.py",
+      "sha256_worktree": "99562722be082c5655625c6eeea26b62609e0147a5968a9af9ed2193f1e1195b",
+      "lines": 434,
+      "bytes": 25039
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/residuals_BG.py",
+      "sha256_worktree": "d6cf339838a6ba8dec86b8ed291fb6c45d1e85e8abdada92f22c29dfc3e05dc4",
+      "lines": 381,
+      "bytes": 22463
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/residuals_DP.py",
+      "sha256_worktree": "f586b0e65d01b3688b954a2758ccf6f6858de410acca4c8ccbdc7ad713dc38ab",
+      "lines": 430,
+      "bytes": 24849
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/sivers0.py",
+      "sha256_worktree": "71f2e3c7b7b90a4f24f6c72ae5dd9ff6ddaabab0b2fe51ca2e83281c2013ff90",
+      "lines": 129,
+      "bytes": 3517
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/upol0.py",
+      "sha256_worktree": "1a29fda19b124f386310c1ad3f07f81dbe6c89671509b8d196f164439e25ba7d",
+      "lines": 158,
+      "bytes": 4789
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/sidis/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/Soffer_Bound/reader.py",
+      "sha256_worktree": "b49e7ff5fca261047fe30c98d318a976cec1f1e1ec2ccfe1027c1398a4c26520",
+      "lines": 16,
+      "bytes": 280
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/Soffer_Bound/residuals.py",
+      "sha256_worktree": "eb8c3fa551ac935f421b06d3665aef943a9d3e9410c9f10e2971ddb041b4cf16",
+      "lines": 176,
+      "bytes": 6444
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/Soffer_Bound/SB0.py",
+      "sha256_worktree": "a26183c26ae1a3f81cf6f0f317339e4355ffb8d456c3fd491e072d0d34212e3e",
+      "lines": 21,
+      "bytes": 414
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/Soffer_Bound/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/wz/reader.py",
+      "sha256_worktree": "eca1c241e066ad46182598d2f69742fde0053be0137585d7c05d94964bae79ab",
+      "lines": 31,
+      "bytes": 761
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/wz/residuals.py",
+      "sha256_worktree": "42f14f71207ff1420a5ae14b850d6e9dd82bd0c05a15b6a96191b20b0945e28e",
+      "lines": 179,
+      "bytes": 6180
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/wz/sivers0.py",
+      "sha256_worktree": "322684a261505c0743446c94897bf37705b9bdb81554ca01aeb9abb08b63b63c",
+      "lines": 276,
+      "bytes": 10122
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/wz/upol0.py",
+      "sha256_worktree": "61fc285bb6f21f110cef6e5c40aefd7ed487944d4bb76d12bdec2a6c927ac594",
+      "lines": 231,
+      "bytes": 7430
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/wz/__init__.py",
+      "sha256_worktree": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "bytes": 0
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_old/AN_theory_051818.py",
+      "sha256_worktree": "636ba2acb1707b1a75d7be1f67203bd556fca9b4595cbe7608581d28420e2924",
+      "lines": 580,
+      "bytes": 19704
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_old/AN_theory_052218.py",
+      "sha256_worktree": "5126300dde9b078e4b7b3f9947b4e2d5c931f096b858204d7c007e96136ef348",
+      "lines": 584,
+      "bytes": 19897
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_old/AN_theory_120518.py",
+      "sha256_worktree": "3b8b45b8b5cd91d05d59bda52b67e3c584ef60e88746944ebc02f7701abb1d24",
+      "lines": 627,
+      "bytes": 21223
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v0.py",
+      "sha256_worktree": "9dad44dfefbdbbbd0d21cf6a0d5656a7405a1675db1861f0d4cdc3288f37d6b3",
+      "lines": 385,
+      "bytes": 20385
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v1.py",
+      "sha256_worktree": "59f39ac9a6e171c6cb63fc53bf44752b22228b30760f5ee79fb585a195872c7f",
+      "lines": 476,
+      "bytes": 18325
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v2.py",
+      "sha256_worktree": "636ba2acb1707b1a75d7be1f67203bd556fca9b4595cbe7608581d28420e2924",
+      "lines": 580,
+      "bytes": 19704
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "obslib/AN_pp/AN_old/AN_theory_v3.py",
+      "sha256_worktree": "82e3cfc24951d89fd1be72e27d2ae484d9a9af6874e8855ae04cf8a1fe067e57",
+      "lines": 662,
+      "bytes": 17283
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato/core.py",
+      "sha256_worktree": "2e2d8fa301b7719a61da0d95404d5ba259daa8fd65708f0fddaed83de146275b",
+      "lines": 65,
+      "bytes": 1718
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato/interp.py",
+      "sha256_worktree": "31c86a2a9cab9fcf3aa3d11d654539fdde2e9ac5a94eff776949345dbefbcb60",
+      "lines": 89,
+      "bytes": 2238
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato/special.py",
+      "sha256_worktree": "5b76378320a918c86b083db05b4775362c79c9f723261e29f267bfd4044def27",
+      "lines": 30,
+      "bytes": 766
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato/tmd_ff.py",
+      "sha256_worktree": "0295d9aeb98a1b600d9b8bc79c3dda8ad404db12d99791175afa3d21c4cf5dca",
+      "lines": 48,
+      "bytes": 1314
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato/tmd_pdf.py",
+      "sha256_worktree": "db27a4b6de38dc79958bc6a844821fa909dd3fa3c9874b2bc649d2e6597e4d94",
+      "lines": 48,
+      "bytes": 1314
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato_interp_files/ff0k.py",
+      "sha256_worktree": "5a08164c510a94b01043c6f03593d1ba0acc56e36c2c53423f47ef4420839477",
+      "lines": 116,
+      "bytes": 3748
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato_interp_files/ff0pi.py",
+      "sha256_worktree": "8dfda4dd9508bd3268de450bfdb3be642f6bf3229722e0b308bc93f4e02f7aeb",
+      "lines": 116,
+      "bytes": 3751
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato_interp_files/interp.py",
+      "sha256_worktree": "31c86a2a9cab9fcf3aa3d11d654539fdde2e9ac5a94eff776949345dbefbcb60",
+      "lines": 89,
+      "bytes": 2238
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato_interp_files/pdf0.py",
+      "sha256_worktree": "1f699dd89f18b7ce077475c66c6613a4159312a44b98511fbbbe1fbaf9fe3670",
+      "lines": 126,
+      "bytes": 3815
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/nsato_interp_files/pdf0pi.py",
+      "sha256_worktree": "454cb3abc0612a9bd88aef8386127649b580e8ddfc39048d583f9dee1739345f",
+      "lines": 126,
+      "bytes": 3824
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/old_files/ff0.py",
+      "sha256_worktree": "66041ff7c878cf69649172a0b291915034bdc9ecd3c1a94e0cde299415b17883",
+      "lines": 84,
+      "bytes": 2961
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "qcdlib/old_files/pdf0.py",
+      "sha256_worktree": "3ab20d504dc5cd8cdfd7dc046ee942faf5cfc2418e294eb2bc79f0ab8c5b5155",
+      "lines": 92,
+      "bytes": 2774
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "simulation/example00/README.md",
+      "sha256_worktree": "e93ab4c0f92f0334f5910db36f7e9c8c235e108a709dcf50a289dae18beb9855",
+      "lines": 25,
+      "bytes": 809
+    },
+    {
+      "repo": "jam3d_dev_lib",
+      "path": "simulation/example00/simulation.py",
+      "sha256_worktree": "1eef71b94dacda023bbcc63e3ecfed9f1f7f4a1eed1c50dcc676b48ccc330f4e",
+      "lines": 91,
+      "bytes": 4748
+    },
+    {
+      "repo": "jam3dlib",
+      "path": "example.py",
+      "sha256_worktree": "30bf1d4dd433277c097534cc79087d657fee673795f41efd55459334f1b0485c",
+      "lines": 19,
+      "bytes": 262
+    },
+    {
+      "repo": "jam3dlib",
+      "path": "readme.md",
+      "sha256_worktree": "5d18d1b0c44b967f77e57c5d73e2bcaf3d0d465f4b8a4c60f5d0eb23ae003179",
+      "lines": 96,
+      "bytes": 2379
+    },
+    {
+      "repo": "jam3dlib",
+      "path": "tmd.py",
+      "sha256_worktree": "8864d25185855f9c93e905ec25f5fd6930b71137c866b82705b38fc4d13ff942",
+      "lines": 100,
+      "bytes": 3908
+    },
+    {
+      "repo": "jam3dlib",
+      "path": "data/input-JAM3D_2020.py",
+      "sha256_worktree": "f7462c7bdd3075981f511363c239c7ef5e32a97a11c362f546d7c4ff072fe785",
+      "lines": 591,
+      "bytes": 55789
+    },
+    {
+      "repo": "jam3dlib",
+      "path": "data/input-JAM3D_2022.py",
+      "sha256_worktree": "3d81716d6d01e57dbc8ab7c3d1f2bc6fda91fa227925c2c08d0c0f22a20e8a07",
+      "lines": 1100,
+      "bytes": 97526
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "README.md",
+      "sha256_worktree": "2b006517f9ab72a11bea2d8c4d494628943a30d0d4e1d3b9b82eec3f9add70b0",
+      "lines": 201,
+      "bytes": 4106
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "stfunctionstest.cpp",
+      "sha256_worktree": "191402db38af4590582fd24e82470c6ec20ee97626dee0c2f5be2effed2221f4",
+      "lines": 73,
+      "bytes": 3027
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "stfunctionstest1.cpp",
+      "sha256_worktree": "89bc5617be9889b627cdd91c9b7100d41cc095bb9ef5855008cc276811ac3505",
+      "lines": 58,
+      "bytes": 1905
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "test.cpp",
+      "sha256_worktree": "ab654ef626d5fc6919be1299f2bf43a34e7bf97a308dbc1a784805d8df55492c",
+      "lines": 430,
+      "bytes": 12465
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/akk.f",
+      "sha256_worktree": "8840b0231e835355f593b37239c7fe8490b4f5e37c232a6a20161c6e8688a18e",
+      "lines": 1218,
+      "bytes": 33554
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/cfortran.h",
+      "sha256_worktree": "8821fcf2b1e18db2bf66db5d137545a2343c13bc0c45a311adbb4cc01a472ade",
+      "lines": 2523,
+      "bytes": 137168
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/collins.cpp",
+      "sha256_worktree": "4be1dd6cb5f198350567469c69d1bfdaa456206efda794047bd57250f552e7a9",
+      "lines": 508,
+      "bytes": 15424
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/collins.h",
+      "sha256_worktree": "5ff9385e58776df0dc0b07d26131438dd314230b782582d2528dda0a76cac163",
+      "lines": 63,
+      "bytes": 2375
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/dlib.f",
+      "sha256_worktree": "87b9216f801606aef49322d5987c76c0311fe33c0e2c979f717774b69225d281",
+      "lines": 659,
+      "bytes": 21744
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/fDSS.f",
+      "sha256_worktree": "e002d4fc4234fb6823141531ee8bae1bfdfb588eee94b061799643232ac5dff4",
+      "lines": 287,
+      "bytes": 10548
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/grille_had_charged.f",
+      "sha256_worktree": "55643040ded871324ba9b527fb83d560f994c4efd22902b1caa924a7f4a53d3f",
+      "lines": 2942,
+      "bytes": 166435
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/grv98.f",
+      "sha256_worktree": "7fc478e5604198487b04d431a9807fa668ba467590f97532e72597c0d76f7428",
+      "lines": 436,
+      "bytes": 17000
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/kkp.f",
+      "sha256_worktree": "d8fca744d118adc3e6e68a8a3710fd1adbab9cb134f202bffd376fb84e095e7a",
+      "lines": 723,
+      "bytes": 33692
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/locate.f",
+      "sha256_worktree": "449773c2640bae9e398bcc60fb445911ab028ef7ba7bda04aa1435b392972271",
+      "lines": 17,
+      "bytes": 1314
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/parameters.cpp",
+      "sha256_worktree": "af32c7eb0bac96327167382a54e4f2c0fd1899edeb88c6054cb07b9f912932ae",
+      "lines": 290,
+      "bytes": 8441
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/parameters.h",
+      "sha256_worktree": "bec6867d03b241f30c0e784e917d55942fa42b76b0a9700953dffcf09b5f379f",
+      "lines": 116,
+      "bytes": 2377
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/pkhff.f",
+      "sha256_worktree": "6ad160d4a00c002e58417cb925e3be67fe070536c21ddb59f41db834c553b575",
+      "lines": 286,
+      "bytes": 12383
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/polin2.f",
+      "sha256_worktree": "881302587392b82f7819a0c6dfdf8b564d24b4a5f0e0d7cf28970578845fd27a",
+      "lines": 13,
+      "bytes": 1035
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/polint.f",
+      "sha256_worktree": "30b55f3abc1ee03684586336fc3dee5b7f37bd1bf1d69e6d68e9bd8a81872c3d",
+      "lines": 38,
+      "bytes": 2994
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/sivers.cpp",
+      "sha256_worktree": "1103bbc45308f90d1072ecbe2e8a96eeccb2bbaf9159f53a6e8c93354b4861dc",
+      "lines": 480,
+      "bytes": 15131
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/sivers.h",
+      "sha256_worktree": "c5eb801364aa3c231715e25240577dce10ed2b40dd8cd8540638890242d84cd6",
+      "lines": 63,
+      "bytes": 2498
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/stfunctions.cpp",
+      "sha256_worktree": "3f61f1ca5139060047498de3d1489c0050d4b1d89d9ee03787dbc119aabdac65",
+      "lines": 237,
+      "bytes": 8405
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/stfunctions.h",
+      "sha256_worktree": "1b125f905919e51aac560ac6e2e1dea2ccd2f4b623150eb602686faa478649b1",
+      "lines": 42,
+      "bytes": 1331
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/toy.f",
+      "sha256_worktree": "d050877d56e37b913af51d4ec2f804639b1d772c176a81a85b92ba0c8c1d0999",
+      "lines": 29,
+      "bytes": 679
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/transversity.cpp",
+      "sha256_worktree": "457d10c7b7ab56a53f283ebc379ba2ffa686ab5e2c507ed4e33ee569a09cf2ea",
+      "lines": 475,
+      "bytes": 14501
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/transversity.h",
+      "sha256_worktree": "9b1a51346a2be07f9f7c223c1bbfdfaea5d98bfcb525a49413b872bff18abd6e",
+      "lines": 102,
+      "bytes": 5170
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/transv_pdf.f",
+      "sha256_worktree": "fae3a8be908506bf165723d3077b14a32e75588f7680c6f0aa83170a12f34228",
+      "lines": 182,
+      "bytes": 7400
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/unpolarised.cpp",
+      "sha256_worktree": "a4f0e6f7c069be8b64a46fb44130dad5e503fa5af686e6aa45ace8113534a4ba",
+      "lines": 441,
+      "bytes": 11135
+    },
+    {
+      "repo": "tmd-parametrizations",
+      "path": "src/unpolarised.h",
+      "sha256_worktree": "180092eec9017d2951973dae0a5bb07e0d21762f3669298a30035287af5d123c",
+      "lines": 231,
+      "bytes": 12180
+    },
+    {
+      "repo": "hoppet",
+      "path": "NEWS.md",
+      "sha256_worktree": "fa893ea23bc8d5317c44dbb71c4b3715f1ccda50de71601e773d0abc535535b4",
+      "lines": 380,
+      "bytes": 14206
+    },
+    {
+      "repo": "hoppet",
+      "path": "README.md",
+      "sha256_worktree": "c22eb0a9bb009fb9d138de9d744f3ef1d00d2b4b82293ffbefc7881195c0c720",
+      "lines": 189,
+      "bytes": 7617
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/assertions.f90",
+      "sha256_worktree": "83014302e5178041516d992a3db489eddfa83f4b6f03370d220ccba9455132e4",
+      "lines": 137,
+      "bytes": 4174
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/coefficient_functions.f90",
+      "sha256_worktree": "2e7e452ff6788939f2493a52a80fb92d81b41e647edf55509356969958310b48",
+      "lines": 111,
+      "bytes": 2695
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/coefficient_functions_holder.f90",
+      "sha256_worktree": "3cced8f07fc85bff5856243b1dd91d0d45e8ccf571aecfc8ef52070b17792df6",
+      "lines": 1058,
+      "bytes": 37541
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/convolution.f90",
+      "sha256_worktree": "e0e2628d59c394d96d45fe5b2d21a6bbd2d5447aff3bb1cf437e0415b68fe70e",
+      "lines": 3251,
+      "bytes": 126458
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/couplings.f90",
+      "sha256_worktree": "0b3544cd0098e4c9c2f122e4ca678fae34d6ae0b2e1495ca2994b55365f8c0c3",
+      "lines": 975,
+      "bytes": 38626
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/dglap_choices.f90",
+      "sha256_worktree": "d5098b569a6a0fcd808630e62bc741ed7c743f94e7df964a698fb3c1fbe6a140",
+      "lines": 121,
+      "bytes": 6457
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/dglap_holders.f90",
+      "sha256_worktree": "e6c1c248c3687fdd13e7a08aa50e36c160a7daf76d0e975f7749975de1278160",
+      "lines": 487,
+      "bytes": 20921
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/evolution.f90",
+      "sha256_worktree": "a60911cde9a543353130af27dbbb126eca73aab9a9bd8656004aa090436d2bd1",
+      "lines": 943,
+      "bytes": 37896
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hoppet.f90",
+      "sha256_worktree": "e3fbd87714d4e5d8b9d9b313bb76f4742281d849c565d1c7d4054386ce04e07f",
+      "lines": 21,
+      "bytes": 460
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hoppet.h",
+      "sha256_worktree": "60b511fa1230efcdd5661f8ee56540984512b8e7efb8e2493f59cb9f2f371c7d",
+      "lines": 640,
+      "bytes": 28023
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hoppet_lhapdf_interfaces.f90",
+      "sha256_worktree": "7e17f59724999d14a1295a0fa58c4f1cc4ac60b99b96479555e9d80583a21ebc",
+      "lines": 102,
+      "bytes": 2690
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hoppet_term.f90",
+      "sha256_worktree": "b252779830e6e5fd2ae0dddde82d5c7a3f3bf48b2a2b0ef2a6b8bf71dd575231",
+      "lines": 28,
+      "bytes": 1301
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hoppet_to_string.f90",
+      "sha256_worktree": "0cc6aa1026cedf0ffbc41ea3fff22a7541feff96b1809686283b43051e0d3ee2",
+      "lines": 40,
+      "bytes": 970
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog.f",
+      "sha256_worktree": "6739ab835dfb89d2a193d6eaa929ce0e2b62ea0c6baeffc1921dcb453bf97fc9",
+      "lines": 3271,
+      "bytes": 131847
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog5.f",
+      "sha256_worktree": "23377bf0ed67619a64d91bab34b3f049bf781975808932df831a07abe536b75e",
+      "lines": 12387,
+      "bytes": 547427
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/integrator.f90",
+      "sha256_worktree": "d525687dcca37288cc5b152ee01a24d526496c2a4e72f7d779ad5e3f6b53db0d",
+      "lines": 941,
+      "bytes": 37533
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/interpolation.f90",
+      "sha256_worktree": "869e98afdabb3903818ba377c606b8512651b279c7fd420afa2ccb5cb6bd48e0",
+      "lines": 254,
+      "bytes": 9693
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/new_as.f90",
+      "sha256_worktree": "730ffef01ff901190b395df8de61373ece0dd38140d53257cf7b7cac658b2913",
+      "lines": 694,
+      "bytes": 25465
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/pdfs_for_benchmarks.f90",
+      "sha256_worktree": "8041de6919cd4db54e155ad5b01bfe2cca5b5c5170c271808f3d9ab804cefa31",
+      "lines": 66,
+      "bytes": 2265
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/pdf_general.f90",
+      "sha256_worktree": "638e39cd416e48545ca38d2cbbe43ce35a484338328b30eee10260659c9549ba",
+      "lines": 401,
+      "bytes": 14800
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/pdf_representation.f90",
+      "sha256_worktree": "c81bc0b8e0de2980b91cb611dc4ee658811aecedb4fae8112b02cd3cb9ecbc26",
+      "lines": 319,
+      "bytes": 12204
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/qcd.f90",
+      "sha256_worktree": "d46f0d68906ef88e00cae0bcce2fa41c7658176b523d48f75412d9f0c5f76bba",
+      "lines": 185,
+      "bytes": 8236
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/qcd_coupling.f90",
+      "sha256_worktree": "91c3e4bd89a602fe645e8537f878acf1fec9774750e69e8b81f9405791efeae0",
+      "lines": 473,
+      "bytes": 17832
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/qcd_qed_coupling.f90",
+      "sha256_worktree": "3db734cbe9fdd9e2578b026af6bcf9dcaa77b01d23234a4ee0c7abce72c89cbf",
+      "lines": 278,
+      "bytes": 12841
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/qed_coupling.f90",
+      "sha256_worktree": "e3b8c52a845d0a28ac1ec63143f2e1aa042291b0fcce0ed138641595c6774ac2",
+      "lines": 247,
+      "bytes": 10092
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/qed_evolution.f90",
+      "sha256_worktree": "951e5af3a7583eaeaa08ef668c3fabe68ab0de9dec2c5144452e92d54b979591",
+      "lines": 175,
+      "bytes": 7204
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/qed_objects.f90",
+      "sha256_worktree": "872b8178f282b7d85e05c348972c8e0a70b1ccfb1c591a0e6fd7af5cfd54febe",
+      "lines": 472,
+      "bytes": 18433
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/qed_splitting_functions.f90",
+      "sha256_worktree": "9773ddb36c5ba44f4ffa063c48c895cfaf6b995a6f30e0e97973b25e10697613",
+      "lines": 262,
+      "bytes": 7885
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/random.f90",
+      "sha256_worktree": "67857826bd7ca72557a486488b4a2f6d656ae70981fe5096c8492cf8513b3cf9",
+      "lines": 55,
+      "bytes": 1637
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/runge_kutta.f90",
+      "sha256_worktree": "aed6462df4c3f2028a6944154c3e344f3c086286de313b42dd5a3d05876ad587",
+      "lines": 136,
+      "bytes": 4804
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/sort.f90",
+      "sha256_worktree": "fb9c6d15e91b58ee1c50e95222e39f859116aaa3ba235e84771b3683dfcd25fa",
+      "lines": 275,
+      "bytes": 9180
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/special_functions.f90",
+      "sha256_worktree": "1afdefa632215b31d9b9076d25476d4f96f3f4a289112d49339226822c40a585",
+      "lines": 1080,
+      "bytes": 45790
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting_functions.f90",
+      "sha256_worktree": "17134f02631a5d9fcf8f26d8cde9405c7ecde0e7d1b3f32131286bebac12122a",
+      "lines": 1247,
+      "bytes": 43828
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting_functions_n3lo.f90",
+      "sha256_worktree": "a5f27f9a1fd6b6ed08254fbbfd6d414ba8706d80bc97b48a7ad5daa550d5c172",
+      "lines": 645,
+      "bytes": 23455
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting_functions_nnlo.f90",
+      "sha256_worktree": "1c64444999f970a68d8b645bafbf9074a118c400c1c44150fabeb6fd474ef754",
+      "lines": 593,
+      "bytes": 19080
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting_function_interfaces.f90",
+      "sha256_worktree": "88acebfc3d18e1c94bbc861a08a63c27ef18dd12e0f9d047d45400248bd68a65",
+      "lines": 278,
+      "bytes": 11015
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/streamlined_interface.f90",
+      "sha256_worktree": "dfdd047bc0ede672fe2e5f05f2fb9a91b51736ce3fe1438ffd1010b5f11c6504",
+      "lines": 866,
+      "bytes": 34677
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/structure_functions.f90",
+      "sha256_worktree": "a025b83777a4582becbec73ccaaf6e8b991c73d63ea03bb69b921cfcef1b6799",
+      "lines": 2820,
+      "bytes": 119912
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/types.f90",
+      "sha256_worktree": "e5dae548582bce19297c2cd1cd49afae54553bf00ea1b8d7c26fd2a0bb744889",
+      "lines": 45,
+      "bytes": 1717
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/warnings_and_errors.f90",
+      "sha256_worktree": "cd93e76906a77911ef872783ea5d00b2671d0bcf0027bfc7194fb59631cf993d",
+      "lines": 149,
+      "bytes": 6003
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/welcome_message.f90",
+      "sha256_worktree": "d0c07f3292cf37cee0fb18428b35d05e3b257526598a4e75ccfc645f6bee00f3",
+      "lines": 90,
+      "bytes": 3883
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/bidirectional_mass_thresholds.f90",
+      "sha256_worktree": "562d9c6dec515344fbbf4eae864434c3ef8c7c12b09e645749adfab98d8d7551",
+      "lines": 116,
+      "bytes": 4106
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/coupling-fixed.f90",
+      "sha256_worktree": "47becf89c88add844ba6723f60b2de2a400df16ea3e6cc8027faf9fcb122d2c3",
+      "lines": 42,
+      "bytes": 1272
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/coupling.f90",
+      "sha256_worktree": "5503f132c1f2043f48d55d0fcf32ccc005bbc0180f0b35ca90cd4a8b93ec5c46",
+      "lines": 42,
+      "bytes": 1264
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/coupling.py",
+      "sha256_worktree": "bea01ff2021707fc5f6d8b7d2e8e5c520a3521085117f049493371e5b60d6c35",
+      "lines": 25,
+      "bytes": 706
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/determine_accuracies.f90",
+      "sha256_worktree": "85ce89114e2d3ab5f4dbb7e6cb726f4aa301b95c091c01b736b4973239550fa3",
+      "lines": 647,
+      "bytes": 25152
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/intrinsic_charm.f90",
+      "sha256_worktree": "4b6d129e0d6748f786f03d109eb2748b41e0fcbcc8b89f775a2afc04b9f8cab5",
+      "lines": 107,
+      "bytes": 3354
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/io_utils.f90",
+      "sha256_worktree": "0340ac9ee5bc98f908a9d8875abdd05c13cc95da2186848ac20c466c03b4efbd",
+      "lines": 1,
+      "bytes": 28
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/lcl_dec.f90",
+      "sha256_worktree": "136799be4c5e3c12620b5c707c9495073d7ed09ea61fc47d59407c254c6a1881",
+      "lines": 1,
+      "bytes": 27
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/lumi_tests.f90",
+      "sha256_worktree": "04fdb1457eef4bada66fafaf6560e0949fd923ccbba4e04a974de1b49fe47abf",
+      "lines": 865,
+      "bytes": 34630
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/msbar_tests.f90",
+      "sha256_worktree": "4d7d406f4d5f25b8a654f771c0fa86498e27fd7f05b0f6bc9cc323ab70c3bf55",
+      "lines": 126,
+      "bytes": 4531
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/split_mat_ops.f90",
+      "sha256_worktree": "976f3e3348542729b31e185bd85e60a6fe26d32512ac68081ece3f726e186460",
+      "lines": 92,
+      "bytes": 3267
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/streamlined_multisplit.f90",
+      "sha256_worktree": "768dee38dcd02fcb66cae22c702e01439e5c03ff66dc540b5462c85b98c3f685",
+      "lines": 125,
+      "bytes": 3802
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/test-n3lo-mtm.f90",
+      "sha256_worktree": "05cc55abab7cc0ec9d6412d3ce7ab6eb0d02ce9452c86f31b093975be0e9be5f",
+      "lines": 243,
+      "bytes": 10698
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/test_qed.f90",
+      "sha256_worktree": "ff950187bdb9cb9afe75df8d3c94e7ee5a37d420761bdc87507fa9ac65df00df",
+      "lines": 128,
+      "bytes": 4766
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/test_qed_lepton_evol.f90",
+      "sha256_worktree": "0016a61b3717d79394bf607fcad1d892c6028617f578b8ee133ecce5acf447bc",
+      "lines": 259,
+      "bytes": 8986
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/test_qed_obj.f90",
+      "sha256_worktree": "336b361ab9a9f716886251e3c81f819c454197c6a8b4d198c150ecdbbb0c8dd1",
+      "lines": 99,
+      "bytes": 3854
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/test_split_integration.f90",
+      "sha256_worktree": "5889fe3aef92e85c86316c055e4757cbe8b3f9de3800d912d2c6d5744fc79769",
+      "lines": 228,
+      "bytes": 7454
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/timelike_NLOevol_tests.f90",
+      "sha256_worktree": "3e9b66b1f039b0aa556198a9762fc922797acfcc67482381a4aa358bbb670b29",
+      "lines": 174,
+      "bytes": 5956
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/timelike_tests.f90",
+      "sha256_worktree": "040988f8ad66ea41037a656c32e4bfe650b401b8811dcd76e967ba2c7548b388",
+      "lines": 31,
+      "bytes": 797
+    },
+    {
+      "repo": "hoppet",
+      "path": "docs/manual/release-checklist.md",
+      "sha256_worktree": "812196fcf050d729072ba826de2f28bdd042a14344ffd2ef0b743302ccff83bc",
+      "lines": 19,
+      "bytes": 1009
+    },
+    {
+      "repo": "hoppet",
+      "path": "docs/manual/figs-v2/n3lo_k_factors.py",
+      "sha256_worktree": "4e7bc596f0ce7d4663092c37c05a786431067a87fe146cdf384971d207989efe",
+      "lines": 342,
+      "bytes": 15317
+    },
+    {
+      "repo": "hoppet",
+      "path": "docs/manual/figs-v2/PerturbativeConvergence.md",
+      "sha256_worktree": "ebfba3fb0429f50e2dd63475186f619c909b5395527f91843538c5f3bfc49657",
+      "lines": 2,
+      "bytes": 152
+    },
+    {
+      "repo": "hoppet",
+      "path": "docs/manual/logo/README.md",
+      "sha256_worktree": "51baecf51d75a82b95867808c1f867bf4b73b0ea48335a5fee60a079ec7adbd2",
+      "lines": 3,
+      "bytes": 144
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/cpp/structure_functions_example.cc",
+      "sha256_worktree": "680ce7794757a16f067d458d51766034df45aef820df824189647530d1ce63dd",
+      "lines": 115,
+      "bytes": 3235
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/cpp/tabulation_example.cc",
+      "sha256_worktree": "3513322468578d75d7d8bacded2b79298f1a52b0f3623fa9e8aed22cfd60527c",
+      "lines": 90,
+      "bytes": 2507
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/cpp/tabulation_example_qed.cc",
+      "sha256_worktree": "b61519de5f6b64f0a7884c4c6b11debdc233e7d376c008531ee0b21ac254e8d3",
+      "lines": 94,
+      "bytes": 2662
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f77/compare_lhapdf_hoppet.f",
+      "sha256_worktree": "71c113058173d7b3f017821b7f940346097d6da6059559ec1b742a7f9ad1e2af",
+      "lines": 81,
+      "bytes": 3347
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f77/convolution_example.f",
+      "sha256_worktree": "05e588eb9a7504e43ac5f936bd6cf1c4ecaa5025f53f10fe332cbfad4cbe0d60",
+      "lines": 54,
+      "bytes": 2097
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f77/tabulation_example.f",
+      "sha256_worktree": "2b906e6bb56f567039a48dddeecaf7ac8dc92b627d2a2e215bfa349963744724",
+      "lines": 131,
+      "bytes": 5342
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/README.md",
+      "sha256_worktree": "dd1271adb1da34a1a95c519090fd58e3b424dcade83f4be2a27920f25f976047",
+      "lines": 49,
+      "bytes": 3030
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/structure_functions_example.f90",
+      "sha256_worktree": "0a8ebd3e1fc030c8764318f719d366fa8f84e0800f779b993cad6bc7d05da0d6",
+      "lines": 80,
+      "bytes": 2415
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/structure_functions_example_flavour.f90",
+      "sha256_worktree": "44e2d197e195ee5f91c7a3f72a934e9b159136d235bbafaa3494b3b20aa3818e",
+      "lines": 259,
+      "bytes": 9590
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/structure_functions_example_n3lo_tests.f90",
+      "sha256_worktree": "1a78939edff3348a6d328316655f43f84e63bff636f96b52d6ef4bf9701fe5d0",
+      "lines": 211,
+      "bytes": 7613
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/tabulation_example.f90",
+      "sha256_worktree": "62552e4d6bc3d58ab3cf757c4783f2edbd1e79927bff3be96b7d02169c466109",
+      "lines": 164,
+      "bytes": 6438
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/tabulation_example_2.f90",
+      "sha256_worktree": "188b9f03957405c4d742a1fccf3eb092226742ea80e3ba1436462a12991dcb10",
+      "lines": 296,
+      "bytes": 11111
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/tabulation_example_n3lo.f90",
+      "sha256_worktree": "fd6714025e6cffe87b89a66c7886824ac0b03f79bb20eceeccc268dc954f32c3",
+      "lines": 242,
+      "bytes": 10447
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/tabulation_example_qed.f90",
+      "sha256_worktree": "41574f306faf3857fb1cf982e5a474e16e2c38280c5b29e3efa34ac509be0235",
+      "lines": 204,
+      "bytes": 8178
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/tabulation_example_qed_streamlined.f90",
+      "sha256_worktree": "e950719c1a60a8b3d6092a587b9332c2f725cdbfe7c77fa6b3444e8f688ede8e",
+      "lines": 155,
+      "bytes": 5277
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/tabulation_example_streamlined.f90",
+      "sha256_worktree": "4a0a4941260f89efdbcfcb1ec9c9d6473ede0c9b63ec2d598677f64410e4bcfe",
+      "lines": 172,
+      "bytes": 5876
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/tabulation_example_up_and_down.f90",
+      "sha256_worktree": "e66ec483a00e5f4793d6131a16ea3d8f02f97eae40a683bbc4f59b727df8d2de",
+      "lines": 210,
+      "bytes": 8445
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/python/lhapdf_to_hoppet.py",
+      "sha256_worktree": "ab7c44eb28b5b8992e7a438cc595410a9e3a1ad41b77c2111b2caa86e077d5ae",
+      "lines": 131,
+      "bytes": 5246
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/python/README.md",
+      "sha256_worktree": "accfdd8074664fa3729525351b7e39323dba80f2c5b1ffb1351bd8350585796d",
+      "lines": 15,
+      "bytes": 632
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/python/structure_functions_example.py",
+      "sha256_worktree": "fb13b1a4bf5cbf9e0141b8071bda6f85af918e3005c2a58bdddc9e717c254d4a",
+      "lines": 191,
+      "bytes": 8087
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/python/tabulation_example.py",
+      "sha256_worktree": "d644fc1ebba32504aef644b4a16803b9344ae21bcead9f4598a6d7bd39dddaf8",
+      "lines": 78,
+      "bytes": 2337
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/python/tabulation_example_qed.py",
+      "sha256_worktree": "56f8004d2b18457fcad8d0b8ca5598b8a5ea880553f42396bdd75ccfb8e791ea",
+      "lines": 104,
+      "bytes": 3176
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/cpp/with-lhapdf/lhapdf_to_hoppet.cc",
+      "sha256_worktree": "db64e1094936362a0c96ecf6950e853fa0730d80dc474cc3c0abddea3a3abbb3",
+      "lines": 197,
+      "bytes": 7454
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f77/variants/tabulation_example_exact_nnlo.f",
+      "sha256_worktree": "78218e7456bec9f3e60105871c89f965e8095b49798d8af1c0a5b3781f8a72bd",
+      "lines": 144,
+      "bytes": 6099
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/with-lhapdf/hoppet_lhapdf.f90",
+      "sha256_worktree": "dc21ae47374faca579466e3d535ad11bc620f48e801384475aa4b46c1c6bb768",
+      "lines": 184,
+      "bytes": 6529
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/with-lhapdf/lhapdf_to_hoppet.f90",
+      "sha256_worktree": "53d0cbef91ce9675ff4f6aef34ef6ccc15c42a7019e733a4662d79eeec0948a1",
+      "lines": 117,
+      "bytes": 4178
+    },
+    {
+      "repo": "hoppet",
+      "path": "examples/f90/with-lhapdf/lhapdf_to_hoppet_allmembers.f90",
+      "sha256_worktree": "0a7355e1f8db4d9cb2b89367846ff8b5bcc478b5745ac7159c63e95795eb7966",
+      "lines": 173,
+      "bytes": 6431
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/coefficient_functions_holder_exact.f90",
+      "sha256_worktree": "ca77a2b27607a821e62c25ab206c092863fc5f839159f804bd83042350abda81",
+      "lines": 827,
+      "bytes": 29868
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xc2gl3e.f",
+      "sha256_worktree": "35484ca1a20d4e33d485dd4eeeac9e2888a1ee014e8d7b0f696cf74fef2b5ab4",
+      "lines": 1475,
+      "bytes": 98524
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xc2ns2e.f",
+      "sha256_worktree": "b1087672e986f094afde7d62a947acaf10f8f76a3198cc8b277ce5187a5fd14e",
+      "lines": 253,
+      "bytes": 9757
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xc2ns3e.f",
+      "sha256_worktree": "f6d5bc3032d3e4f364ed6044d47970f934f1f97f0a3bacadb34882ce5e9fa713",
+      "lines": 1827,
+      "bytes": 111936
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xc2ps3e.f",
+      "sha256_worktree": "d2f64e65f25def8ca26437d7b49dd4f60cd84898b1baff6bb9b9a8bb7733b8b9",
+      "lines": 614,
+      "bytes": 37854
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xc2sg2e.f",
+      "sha256_worktree": "20e6fb40e927bc30d4f6b54cd3772714f25859420880c7a577afedd610a7f50c",
+      "lines": 185,
+      "bytes": 8246
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xc3ns2e.f",
+      "sha256_worktree": "218c31fc211ffea68d774468d96ab9d714132e05041997539362aac198ae992e",
+      "lines": 249,
+      "bytes": 9461
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xc3ns3e.f",
+      "sha256_worktree": "ea73593d354f1852b44c834360be54843a535243a5fe82466e39a9acd9cb2f16",
+      "lines": 1684,
+      "bytes": 104344
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xcdiff2e.f",
+      "sha256_worktree": "33408c1fa09b591f288b9a771fd7625c40479529086f93aab7aecceea4c6db23",
+      "lines": 191,
+      "bytes": 7643
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xclgl3e.f",
+      "sha256_worktree": "07f59a7c2105ce1b5bc6df3399c7cd1b52915944b9edc0d4f6a24d20556c4b6f",
+      "lines": 737,
+      "bytes": 47373
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xclns2e.f",
+      "sha256_worktree": "5f134f7e897b02f9a8e4d7b187b375eba5d325a33ed3d624914016284f9579ff",
+      "lines": 105,
+      "bytes": 3730
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xclns3e.f",
+      "sha256_worktree": "3da0878778f84cb6d014677e5e21445fcf406c790ae124a2078bde74d795eb8d",
+      "lines": 760,
+      "bytes": 48672
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xclps3e.f",
+      "sha256_worktree": "b7df234843394ac697531c9adf310031c986b9a5c8d20c5bb458954cc56571e0",
+      "lines": 333,
+      "bytes": 20062
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/exact-coefs/xclsg2e.f",
+      "sha256_worktree": "8f48aebcde60e193307a1512430b508b3a547c8d052f439da6d7feeacdd5cd40",
+      "lines": 137,
+      "bytes": 4956
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/eval1dhplat0.f",
+      "sha256_worktree": "b1dd75d13b4f427314877900c040a1bfe339596f1a2ef1597b883f4d31a673ec",
+      "lines": 30,
+      "bytes": 1536
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/eval1dhplat1.f",
+      "sha256_worktree": "d112dd976f3769984be2063c002021f2b6d99b282689cf68f9c88a71ce88245f",
+      "lines": 45,
+      "bytes": 2322
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/eval1dhplatinf.f",
+      "sha256_worktree": "4b5a8048ea8a8721b61050a8ec243e41421ac83850f4a35dcd3e8c8cb9331e40",
+      "lines": 45,
+      "bytes": 2307
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/eval1dhplatm1.f",
+      "sha256_worktree": "8dd69585203de375de986c32801954e5bd87b42e46e7fdd6b4c9368fc4514e14",
+      "lines": 114,
+      "bytes": 4986
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/eval1dhplatminf.f",
+      "sha256_worktree": "aa1fe05bc8bb16dd6904dcaa9a048b1774f2e36e3e03c2c9d5d76e8822686882",
+      "lines": 114,
+      "bytes": 5046
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/eval1dhplin1.f",
+      "sha256_worktree": "59c767b695b1303c6252813321fafed0b75c544d370e919d4b9e256482fe048b",
+      "lines": 51,
+      "bytes": 2318
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/eval1dhplinm1.f",
+      "sha256_worktree": "ecbb280d2fd3680e82b60cee07ab0d748b0207ad9172944d3fae75284bf07886",
+      "lines": 135,
+      "bytes": 6121
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillh1.f",
+      "sha256_worktree": "16d85effebf7873d7cbf45e778aa5135accf516483440b6a5e16b08f645edc5d",
+      "lines": 39,
+      "bytes": 1205
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillirr1dhplat0.f",
+      "sha256_worktree": "0236616f5054939ab27919fba75a81365bd9fd7d14b6393d46dacc641e84dcd7",
+      "lines": 3168,
+      "bytes": 122830
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillirr1dhplat1.f",
+      "sha256_worktree": "79f509abbd5c3b653cd9919a6a4185a4a92d2e871d3d313ee6aacc0a1a34c81f",
+      "lines": 32311,
+      "bytes": 1705531
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillirr1dhplatinf.f",
+      "sha256_worktree": "c087caea429a51e741fbc0067989a370efb2a6530634549ee0920a996a8bd1a6",
+      "lines": 10953,
+      "bytes": 511725
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillirr1dhplin1.f",
+      "sha256_worktree": "7fd794bfcb551045d22bdd2bcc3ec82e7d866b098f1742ab70065dcecf04d99a",
+      "lines": 435,
+      "bytes": 13408
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillred1dhpl.f",
+      "sha256_worktree": "6a85b71704b8189d4525756eef7ac9d4f3ebb58d1e5ff65fff1144b95a3aa967",
+      "lines": 106,
+      "bytes": 4211
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillredhpl2.f",
+      "sha256_worktree": "6b07daba53a744dd517dde7c4f844403b2296785b84c2278aab456884f3fc805",
+      "lines": 18,
+      "bytes": 672
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillredhpl3.f",
+      "sha256_worktree": "3914de50c9ef654e4fdb1f824044da69bf2944210f1768ed7f30350cf050a574",
+      "lines": 62,
+      "bytes": 2455
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillredhpl4.f",
+      "sha256_worktree": "072272d5768d34977ed60ae7211d0e43db293646377f4e925da6e4cbb314804a",
+      "lines": 274,
+      "bytes": 14128
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillredhpl5.f",
+      "sha256_worktree": "a562dde8a1083875f656e72165bfc099bf15e6379e16ed97bef4c40c90d487f3",
+      "lines": 1453,
+      "bytes": 59597
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/fillredhpl6.f",
+      "sha256_worktree": "a0292f055334b413d7b336ce601fa37281a02e4f78e68fa43bd2dccf0378cdd8",
+      "lines": 7031,
+      "bytes": 323466
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/hplog6.f",
+      "sha256_worktree": "08aebb8886170153b17f297bad6ff78e1d9bc395443905471e1bddee761d758c",
+      "lines": 167,
+      "bytes": 7655
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/printer2.f",
+      "sha256_worktree": "7d6d55f00dd3dd69b38c54aaef556bb0389f6714f90829f503e782e3d50af48b",
+      "lines": 25,
+      "bytes": 637
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/printer3.f",
+      "sha256_worktree": "b679464c72daf191a34dc850bafbb9f5e73a0972ab469c994a2c89adb7941ef4",
+      "lines": 31,
+      "bytes": 817
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/printer4.f",
+      "sha256_worktree": "046972b587309ed260d99b52265c6a5dcbc1aa568758280999f130bec95ccc68",
+      "lines": 41,
+      "bytes": 1115
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/README.md",
+      "sha256_worktree": "ef2a1ca11313fe2f304d4a32204179d658df3852de0e14b7f707a81bc862b4c0",
+      "lines": 4,
+      "bytes": 213
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/setzero.f",
+      "sha256_worktree": "1c97a3614dc46f61ff42960e5ec02d09506f4be28e7fe88f3cd0c2c080bbc763",
+      "lines": 38,
+      "bytes": 1380
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/hplog6/subprint.f",
+      "sha256_worktree": "98ee034c0440ddc02479494cb71b1e10c68c7c0d9be6cdfa516e1d4ef6d4c6e8",
+      "lines": 12,
+      "bytes": 216
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/libome/hoppet_libome_cxx.cc",
+      "sha256_worktree": "d79df11b18e6e855e6e2d64ddd240ab5ea5d362ef784a3e86fdda401c32b7ad1",
+      "lines": 128,
+      "bytes": 4864
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/libome/hoppet_libome_fortran.f90",
+      "sha256_worktree": "8ebee3c069c26f3b8c8f6304d7525f7ce937349676fd00aea45177a9007d5657",
+      "lines": 82,
+      "bytes": 3772
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/mass-thresholds/AQg3mod.f90",
+      "sha256_worktree": "29affaa5a995e71bd76900cfe96b10418a88eea3350ce82ac508de199d7aacb3",
+      "lines": 206,
+      "bytes": 8584
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/mass-thresholds/AQqPSs3.f",
+      "sha256_worktree": "675ee9bdcc1089fcb2d8eb150cad357f072c2a6332ae7945766f93ad860bfe1a",
+      "lines": 1072,
+      "bytes": 30990
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/mass-thresholds/daind_fake.f90",
+      "sha256_worktree": "cebcda087195aa9b598ef1349d84a5610a1ebaf1fa741b9e97cb9c486d029884",
+      "lines": 55,
+      "bytes": 1918
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/mass-thresholds/mass_thresholds_n3lo.f90",
+      "sha256_worktree": "718c1a0a43df1eed75f27528a7ee54d5505c91edeea00f75ad33dee592c9d308",
+      "lines": 427,
+      "bytes": 15280
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/mass-thresholds/momnsmod.f",
+      "sha256_worktree": "cade01b9fa37f9eedcc76dd115fed69ed0caf47d4ed3dea0b9da4fe4f4b29aa3",
+      "lines": 1200,
+      "bytes": 37186
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/mass-thresholds/VFNSmod.f",
+      "sha256_worktree": "e1ad3a7aedd9285c096503b4fddb48398413adf72734dade1a43e1fe1fb8d4f1",
+      "lines": 20842,
+      "bytes": 722729
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/mass-thresholds-nnlo/xa2hgp.f90",
+      "sha256_worktree": "cdad789eb86d065e2cca45c1be322b49a76f23fe60277ac36b65cf3af71dba73",
+      "lines": 66,
+      "bytes": 4403
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/no-exact-coefs/coefficient_functions_holder_exact.f90",
+      "sha256_worktree": "616298cd8108d6a2a445bf196ff247ce1b8f16854baf5c3758057d23ceaf31b5",
+      "lines": 18,
+      "bytes": 793
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xc2ns2p.f",
+      "sha256_worktree": "bfa218790041cea5e0afc695b29eedc4320fa86d1c43462e42888a805b7ca43f",
+      "lines": 156,
+      "bytes": 5427
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xc2ns3p.f",
+      "sha256_worktree": "f7df1cfec7510633bcf39341d97dfbbbaa54fd348526493d2f6fa673139a2476",
+      "lines": 158,
+      "bytes": 5653
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xc2sg2p.f",
+      "sha256_worktree": "023469cace54709740a4f1df0d8d96d597e885f334f5ee41cfcf44e3d9206ca3",
+      "lines": 92,
+      "bytes": 3264
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xc2sg3p.f",
+      "sha256_worktree": "62a9abc2406daca686b5faf6d472daa53de9ff9b6997d0d6af5e1999491abc5b",
+      "lines": 146,
+      "bytes": 5371
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xc3ns2p.f",
+      "sha256_worktree": "fd3f0a139244d401ffd686aa0235460af009392359199aa9f693499f09808151",
+      "lines": 148,
+      "bytes": 5422
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xc3ns3p.f",
+      "sha256_worktree": "7afb55e7cac9232a178833547e6d6d4ac412cc9937ceabe65e39326a5e5fdc7a",
+      "lines": 144,
+      "bytes": 5560
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xcdiff3p-lowest-mom.f",
+      "sha256_worktree": "dacf42a4a564740e0ed22c874a6e928f0e42e0a4cd5ef508862f5b9b0dd75ae0",
+      "lines": 126,
+      "bytes": 4240
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xcdiff3p.f",
+      "sha256_worktree": "9daa58a2e554764fb7dcbb51c79ae7c45c7449a41944e1ea89e1b4f2d55a41c8",
+      "lines": 187,
+      "bytes": 5936
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xclns2p.f",
+      "sha256_worktree": "bdef03f2a1dc9da0e27d16ad02b792b42fba7670cb7e9424aa390823decc5ec5",
+      "lines": 111,
+      "bytes": 3633
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xclns3p.f",
+      "sha256_worktree": "cf7f136a4b80cb194afa937188c4b5dcdce53ac17bbbb26d65c1b53df7e5c6e0",
+      "lines": 262,
+      "bytes": 8206
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xclsg2p.f",
+      "sha256_worktree": "b85dd9456954fd8556c4af48bb13232cdbf17b7be888b074605b47ae8e70afef",
+      "lines": 68,
+      "bytes": 2211
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/param-coefs/xclsg3p.f",
+      "sha256_worktree": "5438823bf03fd03871bdbe9d2961378a918ed5bd1a6e62f8de059ba5a0636e17",
+      "lines": 105,
+      "bytes": 4037
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpgg3a.f90",
+      "sha256_worktree": "31a8ebca9f18a4f45e31f153582d5c1bdfacdcc19d97c9fc667f563896e90cb9",
+      "lines": 178,
+      "bytes": 6039
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpgg3a_2410.f90",
+      "sha256_worktree": "16e7f4d5de1324e7b281b2fbd3402ebefc0b98a1936f7ec87ce2f0c00757c2d5",
+      "lines": 240,
+      "bytes": 8385
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpgq3a.f90",
+      "sha256_worktree": "b3d9bf466ee91f6a3c6debb0ba08151dacf559dc7223cc9c59fe196cf3210550",
+      "lines": 121,
+      "bytes": 4017
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpgq3a_2404.f90",
+      "sha256_worktree": "545cb0a1c0ecd67607e281c81b9e1044ec8227cb4fadb7df63c5d36ed982a3b4",
+      "lines": 160,
+      "bytes": 5542
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpgq3a_2512.f90",
+      "sha256_worktree": "b68ed6ec310c30de2727a0937e3dedb8c2dbce8daa92e6949c9232c23795d91f",
+      "lines": 186,
+      "bytes": 7026
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpij2e.f",
+      "sha256_worktree": "57e520c5ccf43dbbe1b684af8c0ce4e33363757b3d96f9dc486f405962d05508",
+      "lines": 1178,
+      "bytes": 84558
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpij2n.f90",
+      "sha256_worktree": "67ff7510920652d90381067e8ab91ab8cf39a0f5faa791825c28b3cc48c3d17d",
+      "lines": 233,
+      "bytes": 12929
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpij2p.f90",
+      "sha256_worktree": "e20fdadd37cb1421e1c9f60c4905c2750846f7cc84d475263160150ede8159b0",
+      "lines": 191,
+      "bytes": 12289
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns2e.f",
+      "sha256_worktree": "8df74acb7af3a5de2b0397ab776e4f75c678075ee0463703107f40cd583abafd",
+      "lines": 766,
+      "bytes": 54053
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns2n.f90",
+      "sha256_worktree": "135ccdfe54a372a2dba3faf975d5bacf43b6a6a3f68364159821908a83edf11a",
+      "lines": 253,
+      "bytes": 13867
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns2p.f90",
+      "sha256_worktree": "9fdb4deee2a54294ac7f21ae41260450ec35a86c17619f8b55bc3f3bb2165644",
+      "lines": 162,
+      "bytes": 9883
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns3m.f90",
+      "sha256_worktree": "7b3b62cb74ef75d717e204675737a02c1cfe32bb9309aec9ee55044c67fd793a",
+      "lines": 175,
+      "bytes": 6692
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns3m_2604_fit.f90",
+      "sha256_worktree": "1a7b8195b77afba3c9f806d3b4a886a264a57868d2974df00b3f348749970d47",
+      "lines": 486,
+      "bytes": 28746
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns3p.f90",
+      "sha256_worktree": "f78490be3086e98e72f8fe87696d8341ed228510dbf2657e049f7839bd440f6f",
+      "lines": 181,
+      "bytes": 6862
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns3p_2604_fit.f90",
+      "sha256_worktree": "541bfd3651ea1cc6ec14d766ff6e3d9a4b6f02c186c5d73152cb535855d30719",
+      "lines": 514,
+      "bytes": 30257
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns3s.f90",
+      "sha256_worktree": "bd7906e50216d419ec9d2b1fea346c817b88de9e702c9ef908230ec9688e161a",
+      "lines": 78,
+      "bytes": 3018
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpns3s_2604_fit.f90",
+      "sha256_worktree": "2b7e3d816a47c5268c634282c6cd83574036ebb8ae2fe1ae115374acdc6e07b0",
+      "lines": 146,
+      "bytes": 7689
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpps3a.f90",
+      "sha256_worktree": "1dae4cbe045c6825e0e524c91f6a8cfb64e7bd401af00983c67615948520edf4",
+      "lines": 174,
+      "bytes": 6056
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpps3a_2609_fit.f90",
+      "sha256_worktree": "a5d71a161c5818b354cf33aba45b83f579703b7b17ed418f1f38b7f958310805",
+      "lines": 335,
+      "bytes": 21473
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/xpqg3a.f90",
+      "sha256_worktree": "6d0faa1a06e99b786aec08a3ce5e14f930661e2644785377c63c506885f8582c",
+      "lines": 183,
+      "bytes": 6459
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/unused/pdf_table_array.f90",
+      "sha256_worktree": "acdbc2a466c158a22366d4e40a59a7c932b7a1840f5f6d23fb079fd9b471979c",
+      "lines": 35,
+      "bytes": 1088
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/unused/xclns3p-orig.f",
+      "sha256_worktree": "ed0889c938471077769754bdfb9b1a7c3ad07a65c9ea920920960289b661d89b",
+      "lines": 76,
+      "bytes": 2957
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/exact-n3lo-split/xpns3m_2604_exact.f90",
+      "sha256_worktree": "ed1a05254fd7f3b82fc30060ef0b97892604fb3d494d7922184359b60daf3d40",
+      "lines": 4094,
+      "bytes": 283198
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/exact-n3lo-split/xpns3p_2604_exact.f90",
+      "sha256_worktree": "7cc2341dc4ae4b0b682fe945ce061a860f9f83dead30ceae56a89596e881b64d",
+      "lines": 4109,
+      "bytes": 284123
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/exact-n3lo-split/xpns3s_2604_exact.f90",
+      "sha256_worktree": "ed6717efb79579f24bd1d83829a25a1681fb326202fd8f02734bab1c5ae5e2e7",
+      "lines": 850,
+      "bytes": 57191
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/exact-n3lo-split/xpps3a_2609_exact.f90",
+      "sha256_worktree": "28c30271f13e3e165abd015e3e7305239628373e93c368f8bc2869bc62df2bc4",
+      "lines": 2360,
+      "bytes": 162689
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/no-exact-n3lo-split/xpns3m_2604_exact.f90",
+      "sha256_worktree": "24d8b2ac3f12037f65d4c76e01ec6c513d371fb93a7dbb566f0e016aa79119b0",
+      "lines": 38,
+      "bytes": 952
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/no-exact-n3lo-split/xpns3p_2604_exact.f90",
+      "sha256_worktree": "02776443e23875cd452115305d9ef4548ea4ac2cc7fe1bd89ac8d74522ff516a",
+      "lines": 38,
+      "bytes": 952
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/no-exact-n3lo-split/xpns3s_2604_exact.f90",
+      "sha256_worktree": "9113d55d52e03e84c115a3d2239f765d606992f3b257aa232498f12c4ea3889d",
+      "lines": 18,
+      "bytes": 486
+    },
+    {
+      "repo": "hoppet",
+      "path": "src/splitting-functions/no-exact-n3lo-split/xpps3a_2609_exact.f90",
+      "sha256_worktree": "b2c26e23fad6589fbe3a43e22599fc88c8ee5da51a67dbde383a18072bb83ed7",
+      "lines": 19,
+      "bytes": 559
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/2025-05-MTM-NSm/README.md",
+      "sha256_worktree": "33e137476aa85cba97690923bbe17e78e0cce0bfb4169b5a8840f27fe1c2da3d",
+      "lines": 43,
+      "bytes": 1975
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/apfelxx-refs/apfelxx-testsplit.cc",
+      "sha256_worktree": "4cd91a60dd950098726e0582883552b8374ecd802b46a7ebcfb35e65e3e67655",
+      "lines": 44,
+      "bytes": 981
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/apfelxx-refs/apfel_dglap_test_streamlined.cc",
+      "sha256_worktree": "aa44cd7d94382ed707dc95c107525f141fa6aa308a15615f27ba20c2ddba6372",
+      "lines": 73,
+      "bytes": 2548
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/with-lhapdf/io_utils.f90",
+      "sha256_worktree": "00f92da7ed3b34504288aafe6e923bb092e442c4d012b87e5baa5680154c367e",
+      "lines": 1,
+      "bytes": 31
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/with-lhapdf/lcl_dec.f90",
+      "sha256_worktree": "4d971ad2916a1d90fc93edd15dd67195fd0eb824b495e2e5afdc9c4e7cd82528",
+      "lines": 1,
+      "bytes": 30
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/with-lhapdf/tabulation_n3lo_v130_paper.f90",
+      "sha256_worktree": "455e5654b86fc60c645e70025ff35dd6c2d6c4efdfe98cd4a92c56a9fa203b82",
+      "lines": 271,
+      "bytes": 11476
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/with-lhapdf/test_qed_evol_lhapdf.f90",
+      "sha256_worktree": "411c33362ef38012714e14dc904a0aee8517ba67e73c478bf39730855383cb9f",
+      "lines": 394,
+      "bytes": 14302
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/with-lhapdf/test_qed_lhapdf.f90",
+      "sha256_worktree": "b8213f6ce44ba82810d22719875471bf8cfb6fda00b0618ad2b0c459ca08f215",
+      "lines": 46,
+      "bytes": 1258
+    },
+    {
+      "repo": "hoppet",
+      "path": "tests/xc2ns3e_vs_xc2ns3p/xc2ns3e_vs_xc2ns3p.f",
+      "sha256_worktree": "c13f7a3cb8f0d89d51301ff38fdcc93ea19efcc180b17e8847241f2d7f928eaa",
+      "lines": 14280,
+      "bytes": 662964
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "README.md",
+      "sha256_worktree": "cc2ad2faf9c506de6e209f2a08c099f8ff0025e5f87634be5e6330b1b2a1b5ed",
+      "lines": 287,
+      "bytes": 12687
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "README_CN.md",
+      "sha256_worktree": "7a7b8bb45a8dab3dedc2770645c55f6a52a463313026e9fcda0c4f6a15d42213",
+      "lines": 288,
+      "bytes": 12259
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "core/clarifier.py",
+      "sha256_worktree": "d4f6b18fdaa16b3c9772884bca84bd802d45573fc464bd958dbc6d3165795605",
+      "lines": 264,
+      "bytes": 11215
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "core/mcts.py",
+      "sha256_worktree": "6bdce52ebe9c8bcaa53dc5e64eb6f9bfe60e3287f22348f815f61d3a14122713",
+      "lines": 496,
+      "bytes": 20135
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "core/summarizer.py",
+      "sha256_worktree": "9ec78e816fc06d07b7632a0a42d43c10ff517dedc57358367323bdd9c9e85173",
+      "lines": 72,
+      "bytes": 2850
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "core/supervisor.py",
+      "sha256_worktree": "d5a11e2de37376c0dbf8b7ff841d6daa37dbf1398a32a0d042b75cea52e346a2",
+      "lines": 1201,
+      "bytes": 49897
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "core/theoretician.py",
+      "sha256_worktree": "1296735c68187c591ea1ffa5d7ebcf188df211afe8192ee4e5f48389267d39e1",
+      "lines": 197,
+      "bytes": 8537
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "core/visualization.py",
+      "sha256_worktree": "ea12261cd66eaf6e2a3c2ee4e8fc1e979f30e1ea776054b2a2c263856528ef59",
+      "lines": 210,
+      "bytes": 7451
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "core/__init__.py",
+      "sha256_worktree": "9bc3828ccfe3e69b924e7de449e7bfed6e94abc609f5a4471110e891ecc86727",
+      "lines": 21,
+      "bytes": 576
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/README-zh.md",
+      "sha256_worktree": "2da0bff4ef0269881125478f6e4d1311509ecad4e7ce2d9c19abcbb69bca8785",
+      "lines": 99,
+      "bytes": 3507
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/README.md",
+      "sha256_worktree": "6d0eaa39c20d4bf4397a6865a24cfbcd158a1b978abd1170de44fec64f52027b",
+      "lines": 99,
+      "bytes": 3638
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "utils/llm_client.py",
+      "sha256_worktree": "c6d7f9fd63b96e7156263f7c6b3a050c38822d7b0512c5bed1558d9676627084",
+      "lines": 187,
+      "bytes": 6717
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "utils/node_logger.py",
+      "sha256_worktree": "4e7ac1667821d802af49f1b31b5329f553b662b28c81c19760780d1cc4eebd68",
+      "lines": 122,
+      "bytes": 4469
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "utils/python_utils.py",
+      "sha256_worktree": "32d347eebf85e6437d2ac612ad9c08db388a3ed6833519c14ee39741060b6ea7",
+      "lines": 25,
+      "bytes": 817
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "utils/skill_loader.py",
+      "sha256_worktree": "cd18104388d2f25e485aa49d54db586b34864eaaf9df82489740a97971253867",
+      "lines": 180,
+      "bytes": 6324
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "utils/tool_schemas.py",
+      "sha256_worktree": "3cbd2d4e36dcba1e20193cef5db38c2266be00b5938c611bc9c2326cbede866f",
+      "lines": 129,
+      "bytes": 4714
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/skills/physmaster/SKILL.md",
+      "sha256_worktree": "2a3c397490a558e518515a15da2ff1b080195dcc9bc5c18044994f050257f66b",
+      "lines": 179,
+      "bytes": 6727
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/skills/physmaster/reference/configuration.md",
+      "sha256_worktree": "8a205fbccda6669d77941b39ac4e815c24b36e1feacfa0272068085bbf359b87",
+      "lines": 95,
+      "bytes": 4729
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/skills/physmaster/reference/pipeline.md",
+      "sha256_worktree": "d152d9f4807a137e7349da4f1b13342b88dcf6baa6a306dba9c6eeb944d3739f",
+      "lines": 117,
+      "bytes": 4522
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/skills/physmaster/reference/prior_knowledge.md",
+      "sha256_worktree": "cecd12fbb91cf3c228ea600c7ce6b53da72226706559d125520d51214d0d39db",
+      "lines": 116,
+      "bytes": 4487
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/skills/physmaster/reference/tools.md",
+      "sha256_worktree": "56878a7f923fe7be38c6d467eaa12e78e76a65b5121e153a6d82a668ccd4170b",
+      "lines": 143,
+      "bytes": 5045
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/skills/physmaster/scripts/arxiv_search.py",
+      "sha256_worktree": "ffd00a6b56855651dadc670f3211084b11fbd18489e7a4d683cf8f25c5f055d1",
+      "lines": 53,
+      "bytes": 1573
+    },
+    {
+      "repo": "PhysMaster",
+      "path": "extensions/skills/physmaster/scripts/run_physmaster.py",
+      "sha256_worktree": "5cbc31d0146903e55a4d0a9b1fecd8a8988cea74df234be4d66e85a92295e138",
+      "lines": 191,
+      "bytes": 7069
+    },
+    {
+      "repo": "tParton",
+      "path": "paper.md",
+      "sha256_worktree": "5589c272c0441bd61327eb5bda7eab1d7fe2f5155367199b238fffb639e59c5b",
+      "lines": 110,
+      "bytes": 7214
+    },
+    {
+      "repo": "tParton",
+      "path": "README.md",
+      "sha256_worktree": "192acbb3a9083d4d34a99c3f382933cf2a4ea7bed89a76781ae3474019a6b538",
+      "lines": 55,
+      "bytes": 2505
+    },
+    {
+      "repo": "tParton",
+      "path": "examples/README.md",
+      "sha256_worktree": "16f2ca85752bf50a35d30f69d2673a204cfcafcbf17d2fc7d2463cd0e2dc2dab",
+      "lines": 23,
+      "bytes": 1584
+    },
+    {
+      "repo": "tParton",
+      "path": "tests/test_evolution.py",
+      "sha256_worktree": "39ca5adf3e2d900523948bb443bc00e071de66d19d699b02bd78655a89a93df8",
+      "lines": 451,
+      "bytes": 16907
+    },
+    {
+      "repo": "tParton",
+      "path": "tests/__init__.py",
+      "sha256_worktree": "4ed90f1f1a8714f4f3686da718abd7f83cfdd33e9a0f66092054549403074702",
+      "lines": 1,
+      "bytes": 34
+    },
+    {
+      "repo": "tParton",
+      "path": "examples/vogelsang_exact_alpha_variable_degree/vary.py",
+      "sha256_worktree": "0b49690f5d617e6370b0b7e6954540e4c80d9be45e4eefbe349ac82f3934d944",
+      "lines": 27,
+      "bytes": 1291
+    },
+    {
+      "repo": "tParton",
+      "path": "src/tparton/constants.py",
+      "sha256_worktree": "d24497e8054bdb64c8b414ba5e8d858e6290a01469402a1b202a8e685385fc60",
+      "lines": 121,
+      "bytes": 4105
+    },
+    {
+      "repo": "tParton",
+      "path": "src/tparton/m_evolution.py",
+      "sha256_worktree": "a81fd6748b1c53e1ebcebe0653385979436dd7050e7949d85d5449112edf2184",
+      "lines": 769,
+      "bytes": 27478
+    },
+    {
+      "repo": "tParton",
+      "path": "src/tparton/t_evolution.py",
+      "sha256_worktree": "f9b285654699bb2e186ecdb406d9c2c54e5f101cbbbbf51754bd3c33f3406b11",
+      "lines": 587,
+      "bytes": 24000
+    },
+    {
+      "repo": "tParton",
+      "path": "src/tparton/__init__.py",
+      "sha256_worktree": "4dc79b51dd56836790db76b75e58b9b736795f641ea6a3010472d37353d3bd04",
+      "lines": 54,
+      "bytes": 1865
+    },
+    {
+      "repo": "tParton",
+      "path": "src/tparton/__main__.py",
+      "sha256_worktree": "6e32cca485620eccdcf3624de51bad86c4d4d4d8c912f56bd839aaadcae236ba",
+      "lines": 30,
+      "bytes": 870
+    }
+  ],
+  "feynfacet_integrity": {
+    "canonical_blobs_checked": 402,
+    "canonical_mismatches": [],
+    "working_tree_differences": 349,
+    "differences_explained_by_CRLF": 349,
+    "unexplained_working_tree_differences": []
+  }
+}

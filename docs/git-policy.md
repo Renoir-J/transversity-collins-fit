@@ -2,7 +2,7 @@
 
 仓库默认私有。`main` 保存可复现、通过 CI 的版本；用 `feat/`、`fix/`、`theory/`、`data/`、`docs/` 分支提交 PR，squash merge 后删除分支。每项研究工作以 Issue 描述验收证据并归入 milestone。单人仓库不强制一个本人无法提供的额外 review；涉及理论约定的变更仍需明确记录科学审查状态。
 
-本地安装规则：`git config --local core.hooksPath .githooks`，`git config --local pull.ff only`，`git config --local fetch.prune true`。pre-commit 检查 staged 内容；pre-push 拒绝直接推 main 并运行 Python 检查。hook 可被本地操作者跳过，不能等同于服务端保护。
+本地安装规则：`git config --local core.hooksPath .githooks`，`git config --local pull.ff only`，`git config --local fetch.prune true`。pre-commit 检查 staged 内容；pre-push 拒绝直接推 main 并运行无需额外依赖的规格/内容检查。完整数值测试由 Linux CI 执行。hook 可被本地操作者跳过，不能等同于服务端保护。
 
 目标服务端规则：PR 合并、CI `validation` 通过、讨论解决、线性历史、禁止 force push / 删除 main，并适用于管理员。GitHub Free 的私有仓库可能无法启用这类规则；实际启用结果记录在 `config/github-state.json`。不会为获得规则而把研究仓库改成公开，也不会自动购买升级。[GitHub protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
 

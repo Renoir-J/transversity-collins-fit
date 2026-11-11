@@ -1,0 +1,18 @@
+# Numerical jobs and data contracts
+
+Python passes one versioned JSON job to `julia --project=numerics numerics/bin/run_job.jl job.json`. A job owns a complete validation, fit, replica collection or holdout analysis. Julia never calls Python inside an objective or quadrature node.
+
+The initial numerical implementation accepts finite preintegrated linear/bilinear kernels. Each bin identifies the exact point ID, an integrated positive unpolarized denominator, an explicit convention sign, optional constant and linear terms, and bilinear coefficient terms. Parameter indices are 1-based. The numerator is summed first and divided by the denominator once. Parameter transformations (`identity`, `exp`, `tanh`) are differentiated in Julia. These transformations define the declared coefficient domain; they do not automatically impose a physical bound on a renormalized Collins twist-3 moment.
+
+This interface represents fixed-basis kernel contractions. It does not construct a CSS or finite-R jet kernel. If basis shapes, alpha_s, Q0, scales or other kernel dependencies are fitted, their effect must enter the differentiable implementation or invalidate/rebuild kernels. The delivered synthetic fixture has four algebraic coefficients and no experimental interpretation.
+
+Data JSON includes a version, `scope`, ordered unique point IDs, dataset provenance, process, hadron, bins, fraction-valued observations and an explicit convention. Covariance must be finite, symmetric and positive definite; validation never adds diagonal jitter. Shared additive Gaussian systematics use a separate `nuisance_design` B with unit-normal priors. Julia minimizes the profiled quadratic including nuisance penalties; it agrees with fixed effective covariance C+BBᵀ. This is a frequentist objective. Parameter-dependent covariance, non-Gaussian errors, multiplicative/t0 systematics and Bayesian normalization require separate implementations and validation.
+
+`collinsflow normalize raw.xlsx reviewed-mapping.json output.json` (or CSV) requires a SHA256, explicit columns/selection, fraction/percent conversion, sign, hadron and convention. It does not infer missing depolarization factors, covariance, bin semantics or hadron composition. Production provenance includes publication/table/version/source URL/hash, covariance status and selection reason. Full covariance can be supplied in a reviewed JSON file. Nuisance entries are supplied in already normalized fraction units. Combining datasets requires an overlap review and an assembled block/joint covariance.
+
+`collinsflow plan-update current.json incoming.json` removes named replacements and requires refitting frequentist replicas. Only unchanged-contract actual posterior samples are candidates for importance reweighting; this command plans that route but does not execute it. Unknown replacement targets, duplicate IDs and unresolved overlapping projections fail.
+
+The fixed-operator Fortran ABI uses column-major Float64 arrays, explicit dimensions and an integer error status. `cf_apply_operator` batches applications of an already constructed operator; it does not construct HOPPET transversity evolution. Julia applies operators in generic arithmetic to retain validated AD. Upstream HOPPET is unchanged, and no speedup over it has been claimed.
+
+Each stage emits an atomic receipt with source/configuration, input/output hashes, environment digest, seed, scope, code commit, architecture, policy, precision and thread counts. Consumers validate ancestors and output integrity. Synthetic and production scopes never mix. These content hashes detect stale or changed artifacts; they are not cryptographic signatures or an authorization system.
+

@@ -1,0 +1,25 @@
+{
+  "as_of": "2026-11-11",
+  "tParton": {
+    "repo": "tParton",
+    "files": [
+      "README.md",
+      "paper.md",
+      "src/tparton/m_evolution.py",
+      "src/tparton/t_evolution.py"
+    ],
+    "read_depth": "README and paper fully; evolution signatures, kernels and inverse Mellin implementation targeted",
+    "reuse": "independent transversity evolution candidate; not validated here and not the KPSY original"
+  },
+  "excluded": {
+    "remote_candidate": "JeffersonLab/evgen_sidis_duke",
+    "commit": "e7d29eca16fcab78ff5e33f3a3938ba40e4ecdc6",
+    "source": "physics.md",
+    "finding": "Maintained SoLID projection pipeline explicitly distinguishes its Torino ansatz from KPSY CSS; not accepted as original KPSY code."
+  },
+  "searches": [
+    "GitHub code search for 1505.05589",
+    "GitHub code search for transversity HOPPET",
+    "KPSY15 code, original paper code, authors' repositories and cited public libraries"
+  ]
+}
