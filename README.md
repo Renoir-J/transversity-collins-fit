@@ -6,6 +6,8 @@ The current implementation supports **synthetic closure runs; production physics
 
 Experimental intake is now available separately: it acquires 22 pinned sources and normalizes 773 amplitudes across 82 overlapping candidate views. Candidates preserve source locators, units, statistical/systematic components, bin corrections and unresolved admission requirements. They are rejected by the fitting path. See the [experimental data review](docs/experimental-data.md).
 
+A [reconstructed LO collinear evolution component](docs/evolution.md) now covers transversity and the explicitly defined KPSY homogeneous Hhat3 approximation with independent x-space/Mellin checks. It does not supply the complete CSS model or a production physics fit.
+
 ## Running the workflow
 
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.

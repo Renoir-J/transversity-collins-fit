@@ -6,6 +6,7 @@ using ForwardDiff, Optim, QuadGK, JSON
 export Context, load_context, coefficients, predict, predict!, objective, value_and_gradient!,
        fit, gradient_report, benchmark_report, closure_report, performance_report,
        transversity_moment, alpha_lo, evolve_moment, apply_operator, operator_adjoint,
+       CollinearLOOperator, collinear_lo_generator, collinear_lo_operator,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -95,6 +96,8 @@ end
 function evolve_moment(moment, n, Q2, Q02, alpha0; nf=3)
     moment * (alpha_lo(Q2, Q02, alpha0; nf=nf) / alpha0)^(-2transversity_moment(n) / (11 - 2nf / 3))
 end
+
+include("CollinearLO.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)

@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "05b90f86b2197fa85d2db7d254331198a03095ca"
+project_hash = "9eb136793625979c6fe0bc030bef5fb4a4804258"
 
 [[deps.ADTypes]]
 deps = ["PrecompileTools"]
@@ -78,7 +78,7 @@ uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 version = "1.11.0"
 
 [[deps.CollinsFit]]
-deps = ["ForwardDiff", "JSON", "Libdl", "LinearAlgebra", "Optim", "QuadGK", "Random", "Statistics"]
+deps = ["ForwardDiff", "JSON", "Libdl", "LinearAlgebra", "Optim", "QuadGK", "Random", "SpecialFunctions", "Statistics"]
 path = "."
 uuid = "03c98a50-17ab-4f5c-85cf-0f3d449a5a19"
 version = "0.1.0"

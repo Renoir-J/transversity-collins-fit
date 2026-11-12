@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "id": "COLLINEAR-LO-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "status": "RECONSTRUCTED_COMPONENT_NOT_PRODUCTION_ADMITTED",
+  "sources": [
+    {"url": "https://arxiv.org/html/1505.05589v1", "equations": [64, 69, 70, 71], "role": "collinear kernel and explicitly chosen homogeneous Collins approximation"},
+    {"url": "https://arxiv.org/html/2409.00221v3", "equations": [9, 25, 26, 28], "role": "independent Mellin representation"}
+  ],
+  "equation": "d h(x,Q2)/d ln(Q2) = alpha_s(Q2)/(2*pi) integral_x^1 dz/z P(z) h(x/z,Q2)",
+  "splitting_function": "CF * (2*z * [1/(1-z)]_+ + 3/2 * delta(1-z)); CF=4/3",
+  "plus_prescription": "P*h = CF*(2*integral_x^1 dz (h(x/z)-h(x))/(1-z) + (3/2+2*ln(1-x))*h(x))",
+  "mellin_convention": "h_N = integral_0^1 dx x^(N-1) h(x); P_N = CF*(3/2-2*H_N)",
+  "quantities": {
+    "transversity": "unweighted spacelike h1(x), no gluon mixing at LO",
+    "KPSY_Hhat3_homogeneous": "unweighted Hhat^(3)(z) as defined in KPSY Eq.56; Eq.71 keeps only the homogeneous term with the same kernel",
+    "rejected": "x*h1, generic Collins, or Trento H1perp first moment without an explicit conversion contract"
+  },
+  "coupling": {"order": "one_loop", "nf": "fixed integer 3 to 6", "reference": "alpha_s(Q02)=alpha0", "threshold_matching": false},
+  "discretization": {"basis": "piecewise linear in x", "convolution": "analytic integration on each cell after plus subtraction", "time_solution": "exp(tau*P) with exact one-loop tau", "grid": "strictly increasing 0 < xmin < x <= 1", "endpoint": "h(1)=0; no extrapolation below xmin"},
+  "derivatives": {"validated_coordinates": "initial ordinates with the last ordinate fixed to zero", "operator_settings": "fixed grid, alpha0, scales, nf, quantity and scheme; fitted settings require a separately validated dU term", "foreign_callbacks": false},
+  "validation_policy": {
+    "scope": "analytic polynomial inputs, independent x-space/Mellin routes; not production G2 or interval coverage",
+    "grids": [201, 401, 801, 1601, 3201],
+    "grid_allocation": "one quarter of intervals logarithmic from xmin to 0.02; remainder uniform in sqrt(1-x) to x=1",
+    "xmin": 0.000001,
+    "input": "h0(x)=x*(1-x)^3; no experimental input",
+    "affine_generator_max_abs": 0.0000000001,
+    "fine_moment_max_relative": 0.0001,
+    "fine_mellin_max_scaled": 0.0001,
+    "error_scale": "max(abs(reference), 0.01*max(abs(reference_vector)))",
+    "refinement_error_ratio_max": 0.6,
+    "mellin_contour_refinement_max_abs": 0.0000000001,
+    "identity_semigroup_max_abs": 0.0000000001,
+    "derivative_max_scaled": 0.0000001
+  },
+  "remaining_for_KPSY": ["two-loop coupling and original grid/settings comparison", "CSS Sudakov and matching coefficients", "unpolarized PDFs/FFs and exact conventions", "historical dataset and 13-parameter/262-point benchmark", "independent physical-process and derivative certification"],
+  "original_author_code_recovered": false
+}
