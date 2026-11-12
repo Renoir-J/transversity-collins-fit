@@ -21,7 +21,7 @@ ADR-001, 2026-11-11. Issues and milestones track progress. Software capability a
 | GitHub progress and Git rules | Configured | Milestones, issues, PR/CI, hooks; server enforcement recorded separately |
 | Updated experimental data | First candidate batch acquired; production review pending | HERMES/Belle/BESIII and official STAR200/510 pion Collins tables; STAR physical binning, COMPASS tables, covariance and admission remain open |
 | KPSY CSS historical reproduction | Blocked on source or independent reconstruction | Author's modified HOPPET and fitting program not located |
-| Historical 262-amplitude data intake | Candidate implementation; no fit admission | Source-locked historical views, published cut, Hall A primary remap and explicit uncertainty/convention blockers; [scope and limits](historical-data.md) |
+| Historical 262-amplitude data intake | Candidate implementation; no fit admission | Source-locked historical views, published cut, Hall A primary remap, exact primary COMPASS deuteron checks and explicit uncertainty/convention blockers; [scope and limits](historical-data.md) |
 | Production theory | Pending | Process-accurate bins/acceptance, evolution, matching and independent fixtures |
 | Production gradients/performance/interval coverage | Pending | Synthetic checks do not certify physical implementations |
 | B0–B4 / V1 real fits and publication grids | Blocked on production gates | No new physical extraction reported |

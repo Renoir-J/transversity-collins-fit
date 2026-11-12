@@ -108,6 +108,53 @@ def halla_primary(path, spec):
     return parse_halla_tex(data.decode("utf-8"))
 
 
+def deuteron_primary(path, spec):
+    """Read the source-labeled Collins group of a locked ALL-pion HEPData table."""
+    if file_hash(path) != spec["sha256"]:
+        raise ValueError("changed primary deuteron table")
+    table = read_json(path)
+    reactions = {"pi+": "MU+ DEUT --> MU+ PI+ X", "pi-": "MU+ DEUT --> MU+ PI- X"}
+    projections = {"X": "x", "Z": "z", "PT [GEV]": "pt"}
+    if (table["doi"] != spec["doi"] or table["name"] != spec["table"] or
+            [h["name"] for h in table["headers"]] != spec["headers"] or table["x_count"] != 5 or
+            table["headers"][5]["name"] != "ASYM(C=COLLINS)" or
+            "'ALL'" not in table["description"] or "Errors are statistical only." not in table["description"]):
+        raise ValueError("changed primary deuteron identity/harmonic/error schema")
+    if (spec["hadron"] not in reactions or spec["reaction"] != reactions[spec["hadron"]] or
+            projections.get(spec["headers"][0]) != spec["projection"]):
+        raise ValueError("primary deuteron species/projection mismatch")
+    if table["qualifiers"]["RE"] != [{"colspan": 2, "group": 0, "type": "RE", "value": spec["reaction"]}]:
+        raise ValueError("primary deuteron charge/reaction mismatch")
+    if len(table["values"]) != spec["expected_raw_rows"]:
+        raise ValueError("incomplete primary deuteron table")
+    points = []
+    for row in table["values"]:
+        if len(row["x"]) != 5 or len(row["y"]) != 2 or [v["group"] for v in row["y"]] != [0, 1]:
+            raise ValueError("ambiguous primary deuteron columns")
+        averages = {spec["mean_fields"][h]: scalar(v["value"])
+                    for h, v in zip(spec["headers"][:5], row["x"])}
+        collins = row["y"][0]
+        if len(collins["errors"]) != 1 or set(collins["errors"][0]) != {"symerror"}:
+            raise ValueError("ambiguous primary deuteron statistical error")
+        stat = scalar(collins["errors"][0]["symerror"])
+        if stat <= 0:
+            raise ValueError("invalid primary deuteron statistical error")
+        first = row["x"][0]
+        if ("low" in first) != ("high" in first):
+            raise ValueError("incomplete primary deuteron bin")
+        bins = {}
+        if "low" in first:
+            key = spec["mean_fields"][spec["headers"][0]]
+            low, high = scalar(first["low"]), scalar(first["high"])
+            if not low <= averages[key] <= high or low >= high:
+                raise ValueError("invalid primary deuteron bin")
+            bins[key] = [low, high]
+        points.append({"averages": averages, "central_value": scalar(collins["value"]),
+                       "statistical_error": stat, "primary_bins": bins})
+    return {"id": spec["id"], "doi": spec["doi"], "sha256": spec["sha256"],
+            "hadron": spec["hadron"], "projection": spec["projection"], "points": points}
+
+
 def row_bounds(row, averages):
     result = {}
     for name, key in (("x", "x"), ("z", "z"), ("pT", "pT_GeV"), ("z1", "z1"), ("z2", "z2")):
@@ -139,6 +186,9 @@ def sidis_point(row, adapter, contract, primary):
     elif adapter["uncertainty_layout"] == "stat_exp":
         stat = number(row["stat_u"], "statistical error", positive=True)
         systematic = {"experimental": number(row["syst_u"], "experimental systematic", nonnegative=True)}
+    elif adapter["uncertainty_layout"] == "primary_stat_only":
+        stat = number(row["error_u"], "primary statistical error", positive=True)
+        systematic = {}
     else:
         stat, systematic = None, {}
     averages = {key: values[key] for key in ("x", "y", "z", "Q2_GeV2", "pT_GeV")}
@@ -151,6 +201,10 @@ def sidis_point(row, adapter, contract, primary):
     if stat is None:
         result["reported_error_u"] = number(row["error_u"], "reported error_u", positive=True)
         result["uncertainty_status"] = "reported_error_u_composition_unresolved"
+    elif adapter["uncertainty_layout"] == "primary_stat_only":
+        result.update(uncertainty_status="primary_statistical_only",
+                      uncertainty_source_columns={"statistical": "error_u"},
+                      systematic_uncertainty_status="publication_reports_small_but_not_tabulated")
     if corrected:
         result["source_remap"] = {"kind": "reviewed_legacy_column_remap", "fields": remap, "source_bin_id": row_id,
             "primary_tables": ["table:kine", "table:results"], "primary_lines": [reference["source_line"], reference["measurement_source_line"]]}
@@ -182,7 +236,7 @@ def sia_point(row, adapter):
             "angular_source": {"column": angular_column, "value": angular, "average_type": "publication_review_pending"}}
 
 
-def parse_historical_xlsx(path, source, contract, primary):
+def parse_historical_xlsx(path, source, contract, primary, deuteron_tables=None):
     if file_hash(path) != source["sha256"]:
         raise ValueError("historical source checksum mismatch")
     config = source["adapter"]
@@ -194,8 +248,18 @@ def parse_historical_xlsx(path, source, contract, primary):
         raise ValueError("unknown historical adapter or input unit")
     blockers = ["historical candidate only; no approved likelihood or production admission",
                 "historical projection overlap/covariance prescription is not approved for updated primary fits"]
-    if config.get("uncertainty_layout") != "stat_exp_model_remap":
+    if config.get("uncertainty_layout") not in ("stat_exp_model_remap", "primary_stat_only"):
         blockers.append("secondary transcription primary numerical crosscheck pending")
+    deuteron = None
+    if config.get("uncertainty_layout") == "primary_stat_only":
+        key = config["primary_crosscheck_id"]
+        deuteron = (deuteron_tables or {}).get(key)
+        if (deuteron is None or len(deuteron["points"]) != len(records) or
+                config["experiment"] != "compass" or config["target"] != "deuteron" or
+                any(deuteron[k] != config[k] for k in ("hadron", "projection"))):
+            raise ValueError("missing or mismatched primary deuteron crosscheck")
+        blockers.extend(["primary statistical errors only; systematic covariance is not tabulated",
+                         "source Collins phase mapping to the theory contract remains pending"])
     if config.get("uncertainty_layout") == "reported_unspecified":
         blockers.append("source error_u statistical/systematic composition unresolved")
     if config.get("depolarization_status") == "publication_review_pending":
@@ -218,6 +282,10 @@ def parse_historical_xlsx(path, source, contract, primary):
             dataset.update(target_material="3He", target_result="published extracted neutron; no second nuclear extraction")
         if config["experiment"] == "hermes":
             dataset["replaced_by_in_updated_fit"] = "HERMES2020_same_2002_2005_event_sample"
+        if deuteron is not None:
+            dataset["source_convention"] = contract["COMPASS_deuteron_primary"]["source_convention"]
+            dataset["primary_numeric_crosscheck"] = {"id": deuteron["id"], "doi": deuteron["doi"],
+                "sha256": deuteron["sha256"], "raw_points": len(records), "comparison": "exact numerical equality"}
     else:
         dataset.update(ratio=config["ratio"], frame="hadron2",
                        prediction_prescription="reported P mean" if config["projection"] == "pT" else "P-integrated source view; theory adapter pending")
@@ -230,6 +298,12 @@ def parse_historical_xlsx(path, source, contract, primary):
         if not sidis and (record["hadron1"] != "pi" or record["hadron2"] != "pi"):
             raise ValueError("historical SIA is pion-pair only")
         point = sidis_point(record, config, contract, primary) if sidis else sia_point(record, config)
+        if deuteron is not None:
+            reference = deuteron["points"][i - 2]
+            if any(point[k] != reference[k] for k in ("averages", "central_value", "statistical_error")):
+                raise ValueError("secondary deuteron row disagrees with primary numerical table")
+            point["primary_locator"] = {"doi": deuteron["doi"], "table_row": i - 1}
+            point["primary_bins"] = reference["primary_bins"]
         point.update(id=f"{source['id']}:r{i}", locator={"sheet": config["sheet"], "excel_row": i})
         if sidis and config["projection"] == "pt" and point["averages"]["pT_GeV"] >= contract["SIDIS_projection_cut"]["upper_GeV"]:
             dataset["excluded"].append({"locator": point["locator"], "reported_pT_GeV": point["averages"]["pT_GeV"],
@@ -263,6 +337,10 @@ def validate_historical_candidate(candidate, contract):
                 number(p["reported_error_u"], "reported error", positive=True)
             else:
                 number(p["statistical_error"], "statistical error", positive=True)
+            if p.get("uncertainty_status") == "primary_statistical_only" and (
+                    p.get("systematic_uncertainty_status") != "publication_reports_small_but_not_tabulated" or
+                    p["systematic_components"] or "primary_locator" not in p):
+                raise ValueError("primary stat-only error cannot certify missing systematic uncertainty")
             for value in p["systematic_components"].values():
                 number(value, "systematic error", nonnegative=True)
     counts = {"views": len(views), "points": len(ids)}
@@ -286,7 +364,8 @@ def run_historical_intake(manifest_path, cache, output, *, seed_root=None, offli
     fingerprint = source_fingerprint(root)
     hashes = {str(p): file_hash(p) for p in (manifest_path, contract_path)}
     paths = {}
-    for source in [manifest["primary_crosscheck"], *manifest["sources"]]:
+    deuteron_sources = manifest.get("deuteron_primary_tables", [])
+    for source in [manifest["primary_crosscheck"], *deuteron_sources, *manifest["sources"]]:
         seed = Path(seed_root) / source["seed_path"] if seed_root else None
         if seed is not None and not seed.is_file():
             seed = Path(seed_root) / "data/raw/historical" / source["filename"]
@@ -294,7 +373,8 @@ def run_historical_intake(manifest_path, cache, output, *, seed_root=None, offli
         paths[source["id"]] = path
         hashes[str(path.resolve())] = file_hash(path)
     primary = halla_primary(paths[manifest["primary_crosscheck"]["id"]], manifest["primary_crosscheck"])
-    views = [parse_historical_xlsx(paths[s["id"]], s, contract, primary) for s in manifest["sources"]]
+    deuteron_tables = {s["id"]: deuteron_primary(paths[s["id"]], s) for s in deuteron_sources}
+    views = [parse_historical_xlsx(paths[s["id"]], s, contract, primary, deuteron_tables) for s in manifest["sources"]]
     candidate = {"schema_version": 1, "scope": SCOPE, "production_ready": False, "physical_extraction": False,
         "historical_fit_ready": False, "contract_id": contract["id"], "views": views,
         "manifest_sha256": file_hash(manifest_path), "contract_sha256": file_hash(contract_path), "source_fingerprint": fingerprint}
@@ -307,6 +387,7 @@ def run_historical_intake(manifest_path, cache, output, *, seed_root=None, offli
         "historical_fit_ready": False, "counts": counts, "source_hashes": hashes, "source_fingerprint": fingerprint,
         "manifest": str(manifest_path), "cache_root": str(Path(cache).resolve()),
         "candidate_sha256": file_hash(output / "candidates.json"), "primary_HallA_points_crosschecked": len(primary),
+        "primary_COMPASS_deuteron_raw_points_crosschecked": sum(len(t["points"]) for t in deuteron_tables.values()),
         "excluded_source_rows": sum(len(v["excluded"]) for v in views), "limitations": contract["limitations"], "completed_at": utc_now()}
     atomic_json(output / "report.json", report)
     return report
@@ -330,7 +411,7 @@ def verify_historical_intake(manifest_path, cache, output):
         raise ValueError("changed historical candidates")
     if candidate["manifest_sha256"] != file_hash(manifest_path) or candidate["contract_sha256"] != file_hash(contract_path):
         raise ValueError("changed historical source specification")
-    sources = [manifest["primary_crosscheck"], *manifest["sources"]]
+    sources = [manifest["primary_crosscheck"], *manifest.get("deuteron_primary_tables", []), *manifest["sources"]]
     expected = {str(manifest_path): file_hash(manifest_path), str(contract_path): file_hash(contract_path),
                 **{str(cache / source["filename"]): source["sha256"] for source in sources}}
     if report["manifest"] != str(manifest_path) or report["cache_root"] != str(cache) or report["source_hashes"] != expected:
@@ -340,5 +421,7 @@ def verify_historical_intake(manifest_path, cache, output):
     counts = validate_historical_candidate(candidate, contract)
     if report["counts"] != counts or report["primary_HallA_points_crosschecked"] != 8 or report["excluded_source_rows"] != 14:
         raise ValueError("changed historical intake decisions")
+    if report.get("primary_COMPASS_deuteron_raw_points_crosschecked", 0) != contract.get("COMPASS_deuteron_primary", {}).get("raw_points", 0):
+        raise ValueError("changed primary deuteron decisions")
     return {"scope": SCOPE, "production_ready": False, "physical_extraction": False,
             "historical_fit_ready": False, "counts": counts}

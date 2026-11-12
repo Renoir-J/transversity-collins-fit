@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import io
+import json
 import tarfile
 
 import pytest
@@ -179,3 +180,106 @@ def test_historical_candidates_cannot_claim_admission(key):
     changed[key] = True
     with pytest.raises(ValueError, match="self-certify"):
         hist.validate_historical_candidate(changed, {})
+
+
+def synthetic_deuteron_primary(tmp_path, mutation=None):
+    headers = ["X", "MEAN(NAME=Q**2) [GEV**2]", "MEAN(NAME=Y)", "MEAN(NAME=Z)",
+               "MEAN(NAME=PT) [GEV]", "ASYM(C=COLLINS)", "ASYM(C=SIVERS)"]
+    body = {"doi": "synthetic-doi", "name": "Synthetic Table", "x_count": 5,
+            "headers": [{"name": h, "colspan": 1} for h in headers],
+            "description": "Synthetic 'ALL' pion fixture. Errors are statistical only.",
+            "qualifiers": {"RE": [{"colspan": 2, "group": 0, "type": "RE", "value": "MU+ DEUT --> MU+ PI+ X"}]},
+            "values": []}
+    rows = [{"Q2": 2., "x": .1, "y": .6, "z": .4, "pT": .2, "value": .01, "error_u": .03},
+            {"Q2": 3., "x": .2, "y": .6, "z": .4, "pT": .3, "value": -.02, "error_u": .04}]
+    for row, low, high in zip(rows, (.05, .15), (.15, .25)):
+        body["values"].append({
+            "x": [{"value": str(row["x"]), "low": str(low), "high": str(high)},
+                  *[{"value": str(row[k])} for k in ("Q2", "y", "z", "pT")]],
+            "y": [{"group": 0, "value": str(row["value"]), "errors": [{"symerror": str(row["error_u"])}]},
+                  {"group": 1, "value": "0.9", "errors": [{"symerror": "0.5"}]}]})
+    spec = {"id": "synthetic_primary_deuteron", "doi": body["doi"], "table": body["name"],
+            "headers": headers, "mean_fields": dict(zip(headers[:5], ("x", "Q2_GeV2", "y", "z", "pT_GeV"))),
+            "reaction": "MU+ DEUT --> MU+ PI+ X", "hadron": "pi+", "projection": "x", "expected_raw_rows": 2}
+    if mutation:
+        mutation(body)
+    path = tmp_path/"synthetic-primary.json"
+    path.write_text(json.dumps(body), encoding="utf-8")
+    spec["sha256"] = file_hash(path)
+    return path, spec, rows
+
+
+def synthetic_deuteron_source(tmp_path, rows, primary_spec):
+    records = [{**row, "obs": "AUTcollins", "col": "COMPASS", "target": "deuteron",
+                "hadron": "pi+", "dependence": "x"} for row in rows]
+    path = tmp_path/"synthetic-deuteron.xlsx"
+    headers = write_xlsx(path, records)
+    source = synthetic_source(path, headers, len(rows), len(rows), "x")
+    source["adapter"].update(experiment="compass", target="deuteron", uncertainty_layout="primary_stat_only",
+        primary_crosscheck_id=primary_spec["id"], depolarization_status="primary_transfer_divided_phase_mapping_pending")
+    return path, source
+
+
+def test_primary_deuteron_crosscheck_keeps_sign_statistical_error_and_missing_systematics(tmp_path):
+    primary_path, spec, rows = synthetic_deuteron_primary(tmp_path)
+    primary = hist.deuteron_primary(primary_path, spec)
+    path, source = synthetic_deuteron_source(tmp_path, rows, spec)
+    convention = {"Collins_phase": "phi_h+phi_S-pi", "transverse_transfer_divided_out": True,
+                  "phase_transform_applied": False, "normalization_transform_applied": False,
+                  "mapping_to_theory_contract": "pending independent convention audit"}
+    contract = {**remap_contract(), "COMPASS_deuteron_primary": {"source_convention": convention}}
+    view = hist.parse_historical_xlsx(path, source, contract, {}, {spec["id"]: primary})
+    assert [p["central_value"] for p in view["points"]] == [.01, -.02]
+    assert [p["statistical_error"] for p in view["points"]] == [.03, .04]
+    assert [p["primary_bins"] for p in view["points"]] == [{"x": [.05, .15]}, {"x": [.15, .25]}]
+    assert [p["primary_locator"]["table_row"] for p in view["points"]] == [1, 2]
+    assert all(p["systematic_components"] == {} and p["systematic_uncertainty_status"] ==
+               "publication_reports_small_but_not_tabulated" for p in view["points"])
+    assert view["source_convention"] == convention and view["depolarization_removed"] is None
+    assert view["primary_numeric_crosscheck"]["sha256"] == spec["sha256"]
+    assert any("phase mapping" in b for b in view["blockers"])
+    assert view["historical_fit_ready"] is view["production_ready"] is False
+
+
+@pytest.mark.parametrize("mutation", [
+    lambda d: d["headers"][5].update(name="ASYM(C=SIVERS)"),
+    lambda d: d.update(description="Synthetic 'ALL' pion fixture. Total errors."),
+    lambda d: d["qualifiers"]["RE"][0].update(value="synthetic pi-"),
+    lambda d: d["values"][0]["y"][0]["errors"].append({"symerror": "0.01"}),
+    lambda d: d["values"][0]["y"][1].update(group=0),
+])
+def test_primary_deuteron_rejects_harmonic_error_charge_and_group_ambiguity(tmp_path, mutation):
+    path, spec, _ = synthetic_deuteron_primary(tmp_path, mutation)
+    with pytest.raises(ValueError):
+        hist.deuteron_primary(path, spec)
+
+
+@pytest.mark.parametrize("field", ["x", "value", "error_u"])
+def test_secondary_deuteron_must_match_all_primary_values(tmp_path, field):
+    primary_path, spec, rows = synthetic_deuteron_primary(tmp_path)
+    primary = hist.deuteron_primary(primary_path, spec)
+    rows[0][field] += .01
+    path, source = synthetic_deuteron_source(tmp_path, rows, spec)
+    contract = {**remap_contract(), "COMPASS_deuteron_primary": {"source_convention": {"mapping": "pending"}}}
+    with pytest.raises(ValueError, match="disagrees with primary"):
+        hist.parse_historical_xlsx(path, source, contract, {}, {spec["id"]: primary})
+
+
+def test_primary_deuteron_hash_and_crosscheck_are_required(tmp_path):
+    path, spec, rows = synthetic_deuteron_primary(tmp_path)
+    changed = {**spec, "sha256": "0"*64}
+    with pytest.raises(ValueError, match="changed primary"):
+        hist.deuteron_primary(path, changed)
+    raw_path, source = synthetic_deuteron_source(tmp_path, rows, spec)
+    with pytest.raises(ValueError, match="missing or mismatched primary"):
+        hist.parse_historical_xlsx(raw_path, source, remap_contract(), {})
+
+
+@pytest.mark.parametrize("field,value", [("hadron", "pi-"), ("projection", "z")])
+def test_primary_secondary_deuteron_identity_cannot_be_inferred_from_equal_numbers(tmp_path, field, value):
+    primary_path, spec, rows = synthetic_deuteron_primary(tmp_path)
+    primary = hist.deuteron_primary(primary_path, spec)
+    path, source = synthetic_deuteron_source(tmp_path, rows, spec)
+    source["adapter"][field] = value
+    with pytest.raises(ValueError, match="missing or mismatched primary"):
+        hist.parse_historical_xlsx(path, source, remap_contract(), {}, {spec["id"]: primary})
