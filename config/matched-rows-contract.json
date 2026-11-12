@@ -19,6 +19,9 @@
   "independent_oracle": "Mellin moments R_N=-2*CF*trigamma(N+1); multiply the analytic initial moment by exp(tau*P_N) and the process coefficient. Validate complex trigamma with direct moments, recurrence and inversion contour changes, and tau0 matching with independent fixed quadrature.",
   "validation_policy": {
     "interval_refinements": [256,512,1024],
+    "physical_interval_refinements": [256,512,1024,2048,4096],
+    "minimum_physical_intervals": 1024,
+    "physical_refinement_policy": "Retain all coarse levels. At or above the declared minimum, stop a process/quantity only when every supplied scale passes the same final adjacent-grid comparison. Refine only unconverged cases within the fixed budget; exhaustion is FAIL. The initial SIA Collins Q2=0.6, z=0.05, u pilot failed 512-to-1024 refinement (1.315e-4 versus 1e-4) and remains recorded.",
     "row_native_max_scaled": 1e-10,
     "kernel_moment_max_abs": 1e-11,
     "analytic_Q0_matching_max_scaled": 1e-9,

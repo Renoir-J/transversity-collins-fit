@@ -50,7 +50,7 @@ function matched_input_checks(nativefile,partonfile)
     try
         for (process,quantity) in cases
             ispdf=quantity==:transversity;probes=ispdf ? xp : zp;label="$process $quantity"
-            for resolution in policy["interval_refinements"]
+            for resolution in policy["physical_interval_refinements"]
                 plan=nothing;cold=@elapsed plan=HoppetMatchingPlan(nativefile,vcat(probes,1.),q2,q0,coupling;
                     process=process,quantity=quantity,intervals=resolution)
                 inputs=ispdf ? prepare_initial_conditions(pdf,hel,ff,plan.grid,[.05,.5,1.]) :
@@ -67,7 +67,13 @@ function matched_input_checks(nativefile,partonfile)
                 push!(refinements[(process,quantity)],Dict("intervals"=>resolution,"values"=>values[1:end-1,:,:],
                     "unique_nodes"=>length(plan.grid),"coefficient_payload_bytes"=>plan.coefficient_payload_bytes,
                     "preparation_seconds_informational"=>cold,"apply_seconds_informational"=>warm,"initial_provenance"=>inputs.provenance))
-                if resolution==last(policy["interval_refinements"])
+                levels=refinements[(process,quantity)]
+                error=length(levels)>1 ? maximum(scaled(levels[end]["values"][:,:,k],levels[end-1]["values"][:,:,k]) for k in eachindex(q2)) : nothing
+                converged=resolution>=policy["minimum_physical_intervals"] && error!==nothing && error<=policy["physical_value_max_scaled"]
+                levels[end]["previous_level_max_error"]=error
+                levels[end]["refinement_accepted"]=converged
+                finish=converged || resolution==last(policy["physical_interval_refinements"])
+                if finish
                     native_values[(process,quantity)]=values[1:end-1,:,:]
                     prediction(t)=vec(apply_operator(plan,initial(t))[1:end-1,:,:])
                     direction=[.02,.03,.01,.02,.01,.01,.02,.02,.01,.02,.03,.03,0.]
@@ -86,8 +92,9 @@ function matched_input_checks(nativefile,partonfile)
                     end
                 end
                 println(JSON.json(Dict("completed_process"=>string(process),"quantity"=>string(quantity),"intervals"=>resolution)));flush(stdout)
+                finish && break
             end
-            fine,coarse=refinements[(process,quantity)][end-0]["values"],refinements[(process,quantity)][end-1]["values"]
+            fine,coarse=refinements[(process,quantity)][end]["values"],refinements[(process,quantity)][end-1]["values"]
             for k in eachindex(q2)
                 check("$label native refinement Q2=$(q2[k])",scaled(fine[:,:,k],coarse[:,:,k]),policy["physical_value_max_scaled"])
             end

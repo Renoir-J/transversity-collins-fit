@@ -37,9 +37,14 @@ plan = HoppetMatchingPlan(".runtime/hoppet/build.json", [0.05, 0.3, 0.7, 0.9, 1.
 
 The independent Mellin reference uses R_N=−2CF trigamma(N+1), an analytic beta-polynomial initial moment, and a separate inversion contour. Complex trigamma is checked against direct moments, recurrence and contour changes. Q0 matching is compared with independent quadrature. Full constrained-basis rows, transpose identities, physical-coupling selection, generic gradients, Hessians/HVPs and invalid-setting rejection are checked explicitly.
 
+These in-memory rows are not an admitted serialized production kernel. Source-bound artifact preparation and complete coefficient-mutation admission remain required alongside the existing metadata checks.
+
 The pinned-input job uses strict CT10/DSSV08/DSS14 initial inputs and the printed historical parameter family. It refines native grids, checks direct Q0 matching split at source knots, and independently evolves source/probe-aligned dense grids with cell-wise matching quadrature. Coarse failed comparisons remain recorded; only unconverged cases receive the contracted extra dense-grid refinement, with unchanged value/derivative targets. Reference finite differences use 256-bit initial-family/row arithmetic; fitting remains Float64. These checks do not calibrate physical interval coverage or admit a likelihood.
 
+The initial physical run at commit `0b57abd` failed one of 93 checks: SIA Hhat3 at Q2=0.6, z=0.05 in the u channel differed by 1.315e-4 between 512 and 1024 intervals, above the unchanged 1e-4 target. That report and contract snapshot remain preserved. The physical runner therefore has an explicit 256/512/1024/2048/4096 budget, stopping each process/quantity only when all supplied scales pass its final adjacent-grid comparison at or above 1024 intervals. Unconverged cases refine; budget exhaustion is FAIL. Constructor defaults and analytic checks alone never certify an arbitrary physical job.
+
 ```sh
+python scripts/prepare_parton_inputs.py
 python scripts/prepare_hoppet.py
 julia --project=numerics numerics/bin/check_matched_rows.jl .runtime/hoppet/build.json runs/matched/rows.json
 julia --project=numerics numerics/bin/check_matched_inputs.jl \
