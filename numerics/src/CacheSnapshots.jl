@@ -15,6 +15,12 @@ end
 snapshot_tag!(context,tag)=SHA.update!(context,codeunits(tag))
 snapshot_update!(context,::Nothing)=snapshot_tag!(context,"N")
 
+snapshot_type_name(::Type{T}) where T=string(T)
+for numeric_type in (Bool,Int8,Int16,Int32,Int64,Int128,UInt8,UInt16,UInt32,UInt64,UInt128,
+                  Float16,Float32,Float64)
+    @eval snapshot_type_name(::Type{$numeric_type})=$(string(numeric_type))
+end
+
 function snapshot_update!(context,value::AbstractString)
     snapshot_tag!(context,"S$(ncodeunits(value)):")
     SHA.update!(context,codeunits(value))
@@ -26,7 +32,7 @@ end
 function snapshot_update!(context,value::Union{Integer,AbstractFloat})
     isbitstype(typeof(value)) || error("fixed snapshot requires a primitive numeric scalar")
     snapshot_tag!(context,"P")
-    snapshot_update!(context,string(typeof(value)))
+    snapshot_update!(context,snapshot_type_name(typeof(value)))
     SHA.update!(context,reinterpret(UInt8,[value]))
 end
 function snapshot_update!(context,value::Tuple)
@@ -50,7 +56,7 @@ function snapshot_update!(context,value::AbstractDict)
 end
 function snapshot_update!(context,value::AbstractArray{T}) where T
     snapshot_tag!(context,"A")
-    snapshot_update!(context,string(T))
+    snapshot_update!(context,snapshot_type_name(T))
     snapshot_update!(context,size(value))
     if value isa Array && isbitstype(T) && T<:Union{Integer,AbstractFloat}
         SHA.update!(context,reinterpret(UInt8,vec(value)))

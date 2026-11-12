@@ -1,3 +1,39 @@
+struct SyntheticSnapshotFloat <: AbstractFloat
+    value::Float64
+end
+const synthetic_snapshot_type_label=Ref("synthetic-cache-float-v1")
+Base.show(io::IO,::Type{SyntheticSnapshotFloat})=print(io,synthetic_snapshot_type_label[])
+
+@testset "primitive type-name optimization preserves parent snapshot bytes" begin
+    fixture=JSON.parsefile(joinpath(@__DIR__,"../../fixtures/closure/snapshot-digests.json"))
+    @test fixture["scope"]=="synthetic_cache_integrity_fixture"
+    @test fixture["contract"]=="KPSY-NUMERICAL-CACHE-001"
+    @test fixture["production_ready"]===false
+    @test fixture["native_endian"]==Int(Base.ENDIAN_BOM)
+    primitives=(Bool,Int8,Int16,Int32,Int64,Int128,UInt8,UInt16,UInt32,UInt64,UInt128,Float16,Float32,Float64)
+    types=Dict(string(T)=>T for T in primitives)
+    @test Set(r["type"] for r in fixture["records"])==Set(keys(types))
+    for record in fixture["records"]
+        T=types[record["type"]]
+        @test CollinsFit.numerical_snapshot(one(T))==record["scalar_one"]
+        @test CollinsFit.numerical_snapshot(reshape(T[one(T),zero(T)],1,2))==record["matrix_one_zero"]
+    end
+    composite=Dict("a"=>[.1,.2],"b"=>false,"c"=>(:SIDIS,2,(-0.,"synthetic")))
+    @test CollinsFit.numerical_snapshot(composite)==fixture["synthetic_composite"]
+    value=SyntheticSnapshotFloat(.25);array=[value]
+    old_scalar=CollinsFit.numerical_snapshot(value);old_array=CollinsFit.numerical_snapshot(array)
+    try
+        synthetic_snapshot_type_label[]="synthetic-cache-float-v2"
+        @test CollinsFit.snapshot_type_name(SyntheticSnapshotFloat)=="synthetic-cache-float-v2"
+        @test CollinsFit.numerical_snapshot(value)!=old_scalar
+        @test CollinsFit.numerical_snapshot(array)!=old_array
+    finally
+        synthetic_snapshot_type_label[]="synthetic-cache-float-v1"
+    end
+    @test CollinsFit.numerical_snapshot(value)==old_scalar
+    @test CollinsFit.numerical_snapshot(array)==old_array
+end
+
 @testset "complete fixed-array snapshots and typed metadata" begin
     snapshot=CollinsFit.numerical_snapshot
     values=reshape(collect(1.:100000.),100,1000)
