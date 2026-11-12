@@ -49,6 +49,7 @@ jobs:
           python scripts/plan_workflow.py validate
           python scripts/check_repository.py
           julia --project=numerics numerics/test/runtests.jl
+          julia --project=numerics numerics/bin/check_collinear_lo.jl runs/ci/collinear-lo-validation.json
       - name: Fortran batch bridge
         run: |
           make -C fortran

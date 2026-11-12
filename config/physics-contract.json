@@ -28,6 +28,7 @@
     "physics_results": false
   },
   "experimental_data_manifest": "config/experimental-sources.json",
+  "reconstructed_collinear_evolution_contract": "config/evolution-contract.json",
   "data_admission": {
     "candidate_scope": "experimental_candidate",
     "candidate_enters_optimizer": false,
