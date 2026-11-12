@@ -26,6 +26,8 @@ A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use
 
 ## Running the workflow
 
+[Historical KPSY candidate intake](docs/historical-data.md) preserves 26 source-locked historical views, the published SIDIS projection cut and an exact primary-table check of the Hall A legacy column remapping. Candidate normalization does not admit a historical or updated fit.
+
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.
 
 ```bash
