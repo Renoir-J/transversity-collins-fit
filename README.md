@@ -16,6 +16,8 @@ A [reconstructed LO collinear evolution component](docs/evolution.md) now covers
 
 [Initial transversity/Collins parameterizations](docs/initial-conditions.md) now retain physical boundary values and connect strict initial inputs to fixed-scale LO evolution. These are reconstructed components; efficient many-scale integration, observable adapters and the historical fit remain incomplete.
 
+A [retained HOPPET adapter](docs/hoppet.md) is being validated against the same LO equation. It retains upstream convolution/evolution and fixes the x-weight, auxiliary-time and derivative conventions explicitly. It does not admit production fits or establish physical fitting throughput.
+
 ## Running the workflow
 
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HOPPET-INPUTS-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "initial_contract": "config/initial-contract.json",
+  "backend_contract": "config/hoppet-contract.json",
+  "Q2_GeV2": [0.6,2.4,10.0,100.0],
+  "Q02_GeV2": 2.4,
+  "x_min": 0.00001,
+  "z_min": 0.05,
+  "x_probes": [0.0065,0.01,0.03,0.1,0.2,0.35,0.6,0.8],
+  "z_probes": [0.05,0.1,0.2,0.3,0.5,0.7,0.9],
+  "dy_refinements": [0.1,0.05,0.025,0.0125],
+  "du": 0.0125,
+  "dense_background_refinements": [1601,3201],
+  "validation_policy": {
+    "value_refinement_max_scaled": 0.0001,
+    "cross_backend_max_scaled": 0.0001,
+    "derivative_max_scaled": 0.0000001,
+    "endpoint_max_abs": 0.0,
+    "relative_floor": 0.00001,
+    "finite_difference_steps": [0.0001,0.00001],
+    "comparison": "Preserve coarse and failed cases. Refine the mesh or solver; do not change these targets. A failed physical pilot remains FAIL independently of analytic component checks.",
+    "scope": "Strict pinned Q0 inputs and the rounded historical parameter family; no data likelihood, fit, full tensor charge or production admission."
+  },
+  "resource_pilot": {"scales": 64,"Q2_min_GeV2": 0.6,"Q2_max_GeV2": 10000.0,"qualification": "Informational preparation and warm batched application only; coefficient payload is not peak RSS. No G2PERF or physical fitting-throughput claim."},
+  "limitations": ["Original author code and historical settings remain unavailable", "Low/high CSS scale prescriptions, observable adapters, data overlap/covariance and production coverage remain unresolved", "Backward evolution of the published slow endpoint requires its own mesh checks; polynomial success cannot certify it"]
+}
