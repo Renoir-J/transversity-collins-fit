@@ -3,10 +3,11 @@ using CollinsFit, JSON, SHA, LinearAlgebra
 
 const ROOT=normpath(joinpath(@__DIR__,"../.."))
 const CONTRACT=joinpath(ROOT,"config/numerical-cache-contract.json")
-const SOURCES=vcat([@__FILE__,CONTRACT,joinpath(ROOT,"config/polarized-process-contract.json"),
-    joinpath(ROOT,"config/leptonic-observable-contract.json"),joinpath(ROOT,"config/parton-sources.json"),
-    joinpath(ROOT,"numerics/Project.toml"),joinpath(ROOT,"numerics/Manifest.toml")],
-    filter(p->endswith(p,".jl"),readdir(joinpath(ROOT,"numerics/src");join=true)))
+const SOURCES=vcat([@__FILE__,joinpath(ROOT,"numerics/Project.toml"),joinpath(ROOT,"numerics/Manifest.toml"),
+    joinpath(ROOT,"references/source-inventory.json"),joinpath(ROOT,"references/code-review.json")],
+    filter(p->endswith(p,".jl"),readdir(joinpath(ROOT,"numerics/src");join=true)),
+    filter(p->endswith(p,".json") && !(basename(p) in ("github-state.json","project-tasks.json","actions.lock.json")),
+        readdir(joinpath(ROOT,"config");join=true)))
 
 function cache_checks(nativefile,inputfile)
     sources=Dict(relpath(p,ROOT)=>bytes2hex(sha256(read(p))) for p in SOURCES)

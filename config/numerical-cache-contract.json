@@ -22,5 +22,6 @@
     "Exact byte snapshots can detect changes that leave one tested prediction numerically unchanged",
     "Record complete-check overhead separately; do not infer a production G2PERF pass or relax a failed budget",
     "Historical fit, data covariance/overlap, jet kernels, production admission and interval coverage remain separate requirements"
-  ]
+  ],
+  "source_bindings": "The receipt binds its producer, all numerical source files, all scientific configuration JSON files, the Julia locks and the pinned reference inventory/review, plus verified native and parton builds. Administrative GitHub/task/action metadata is excluded."
 }
