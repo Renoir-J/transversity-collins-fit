@@ -47,5 +47,6 @@
     "refinement_error_ratio_max": 0.6
   },
   "parton_input_contract": "config/parton-contract.json",
-  "not_implemented": ["Wilson/hard matching coefficients", "Bessel transforms and physical SIDIS/SIA/STAR predictions", "historical fit and uncertainty calibration", "production admission and same-contract historical HOPPET comparison"]
+  "leptonic_component_contract": "config/leptonic-contract.json",
+  "not_implemented": ["fitted initial parameterizations and scalable many-scale evolution integration", "publication-specific SIDIS/SIA observable adapters and STAR predictions", "historical fit and uncertainty calibration", "production admission and same-contract historical HOPPET comparison"]
 }

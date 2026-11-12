@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-LEPTONIC-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "precision": "Float64 inputs, nodes, weights and numerical evaluation; cached Gauss roots/weights prepared at 192 bits then rounded once",
+  "source": "https://arxiv.org/html/1505.05589v1",
+  "equations": [37,38,48,49,50,51,58,67,68,73,74,101,102,103,104,105,108,109],
+  "matching": {
+    "expansion": "alpha_s(mu_b)/pi",
+    "scheme": "CSS with hard factors absorbed into each matching leg",
+    "convolution": "integral_x^1 dy/y C(x/y)*F(y); fixed Gauss nodes in log(y), optionally split at supplied input knots",
+    "inputs": "unweighted f, h1, D or KPSY Hhat3; no x or z weight",
+    "SIDIS_delta": "-2*CF for pdf, transversity, ff and collins",
+    "SIA_delta": "CF*(pi^2-8)/4 for ff and collins",
+    "quark_pdf_regular": "CF*(1-v)/2",
+    "gluon_pdf_regular": "TR*v*(1-v)",
+    "quark_ff_regular": "CF*((1-v)/2+(1+v^2)*ln(v)/(1-v))",
+    "gluon_ff_regular": "CF*(v/2+(1+(1-v)^2)*ln(v)/v)",
+    "collins_regular": "2*CF*v*ln(v)/(1-v)",
+    "transversity_regular": 0,
+    "endpoint": "ln(v)*plus distribution is regular since ln(1)=0; its delta contribution vanishes; ln(v)/(1-v) has limit -1",
+    "leg_product": "multiply the two first-order matched legs literally as written in the paper; do not silently truncate the product; historical code comparison remains absent",
+    "gluon": "required for pdf/ff at nonzero alpha and x<1; absent in transversity/collins matching"
+  },
+  "fourier": {
+    "b_unit": "GeV^-1", "P_unit": "GeV", "Q2_unit": "GeV^2",
+    "SIDIS_UU": "z^-2 integral db*b*J0(P*b/z)*amplitude/(2*pi)",
+    "SIDIS_Collins": "-1/(2*z^3) integral db*b^2*J1(P*b/z)*amplitude/(2*pi)",
+    "SIA_UU": "z1^-2 integral db*b*J0(P*b/z1)*amplitude/(2*pi)",
+    "SIA_Collins": "1/(4*z1^3*z2) integral db*b^3*J2(P*b/z1)*amplitude/(2*pi)",
+    "Hhat3": "KPSY dimensionful convention, Hhat3=-2*z*M_h*H1perp(1)_Trento; no extra mass factor in Eq74 or Eq109",
+    "interval": "explicit finite [0,B] supplied by caller; Gauss nodes exclude b=0; no tail is silently declared zero",
+    "sign": "preserve signed transforms; no absolute value or positivity clamp"
+  },
+  "assembly": {
+    "matrix_order": "rows are explicit PDG flavors; columns are b nodes",
+    "flavors": "unique quarks and antiquarks in charge-conjugate pairs, abs(pid)=1..5; gluon enters matching only",
+    "SIDIS": "sum_q e_q^2 * matched_pdf_q * matched_ff_q; polarized uses matched_h1_q * matched_Hhat3_q",
+    "SIA": "sum over quarks AND antiquarks e_q^2 * matched_FF1_q * matched_FF2_antiquark(q), analogously for Hhat3",
+    "CSS": "full perturbative exponent once; channel-specific nonperturbative factor once, under KPSY-CSS-001",
+    "derivatives": "Julia generic arithmetic for supplied matched values and gc; kinematics, integration nodes, matching alpha_s and other CSS settings are fixed"
+  },
+  "validation_policy": {
+    "relative_floor": 0.00000001,
+    "matching_max_scaled": 0.000000001,
+    "kernel_moment_max_abs": 0.00000000001,
+    "endpoint_max_abs": 0.00000000001,
+    "gaussian_transform_max_scaled": 0.00000001,
+    "angular_fourier_max_abs": 0.00000000001,
+    "CSS_assembly_max_scaled": 0.0000001,
+    "node_refinement_max_scaled": 0.0000001,
+    "tail_extension_max_scaled": 0.0000001,
+    "derivative_max_scaled": 0.0000001,
+    "matching_orders": [16,32,64],
+    "radial_orders": [8,16,32],
+    "radial_bounds": [12,24,32],
+    "Gaussian_refinements": [
+      {"order":16,"panel_width":0.5},
+      {"order":32,"panel_width":0.125},
+      {"order":64,"panel_width":0.0625}
+    ],
+    "input_prediction_max_scaled": 0.0001,
+    "input_refinements": [
+      {"matching_order":4,"radial_order":8},
+      {"matching_order":8,"radial_order":16},
+      {"matching_order":16,"radial_order":32}
+    ]
+  },
+  "limitations": [
+    "No historical 262-point fit or new physical extraction",
+    "Fitted initial parameterizations, scalable many-scale evolution, reviewed bin/acceptance adapters and experimental likelihood admission remain required",
+    "Finite integration bounds and low/high-scale input prescriptions require physical refinement and sensitivity checks",
+    "No STAR jet kernel, finite-R matching, production derivative/performance gate or interval-coverage certification",
+    "Analytic component comparisons and reconstructed input checks cannot authorize production"
+  ]
+}

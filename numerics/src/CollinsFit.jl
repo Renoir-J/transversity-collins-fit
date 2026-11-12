@@ -13,6 +13,10 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        sidis_snp, sidis_collins_snp, sia_snp, sia_collins_snp,
        CT10Input, load_dssv08, load_dss14, weighted_components,
        ct10_batch, parton_pdf, parton_helicity, pion_ff, parton_domain,
+       MatchingRule, matching_rule, match_leg, RadialRule, LeptonicPlan,
+       sidis_fourier, sia_fourier, leptonic_plan, leptonic_structure,
+       leptonic_unpolarized, leptonic_collins,
+       prepare_unpolarized_sidis, prepare_unpolarized_sia,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -107,6 +111,9 @@ include("RunningCoupling.jl")
 include("CollinearLO.jl")
 include("CSS.jl")
 include("PartonInputs.jl")
+include("Matching.jl")
+include("Leptonic.jl")
+include("LeptonicInputs.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)

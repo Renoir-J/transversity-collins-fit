@@ -19,6 +19,8 @@
     @test pion_ff(table,4,1,.2,4.) ≈ pion_ff(table,-4,1,.2,4.)
     @test pion_ff(table,5,1,.2,4.) ≈ pion_ff(table,-5,1,.2,4.)
     @test pion_ff(table,2,1,.2,4.)*.2 ≈ (raw[1,2,2]+raw[7,2,2])/2
+    @test pion_ff(table,[2,-2,4,-4,21],1,.2,4.) ≈ [pion_ff(table,p,1,.2,4.) for p in (2,-2,4,-4,21)]
+    @test_throws ErrorException pion_ff(table,[2,6],1,.2,4.)
     @test_throws ErrorException weighted_components(table,.049,4.)
     @test_throws ErrorException weighted_components(table,.2,.5)
     @test_throws ErrorException pion_ff(table,6,1,.2,4.)
