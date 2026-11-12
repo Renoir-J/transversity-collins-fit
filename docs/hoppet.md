@@ -35,6 +35,34 @@ For each native negative-order subgrid, the convolution is lower-triangular Toep
 
 Each loaded bridge permits one active context, with generation handles and a Julia process lock. Close it before opening another. Whole numerical jobs remain isolated processes. Upstream global/SAVE state is not treated as generally thread-safe. Queries below grid support, nonfinite inputs, nonzero input endpoints, closed contexts and mutated grids are rejected.
 
+## Query-bound row caches
+
+The initial global-grid physical-input pilot at commit `afb5c6d` fails the original `1e-4` target. The largest differences occur at source interpolation knots, including z=0.7 and 0.9, and are already visible at Q0. Its 59-check report retains 11 failures in both local Linux validation and [independent CI](https://github.com/Renoir-J/transversity-collins-fit/actions/runs/43167683823); it does not admit the global-grid path. These are errors in the numerical representation of the full initial functions, not evidence that their standalone fitted power factors describe the complete endpoint behavior.
+
+[KPSY-HOPPET-POINTS-001](../config/hoppet-point-contract.json) instead puts each required query at the exact boundary of its own retained native grid. The checked native adjoint exports that query's fixed rows, with a full native-forward comparison before closing the context. The sorted union of initial coordinates is sampled once. Repeated queries reuse preparation and preserve their requested output order. Julia applies the detached rows with generic matrix products, so h1 and Hhat3 plans can coexist and numerical iterations have no foreign calls. This does not reimplement the native solver or forward convolution.
+
+Each query still needs integration-grid refinement: alignment is not itself an accuracy certificate. The physical pilot retains the same `1e-4` value and `1e-7` derivative targets. Reference finite differences use 256-bit initial-family and fixed-row arithmetic to avoid subtracting rounded foreign outputs; the fit remains Float64. The failed Float64/global-grid pilot remains recorded. Only unconverged independent dense-reference cases receive additional grid refinement within a fixed budget; coarse failures stay visible.
+
+On the Linux development run, 53 point-input checks passed over Q2=0.6, 2.4, 10 and 100 GeV2. The largest native refinement difference was 3.26e-5 and the largest comparison against the independently refined dense route was 2.35e-5. The independent h1 reference at Q2=100 failed its 3201-background-node refinement target (1.03e-4); 6401 nodes reduced that difference to 3.05e-5 with the original target unchanged. The finite-difference JVP/HVP differences were below 2.31e-9. These are scoped component results, not G2/G2AD, data admission or a physical extraction. Independent CI repeats the submitted source.
+
+```julia
+plan = HoppetPointPlan(".runtime/hoppet/build.json", [0.05, 0.3, 0.7, 0.9, 1.0],
+                      [0.6, 2.4, 10.0, 100.0], 2.4, AsymptoticTwoLoopCoupling();
+                      quantity=:KPSY_Hhat3_homogeneous, intervals=1024)
+# Supply initial Hhat3 on plan.grid; output axes are query, initial column, scale.
+# Every native context has already closed; the retained cache contains fixed rows.
+```
+
+```bash
+julia --project=numerics numerics/bin/check_hoppet_points.jl \
+  .runtime/hoppet/build.json runs/hoppet/points.json
+julia --project=numerics numerics/bin/check_hoppet_inputs.jl \
+  .runtime/hoppet/build.json .runtime/parton-inputs/build.json \
+  runs/hoppet/physical-inputs.json query_rows
+```
+
+Omit `query_rows` to reproduce the unadmitted global-grid diagnostic. The point job separately measures a 64-scale analytic workload at checked accuracy. Stored coefficient bytes and warm row application are informational; they are not peak RSS, complete physical matching cost or G2PERF.
+
 ```bash
 python scripts/prepare_hoppet.py
 julia --project=numerics numerics/bin/check_hoppet.jl \

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HOPPET-POINTS-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "backend_contract": "config/hoppet-contract.json",
+  "input_pilot_contract": "config/hoppet-input-pilot.json",
+  "purpose": "Point-bound fixed linear operators for the exact query fractions needed by a job, without resampling a source kink at the query through a global grid interpolation.",
+  "native_grid": "For each distinct interior query x, use a single retained HOPPET negative-order grid with xmin=x, ymax=-log(x) and a declared fixed interval count. The query is its exact canonical boundary. Every upstream argument x'>=x is sampled from strict initial inputs.",
+  "row_projection": "Apply the independently checked constrained native adjoint to a unit cotangent at each query/time. Store the resulting operator row and the map into the sorted union of exact initial grid nodes. Compare row multiplication against the full native forward map before releasing the context.",
+  "numerical_loop": "Julia generic matrix products apply detached fixed Float64 rows to initial values and derivatives. Native contexts are closed after construction; h1 and Hhat3 plans can coexist without shared Fortran state or callbacks. Initial BigFloat values are supported for independent reference differences only, with the same fixed Float64 operator rows.",
+  "endpoint": "Queries at one return exactly zero on the constrained h(1)=0 subspace. Other queries must lie strictly between zero and one. Repeated queries preserve their requested order and share preparation.",
+  "derivatives": "All grid/query/scale/coupling settings are fixed. Julia ForwardDiff differentiates the initial family and exact row products; there is no derivative through native construction. Fitted settings require dU and are rejected.",
+  "validation_policy": {
+    "interval_refinements": [256,512,1024],
+    "row_native_max_scaled": 1e-10,
+    "physical_values": "The unchanged 1e-4 value/refinement targets in KPSY-HOPPET-INPUTS-001 apply at all declared scales and fractions.",
+    "derivative_max_scaled": 0.0000001,
+    "finite_difference_steps": [0.0001,0.00001],
+    "finite_difference_reference_bits": 256,
+    "reference_precision_reason": "Keep the failed full-grid Float64 difference as evidence. High-precision end-to-end initial-family and row-product differences avoid cancellation after a Float64 foreign evolution; the fit remains Float64.",
+    "dense_reference_background_budget": [1601,3201,6401],
+    "dense_reference_policy": "Refine only unconverged scale/quantity cases through this fixed budget. Preserve every coarse comparison; require the same 1e-4 target at the final comparison, otherwise FAIL."
+  },
+  "limits": ["The older global-grid physical-input pilot remains failed and is not admitted by this contract", "Source knots within the integration interval still need refinement checks; endpoint alignment alone is not a proof of accuracy", "Only supplied queries/scales are cached; new kinematics need a new plan", "Matching/observable assembly, historical reproduction and production derivative/performance/coverage admission remain open"]
+}

@@ -46,7 +46,7 @@
   "fortran_policy": {
     "reference_snapshot": "external/hoppet, pinned by references/source-inventory.json",
     "upstream_checkout_mutation": false,
-    "development_location": "Future project-owned bridge or reviewed fork; keep the pinned upstream reference unchanged",
+    "development_location": "Project-owned bridges and source-locked runtime builds; keep the pinned upstream reference unchanged",
     "module_actions": [
       {
         "id": "retain_evolution",
@@ -89,7 +89,7 @@
           "hoppetCachedEvolve"
         ],
         "work": "Reuse pre-evolution and grid setup, build or export fixed evolution operators, batch initial distributions and evaluations, and reuse work buffers after profiling",
-        "qualification": "Cached evolution exists; exporting a transversity operator and a batched bridge is not yet implemented"
+        "qualification": "The reconstructed scalar kernel and batched bridge retain upstream construction. Query-bound row exports are under physical-input validation; the global-grid source-knot pilot remains failed and is not production admitted."
       },
       {
         "id": "optimize_bridge_and_state",

@@ -70,7 +70,8 @@ jobs:
         shell: bash
         run: |
           julia --project=numerics numerics/bin/check_hoppet.jl .runtime/hoppet/build.json runs/ci-parton/hoppet.json | tee runs/ci-parton/hoppet-native.log
-          julia --project=numerics numerics/bin/check_hoppet_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-parton/hoppet-inputs.json | tee runs/ci-parton/hoppet-inputs-native.log
+          julia --project=numerics numerics/bin/check_hoppet_points.jl .runtime/hoppet/build.json runs/ci-parton/hoppet-points.json | tee runs/ci-parton/hoppet-points-native.log
+          julia --project=numerics numerics/bin/check_hoppet_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-parton/hoppet-inputs.json query_rows | tee runs/ci-parton/hoppet-inputs-native.log
       - name: Upload input comparison evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

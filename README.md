@@ -16,7 +16,7 @@ A [reconstructed LO collinear evolution component](docs/evolution.md) now covers
 
 [Initial transversity/Collins parameterizations](docs/initial-conditions.md) now retain physical boundary values and connect strict initial inputs to fixed-scale LO evolution. These are reconstructed components; efficient many-scale integration, observable adapters and the historical fit remain incomplete.
 
-A [retained HOPPET adapter](docs/hoppet.md) is being validated against the same LO equation. It retains upstream convolution/evolution and fixes the x-weight, auxiliary-time and derivative conventions explicitly. It does not admit production fits or establish physical fitting throughput.
+A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use the same contracted LO equation. They retain upstream convolution/evolution and fix the x-weight, auxiliary-time and derivative conventions explicitly. Physical source-knot checks use query-aligned native grids; the rejected global-grid pilot remains documented. These components do not admit production fits or establish physical fitting throughput.
 
 ## Running the workflow
 

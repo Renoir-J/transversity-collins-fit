@@ -2,6 +2,12 @@
 const HOPPET_NATIVE_LOCK=ReentrantLock()
 const HOPPET_CONTRACT=normpath(joinpath(@__DIR__,"../../config/hoppet-contract.json"))
 
+# An internal token for one serial point-plan preparation. Verify the complete
+# build once before and once after assembling its rows, rather than per query.
+struct HoppetBuildVerification
+    receipt::Dict{String,Any}
+end
+
 mutable struct HoppetState
     library::Ptr{Nothing}
     context::Int64
@@ -73,7 +79,7 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
         ([-2log(alpha_lo(q,q0,a;nf=nf)/a)/(11-2nf/3) for q in qs],:one_loop,nothing)
     end
     all(t -> isfinite(t) && abs(t)<=1,times) || error("unsupported auxiliary evolution-time interval")
-    receipt=verified_hoppet_build(buildfile)
+    receipt=buildfile isa HoppetBuildVerification ? buildfile.receipt : verified_hoppet_build(buildfile)
     lock(HOPPET_NATIVE_LOCK) do
         library=Libdl.dlopen(receipt["library"])
         state=HoppetState(library,0,Dict(name=>Libdl.dlsym(library,name) for name in
@@ -201,3 +207,104 @@ function hoppet_evaluate(plan::HoppetPlan,initial::AbstractArray{T,3},q) where T
     evaluated=hoppet_evaluate(plan,reshape(initial,size(initial,1),:),q)
     reshape(evaluated,length(q),size(initial,2),size(initial,3))
 end
+
+struct HoppetPointBlock
+    indices::Vector{Int}
+    rows::Matrix{Float64}
+end
+
+"Detached query-bound rows from retained HOPPET; no native context in the fit."
+struct HoppetPointPlan
+    grid::Vector{Float64}
+    queries::Vector{Float64}
+    Q2::Vector{Float64}
+    Q02::Float64
+    tau::Vector{Float64}
+    quantity::Symbol
+    nf::Int
+    intervals::Int
+    blocks::Vector{HoppetPointBlock}
+    coefficient_payload_bytes::Int64
+    row_native_max_scaled::Float64
+    signature::UInt
+end
+
+function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
+                         quantity=:transversity,order=-6,eps=1e-10,du=.0125)
+    intervals isa Integer && !(intervals isa Bool) && 11<=intervals<=20000 || error("fixed interval count 11..20000 required")
+    qs=[fixed_scalar(x,"query fraction") for x in queries]
+    !isempty(qs) && all(x -> 0<x<=1,qs) && any(<(1),qs) || error("interior queries in (0,1), with optional endpoint, required")
+    contract=JSON.parsefile(normpath(joinpath(@__DIR__,"../../config/hoppet-point-contract.json")))
+    verification=HoppetBuildVerification(verified_hoppet_build(buildfile))
+    prepared=Dict{Float64,Any}(); coordinates=Float64[1.]; scales=times=nothing
+    row_errors=Float64[]
+    for query in unique(qs)
+        query==1 && continue
+        plan=HoppetPlan(verification,Q2,Q02,coupling;nf=nf,quantity=quantity,xmin=query,
+            dy=-log(query)/intervals,order=order,layout=:single,eps=eps,du=du)
+        try
+            n,nt=length(plan.grid),length(plan.tau)
+            cotangent=zeros(n,nt,nt)
+            for k in 1:nt
+                cotangent[1,k,k]=1.
+            end
+            rows=Matrix(transpose(operator_adjoint(plan,cotangent)))
+            x=plan.grid
+            test=hcat(x.*(1 .-x).^3,-2x.^2 .* (1 .-x).^2)
+            reference=permutedims(apply_operator(plan,test)[1,:,:])
+            actual=rows*test
+            row_error=maximum(abs.(actual-reference)./max.(abs.(reference),.01maximum(abs,reference),1e-15))
+            isfinite(row_error) && row_error<=contract["validation_policy"]["row_native_max_scaled"] || error("query-row/native mismatch")
+            push!(row_errors,row_error)
+            prepared[query]=(grid=copy(x),rows=rows)
+            append!(coordinates,x)
+            scales,times=copy(plan.Q2),copy(plan.tau)
+        finally
+            close(plan)
+        end
+    end
+    grid=sort!(unique(coordinates)); blocks=HoppetPointBlock[]
+    for query in qs
+        if query==1
+            push!(blocks,HoppetPointBlock(Int[],zeros(length(times),0)))
+        else
+            native=prepared[query]
+            indices=searchsortedfirst.(Ref(grid),native.grid)
+            push!(blocks,HoppetPointBlock(indices,native.rows))
+        end
+    end
+    bytes=sum(sizeof(native.rows) for native in values(prepared))
+    verified_hoppet_build(buildfile)==verification.receipt || error("HOPPET build changed during point preparation")
+    HoppetPointPlan(grid,qs,scales,fixed_scalar(Q02,"Q02"),times,quantity,nf,intervals,
+        blocks,bytes,maximum(row_errors),hash((grid,qs,scales,times)))
+end
+
+function hoppet_point_valid(plan,initial;endpoint=true)
+    hash((plan.grid,plan.queries,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET point settings/grid")
+    size(initial,1)==length(plan.grid) && size(initial,2)>0 && all(isfinite,initial) || error("invalid point-plan initial shape/values")
+    endpoint && !all(iszero,initial[end,:]) && error("h(1)=0 is required")
+end
+
+function apply_operator(plan::HoppetPointPlan,initial::AbstractMatrix{T}) where {T<:Real}
+    hoppet_point_valid(plan,initial)
+    result=zeros(promote_type(T,Float64),length(plan.queries),size(initial,2),length(plan.tau))
+    for (i,block) in enumerate(plan.blocks)
+        isempty(block.indices) && continue
+        result[i,:,:]=permutedims(block.rows*view(initial,block.indices,:))
+    end
+    result
+end
+apply_operator(plan::HoppetPointPlan,initial::AbstractVector)=dropdims(apply_operator(plan,reshape(initial,:,1));dims=2)
+
+function operator_adjoint(plan::HoppetPointPlan,g::AbstractArray{T,3}) where {T<:Real}
+    hash((plan.grid,plan.queries,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET point settings/grid")
+    size(g,1)==length(plan.queries) && size(g,3)==length(plan.tau) && all(isfinite,g) || error("invalid point-plan cotangent")
+    result=zeros(promote_type(T,Float64),length(plan.grid),size(g,2))
+    for (i,block) in enumerate(plan.blocks)
+        isempty(block.indices) && continue
+        result[block.indices,:].+=transpose(block.rows)*permutedims(g[i,:,:])
+    end
+    result[end,:].=zero(T)
+    result
+end
+operator_adjoint(plan::HoppetPointPlan,g::AbstractMatrix)=vec(operator_adjoint(plan,reshape(g,size(g,1),1,size(g,2))))
