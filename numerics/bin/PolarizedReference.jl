@@ -28,8 +28,25 @@ function analytic_amplitude(process,charge1,charge2,weights,a)
         (process==:SIDIS ? (weights[1]*hp(q)+weights[2]*hp(swap(q)))*H(q,charge1) : H(q,charge1)*H(-q,charge2)) for q in IDS)
 end
 
-function analytic_reference(model,process,Q2,P,x,z1,z2,c1,c2,target,amplitudes,B;moments=false)
+function analytic_reference(model,process,Q2,P,x,z1,z2,c1,c2,target,amplitudes,B;moments=false,momentum_interval=nothing)
     cache=Dict{Float64,Tuple{Float64,Float64}}()
+    # Fubini: adaptively integrate P*dP for each Bessel kernel before the
+    # independent adaptive b integral. No production momentum/radial weights.
+    momentum_cache=Dict{Tuple{Int,Float64},Float64}()
+    bounds=if momentum_interval===nothing
+        nothing
+    else
+        length(momentum_interval)==2 || error("two momentum bounds required")
+        low,high=Float64.(momentum_interval)
+        isfinite(low) && isfinite(high) && 0<=low<high || error("finite ordered nonnegative momentum bounds required")
+        (low,high)
+    end
+    function kernel(n,b)
+        bounds===nothing && return besselj(n,P*b/z1)
+        get!(momentum_cache,(n,b)) do
+            quadgk(p->p*besselj(n,p*b/z1),bounds...;rtol=1e-12,atol=1e-14)[1]
+        end
+    end
     b0,b1=11-2model.coupling.nf/3,102-38model.coupling.nf/3
     function legs(b)
         get!(cache,b) do
@@ -55,14 +72,14 @@ function analytic_reference(model,process,Q2,P,x,z1,z2,c1,c2,target,amplitudes,B
     shape=process==:SIDIS ? inv(z1^2) : inv(z1^2)+inv(z2^2)
     common(b)=model.g2*log(sqrt(1+(b/model.bmax)^2))*log(sqrt(Q2/model.Q02))+
         (process==:SIDIS ? model.gq*b^2 : 0.)+reference_sudakov(model,b,Q2)
-    UU=flavor_uu*quadgk(b->b*besselj(0,P*b/z1)*exp(-common(b)-model.gh*shape*b^2)/(2pi*z1^2),
+    UU=flavor_uu*quadgk(b->b*kernel(0,b)*exp(-common(b)-model.gh*shape*b^2)/(2pi*z1^2),
         0.,.001,.1,1.,4.,B;rtol=1e-11,atol=1e-13)[1]
     n=process==:SIDIS ? 1 : 2
     prefactor=process==:SIDIS ? -inv(2z1^3) : inv(4z1^3*z2)
     function integral(power)
         quadgk(0.,.001,.1,1.,4.,B;rtol=1e-11,atol=1e-13) do b
             M1,M2=legs(b)
-            prefactor*b^(n+1)*besselj(n,P*b/z1)*M1*M2*(shape*b^2)^power*
+            prefactor*b^(n+1)*kernel(n,b)*M1*M2*(shape*b^2)^power*
                 exp(-common(b)-(model.gh-amplitudes[5])*shape*b^2)/(2pi)
         end[1]
     end

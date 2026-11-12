@@ -31,12 +31,13 @@
     "algebra_max_scaled": 1e-12,
     "analytic_integral_max_scaled": 1e-10,
     "physical_value_max_scaled": 1e-4,
+    "momentum_refinement_max_scaled": 1e-7,
     "derivative_max_scaled": 1e-7,
     "momentum_orders": [8,16,32,64,128],
     "minimum_momentum_order": 32,
     "finite_difference_steps": [1e-4,1e-5],
     "finite_difference_reference_bits": 256,
-    "refinement_policy": "Retain coarse levels. At or above order32 accept only the unchanged adjacent-order target; budget exhaustion is FAIL. Source/parameter/grid limits remain those of the parent contracts."
+    "refinement_policy": "Retain coarse levels. At or above order32 accept only an adjacent-order momentum difference at or below momentum_refinement_max_scaled=1e-7, declared before formal runs. Joint radial/evolution refinement and independent physical references retain physical_value_max_scaled=1e-4. Budget exhaustion is FAIL. Source/parameter/grid limits remain those of the parent contracts."
   },
   "limitations": [
     "No experimental admission, historical fit or real-data extraction",

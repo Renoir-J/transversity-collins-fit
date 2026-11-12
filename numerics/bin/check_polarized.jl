@@ -3,10 +3,12 @@
 using CollinsFit, JSON, SHA, Dates, LinearAlgebra, ForwardDiff
 include("PolarizedReference.jl")
 using .PolarizedReference
+include("PolarizedFixture.jl")
 
 const ROOT=normpath(joinpath(@__DIR__,"../.."))
 const CONTRACT=joinpath(ROOT,"config/polarized-process-contract.json")
 const SOURCES=vcat([@__FILE__,CONTRACT,joinpath(@__DIR__,"PolarizedReference.jl"),
+    joinpath(@__DIR__,"PolarizedFixture.jl"),
     joinpath(@__DIR__,"LeptonicReference.jl"),joinpath(@__DIR__,"MatchedReference.jl"),joinpath(@__DIR__,"CollinearReference.jl"),
     joinpath(ROOT,"config/hoppet-contract.json"),joinpath(ROOT,"config/hoppet-point-contract.json"),
     joinpath(ROOT,"config/hoppet-batch-contract.json"),joinpath(ROOT,"config/matched-rows-contract.json"),
@@ -16,28 +18,6 @@ const SOURCES=vcat([@__FILE__,CONTRACT,joinpath(@__DIR__,"PolarizedReference.jl"
     filter(p->endswith(p,".jl"),readdir(joinpath(ROOT,"numerics/src");join=true)))
 source_hashes()=Dict(relpath(p,ROOT)=>bytes2hex(sha256(read(p))) for p in SOURCES)
 edges(B)=vcat([0.,1e-7,1e-6,1e-5,1e-4,.001,.005,.02,.05,.1,.2,.4,.7,1.,1.5,2.,3.,4.,6.,8.],filter(<(B),[12.,16.,20.,24.]),B)
-
-function analytic_context(buildfile,process,model,radial;intervals=1024,target=NucleonTarget(:proton))
-    q2=css_mu_b2.(Ref(model),radial.b)
-    Q2=process==:SIDIS ? 4. : 110.
-    plan=leptonic_plan(process,model,radial,Q2,.3,.3;z2=process==:SIA ? .5 : nothing)
-    unpol1=[1+.1pid for pid in plan.flavors,b in radial.b]
-    unpol2=[.8-.05pid for pid in plan.flavors,b in radial.b]
-    kind=process==:SIDIS ? :transversity : :KPSY_Hhat3_homogeneous
-    op=HoppetMatchingPlan(buildfile,process==:SIDIS ? [.1] : [.3,.5],q2,2.4,model.coupling;
-        process=process,quantity=kind,intervals=intervals)
-    bases=process==:SIDIS ? [(i==1 ? 1.3 : .8)*(1-x) for i in 1:2,x in op.grid] :
-        [PolarizedReference.FF_BASES[i]*(1-x)^3 for i in 1:4,x in op.grid]
-    samples=PolarizedInitialSamples(kind,op.grid,bases;input_kind=:analytic)
-    if process==:SIDIS
-        op2=HoppetMatchingPlan(buildfile,[.3],q2,2.4,model.coupling;process=process,intervals=intervals)
-        samples2=PolarizedInitialSamples(:KPSY_Hhat3_homogeneous,op2.grid,
-            [PolarizedReference.FF_BASES[i]*(1-x)^3 for i in 1:4,x in op2.grid];input_kind=:analytic)
-        polarized_leptonic_plan(plan,unpol1,unpol2,op,samples;second_operator=op2,second_samples=samples2,target=target,charges=(1,0))
-    else
-        polarized_leptonic_plan(plan,unpol1,unpol2,op,samples;charges=(1,-1))
-    end
-end
 
 function polarized_checks(buildfile)
     sources=source_hashes();build=CollinsFit.verified_hoppet_build(buildfile);build_hash=bytes2hex(sha256(read(buildfile)))
