@@ -1,28 +1,102 @@
-external/
-references/papers/
+# Local instructions and internal working notes
+[Aa][Gg][Ee][Nn][Tt].md
+[Aa][Gg][Ee][Nn][Tt][Ss].md
+[Aa][Gg][Ee][Nn][Tt].local.md
+[Aa][Gg][Ee][Nn][Tt][Ss].local.md
+.agents/
+.codex/
+/docs/internal/
+
+# Downloaded references and experiment inputs
+/external/
+/references/papers/
+/references/sources/
+/data/raw/
+/data/normalized/
+
+# Generated reports, run products and local repository snapshots
+/artifacts/
+/runs/
+/config/github-state.json
+/bridge-validation.json
+/.runtime/
+/.snakemake/
+/.cache/
+/cache/
+/logs/
+*.log
+
+# Python environments, bytecode and package metadata
+/.venv/
+/.venv-*/
+/venv/
+/env/
+/ENV/
+/.conda/
+/.pixi/
 __pycache__/
-*.pyc
-runs/
-data/raw/
-data/normalized/
-.runtime/
-.venv/
-.snakemake/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.ipynb_checkpoints/
+
+# Test, analysis and coverage caches
 .pytest_cache/
 .ruff_cache/
-*.egg-info/
-build/
-dist/
+.mypy_cache/
+.hypothesis/
+.coverage
+.coverage.*
+/coverage.xml
+/htmlcov/
+
+# Julia depots and compiled code; keep Project.toml and Manifest.toml tracked
+/.julia/
+*.ji
+
+# Native build products; keep Python, Julia and Fortran sources tracked
+/build/
+/dist/
+/numerics/build/
+/fortran/build/
 *.so
+*.so.*
 *.dll
 *.dylib
 *.o
+*.obj
+*.a
+*.lib
 *.mod
+*.smod
+*.pdb
+*.exe
+
+# Local credentials; example configuration files may be versioned
 .env
 .env.*
+!.env.example
+!.env.sample
+!.env.template
 *.pem
 *.key
-artifacts/research-page.json
-references/papers/
-references/sources/
+
+# Editor, operating-system and document-build temporary files
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*~
+*.swp
+*.swo
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.run.xml
+*.synctex.gz
 
