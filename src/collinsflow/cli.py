@@ -6,6 +6,7 @@ import sys
 
 from .data import normalize_table, plan_update, validate_dataset
 from .experimental import run_intake
+from .historical import run_historical_intake
 from .pipeline import Blocked, execute, production_readiness, root_path, run_stage
 from .provenance import read_json
 
@@ -20,6 +21,12 @@ def main():
     intake.add_argument("--output", default="data/normalized/intake")
     intake.add_argument("--seed-root")
     intake.add_argument("--offline", action="store_true")
+    historical = commands.add_parser("historical-intake")
+    historical.add_argument("--manifest", default="config/historical-sources.json")
+    historical.add_argument("--cache", default="data/raw/historical")
+    historical.add_argument("--output", default="data/normalized/historical")
+    historical.add_argument("--seed-root")
+    historical.add_argument("--offline", action="store_true")
     validate = commands.add_parser("validate-data")
     validate.add_argument("data")
     normalize = commands.add_parser("normalize")
@@ -45,6 +52,9 @@ def main():
         if args.command == "intake":
             result = run_intake(args.manifest, args.cache, args.output,
                                 seed_root=args.seed_root, offline=args.offline)
+        elif args.command == "historical-intake":
+            result = run_historical_intake(args.manifest, args.cache, args.output,
+                                          seed_root=args.seed_root, offline=args.offline)
         elif args.command == "validate-data":
             result = validate_dataset(read_json(args.data))
         elif args.command == "normalize":

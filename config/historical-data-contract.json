@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "KPSY15-HISTORICAL-DATA-001",
+  "scope": "historical_benchmark_candidate",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "paper": {
+    "url": "https://arxiv.org/pdf/1505.05589v1",
+    "sha256": "f56ce8c7c5fdfb3034725ed1ece2c6f3981ce0a2d847eecb85fbdc19dd51f0d3",
+    "selection_and_likelihood_pages": [
+      17,
+      18
+    ],
+    "counts_pages": [
+      20
+    ],
+    "reference_pages": [
+      43,
+      44
+    ]
+  },
+  "expected": {
+    "views": 26,
+    "SIDIS_views": 20,
+    "SIA_views": 6,
+    "points": 262,
+    "SIDIS_points": 140,
+    "SIA_points": 122
+  },
+  "SIDIS_projection_cut": {
+    "applies_to": "pT projection only",
+    "quantity": "reported mean pT_GeV",
+    "comparison": "strict_less_than",
+    "upper_GeV": 0.8,
+    "source": "KPSY PDF page18; use of reported means on same page; retain excluded source rows"
+  },
+  "prediction_prescription": "Historical reported means; finite-P integrated SIA views require a separately reviewed prediction adapter. Do not replace this with general acceptance integration.",
+  "likelihood_source": "KPSY Eq116 combines statistical and experimental systematic errors in quadrature and excludes normalization uncertainties. No likelihood is constructed here. Source error_u semantics and Hall A model-systematic inclusion require review.",
+  "overlap_policy": "Retain all 26 historical views, including overlapping projections and UL/UC, only as explicitly labeled reproduction candidates. This does not approve that covariance treatment for updated primary fits.",
+  "HERMES_citation": {
+    "status": "confirmed mismatch in original arXiv v1 PDF",
+    "table2_reference": 95,
+    "reference95_paper": "0906.3918",
+    "Collins_paper_already_in_same_bibliography": {
+      "reference": 7,
+      "paper": "1006.4221v1"
+    },
+    "resolution": "Use explicitly identified Collins transcription candidates and retain provenance mismatch; exact original author data not confirmed."
+  },
+  "HallA_remap": {
+    "source_tables": [
+      3001,
+      3002
+    ],
+    "scope": "Only exact pinned source hashes and expected headers in manifest",
+    "row_id_field": "Q2",
+    "fields": {
+      "Q2_GeV2": "x",
+      "x": "y",
+      "y": "z",
+      "z": "pT",
+      "pT_GeV": "value",
+      "central_value": "stat_u",
+      "statistical_error": "syst_u",
+      "experimental_systematic": "fit",
+      "model_systematic": "usr"
+    },
+    "crosscheck": "Exact agreement of every remapped value with primary v4 Table I and neutron Collins rows of Table II; no rounding/tolerance adjustment",
+    "target": "Already extracted neutron; measured target material 3He. Do not apply effective-polarization/dilution extraction twice.",
+    "raw_source_policy": "Keep original XLSX bytes and headers unchanged; record explicit source-row remapping"
+  },
+  "SIA_units": "Declared percent input; convert central/statistical/reported-systematic values by0.01. Error columns are explicit per source; BaBar1003 uses the literal legacy spelling syt_u. Preserve that name and pending primary numerical review. Preserve angular average type as unresolved until publication review.",
+  "missing_values": "Preserve missing means/bounds and their blockers. Do not infer <P> as <z1>*<qT>, physical bin edges from neighboring means, or covariance from error columns.",
+  "limitations": [
+    "Historical candidate intake only; no historical fit, extraction or production admission",
+    "Primary numerical crosschecks remain pending for the secondary transcriptions except Hall A",
+    "COMPASS error_u composition and depolarization conventions require source review",
+    "SIA angular means and momentum integration/acceptance require publication-specific review",
+    "Overlapping projections, unavailable covariance, nuclear prescriptions and model systematics remain explicit",
+    "Original author fitting program and modified HOPPET are not recovered; no chi2 reproduction threshold is selected"
+  ]
+}
