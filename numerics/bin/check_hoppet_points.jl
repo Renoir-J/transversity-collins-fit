@@ -63,6 +63,11 @@ function point_checks(buildfile)
     one=apply_operator(one_loop,one_loop.grid.*(1 .-one_loop.grid).^3)
     expected_one=[mellin_polynomial(xx,q,4.,.3;nf=3) for xx in one_loop.queries,q in one_loop.Q2]
     check("scalar one-loop constructor versus Mellin",max_scaled(one,expected_one),policy["mellin_max_scaled"])
+    dimensions=contract["validation_policy"]["identity_dimension_stress"]
+    stress=HoppetPointPlan(buildfile,[.2],fill(2.4,dimensions["scales"]),2.4,coupling;intervals=dimensions["intervals"])
+    stress_initial=stress.grid.*(1 .-stress.grid).^3
+    check("2336-scale row export identity",maximum(abs.(apply_operator(stress,stress_initial).-stress_initial[1])),0.)
+    check("2336-scale row storage is linear",stress.coefficient_payload_bytes==dimensions["scales"]*(dimensions["intervals"]+1)*8 ? 0. : 1.,0.)
     # This resource job measures the implemented row path at checked analytic
     # accuracy. It does not certify a physical matching/likelihood workload.
     workload=JSON.parsefile(joinpath(ROOT,"config/hoppet-input-pilot.json"))["resource_pilot"]
@@ -92,6 +97,8 @@ function point_checks(buildfile)
         "status"=>all(c["passed"] for c in checks) ? "PASS" : "FAIL","checks"=>checks,"sources"=>sources,
         "contract_id"=>contract["id"],"build_sha256"=>build_hash,"build"=>build,
         "queries"=>queries,"Q2_GeV2"=>q2,"row_native_error"=>plan.row_native_max_scaled,
+        "identity_dimension_stress"=>Dict("scales"=>dimensions["scales"],"nodes_per_query"=>dimensions["intervals"]+1,
+            "row_coefficient_bytes"=>stress.coefficient_payload_bytes,"scope"=>dimensions["scope"],"production_ready"=>false),
         "resource_pilot"=>resource_report,"limitations"=>contract["limits"],
         "julia_version"=>string(VERSION),"completed_at"=>string(now(UTC)))
 end

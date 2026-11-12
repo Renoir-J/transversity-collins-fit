@@ -17,7 +17,7 @@ module collins_hoppet_bridge
   logical, save :: active=.false.
   public :: cf_hoppet_abi, cf_hoppet_open, cf_hoppet_close, cf_hoppet_grid
   public :: cf_hoppet_forward, cf_hoppet_adjoint, cf_hoppet_generator, cf_hoppet_evaluate
-  public :: cf_hoppet_info
+  public :: cf_hoppet_info, cf_hoppet_rows
 contains
   integer(c_int) function cf_hoppet_abi() bind(C)
     cf_hoppet_abi=1_c_int
@@ -343,5 +343,36 @@ contains
       if (times(k)/=0.0_dp) payload=payload+coefficient_bytes(kernels(k))
     end do
     native_nodes=grid%ny+1; status=0_c_int
+  end subroutine
+  ! Export one selected output row per scale with linear workspace. This is
+  ! the same constrained adjoint, without a node-by-scale-by-scale cotangent.
+  subroutine cf_hoppet_rows(handle,n,ntau,node,rows,status) bind(C)
+    integer(c_int64_t), value :: handle
+    integer(c_int), value :: n,ntau,node
+    real(c_double), intent(out) :: rows(ntau,n)
+    integer(c_int), intent(out) :: status
+    real(dp), allocatable :: native(:), evolved(:)
+    integer :: i,k
+    status=3_c_int
+    if (.not. valid(handle,n)) return
+    status=1_c_int
+    if (ntau/=size(times) .or. node<1 .or. node>n) return
+    allocate(native(0:grid%ny),evolved(0:grid%ny))
+    rows=0.0_dp
+    do k=1,ntau
+      if (times(k)==0.0_dp) then
+        rows(k,node)=1.0_dp
+      else
+        native=0.0_dp
+        native(representative(node))=1.0_dp/unique_xs(node)
+        evolved=convolution_transpose(kernels(k),native)
+        do i=0,grid%ny
+          rows(k,node_map(i))=rows(k,node_map(i))+xs(i)*evolved(i)
+        end do
+      end if
+      rows(k,n)=0.0_dp
+    end do
+    if (.not. all(ieee_is_finite(rows))) return
+    status=0_c_int
   end subroutine
 end module

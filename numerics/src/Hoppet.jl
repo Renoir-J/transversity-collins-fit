@@ -84,7 +84,7 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
         library=Libdl.dlopen(receipt["library"])
         state=HoppetState(library,0,Dict(name=>Libdl.dlsym(library,name) for name in
             (:cf_hoppet_open,:cf_hoppet_close,:cf_hoppet_grid,:cf_hoppet_forward,
-             :cf_hoppet_adjoint,:cf_hoppet_generator,:cf_hoppet_evaluate,:cf_hoppet_info)))
+             :cf_hoppet_adjoint,:cf_hoppet_generator,:cf_hoppet_evaluate,:cf_hoppet_info,:cf_hoppet_rows)))
         try
             ccall(Libdl.dlsym(library,:cf_hoppet_abi),Cint,())==1 || error("wrong HOPPET ABI")
             n=Ref{Cint}(0); context=Ref{Int64}(0); status=Ref{Cint}(0)
@@ -208,6 +208,21 @@ function hoppet_evaluate(plan::HoppetPlan,initial::AbstractArray{T,3},q) where T
     reshape(evaluated,length(q),size(initial,2),size(initial,3))
 end
 
+"Fixed selected-node rows with O(nodes*scales) output and O(native nodes) workspace."
+function hoppet_rows(plan::HoppetPlan,node)
+    node isa Integer && !(node isa Bool) && 1<=node<=length(plan.grid) || error("fixed valid grid node required")
+    lock(HOPPET_NATIVE_LOCK) do
+        isopen(plan) || error("closed HOPPET plan")
+        hash((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
+        rows=zeros(length(plan.tau),length(plan.grid));status=Ref{Cint}(0)
+        ccall(plan.state.functions[:cf_hoppet_rows],Cvoid,
+            (Int64,Cint,Cint,Cint,Ptr{Cdouble},Ref{Cint}),
+            plan.state.context,length(plan.grid),length(plan.tau),node,rows,status)
+        status[]==0 || error("HOPPET row export rejected (status $(status[]))")
+        rows
+    end
+end
+
 struct HoppetPointBlock
     indices::Vector{Int}
     rows::Matrix{Float64}
@@ -244,11 +259,7 @@ function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
             dy=-log(query)/intervals,order=order,layout=:single,eps=eps,du=du)
         try
             n,nt=length(plan.grid),length(plan.tau)
-            cotangent=zeros(n,nt,nt)
-            for k in 1:nt
-                cotangent[1,k,k]=1.
-            end
-            rows=Matrix(transpose(operator_adjoint(plan,cotangent)))
+            rows=hoppet_rows(plan,1)
             x=plan.grid
             test=hcat(x.*(1 .-x).^3,-2x.^2 .* (1 .-x).^2)
             reference=permutedims(apply_operator(plan,test)[1,:,:])

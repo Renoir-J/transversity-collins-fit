@@ -142,11 +142,17 @@ function backend_checks(buildfile)
         try
             n=length(plan.grid); basis=vcat(Matrix{Float64}(I,n-1,n-1),zeros(1,n-1))
             U=apply_operator(plan,basis)
+            for node in (1,n÷2,n)
+                rows=CollinsFit.hoppet_rows(plan,node)
+                reference=permutedims(U[node,:,:])
+                check("$layout exported node $node rows versus full constrained basis",max_scaled(rows[:,1:end-1],reference),policy["adjoint_max_scaled"])
+            end
             g=reshape(sin.(1:n*2),n,1,2)
             expected=sum(transpose(U[:,:,k])*g[:,1,k] for k in 1:2)
             actual=operator_adjoint(plan,g)[:,1]
             check("$layout transpose versus complete constrained forward basis",max_scaled(actual[1:end-1],expected),policy["adjoint_max_scaled"])
             check("$layout endpoint cotangent projected out",abs(actual[end]),0.)
+            check("$layout invalid row node rejected",rejected(() -> CollinsFit.hoppet_rows(plan,0)) ? 0. : 1.,0.)
         finally
             close(plan)
         end
