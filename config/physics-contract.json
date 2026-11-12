@@ -14,7 +14,7 @@
   "missing_prerequisites": [
     "Historical KPSY reconstruction or recovered author code with independent benchmarks",
     "Reviewed normalized experiment data with resolved overlap and covariance",
-    "Process-accurate bin-integrated SIDIS/SIA/STAR kernels and matching conventions",
+    "Publication-matched SIDIS/SIA/STAR predictions with required bin/acceptance treatment and matching conventions",
     "Validated Collins evolution approximation, separate from transversity",
     "Independent integration and evolution refinement fixtures for each process",
     "Pilot-calibrated frozen production gradient/performance/closure policy"
@@ -29,10 +29,12 @@
   },
   "experimental_data_manifest": "config/experimental-sources.json",
   "reconstructed_collinear_evolution_contract": "config/evolution-contract.json",
+  "reconstructed_css_contract": "config/css-contract.json",
   "data_admission": {
     "candidate_scope": "experimental_candidate",
     "candidate_enters_optimizer": false,
     "publication_specific_prediction_prescription": true,
+    "KPSY15_historical": "the paper evaluates predictions at reported mean kinematics; preserve this historical benchmark prescription rather than silently substituting a bin integral",
     "HERMES2020": "structure-function asymmetry with epsilon prefactors removed; use reported-mean interpretation for the published acceptance systematics",
     "Belle2019": "percent-valued source tables; preserve thrust axis, angular factor and overlapping projections",
     "BESIII2016": "fraction-valued v2; preserve exchanged z-bin union and ratio of angular averages",

@@ -11,6 +11,8 @@ struct CollinearLOOperator
     Q02::Float64
     alpha0::Float64
     nf::Int
+    coupling_model::Symbol
+    lambda_GeV::Union{Nothing,Float64}
 end
 
 function collinear_grid(grid)
@@ -56,8 +58,9 @@ end
 
 """Build a reusable evolution matrix. Grid, scales, alpha0 and nf are fixed inputs.
 
-The running coupling here is one-loop with fixed integer nf. KPSY15's two-loop
-coupling, CSS Sudakov factors, thresholds and matching are separate work.
+The scalar alpha0 constructor uses one-loop running with fixed integer nf.
+An explicit AsymptoticTwoLoopCoupling selects the separate truncated two-loop
+definition; neither constructor implements thresholds or process matching.
 """
 function collinear_lo_operator(grid, Q2, Q02, alpha0; nf=3, quantity=:transversity)
     quantity in (:transversity, :KPSY_Hhat3_homogeneous) || error("unsupported collinear quantity/convention")
@@ -70,7 +73,18 @@ function collinear_lo_operator(grid, Q2, Q02, alpha0; nf=3, quantity=:transversi
     tau = -2log(alpha / alpha0) / (11 - 2nf / 3)
     U = Matrix(exp(UpperTriangular(tau * collinear_lo_generator(x))))
     all(isfinite, U) || error("nonfinite collinear evolution operator")
-    CollinearLOOperator(x, U, quantity, Q2, Q02, alpha0, nf)
+    CollinearLOOperator(x, U, quantity, Q2, Q02, alpha0, nf, :one_loop, nothing)
+end
+
+"LO splitting with the explicitly specified asymptotic two-loop running coupling."
+function collinear_lo_operator(grid, Q2, Q02, coupling::AsymptoticTwoLoopCoupling; quantity=:transversity)
+    quantity in (:transversity, :KPSY_Hhat3_homogeneous) || error("unsupported collinear quantity/convention")
+    x = collinear_grid(grid)
+    tau = evolution_time(coupling, Q2, Q02)
+    U = Matrix(exp(UpperTriangular(tau * collinear_lo_generator(x))))
+    all(isfinite, U) || error("nonfinite collinear evolution operator")
+    CollinearLOOperator(x, U, quantity, Q2, Q02, alpha_s(coupling,Q02), coupling.nf,
+                        :asymptotic_two_loop, coupling.lambda_GeV)
 end
 
 function apply_operator(operator::CollinearLOOperator, initial::AbstractVector)

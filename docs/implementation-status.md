@@ -10,6 +10,7 @@ ADR-001, 2026-11-11. Issues and milestones track progress. Software capability a
 | Snakemake 12-stage DAG / receipts / cache / outputs | Implemented | Linux integration and negative admission tests |
 | Fixed Float64 batched Fortran ABI | Implemented | Cross-language application test; no HOPPET operator builder |
 | LO collinear evolution | Reconstructed component; not production admitted | Analytic cell integration, x-space/Mellin refinement and initial-parameter derivatives; [scope and limits](evolution.md) |
+| Two-loop coupling / CSS factors | Reconstructed component; not production admitted | Explicit asymptotic coupling, signed Sudakov integral and channel-specific nonperturbative factors; [scope and limits](css.md) |
 | GitHub progress and Git rules | Configured | Milestones, issues, PR/CI, hooks; server enforcement recorded separately |
 | Updated experimental data | First candidate batch acquired; production review pending | HERMES/Belle/BESIII and official STAR200/510 pion Collins tables; STAR physical binning, COMPASS tables, covariance and admission remain open |
 | KPSY CSS historical reproduction | Blocked on source or independent reconstruction | Author's modified HOPPET and fitting program not located |

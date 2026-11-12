@@ -8,6 +8,8 @@ Experimental intake is now available separately: it acquires 22 pinned sources a
 
 A [reconstructed LO collinear evolution component](docs/evolution.md) now covers transversity and the explicitly defined KPSY homogeneous Hhat3 approximation with independent x-space/Mellin checks. It does not supply the complete CSS model or a production physics fit.
 
+[Reconstructed two-loop coupling and CSS factors](docs/css.md) are available under a separate explicit contract. Independent analytic, adaptive-integration and derivative checks cover these components; matching coefficients, physical process assembly and historical reproduction remain incomplete.
+
 ## Running the workflow
 
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.

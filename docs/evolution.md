@@ -1,6 +1,6 @@
 # Reconstructed collinear evolution
 
-`numerics/src/CollinearLO.jl` implements one component of issue #4. It builds a fixed-nf LO collinear evolution matrix in Julia and applies that matrix in generic arithmetic. Its scientific contract is [COLLINEAR-LO-001](../config/evolution-contract.json). This is reconstructed theory tested on analytic inputs, separate from the synthetic fitting fixture and from validated production physics.
+`numerics/src/CollinearLO.jl` implements one component of issue #4. It builds a fixed-nf LO collinear evolution matrix in Julia and applies that matrix in generic arithmetic. Its scientific contract is [COLLINEAR-LO-002](../config/evolution-contract.json). This is reconstructed theory tested on analytic inputs, separate from the synthetic fitting fixture and from validated production physics.
 
 The supported quantities are unweighted spacelike transversity `h1(x)` and explicitly selected `KPSY_Hhat3_homogeneous`: the twist-three fragmentation function defined in [KPSY Eq. 56](https://arxiv.org/html/1505.05589v1#S2.E56), using the homogeneous approximation in Eqs. 64 and 69–71. Those equations justify the same collinear kernel for these two specifically defined quantities. A Trento Collins first moment has additional z/mass conversion factors in Eq. 58 and cannot be supplied as though it were the same quantity. Generic Collins and x-weighted distribution tags are rejected.
 
@@ -22,7 +22,7 @@ Here the plus prescription acts on the denominator. The truncated convolution in
 
 The matrix integrates a piecewise-linear function of x analytically on each cell after setting `y=x/z`. The first cell uses the exact cancellation of `h(y)-h(x)` against `y-x`. The grid must increase from positive xmin to exactly one; `h(1)=0` is imposed, and no extrapolation below xmin is performed. The physical distribution may have either sign.
 
-For the selected one-loop coupling with fixed integer nf, `U=exp(tau*P)` and `tau=-2*log(alpha_s(Q2)/alpha0)/beta0`. This is not the two-loop coupling or the complete CSS evolution used by KPSY. Threshold matching, Sudakov factors, coefficient functions and the historical fit remain open work.
+For one-loop coupling with fixed integer nf, `U=exp(tau*P)` and `tau=-2*log(alpha_s(Q2)/alpha0)/beta0`. The scalar alpha0 constructor retains this definition. An explicit `AsymptoticTwoLoopCoupling` selects the separately defined integrated two-loop expansion, with alpha0 derived from Lambda. See [CSS reconstruction](css.md) for its independent checks and limits. Threshold matching, full process matching and the historical fit remain open work.
 
 ```julia
 using CollinsFit
