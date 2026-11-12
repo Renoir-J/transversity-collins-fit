@@ -33,7 +33,7 @@ struct PolarizedInitialSamples
     complement_logarithm::Vector{Float64}
     bases::Matrix{Float64}
     input_kind::Symbol
-    signature::UInt
+    signature::String
 end
 
 function PolarizedInitialSamples(kind,grid,bases;input_kind)
@@ -45,11 +45,11 @@ function PolarizedInitialSamples(kind,grid,bases;input_kind)
         error("invalid polarized initial bases or endpoint")
     kind==:transversity && !all(>=(0),b) && error("negative Soffer source; no clipping is allowed")
     lx=log.(x);lc=[xx==1 ? 0. : log1p(-xx) for xx in x]
-    PolarizedInitialSamples(kind,x,lx,lc,b,input_kind,hash((kind,x,lx,lc,b,input_kind)))
+    PolarizedInitialSamples(kind,x,lx,lc,b,input_kind,numerical_snapshot((kind,x,lx,lc,b,input_kind)))
 end
 
 function polarized_initial_columns(samples::PolarizedInitialSamples,p::KPSYParameters)
-    hash((samples.kind,samples.grid,samples.logarithm,samples.complement_logarithm,samples.bases,samples.input_kind))==samples.signature ||
+    numerical_snapshot((samples.kind,samples.grid,samples.logarithm,samples.complement_logarithm,samples.bases,samples.input_kind))==samples.signature ||
         error("mutated polarized initial samples")
     result=zeros(typeof(p.values[1]),length(samples.grid),size(samples.bases,1))
     if samples.kind==:transversity
@@ -86,7 +86,7 @@ struct PolarizedLeptonicPlan
     target::Union{Nothing,NucleonTarget}
     charges::NTuple{2,Int}
     provenance::Dict{String,Any}
-    signature::UInt
+    signature::String
 end
 
 pion_charge(charge)=charge isa Integer && !(charge isa Bool) && charge in (-1,0,1) ? Int(charge) : error("fixed pion charge required")
@@ -107,11 +107,12 @@ end
 
 function polarized_context_signature(plan,first,second,target,charges,provenance)
     model=plan.model
-    hash((plan.process,plan.Q2,plan.P,plan.z1,plan.z2,plan.flavors,plan.antiparticle,plan.charge2,
+    target_data=target===nothing ? nothing : (target.name,target.unpolarized,target.polarized,target.source)
+    numerical_snapshot((plan.process,plan.Q2,plan.P,plan.z1,plan.z2,plan.flavors,plan.antiparticle,plan.charge2,
         plan.radial.b,plan.radial.db,plan.radial.edges,plan.radial.order,
         plan.uu_weights,plan.collins_weights,plan.uu_damping,plan.fixed_exponent,plan.fragmentation_shape,
         model.bmax,model.Q02,model.g2,model.gq,model.gh,model.coupling.lambda_GeV,model.coupling.nf,model.nodes,model.weights,
-        first,second,target,charges,provenance))
+        first,second,target_data,charges,provenance))
 end
 
 function pion_charge_matrix(basis,charge,antiparticle)

@@ -49,5 +49,6 @@
     "unknown_systematic_correlations": "retain components; never silently diagonalize",
     "multiplicative_polarization_systematics": "retain relative uncertainty and shared correlation group; certified likelihood implementation required",
     "source_corrections": "Only explicit cell-level corrections tied to a locked source and primary-paper evidence; preserve raw bytes and test the complete published bin partition."
-  }
+  },
+  "fixed_numerical_cache_contract": "config/numerical-cache-contract.json"
 }

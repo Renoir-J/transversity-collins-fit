@@ -5,7 +5,7 @@ struct MomentumRule
     lower::Float64
     upper::Float64
     order::Int
-    signature::UInt
+    signature::String
 end
 
 function MomentumRule(lower,upper;order=32)
@@ -16,10 +16,10 @@ function MomentumRule(lower,upper;order=32)
     half=(high-low)/2
     P=(low+high)/2 .+ half.*nodes
     w=half.*weights.*P
-    MomentumRule(P,w,low,high,Int(order),hash((P,w,low,high,Int(order))))
+    MomentumRule(P,w,low,high,Int(order),numerical_snapshot((P,w,low,high,Int(order))))
 end
 
-momentum_signature(rule::MomentumRule)=hash((rule.nodes,rule.weights,rule.lower,rule.upper,rule.order))
+momentum_signature(rule::MomentumRule)=numerical_snapshot((rule.nodes,rule.weights,rule.lower,rule.upper,rule.order))
 momentum_valid(rule::MomentumRule)=momentum_signature(rule)==rule.signature || error("mutated momentum quadrature")
 
 "Source-labeled ratio of angular averages for hadron-2-frame SIA."
@@ -88,11 +88,11 @@ struct LeptonicObservablePlan
     denominators::Vector{Float64}
     angular::Float64
     provenance::Dict{String,Any}
-    signature::UInt
+    signature::String
 end
 
 function observable_signature(kind,context,momentum,uu,collins,denominators,angular,metadata)
-    hash((kind,context.signature,momentum===nothing ? nothing : momentum_signature(momentum),uu,collins,denominators,angular,metadata))
+    numerical_snapshot((kind,context.signature,momentum===nothing ? nothing : momentum_signature(momentum),uu,collins,denominators,angular,metadata))
 end
 
 function observable_weights(context,momentum)
