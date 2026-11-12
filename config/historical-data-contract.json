@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "id": "KPSY15-HISTORICAL-DATA-001",
+  "id": "KPSY15-HISTORICAL-DATA-002",
   "scope": "historical_benchmark_candidate",
   "production_ready": false,
   "physical_extraction": false,
@@ -36,7 +36,7 @@
     "source": "KPSY PDF page18; use of reported means on same page; retain excluded source rows"
   },
   "prediction_prescription": "Historical reported means; finite-P integrated SIA views require a separately reviewed prediction adapter. Do not replace this with general acceptance integration.",
-  "likelihood_source": "KPSY Eq116 combines statistical and experimental systematic errors in quadrature and excludes normalization uncertainties. No likelihood is constructed here. Source error_u semantics and Hall A model-systematic inclusion require review.",
+  "likelihood_source": "KPSY Eq116 combines statistical and experimental systematic errors in quadrature and excludes normalization uncertainties. No likelihood is constructed here. COMPASS deuteron errors are primary-verified statistical only; proton error_u semantics, missing systematic covariance and Hall A model-systematic inclusion remain open.",
   "overlap_policy": "Retain all 26 historical views, including overlapping projections and UL/UC, only as explicitly labeled reproduction candidates. This does not approve that covariance treatment for updated primary fits.",
   "HERMES_citation": {
     "status": "confirmed mismatch in original arXiv v1 PDF",
@@ -74,10 +74,61 @@
   "missing_values": "Preserve missing means/bounds and their blockers. Do not infer <P> as <z1>*<qT>, physical bin edges from neighboring means, or covariance from error columns.",
   "limitations": [
     "Historical candidate intake only; no historical fit, extraction or production admission",
-    "Primary numerical crosschecks remain pending for the secondary transcriptions except Hall A",
-    "COMPASS error_u composition and depolarization conventions require source review",
+    "Primary numerical crosschecks remain pending except Hall A and the six COMPASS deuteron ALL-pion views",
+    "COMPASS proton error_u composition, deuteron missing systematic covariance, source-phase mapping and all updated-fit admission remain open",
     "SIA angular means and momentum integration/acceptance require publication-specific review",
     "Overlapping projections, unavailable covariance, nuclear prescriptions and model systematics remain explicit",
     "Original author fitting program and modified HOPPET are not recovered; no chi2 reproduction threshold is selected"
-  ]
+  ],
+  "COMPASS_deuteron_primary": {
+    "paper": {
+      "url": "https://arxiv.org/pdf/0802.2160v2",
+      "sha256": "7bdcae73e26cfc80fdf6edeb7f36e9c03d3d3f97cccacc955329ab9f0ed40045",
+      "phase_equation": "Collins angle following Eq2",
+      "transfer_equation": "Eq6",
+      "source_archive_sha256": "9b7466979e718dcfbdfac8f1f239d516fcfbe3d6b55aaed7cbe2cc686bf75aa6"
+    },
+    "record": "https://www.hepdata.net/record/ins779473",
+    "record_DOI": "10.17182/hepdata.48532.v1",
+    "tables": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "raw_points": 52,
+    "retained_points": 46,
+    "comparison": "Exact equality of all five mean kinematics, central values and statistical errors in all raw rows; no sign or scale change",
+    "errors": "Primary tables state statistical-only errors. Keep missing systematic covariance explicit; no zero systematic assumption or total error construction.",
+    "source_convention": {
+      "Collins_phase": "phi_h+phi_S-pi",
+      "transverse_transfer_divided_out": true,
+      "phase_transform_applied": false,
+      "normalization_transform_applied": false,
+      "mapping_to_theory_contract": "pending independent convention audit"
+    },
+    "bins": "Retain literal primary projection-bin bounds separately; do not infer edges or replace the historical reported-mean cut."
+  },
+  "COMPASS_proton_source_versions": {
+    "preprint": {
+      "url": "https://arxiv.org/pdf/1408.4405v1",
+      "sha256": "ae8975382e0502e582dd0ff44aeee127fcaed5da44a6690a0f01040f66812050",
+      "PDF_page": 8,
+      "scale_uncertainty_fraction": 0.03
+    },
+    "journal": {
+      "url": "https://mediatum.ub.tum.de/doc/1349896/document.pdf",
+      "DOI": "10.1016/j.physletb.2015.03.056",
+      "sha256": "0bafaf2bf6c6ddca2490357a21a02bdf433de36cde792dd867decf32482925ed",
+      "PDF_page": 7,
+      "scale_uncertainty_fraction": 0.05,
+      "acceptance_and_projection_correlation_PDF_pages": [
+        5,
+        6
+      ]
+    },
+    "effect_on_intake": "Evidence only; no proton uncertainty or likelihood is transformed. Pointwise numerical/source error review remains pending. Historical normalization-exclusion and updated-fit nuisance decisions are separate."
+  }
 }

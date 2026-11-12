@@ -520,8 +520,9 @@
           "dependence"
         ],
         "sheet": "Sheet1",
-        "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "uncertainty_layout": "primary_stat_only",
+        "depolarization_status": "primary_transfer_divided_phase_mapping_pending",
+        "primary_crosscheck_id": "COMPASS_deuteron_primary_table1"
       }
     },
     {
@@ -560,8 +561,9 @@
           "dependence"
         ],
         "sheet": "Sheet3",
-        "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "uncertainty_layout": "primary_stat_only",
+        "depolarization_status": "primary_transfer_divided_phase_mapping_pending",
+        "primary_crosscheck_id": "COMPASS_deuteron_primary_table3"
       }
     },
     {
@@ -600,8 +602,9 @@
           "dependence"
         ],
         "sheet": "Sheet2",
-        "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "uncertainty_layout": "primary_stat_only",
+        "depolarization_status": "primary_transfer_divided_phase_mapping_pending",
+        "primary_crosscheck_id": "COMPASS_deuteron_primary_table2"
       }
     },
     {
@@ -640,8 +643,9 @@
           "dependence"
         ],
         "sheet": "Sheet4",
-        "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "uncertainty_layout": "primary_stat_only",
+        "depolarization_status": "primary_transfer_divided_phase_mapping_pending",
+        "primary_crosscheck_id": "COMPASS_deuteron_primary_table4"
       }
     },
     {
@@ -680,8 +684,9 @@
           "dependence"
         ],
         "sheet": "Sheet6",
-        "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "uncertainty_layout": "primary_stat_only",
+        "depolarization_status": "primary_transfer_divided_phase_mapping_pending",
+        "primary_crosscheck_id": "COMPASS_deuteron_primary_table6"
       }
     },
     {
@@ -720,8 +725,9 @@
           "dependence"
         ],
         "sheet": "Sheet5",
-        "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "uncertainty_layout": "primary_stat_only",
+        "depolarization_status": "primary_transfer_divided_phase_mapping_pending",
+        "primary_crosscheck_id": "COMPASS_deuteron_primary_table5"
       }
     },
     {
@@ -1080,6 +1086,194 @@
         "angular_column": "S2/1+C2",
         "angular_average_status": "publication_review_pending"
       }
+    }
+  ],
+  "deuteron_primary_tables": [
+    {
+      "id": "COMPASS_deuteron_primary_table1",
+      "filename": "COMPASS_deuteron_HEPData_v1_table1.json",
+      "publication": "0802.2160v2",
+      "version": "HEPData 48532 v1",
+      "doi": "10.17182/hepdata.48532.v1/t1",
+      "url": "https://www.hepdata.net/download/table/ins779473/Table 1/json",
+      "sha256": "f295b7d3693450086ecee861c5d9848cacf43a98171b75cd9ada6bea0278bc96",
+      "seed_path": ".runtime/papers/hepdata-ins779473-table-1.json",
+      "table": "Table 1",
+      "headers": [
+        "X",
+        "MEAN(NAME=Q**2) [GEV**2]",
+        "MEAN(NAME=Y)",
+        "MEAN(NAME=Z)",
+        "MEAN(NAME=PT) [GEV]",
+        "ASYM(C=COLLINS)",
+        "ASYM(C=SIVERS)"
+      ],
+      "mean_fields": {
+        "X": "x",
+        "MEAN(NAME=Q**2) [GEV**2]": "Q2_GeV2",
+        "MEAN(NAME=Y)": "y",
+        "MEAN(NAME=Z)": "z",
+        "MEAN(NAME=PT) [GEV]": "pT_GeV"
+      },
+      "expected_raw_rows": 9,
+      "reaction": "MU+ DEUT --> MU+ PI+ X",
+      "hadron": "pi+",
+      "projection": "x"
+    },
+    {
+      "id": "COMPASS_deuteron_primary_table2",
+      "filename": "COMPASS_deuteron_HEPData_v1_table2.json",
+      "publication": "0802.2160v2",
+      "version": "HEPData 48532 v1",
+      "doi": "10.17182/hepdata.48532.v1/t2",
+      "url": "https://www.hepdata.net/download/table/ins779473/Table 2/json",
+      "sha256": "b60d267c7a423d8e76d6052c1c77b7231a6463d096626e2ea29d82eba7d796b0",
+      "seed_path": ".runtime/papers/hepdata-ins779473-table-2.json",
+      "table": "Table 2",
+      "headers": [
+        "PT [GEV]",
+        "MEAN(NAME=Q**2) [GEV**2]",
+        "MEAN(NAME=Y)",
+        "MEAN(NAME=X)",
+        "MEAN(NAME=Z)",
+        "ASYM(C=COLLINS)",
+        "ASYM(C=SIVERS)"
+      ],
+      "mean_fields": {
+        "PT [GEV]": "pT_GeV",
+        "MEAN(NAME=Q**2) [GEV**2]": "Q2_GeV2",
+        "MEAN(NAME=Y)": "y",
+        "MEAN(NAME=X)": "x",
+        "MEAN(NAME=Z)": "z"
+      },
+      "expected_raw_rows": 9,
+      "reaction": "MU+ DEUT --> MU+ PI+ X",
+      "hadron": "pi+",
+      "projection": "pt"
+    },
+    {
+      "id": "COMPASS_deuteron_primary_table3",
+      "filename": "COMPASS_deuteron_HEPData_v1_table3.json",
+      "publication": "0802.2160v2",
+      "version": "HEPData 48532 v1",
+      "doi": "10.17182/hepdata.48532.v1/t3",
+      "url": "https://www.hepdata.net/download/table/ins779473/Table 3/json",
+      "sha256": "848dc2829675eebf6e924d783fde8df7967cf87fc6ba7850f86d5144f52df792",
+      "seed_path": ".runtime/papers/hepdata-ins779473-table-3.json",
+      "table": "Table 3",
+      "headers": [
+        "Z",
+        "MEAN(NAME=Q**2) [GEV**2]",
+        "MEAN(NAME=Y)",
+        "MEAN(NAME=X)",
+        "MEAN(NAME=PT) [GEV]",
+        "ASYM(C=COLLINS)",
+        "ASYM(C=SIVERS)"
+      ],
+      "mean_fields": {
+        "Z": "z",
+        "MEAN(NAME=Q**2) [GEV**2]": "Q2_GeV2",
+        "MEAN(NAME=Y)": "y",
+        "MEAN(NAME=X)": "x",
+        "MEAN(NAME=PT) [GEV]": "pT_GeV"
+      },
+      "expected_raw_rows": 8,
+      "reaction": "MU+ DEUT --> MU+ PI+ X",
+      "hadron": "pi+",
+      "projection": "z"
+    },
+    {
+      "id": "COMPASS_deuteron_primary_table4",
+      "filename": "COMPASS_deuteron_HEPData_v1_table4.json",
+      "publication": "0802.2160v2",
+      "version": "HEPData 48532 v1",
+      "doi": "10.17182/hepdata.48532.v1/t4",
+      "url": "https://www.hepdata.net/download/table/ins779473/Table 4/json",
+      "sha256": "38a58b105fd565259eaabd15a8853a22268bdf1eccdb6d3af242d5742267be33",
+      "seed_path": ".runtime/papers/hepdata-ins779473-table-4.json",
+      "table": "Table 4",
+      "headers": [
+        "X",
+        "MEAN(NAME=Q**2) [GEV**2]",
+        "MEAN(NAME=Y)",
+        "MEAN(NAME=Z)",
+        "MEAN(NAME=PT) [GEV]",
+        "ASYM(C=COLLINS)",
+        "ASYM(C=SIVERS)"
+      ],
+      "mean_fields": {
+        "X": "x",
+        "MEAN(NAME=Q**2) [GEV**2]": "Q2_GeV2",
+        "MEAN(NAME=Y)": "y",
+        "MEAN(NAME=Z)": "z",
+        "MEAN(NAME=PT) [GEV]": "pT_GeV"
+      },
+      "expected_raw_rows": 9,
+      "reaction": "MU+ DEUT --> MU+ PI- X",
+      "hadron": "pi-",
+      "projection": "x"
+    },
+    {
+      "id": "COMPASS_deuteron_primary_table5",
+      "filename": "COMPASS_deuteron_HEPData_v1_table5.json",
+      "publication": "0802.2160v2",
+      "version": "HEPData 48532 v1",
+      "doi": "10.17182/hepdata.48532.v1/t5",
+      "url": "https://www.hepdata.net/download/table/ins779473/Table 5/json",
+      "sha256": "f2f86e13a537fd06e5d2556801067f6bf47d972f6815ac3153cd6af7de158d03",
+      "seed_path": ".runtime/papers/hepdata-ins779473-table-5.json",
+      "table": "Table 5",
+      "headers": [
+        "PT [GEV]",
+        "MEAN(NAME=Q**2) [GEV**2]",
+        "MEAN(NAME=Y)",
+        "MEAN(NAME=X)",
+        "MEAN(NAME=Z)",
+        "ASYM(C=COLLINS)",
+        "ASYM(C=SIVERS)"
+      ],
+      "mean_fields": {
+        "PT [GEV]": "pT_GeV",
+        "MEAN(NAME=Q**2) [GEV**2]": "Q2_GeV2",
+        "MEAN(NAME=Y)": "y",
+        "MEAN(NAME=X)": "x",
+        "MEAN(NAME=Z)": "z"
+      },
+      "expected_raw_rows": 9,
+      "reaction": "MU+ DEUT --> MU+ PI- X",
+      "hadron": "pi-",
+      "projection": "pt"
+    },
+    {
+      "id": "COMPASS_deuteron_primary_table6",
+      "filename": "COMPASS_deuteron_HEPData_v1_table6.json",
+      "publication": "0802.2160v2",
+      "version": "HEPData 48532 v1",
+      "doi": "10.17182/hepdata.48532.v1/t6",
+      "url": "https://www.hepdata.net/download/table/ins779473/Table 6/json",
+      "sha256": "ddd8f207c44840e39943e83a739b7b8310b5d9bac709ef7c9ef1e31e9a7cb3a2",
+      "seed_path": ".runtime/papers/hepdata-ins779473-table-6.json",
+      "table": "Table 6",
+      "headers": [
+        "Z",
+        "MEAN(NAME=Q**2) [GEV**2]",
+        "MEAN(NAME=Y)",
+        "MEAN(NAME=X)",
+        "MEAN(NAME=PT) [GEV]",
+        "ASYM(C=COLLINS)",
+        "ASYM(C=SIVERS)"
+      ],
+      "mean_fields": {
+        "Z": "z",
+        "MEAN(NAME=Q**2) [GEV**2]": "Q2_GeV2",
+        "MEAN(NAME=Y)": "y",
+        "MEAN(NAME=X)": "x",
+        "MEAN(NAME=PT) [GEV]": "pT_GeV"
+      },
+      "expected_raw_rows": 8,
+      "reaction": "MU+ DEUT --> MU+ PI- X",
+      "hadron": "pi-",
+      "projection": "z"
     }
   ]
 }
