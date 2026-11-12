@@ -25,7 +25,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        HoppetPlan, HoppetPointPlan, HoppetMatchingPlan, hoppet_evaluate, hoppet_generator,
        NucleonTarget, PolarizedInitialSamples, polarized_initial_columns, PolarizedLeptonicPlan,
        polarized_leptonic_plan, prepare_polarized_sidis, prepare_polarized_sia, polarized_structure, with_momentum, with_pion_charges,
-       MomentumRule, SIAAngularFactor, LeptonicObservablePlan, depolarization_factor,
+       MomentumRule, SIAAngularFactor, SIAMeanOfRatio, LeptonicObservablePlan, depolarization_factor,
        sia_charge_sums, sia_double_ratio, sidis_observable, sia_observable, predict_observable,
        profile_nuisance, writejson, run_job
 
