@@ -16,8 +16,12 @@ def main():
     original_candidate, original_report = candidate_path.read_bytes(), report_path.read_bytes()
     verify_intake(manifest, cache, output)
     checks = []
-    for mutation in ("value", "rehashed_value", "rehashed_harmonic", "rehashed_overlap", "rehashed_admission_type",
-                     "report_count", "report_decision", "report_admission", "report_flag_type"):
+    mutations = ["value", "rehashed_value", "rehashed_harmonic", "rehashed_overlap", "rehashed_admission_type",
+                 "report_count", "report_decision", "report_admission", "report_flag_type"]
+    if "COMPASS2022_source_review" in read_json(report_path):
+        mutations += ["rehashed_compass_total", "rehashed_compass_decimal", "rehashed_compass_sample",
+                      "report_compass_flag"]
+    for mutation in mutations:
         rejected = False
         try:
             candidate, report = read_json(candidate_path), read_json(report_path)
@@ -29,8 +33,20 @@ def main():
                 report["physical_extraction"] = True
             elif mutation == "report_flag_type":
                 report["HERMES_3D_primary_binning"][0]["passed"] = 1
+            elif mutation == "report_compass_flag":
+                report["COMPASS2022_source_review"]["partial_2022_sample"] = 1
             elif mutation == "rehashed_admission_type":
                 candidate["production_ready"] = 0
+            elif mutation.startswith("rehashed_compass_"):
+                dataset = next(v for v in candidate["views"]
+                               if v.get("scientific_contract") == "COMPASS2022-DATA-001")
+                item = dataset["points"][0]
+                if mutation == "rehashed_compass_total":
+                    item["reported_total_error"] *= 2
+                elif mutation == "rehashed_compass_decimal":
+                    item["source_decimal_fields"]["er_tot"] = str(item["reported_total_error"] * 2)
+                else:
+                    dataset["sample"] = "synthetic_wrong_complete_2022_sample"
             elif mutation in {"rehashed_harmonic", "rehashed_overlap"}:
                 dataset = next(v for v in candidate["views"] if v["process"] == "STAR_510")
                 if mutation == "rehashed_harmonic":

@@ -135,7 +135,7 @@ def test_real_source_manifest_locks_versions_and_corrections():
     root = Path(__file__).resolve().parents[1]
     manifest = read_json(root / "config/experimental-sources.json")
     sources = {s["id"]: s for s in manifest["sources"]}
-    assert len(sources) == len(manifest["sources"]) == 22
+    assert len(sources) == len(manifest["sources"]) == 23
     assert sources["arxiv_1507.06824v2"]["version"] == "1507.06824v2"
     corrections = sources["HERMES_JAM_3709"]["adapter"]["corrections"]
     assert [c["source_excel_row"] for c in corrections] == [14, 15, 16, 17]

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-11-11",
+  "as_of": "2026-11-12",
   "normalized_for_production": false,
   "required_fields": [
     "source_publication",
@@ -60,13 +60,14 @@
       "id": "COMPASS_deuteron_2022_published",
       "paper": "2401.00309",
       "process": "SIDIS",
-      "status": "published partial-2022 sample; primary paper read; tables need normalization",
+      "status": "52 partial-2022 unidentified-hadron candidate amplitudes across six x/z/pT views from the checksum-locked collaboration archive; stat and total errors retained without inferred decomposition; source-version, covariance, overlap and hadron/nuclear adapters remain unresolved",
       "role": "candidate update conditional on hadron-species model",
       "new_since_KPSY15": true,
       "flags": [
         "unidentified charged hadrons",
         "2022 partial sample overlaps complete sample"
-      ]
+      ],
+      "scientific_contract": "config/compass-2022-data-contract.json"
     },
     {
       "id": "COMPASS_deuteron_2022_complete",
