@@ -84,7 +84,8 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
         library=Libdl.dlopen(receipt["library"])
         state=HoppetState(library,0,Dict(name=>Libdl.dlsym(library,name) for name in
             (:cf_hoppet_open,:cf_hoppet_close,:cf_hoppet_grid,:cf_hoppet_forward,
-             :cf_hoppet_adjoint,:cf_hoppet_generator,:cf_hoppet_evaluate,:cf_hoppet_info,:cf_hoppet_rows)))
+             :cf_hoppet_adjoint,:cf_hoppet_generator,:cf_hoppet_evaluate,:cf_hoppet_info,:cf_hoppet_rows,
+             :cf_hoppet_collins,:cf_hoppet_collins_rows)))
         try
             ccall(Libdl.dlsym(library,:cf_hoppet_abi),Cint,())==1 || error("wrong HOPPET ABI")
             n=Ref{Cint}(0); context=Ref{Int64}(0); status=Ref{Cint}(0)
@@ -209,18 +210,38 @@ function hoppet_evaluate(plan::HoppetPlan,initial::AbstractArray{T,3},q) where T
 end
 
 "Fixed selected-node rows with O(nodes*scales) output and O(native nodes) workspace."
-function hoppet_rows(plan::HoppetPlan,node)
+function hoppet_rows(plan::HoppetPlan,node;collins=false)
     node isa Integer && !(node isa Bool) && 1<=node<=length(plan.grid) || error("fixed valid grid node required")
+    collins isa Bool || error("fixed Collins row selection required")
+    collins && plan.layout!=:single && error("regular matching rows require a single query-bound grid")
     lock(HOPPET_NATIVE_LOCK) do
         isopen(plan) || error("closed HOPPET plan")
         hash((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
         rows=zeros(length(plan.tau),length(plan.grid));status=Ref{Cint}(0)
-        ccall(plan.state.functions[:cf_hoppet_rows],Cvoid,
+        operation=collins ? :cf_hoppet_collins_rows : :cf_hoppet_rows
+        ccall(plan.state.functions[operation],Cvoid,
             (Int64,Cint,Cint,Cint,Ptr{Cdouble},Ref{Cint}),
             plan.state.context,length(plan.grid),length(plan.tau),node,rows,status)
         status[]==0 || error("HOPPET row export rejected (status $(status[]))")
         rows
     end
+end
+
+"Full retained regular matching, used to check detached row construction."
+function hoppet_collins_regular(plan::HoppetPlan,initial::AbstractMatrix{Float64})
+    plan.layout==:single || error("regular matching requires a single query-bound grid")
+    lock(HOPPET_NATIVE_LOCK) do
+        hoppet_valid(plan,initial)
+        result=zeros(size(initial));status=Ref{Cint}(0)
+        ccall(plan.state.functions[:cf_hoppet_collins],Cvoid,
+            (Int64,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ref{Cint}),
+            plan.state.context,size(initial,1),size(initial,2),Matrix(initial),result,status)
+        status[]==0 || error("HOPPET regular matching rejected (status $(status[]))")
+        result
+    end
+end
+function hoppet_collins_regular(plan::HoppetPlan,initial::AbstractArray{Float64,3})
+    reshape(hoppet_collins_regular(plan,reshape(initial,size(initial,1),:)),size(initial))
 end
 
 struct HoppetPointBlock
@@ -244,8 +265,26 @@ struct HoppetPointPlan
     signature::UInt
 end
 
-function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
-                         quantity=:transversity,order=-6,eps=1e-10,du=.0125)
+"Distinct process-matched rows; physical alpha_s, never the auxiliary coupling."
+struct HoppetMatchingPlan
+    grid::Vector{Float64}
+    queries::Vector{Float64}
+    Q2::Vector{Float64}
+    Q02::Float64
+    tau::Vector{Float64}
+    quantity::Symbol
+    nf::Int
+    intervals::Int
+    blocks::Vector{HoppetPointBlock}
+    coefficient_payload_bytes::Int64
+    row_native_max_scaled::Float64
+    process::Symbol
+    alpha::Vector{Float64}
+    signature::UInt
+end
+
+function prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
+                               quantity=:transversity,order=-6,eps=1e-10,du=.0125,matching=nothing)
     intervals isa Integer && !(intervals isa Bool) && 11<=intervals<=20000 || error("fixed interval count 11..20000 required")
     qs=[fixed_scalar(x,"query fraction") for x in queries]
     !isempty(qs) && all(x -> 0<x<=1,qs) && any(<(1),qs) || error("interior queries in (0,1), with optional endpoint, required")
@@ -262,7 +301,21 @@ function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
             rows=hoppet_rows(plan,1)
             x=plan.grid
             test=hcat(x.*(1 .-x).^3,-2x.^2 .* (1 .-x).^2)
-            reference=permutedims(apply_operator(plan,test)[1,:,:])
+            evolved=apply_operator(plan,test)
+            reference=permutedims(evolved[1,:,:])
+            if matching!==nothing
+                a=matching.alpha./pi
+                prefix=1 .+ a.*matching_delta(matching.process,matching.channel)
+                if matching.channel==:collins
+                    regular_rows=hoppet_rows(plan,1;collins=true)
+                    regular=permutedims(hoppet_collins_regular(plan,evolved)[1,:,:])
+                    rows=prefix.*rows .+ a.*regular_rows
+                    reference=prefix.*reference .+ a.*regular
+                else
+                    rows=prefix.*rows
+                    reference=prefix.*reference
+                end
+            end
             actual=rows*test
             row_error=maximum(abs.(actual-reference)./max.(abs.(reference),.01maximum(abs,reference),1e-15))
             isfinite(row_error) && row_error<=contract["validation_policy"]["row_native_max_scaled"] || error("query-row/native mismatch")
@@ -286,17 +339,42 @@ function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
     end
     bytes=sum(sizeof(native.rows) for native in values(prepared))
     verified_hoppet_build(buildfile)==verification.receipt || error("HOPPET build changed during point preparation")
-    HoppetPointPlan(grid,qs,scales,fixed_scalar(Q02,"Q02"),times,quantity,nf,intervals,
-        blocks,bytes,maximum(row_errors),hash((grid,qs,scales,times)))
+    (grid=grid,queries=qs,Q2=scales,Q02=fixed_scalar(Q02,"Q02"),tau=times,quantity=quantity,nf=nf,
+        intervals=intervals,blocks=blocks,coefficient_payload_bytes=bytes,row_native_max_scaled=maximum(row_errors))
 end
 
+function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
+                         quantity=:transversity,order=-6,eps=1e-10,du=.0125)
+    data=prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=intervals,nf=nf,
+        quantity=quantity,order=order,eps=eps,du=du)
+    HoppetPointPlan(data...,hash((data.grid,data.queries,data.Q2,data.tau)))
+end
+
+function HoppetMatchingPlan(buildfile,queries,Q2,Q02,coupling;process,
+                            quantity=:KPSY_Hhat3_homogeneous,intervals=1024,nf=5,order=-6,eps=1e-10,du=.0125)
+    quantity in (:transversity,:KPSY_Hhat3_homogeneous) || error("unsupported polarized matching quantity")
+    channel=quantity==:transversity ? :transversity : :collins
+    matching_channel(process,channel)
+    q2=[fixed_scalar(q,"matching Q2") for q in Q2];q0=fixed_scalar(Q02,"matching Q02")
+    alpha=coupling isa AsymptoticTwoLoopCoupling ? alpha_s.(Ref(coupling),q2) :
+        [alpha_lo(q,q0,fixed_scalar(coupling,"matching alpha0");nf=nf) for q in q2]
+    all(a -> isfinite(a) && a>0,alpha) || error("finite positive physical matching coupling required")
+    data=prepare_hoppet_points(buildfile,queries,q2,q0,coupling;quantity=quantity,intervals=intervals,
+        nf=nf,order=order,eps=eps,du=du,
+        matching=(process=process,channel=channel,alpha=alpha))
+    HoppetMatchingPlan(data...,process,alpha,hash((data.grid,data.queries,data.Q2,data.tau,process,alpha)))
+end
+
+hoppet_point_signature(plan::HoppetPointPlan)=hash((plan.grid,plan.queries,plan.Q2,plan.tau))
+hoppet_point_signature(plan::HoppetMatchingPlan)=hash((plan.grid,plan.queries,plan.Q2,plan.tau,plan.process,plan.alpha))
+
 function hoppet_point_valid(plan,initial;endpoint=true)
-    hash((plan.grid,plan.queries,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET point settings/grid")
+    hoppet_point_signature(plan)==plan.signature || error("mutated HOPPET point settings/grid")
     size(initial,1)==length(plan.grid) && size(initial,2)>0 && all(isfinite,initial) || error("invalid point-plan initial shape/values")
     endpoint && !all(iszero,initial[end,:]) && error("h(1)=0 is required")
 end
 
-function apply_operator(plan::HoppetPointPlan,initial::AbstractMatrix{T}) where {T<:Real}
+function apply_operator(plan::Union{HoppetPointPlan,HoppetMatchingPlan},initial::AbstractMatrix{T}) where {T<:Real}
     hoppet_point_valid(plan,initial)
     result=zeros(promote_type(T,Float64),length(plan.queries),size(initial,2),length(plan.tau))
     for (i,block) in enumerate(plan.blocks)
@@ -305,10 +383,10 @@ function apply_operator(plan::HoppetPointPlan,initial::AbstractMatrix{T}) where 
     end
     result
 end
-apply_operator(plan::HoppetPointPlan,initial::AbstractVector)=dropdims(apply_operator(plan,reshape(initial,:,1));dims=2)
+apply_operator(plan::Union{HoppetPointPlan,HoppetMatchingPlan},initial::AbstractVector)=dropdims(apply_operator(plan,reshape(initial,:,1));dims=2)
 
-function operator_adjoint(plan::HoppetPointPlan,g::AbstractArray{T,3}) where {T<:Real}
-    hash((plan.grid,plan.queries,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET point settings/grid")
+function operator_adjoint(plan::Union{HoppetPointPlan,HoppetMatchingPlan},g::AbstractArray{T,3}) where {T<:Real}
+    hoppet_point_signature(plan)==plan.signature || error("mutated HOPPET point settings/grid")
     size(g,1)==length(plan.queries) && size(g,3)==length(plan.tau) && all(isfinite,g) || error("invalid point-plan cotangent")
     result=zeros(promote_type(T,Float64),length(plan.grid),size(g,2))
     for (i,block) in enumerate(plan.blocks)
@@ -318,4 +396,4 @@ function operator_adjoint(plan::HoppetPointPlan,g::AbstractArray{T,3}) where {T<
     result[end,:].=zero(T)
     result
 end
-operator_adjoint(plan::HoppetPointPlan,g::AbstractMatrix)=vec(operator_adjoint(plan,reshape(g,size(g,1),1,size(g,2))))
+operator_adjoint(plan::Union{HoppetPointPlan,HoppetMatchingPlan},g::AbstractMatrix)=vec(operator_adjoint(plan,reshape(g,size(g,1),1,size(g,2))))

@@ -17,10 +17,26 @@ module collins_hoppet_bridge
   logical, save :: active=.false.
   public :: cf_hoppet_abi, cf_hoppet_open, cf_hoppet_close, cf_hoppet_grid
   public :: cf_hoppet_forward, cf_hoppet_adjoint, cf_hoppet_generator, cf_hoppet_evaluate
-  public :: cf_hoppet_info, cf_hoppet_rows
+  public :: cf_hoppet_info, cf_hoppet_rows, cf_hoppet_collins, cf_hoppet_collins_rows
 contains
   integer(c_int) function cf_hoppet_abi() bind(C)
     cf_hoppet_abi=1_c_int
+  end function
+
+  ! Regular matching R(v)=2*CF*v*ln(v)/(1-v), with the native extra v.
+  ! ln(1)=0 removes the plus subtraction and its delta contribution.
+  function collins_regular_kernel(y) result(value)
+    real(dp), intent(in) :: y
+    real(dp) :: value,z,ratio
+    value=0.0_dp
+    if (cc_piece/=cc_REAL .and. cc_piece/=cc_REALVIRT) return
+    z=exp(-y)
+    if (y==0.0_dp) then
+      ratio=1.0_dp
+    else
+      ratio=y/(2.0_dp*exp(-0.5_dp*y)*sinh(0.5_dp*y))
+    end if
+    value=-(8.0_dp/3.0_dp)*z*z*ratio
   end function
 
   ! Plus acts on 1/(1-z). HOPPET's non-delta pieces carry one extra z.
@@ -370,6 +386,71 @@ contains
           rows(k,node_map(i))=rows(k,node_map(i))+xs(i)*evolved(i)
         end do
       end if
+      rows(k,n)=0.0_dp
+    end do
+    if (.not. all(ieee_is_finite(rows))) return
+    status=0_c_int
+  end subroutine
+
+  ! Unweighted regular Collins matching on a single retained grid. This full
+  ! native path is used to validate row preparation, not inside Julia fitting.
+  subroutine cf_hoppet_collins(handle,n,nb,h,result,status) bind(C)
+    integer(c_int64_t), value :: handle
+    integer(c_int), value :: n,nb
+    real(c_double), intent(in) :: h(n,nb)
+    real(c_double), intent(out) :: result(n,nb)
+    integer(c_int), intent(out) :: status
+    type(grid_conv) :: regular
+    real(dp), allocatable :: weighted(:),matched(:)
+    integer :: j
+    status=3_c_int
+    if (.not. valid(handle,n)) return
+    status=1_c_int
+    if (nb<1 .or. grid%nsub/=0) return
+    if (.not. all(ieee_is_finite(h)) .or. any(h(n,:)/=0.0_dp)) return
+    allocate(weighted(0:grid%ny),matched(0:grid%ny))
+    call InitGridConv(grid,regular,collins_regular_kernel)
+    do j=1,nb
+      weighted=xs*h(node_map,j)
+      matched=regular*weighted
+      result(:,j)=matched(representative)/unique_xs
+      result(n,j)=0.0_dp
+    end do
+    call Delete(regular)
+    if (.not. all(ieee_is_finite(result))) return
+    status=0_c_int
+  end subroutine
+
+  ! Selected rows of R*U: apply R^T once, then the retained U(tau)^T.
+  ! No composed dense matrix or node-by-scale-by-scale tensor is allocated.
+  subroutine cf_hoppet_collins_rows(handle,n,ntau,node,rows,status) bind(C)
+    integer(c_int64_t), value :: handle
+    integer(c_int), value :: n,ntau,node
+    real(c_double), intent(out) :: rows(ntau,n)
+    integer(c_int), intent(out) :: status
+    type(grid_conv) :: regular
+    real(dp), allocatable :: native(:),cotangent(:),evolved(:)
+    integer :: i,k
+    status=3_c_int
+    if (.not. valid(handle,n)) return
+    status=1_c_int
+    if (ntau/=size(times) .or. node<1 .or. node>n .or. grid%nsub/=0) return
+    allocate(native(0:grid%ny),cotangent(0:grid%ny),evolved(0:grid%ny))
+    native=0.0_dp
+    native(representative(node))=1.0_dp/unique_xs(node)
+    call InitGridConv(grid,regular,collins_regular_kernel)
+    cotangent=convolution_transpose(regular,native)
+    call Delete(regular)
+    rows=0.0_dp
+    do k=1,ntau
+      if (times(k)==0.0_dp) then
+        evolved=cotangent
+      else
+        evolved=convolution_transpose(kernels(k),cotangent)
+      end if
+      do i=0,grid%ny
+        rows(k,node_map(i))=rows(k,node_map(i))+xs(i)*evolved(i)
+      end do
       rows(k,n)=0.0_dp
     end do
     if (.not. all(ieee_is_finite(rows))) return

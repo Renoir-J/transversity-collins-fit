@@ -41,6 +41,8 @@ The delivered batch ABI applies an existing Float64 operator. It does not build 
 
 The [retained HOPPET adapter](hoppet.md) now constructs a separately contracted reconstructed kernel. Query-bound rows are exported through the checked native adjoint and applied in generic Julia arithmetic after the native contexts close. This changes cache/application layout while retaining the upstream solver and convolution. Physical source-knot and derivative validation remain explicit; no production operator is admitted by a build or an analytic-component receipt.
 
+The distinct [polarized matching cache](matched-rows.md) prepares retained regular-matching/evolution rows with process-specific coefficients and physical alpha_s at each supplied scale. Numerical iterations use generic Julia row products on initial parameters. The cache remains a reconstructed leg component; publication observables, complete physical fitting and production validation are still required.
+
 The retained streamlined interface has module `SAVE` state. Use process isolation until shared-context concurrency is validated. Cap Julia, BLAS and OpenMP threads under Snakemake resources. Record compiler settings and precision; changes to floating-point reassociation or precision require separate validation.
 
 ## Evolution derivatives
