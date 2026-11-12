@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "contract_id": "KPSY-INPUTS-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "source_manifest": "config/parton-sources.json",
+  "precision": "Float64",
+  "scale_argument": "Q2 in GeV^2; CT10 grid file lists Q, not Q2",
+  "legacy_literal_semantics": "Parse DATA knots from unchanged source: D-exponent constants are Float64; unsuffixed/default-REAL constants are Float32 promoted to Float64. DSS14 **0.3 uses Float64(Float32(0.3))=0.30000001192092896, matching the compiled reference. No -fdefault-real-8.",
+  "CT10": {
+    "set": "CT10nlo", "member": 0, "DataVersion": 4,
+    "library": "LHAPDF 6.5.6 source release; unmodified",
+    "interpolator": "logcubic", "ForcePositive": 1,
+    "raw_output": "x*f", "public_output": "f = raw/x",
+    "flavors": [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 21],
+    "x_range": [0.00000001, 1.0], "Q2_range": [1.69, 10000000000.0],
+    "strict": "LHAPDF error extrapolator",
+    "reference": "explicit LHAPDF continuation extrapolator; no production admission",
+    "alpha_s": "not used; CSS coupling has its own explicit scientific contract",
+    "derivatives": "no kinematic AD through C++; fixed input tables feed Julia parameterizations",
+    "concurrency": "serialize provider calls within a process; use separate processes for different source roots"
+  },
+  "DSSV08": {
+    "raw_output": "x*(uv,dv,ubar,dbar,strange,gluon)",
+    "interpolation": "bilinear in log(x), log(Q2) after removing source endpoint powers; endpoint x=1 is zero",
+    "powers_x_one_minus_x": [[1,3],[1,4],[0.5,8],[0.5,8],[0.5,8],[0.5,5]],
+    "x_range": [0.00001, 1.0], "Q2_range": [0.8, 1000000.0],
+    "range_evidence": "actual locked source checks and knots; older header gives narrower Q2 values",
+    "public_output": "unweighted u=(uv+ubar)/x, d=(dv+dbar)/x, antiquarks and gluon divided by x",
+    "unadmitted_flavors": "public strange and heavy helicity mapping is withheld pending a separate source convention check",
+    "extrapolation": "none: both policies reject outside source checks"
+  },
+  "DSS14": {
+    "set": "central pion NLO, IS=0 IL=0 IO=1",
+    "grid_basis": "z*(UTOT,DTOT,STOT,CTOT,BTOT,gluon,UVAL,DVAL,SVAL)",
+    "interpolation": "bilinear in log(z), log(Q2) after removing source endpoint powers; endpoint z=1 is zero",
+    "powers_z_one_minus_z": [[0.5,4],[0.5,4],[0.5,4],[0.3,7],[0.3,7],[0.3,4],[0.5,4],[0.5,4],[0.5,4]],
+    "z_range": [0.05, 1.0], "Q2_range": [1.0, 100000.0],
+    "grid_z_min": 0.01,
+    "pi_plus": "q=(TOTAL+VAL)/2; qbar=(TOTAL-VAL)/2; c=cbar=CTOT/2; b=bbar=BTOT/2",
+    "pi_minus": "swap light quark and antiquark; heavy and gluon unchanged",
+    "pi_zero": "arithmetic average of plus and minus",
+    "public_output": "D_i^pi = charge-mapped weighted output/z",
+    "strict": "reject outside documented z and Q2 ranges",
+    "reference": "allow source log-linear Q2 extrapolation explicitly; retain z>=0.05"
+  },
+  "validation_policy": {
+    "relative_floor": 0.00000001,
+    "legacy_max_scaled": 0.0000000001,
+    "ct10_grid_max_scaled": 0.0000000001,
+    "ct10_abi_max_scaled": 0.000000000001,
+    "conversion_max_scaled": 0.000000000001
+  },
+  "limitations": [
+    "Input component only: no physical cross section, historical fit or uncertainty result",
+    "DSSV08 and DSS14 are secondary distributions of publication-tagged routines, not recovered KPSY fitting code",
+    "Legacy Fortran COMMON/SAVE reference programs run in fresh processes, unchanged",
+    "Low CSS mu_b lies below CT10 and DSS14 strict ranges; no hidden freeze, clamp or admission",
+    "No uncertainty eigenvectors or complete tensor-charge endpoint prescription"
+  ]
+}

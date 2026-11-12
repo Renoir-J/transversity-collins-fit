@@ -2,6 +2,7 @@ module CollinsFit
 
 using LinearAlgebra, Random, Statistics
 using ForwardDiff, Optim, QuadGK, JSON
+using SHA, Libdl
 
 export Context, load_context, coefficients, predict, predict!, objective, value_and_gradient!,
        fit, gradient_report, benchmark_report, closure_report, performance_report,
@@ -10,6 +11,8 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        AsymptoticTwoLoopCoupling, alpha_s, evolution_time, KPSYCSS,
        css_bstar, css_mu_b2, sudakov_perturbative,
        sidis_snp, sidis_collins_snp, sia_snp, sia_collins_snp,
+       CT10Input, load_dssv08, load_dss14, weighted_components,
+       ct10_batch, parton_pdf, parton_helicity, pion_ff, parton_domain,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -103,6 +106,7 @@ end
 include("RunningCoupling.jl")
 include("CollinearLO.jl")
 include("CSS.jl")
+include("PartonInputs.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)

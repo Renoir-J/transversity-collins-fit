@@ -1,5 +1,6 @@
 using Test, CollinsFit, ForwardDiff, LinearAlgebra, JSON
 include("css_tests.jl")
+include("parton_tests.jl")
 
 @testset "LO transversity moments and fixed-operator AD" begin
     @test transversity_moment(1) ≈ -2/3
