@@ -23,5 +23,6 @@
     "Record complete-check overhead separately; do not infer a production G2PERF pass or relax a failed budget",
     "Historical fit, data covariance/overlap, jet kernels, production admission and interval coverage remain separate requirements"
   ],
-  "source_bindings": "The receipt binds its producer, all numerical source files, all scientific configuration JSON files, the Julia locks and the pinned reference inventory/review, plus verified native and parton builds. Administrative GitHub/task/action metadata is excluded."
+  "source_bindings": "The receipt binds its producer, all numerical source files, all scientific configuration JSON files, the Julia locks and the pinned reference inventory/review, plus verified native and parton builds. Administrative GitHub/task/action metadata is excluded.",
+  "type_name_formatting": "Store immutable name strings for the 14 Julia built-in primitive numeric types and the internal Tuple{Vector{Int},FixedRowMatrix} block element type at module load. Other element/scalar types retain runtime string(T), including custom displays. Numeric types, framed bytes, full array coverage, dimensions and admission policy are unchanged."
 }

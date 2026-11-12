@@ -1,0 +1,11 @@
+{
+  "type_name": "Tuple{Vector{Int64}, CollinsFit.FixedRowMatrix}",
+  "scope": "synthetic_cache_integrity_fixture",
+  "native_endian": 67305985,
+  "generated_from_head": "9935d83e362d26c6909a305dd9f1b2efa5f838d3",
+  "production_ready": false,
+  "physical_extraction": false,
+  "snapshot": "46ae07289d2e128d728b08cdfa77bb2cce58326b39291c51d6ebef40b222992e",
+  "native_word_size": 64
+}
+

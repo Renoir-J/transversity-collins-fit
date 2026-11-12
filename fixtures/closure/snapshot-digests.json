@@ -1,0 +1,82 @@
+{
+  "contract": "KPSY-NUMERICAL-CACHE-001",
+  "records": [
+    {
+      "matrix_one_zero": "ca6a54d80fcbdafaa75ad5452f0afe14087f5acc1fc0b64647f6b6100907dfca",
+      "type": "Bool",
+      "scalar_one": "8736de2d6a4efd5b0c92cfb019647e63c56c6eb36b6aede5888af06b303ecca6"
+    },
+    {
+      "matrix_one_zero": "df0781b94e8ddbeba45ef444eb9fdf4060986d6a3ad6d819c6fa2e7848ef7f86",
+      "type": "Int8",
+      "scalar_one": "fb04c1d6eb09333ca3e7c384f6a0b8eed67a738eb1a9535d5bba738d1dffed4f"
+    },
+    {
+      "matrix_one_zero": "cf4502804eeeaf787ae1dafb8a0414bc3ea1ccbffc1827f665c5dc4e1917728b",
+      "type": "Int16",
+      "scalar_one": "ce8400213989528179cc50d26e54af1f24f4c43a6c3bec36da6f16e8b8495481"
+    },
+    {
+      "matrix_one_zero": "bd51ab8c00459f9170756f2a9015bcf5dfc84e486caa9782c6f3f062eaab7e95",
+      "type": "Int32",
+      "scalar_one": "672b59e972c430cefb5f651aa211a5cd454f062144156f7eb7e1e441a2536932"
+    },
+    {
+      "matrix_one_zero": "313cfff9e09f0dc678c8ab903f2fc664ef0a7699b75c6076f7ad56725f0173c8",
+      "type": "Int64",
+      "scalar_one": "b06573ecd84580a74bac9bd1491e0dcd5717941add9f630713a1d501861dadd5"
+    },
+    {
+      "matrix_one_zero": "aee30604b25424662783aa666543ae71a90b13482a2975e1a88f3abda4f92750",
+      "type": "Int128",
+      "scalar_one": "0033bc1ce56080f5f3e1e72f64ab2c785014dce048a2a25562f7c912e739d481"
+    },
+    {
+      "matrix_one_zero": "e88b48741f6f4c3ffd5ea09cf72397ec6d2bba7ceffd8a5a94666a39698ad000",
+      "type": "UInt8",
+      "scalar_one": "8f2b917170f4dbef7ab1b0a23c58f3b75a2e2ac1ce0130cbe0aba0832beb3be4"
+    },
+    {
+      "matrix_one_zero": "56a50caa0477f808f2a3e67d760bb53f8bf4aa733f2625a27712ceb047a9207f",
+      "type": "UInt16",
+      "scalar_one": "65e5ff03053dd8baf1c3dd4cd3d18ecaed5894bd7f8df7e10d78d8dcacd309e5"
+    },
+    {
+      "matrix_one_zero": "4eb753a50264163ef2f9c83986aab3568b555aca273b16e86b320b44a34a821e",
+      "type": "UInt32",
+      "scalar_one": "a19b6832dfa27a0066b0d774d20e5ed9d6dea564fafcf6d117ca49d07edbf3aa"
+    },
+    {
+      "matrix_one_zero": "a4ac4b69789ac96d9701e6c72a003144824c7704da566d7bb8d53e21e0906c9a",
+      "type": "UInt64",
+      "scalar_one": "691bc17fd5de7944cab56de881bac753096b33b9a9865e997c70219312894a43"
+    },
+    {
+      "matrix_one_zero": "39359740b56be80000933895d609e940257549fdeab0a42fe0d5738cc5f9d767",
+      "type": "UInt128",
+      "scalar_one": "1de980d6632b8d02eea061e70469917114a29fd731d58c2652c5c3e44e9a632d"
+    },
+    {
+      "matrix_one_zero": "6ef3a823ae7ecea7fe25f35e29d5c7f0365624d0d3ca201e578a684deb5af0ce",
+      "type": "Float16",
+      "scalar_one": "b98dbc206bb3ead85ea12f7874946237781865523da87df53e849671de52f65d"
+    },
+    {
+      "matrix_one_zero": "e0a10dbec901bbfbbc8dd97baf5a943e614e68fb2bae0a5b411aa1ac34835246",
+      "type": "Float32",
+      "scalar_one": "8db204937f602fdedc4f146357337161e7d6359767a9092ff885618dedbd778f"
+    },
+    {
+      "matrix_one_zero": "cd5f83248e2153ec1f246b2a6bbca74a12e49b77192d6c135fa02f8173fd64ae",
+      "type": "Float64",
+      "scalar_one": "4f241b29baa77025163aca2abe340532218889d42e9e5d01919b4eea2786901e"
+    }
+  ],
+  "scope": "synthetic_cache_integrity_fixture",
+  "native_endian": 67305985,
+  "generated_from_head": "9935d83e362d26c6909a305dd9f1b2efa5f838d3",
+  "production_ready": false,
+  "physical_extraction": false,
+  "synthetic_composite": "d6104372a51c27d63f9202c61b69938046f542d193748c772d6594fc935c1db9"
+}
+
