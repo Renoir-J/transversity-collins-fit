@@ -52,6 +52,7 @@ jobs:
           julia --project=numerics numerics/bin/check_collinear_lo.jl runs/ci/collinear-lo-validation.json
           julia --project=numerics numerics/bin/check_css.jl runs/ci/css-validation.json
           julia --project=numerics numerics/bin/check_leptonic.jl runs/ci/leptonic-validation.json
+          julia --project=numerics numerics/bin/check_initial.jl runs/ci/initial-validation.json
       - name: Fortran batch bridge
         run: |
           make -C fortran

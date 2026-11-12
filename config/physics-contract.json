@@ -32,6 +32,7 @@
   "reconstructed_css_contract": "config/css-contract.json",
   "reconstructed_parton_input_contract": "config/parton-contract.json",
   "reconstructed_leptonic_contract": "config/leptonic-contract.json",
+  "reconstructed_initial_contract": "config/initial-contract.json",
   "data_admission": {
     "candidate_scope": "experimental_candidate",
     "candidate_enters_optimizer": false,
