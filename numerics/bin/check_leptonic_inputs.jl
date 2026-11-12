@@ -10,12 +10,7 @@ const SOURCES = vcat([@__FILE__,CONTRACT,joinpath(ROOT,"config/parton-contract.j
 source_hashes() = Dict(relpath(p,ROOT)=>bytes2hex(sha256(read(p))) for p in SOURCES)
 
 function input_edges(model,dss,root,B)
-    grid = readlines(CollinsFit.verified_parton_asset(root,"CT10_central"))
-    q2knots = vcat(parse.(Float64,split(grid[5])).^2,dss.q2)
-    c02 = 4exp(-2Float64(Base.MathConstants.eulergamma))
-    bknots = [inv(sqrt(q/c02-inv(model.bmax^2))) for q in q2knots if q>c02/model.bmax^2]
-    base = [0.,1e-7,1e-6,1e-5,1e-4,.001,.005,.02,.05,.1,.2,.4,.7,1.,1.5,2.,3.,4.,6.,8.,12.,16.,20.,24.]
-    sort(unique(vcat(filter(<(B),base),filter(b -> 0<b<B,bknots),B)))
+    parton_radial_edges(model,dss,root,B)
 end
 
 function input_checks(buildfile)

@@ -59,7 +59,7 @@ def prepare(root, destination, *, source=None, offline=False, cmake="cmake",
     if not (source / "cmake/Modules").is_dir():
         raise ValueError("a sparse reference snapshot cannot build HOPPET")
     project_sources = [contract, root / "config/evolution-contract.json",
-        root / "config/matched-rows-contract.json",
+        root / "config/matched-rows-contract.json", root / "config/hoppet-batch-contract.json",
         root / "fortran/hoppet_bridge.f90", root / "src/collinsflow/hoppet.py",
         root / "src/collinsflow/provenance.py", root / "scripts/prepare_hoppet.py"]
     upstream_paths = [source / p for p in capture([*git, "ls-files"]).splitlines()]
