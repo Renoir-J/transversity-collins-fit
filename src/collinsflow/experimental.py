@@ -5,11 +5,13 @@ acceptance or theory conventions prevent admission to numerical fitting.
 """
 from __future__ import annotations
 
+import hashlib
 import math
 import re
 import shutil
 import tempfile
 import tarfile
+from decimal import Decimal
 from itertools import product
 from pathlib import Path, PurePosixPath
 
@@ -416,6 +418,120 @@ def parse_star_hepdata(path, source):
     return outputs
 
 
+def compass2022_member(path, config):
+    """Read locked regular files in memory, without extracting or reading Sivers as Collins."""
+    payloads, size = {}, 0
+    with tarfile.open(path, "r:*") as archive:
+        for member in archive.getmembers():
+            name = PurePosixPath(member.name)
+            if (name.is_absolute() or ".." in name.parts or "\\" in member.name
+                    or not (member.isfile() or member.isdir())):
+                raise ValueError("unsafe COMPASS archive member")
+            if member.isdir():
+                continue
+            size += member.size
+            if member.size > 2_000_000 or size > 20_000_000:
+                raise ValueError("COMPASS archive exceeds decompression limits")
+            if member.name in payloads or member.name not in config["member_sha256"]:
+                raise ValueError("unexpected or duplicate COMPASS archive member")
+            payload = archive.extractfile(member).read()
+            if hashlib.sha256(payload).hexdigest() != config["member_sha256"][member.name]:
+                raise ValueError("COMPASS archive member checksum mismatch")
+            payloads[member.name] = payload
+    if set(payloads) != set(config["member_sha256"]) or config["member"] != "HEPdata_tables/Collins.dat":
+        raise ValueError("COMPASS Collins archive member identity changed")
+    return payloads[config["member"]].decode("utf-8")
+
+
+def parse_compass2022(path, source):
+    """Retain partial-2022 h+/h- amplitudes and stat/total errors, without a likelihood."""
+    config = source["adapter"]
+    contract = read_json(Path(__file__).resolve().parents[2] / "config/compass-2022-data-contract.json")
+    if config["contract"] != contract["id"]:
+        raise ValueError("COMPASS data contract identity changed")
+    content = [(i + 1, line.strip()) for i, line in enumerate(compass2022_member(path, config).splitlines())
+               if line.strip()]
+    if not content or content[0][1] != contract["source_identity_header"]:
+        raise ValueError("explicit partial-2022 Collins source identity required")
+    sections, current = [], None
+    for number, line in content[1:]:
+        heading = re.fullmatch(r"h\^([+-]); (x|z|pT)-dependence", line)
+        if heading:
+            current = {"hadron": "h" + heading[1], "projection": heading[2],
+                       "heading_line": number, "header_line": None, "rows": []}
+            sections.append(current)
+            continue
+        if current is None:
+            raise ValueError("COMPASS section heading required")
+        cells = line.split()
+        if current["header_line"] is None:
+            expected = [current["projection"] + "-bins", "<x>", "<y>", "<z>", "<p_T>",
+                        "<W>", "<Q^2>", "Asym", "er_stat", "er_tot"]
+            if cells != expected:
+                raise ValueError("COMPASS Collins column identity changed")
+            current["header_line"] = number
+            continue
+        bounds = re.fullmatch(rf"\[({NUMBER});({NUMBER})\]", cells[0])
+        if len(cells) != 10 or bounds is None:
+            raise ValueError("unsupported COMPASS numerical row")
+        tokens = [*bounds.groups(), *cells[1:]]
+        values = list(map(scalar, tokens))
+        exact = list(map(Decimal, tokens))
+        low, high, x, y, z, pt, w, q2, value, stat, total = values
+        coordinate = {"x": x, "z": z, "pT": pt}[current["projection"]]
+        if not low < coordinate < high or not (0 < x < 1 and 0 < y < 1 and 0 < z < 1):
+            raise ValueError("COMPASS mean outside reported bin or kinematic domain")
+        cuts = contract["published_cuts"]
+        if not (cuts["y"][0] < y < cuts["y"][1] and q2 > cuts["Q2_GeV2_min"]
+                and w > cuts["W_GeV_min"] and pt > cuts["pT_GeV_min"] and z > cuts["z_min"]):
+            raise ValueError("COMPASS mean violates the declared published cuts")
+        if stat <= 0 or total < stat:
+            raise ValueError("invalid COMPASS statistical/total uncertainty")
+        if current["rows"] and current["rows"][-1]["exact_high"] != exact[0]:
+            raise ValueError("noncontiguous COMPASS projection bins")
+        current["rows"].append({"number": number, "values": values, "tokens": tokens,
+                                "exact_high": exact[1]})
+    expected_sections = [(h, p) for h in ("h+", "h-") for p in ("x", "z", "pT")]
+    if [(s["hadron"], s["projection"]) for s in sections] != expected_sections:
+        raise ValueError("COMPASS charge/projection sections changed")
+    if [(d["hadron"], d["projection"]) for d in config["tables"]] != expected_sections:
+        raise ValueError("COMPASS table mapping changed")
+    outputs = []
+    for section, definition in zip(sections, config["tables"]):
+        if len(section["rows"]) != definition["expected_rows"] or section["header_line"] is None:
+            raise ValueError("COMPASS source row count changed")
+        projection = definition["projection"]
+        coordinate = "pT_GeV" if projection == "pT" else projection
+        result = view(definition["view_id"], source, "SIDIS", definition["hadron"], "A_Coll",
+            contract["overlap_group"], contract["published_angle_convention"], role="review_required",
+            blockers=contract["production_blockers"], target="deuteron", target_material="6LiD",
+            beam_momentum_GeV=160, sample=contract["sample"],
+            source_identity_header=content[0][1], scientific_contract=contract["id"],
+            hadron_identification="unidentified charged hadrons; no pion relabelling",
+            depolarization_removed=True, additional_depolarization_or_sign_conversion_applied=False,
+            published_cuts=contract["published_cuts"],
+            reported_scale_uncertainties=contract["reported_scale_uncertainties"],
+            overlap_with=contract["overlap_with"], replacement_policy=contract["replacement_policy"],
+            prediction_prescription="requires unidentified-hadron, nuclear, bin and acceptance review",
+            source_version_status=contract["source_version_status"],
+            uncertainty_representation="reported statistical and total; decomposition and covariance unresolved")
+        for index, row in enumerate(section["rows"]):
+            low, high, x, y, z, pt, w, q2, value, stat, total = row["values"]
+            item = point(f"{result['id']}:{index}", value, stat, 0,
+                bins={coordinate: [low, high]},
+                averages={"x": x, "y": y, "z": z, "pT_GeV": pt, "W_GeV": w, "Q2_GeV2": q2},
+                locator={"archive_member": config["member"], "line": row["number"],
+                         "heading_line": section["heading_line"], "header_line": section["header_line"],
+                         "columns": ["Asym", "er_stat", "er_tot"]},
+                reported_total_error=total, error_representation="reported_statistical_and_total",
+                systematic_error_status="not_decomposed_in_source",
+                source_decimal_fields=dict(zip(contract["numeric_field_order"], row["tokens"])))
+            item["systematic_components"] = []  # Absence is not a measured zero or total-minus-stat estimate.
+            result["points"].append(item)
+        outputs.append(result)
+    return outputs
+
+
 def validate_candidate(candidate):
     if candidate.get("scope") != "experimental_candidate" or candidate.get("schema_version") != 1:
         raise ValueError("experimental candidate scope/schema required")
@@ -437,6 +553,13 @@ def validate_candidate(candidate):
             for component in item["systematic_components"]:
                 if component["sigma"] < 0 or not math.isfinite(component["sigma"]):
                     raise ValueError("invalid systematic uncertainty")
+            if "reported_total_error" in item or "error_representation" in item:
+                total = item.get("reported_total_error")
+                if (item.get("error_representation") != "reported_statistical_and_total"
+                        or type(total) not in (float, int) or not math.isfinite(total)
+                        or total < item["statistical_error"] or item["systematic_components"]
+                        or item.get("systematic_error_status") != "not_decomposed_in_source"):
+                    raise ValueError("invalid reported statistical/total error representation")
             for box in [item["bins"], *item.get("bin_union", [])]:
                 for bounds in box.values():
                     if len(bounds) != 2 or not all(math.isfinite(v) for v in bounds) or bounds[0] >= bounds[1]:
@@ -502,7 +625,7 @@ def _candidate_from_sources(manifest_sha256, sources, paths):
     views = []
     adapters = {"hermes_xlsx": parse_hermes, "belle_html": parse_belle,
                 "besiii_html": parse_besiii, "star510_html": parse_star510,
-                "star_hepdata": parse_star_hepdata}
+                "star_hepdata": parse_star_hepdata, "compass2022_dat": parse_compass2022}
     for source in sources:
         kind = source.get("adapter", {}).get("kind")
         if kind:
@@ -523,6 +646,12 @@ def _source_decisions(candidate, paths):
     summary["STAR_source_review"] = {"physical_bin_edges_inferred_from_plot_errors": False,
         "combined_and_component_year_samples_kept_as_alternatives": True,
         "hepdata_views": sum("source_intervals" in v["points"][0] for v in views)}
+    compass = [v for v in views if v.get("scientific_contract") == "COMPASS2022-DATA-001"]
+    if compass:
+        summary["COMPASS2022_source_review"] = {"views": len(compass),
+            "points": sum(len(v["points"]) for v in compass), "partial_2022_sample": True,
+            "identified_pions": False, "total_minus_stat_systematic_inferred": False,
+            "additional_depolarization_or_sign_conversion_applied": False, "production_ready": False}
     lattice = xlsx_records(paths["JAM_lattice_2000"])
     if len(lattice) != 1 or lattice[0]["value"] != 0.936 or lattice[0]["stat_u"] != 0.025 or lattice[0]["Q"] != 2:
         raise ValueError("lattice source differs from the selected original-paper constraint")
