@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "id": "COLLINEAR-LO-001",
+  "id": "COLLINEAR-LO-002",
   "scope": "reconstructed_theory",
   "production_ready": false,
   "status": "RECONSTRUCTED_COMPONENT_NOT_PRODUCTION_ADMITTED",
@@ -17,9 +17,14 @@
     "KPSY_Hhat3_homogeneous": "unweighted Hhat^(3)(z) as defined in KPSY Eq.56; Eq.71 keeps only the homogeneous term with the same kernel",
     "rejected": "x*h1, generic Collins, or Trento H1perp first moment without an explicit conversion contract"
   },
-  "coupling": {"order": "one_loop", "nf": "fixed integer 3 to 6", "reference": "alpha_s(Q02)=alpha0", "threshold_matching": false},
-  "discretization": {"basis": "piecewise linear in x", "convolution": "analytic integration on each cell after plus subtraction", "time_solution": "exp(tau*P) with exact one-loop tau", "grid": "strictly increasing 0 < xmin < x <= 1", "endpoint": "h(1)=0; no extrapolation below xmin"},
-  "derivatives": {"validated_coordinates": "initial ordinates with the last ordinate fixed to zero", "operator_settings": "fixed grid, alpha0, scales, nf, quantity and scheme; fitted settings require a separately validated dU term", "foreign_callbacks": false},
+  "coupling": {
+    "one_loop": "scalar alpha0 constructor; alpha_s(Q02)=alpha0",
+    "asymptotic_two_loop": "explicit AsymptoticTwoLoopCoupling constructor; Lambda and nf determine alpha_s(Q02); see KPSY-CSS-001",
+    "nf": "fixed integer 3 to 6", "threshold_matching": false,
+    "model_identity": "the asymptotic 1/L expansion and an exact two-loop RG solution are distinct definitions; never silently substitute one for the other"
+  },
+  "discretization": {"basis": "piecewise linear in x", "convolution": "analytic integration on each cell after plus subtraction", "time_solution": "exp(tau*P) with the exact integral of the explicitly selected coupling definition", "grid": "strictly increasing 0 < xmin < x <= 1", "endpoint": "h(1)=0; no extrapolation below xmin"},
+  "derivatives": {"validated_coordinates": "initial ordinates with the last ordinate fixed to zero", "operator_settings": "fixed grid, coupling definition, alpha0 or Lambda, scales, nf, quantity and scheme; fitted settings require a separately validated dU term", "foreign_callbacks": false},
   "validation_policy": {
     "scope": "analytic polynomial inputs, independent x-space/Mellin routes; not production G2 or interval coverage",
     "grids": [201, 401, 801, 1601, 3201],
@@ -35,6 +40,6 @@
     "identity_semigroup_max_abs": 0.0000000001,
     "derivative_max_scaled": 0.0000001
   },
-  "remaining_for_KPSY": ["two-loop coupling and original grid/settings comparison", "CSS Sudakov and matching coefficients", "unpolarized PDFs/FFs and exact conventions", "historical dataset and 13-parameter/262-point benchmark", "independent physical-process and derivative certification"],
+  "remaining_for_KPSY": ["historical coupling/backend and original grid/settings comparison", "full CSS assembly and matching coefficients", "unpolarized PDFs/FFs and exact conventions", "historical dataset and 13-parameter/262-point benchmark", "independent physical-process and derivative certification"],
   "original_author_code_recovered": false
 }

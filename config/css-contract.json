@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-CSS-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "original_author_code_recovered": false,
+  "sources": [
+    {"url": "https://arxiv.org/html/1505.05589v1", "equations": [26, 27, 28, 52, 72, 106, 107], "role": "Sudakov and nonperturbative factors; Section III.1 gives coupling parameters"},
+    {"url": "https://arxiv.org/html/2409.00221v3#S2.E4", "role": "explicit asymptotic two-loop formula"},
+    {"url": "https://arxiv.org/pdf/1406.3073v1", "page": 8, "role": "bmax=1.5 GeV^-1 in the referenced unpolarized fit; inherited reconstruction setting, not recovered KPSY implementation evidence"}
+  ],
+  "coupling": {
+    "definition": "asymptotic_two_loop",
+    "formula": "alpha_s=4*pi/(beta0*L)*(1-beta1/beta0^2*ln(L)/L); L=ln(Q2/Lambda^2)",
+    "beta0": "11-2*nf/3", "beta1": "102-38*nf/3",
+    "Lambda_GeV": 0.225, "nf": 5, "threshold_matching": false,
+    "alpha0": "derived from Lambda at Q02; do not separately impose rounded alpha0=0.327",
+    "evolution_time": "2/beta0 * [ln(L)+beta1/beta0^2*(ln(L)+1)/L] evaluated between L0 and L",
+    "exact_RG_solution": "different higher-order convention; comparison is informational, not a same-contract oracle"
+  },
+  "sudakov": {
+    "A1": "CF", "A2": "CF/2*(CA*(67/18-pi^2/6)-10/9*TR*nf)", "B1": "-3/2*CF",
+    "expansion": "alpha_s/pi", "integration_variable": "ln(mu^2)",
+    "b_star": "b/sqrt(1+b^2/bmax^2)", "c0": "2*exp(-EulerGamma)",
+    "mu_b2": "c0^2/b_star^2", "mu_b_cap_at_Q": false, "negative_exponent_clamp": false,
+    "signed_limits": "evaluate the written integral even when mu_b>Q; this short-b prescription is an explicit reconstruction choice pending historical comparison"
+  },
+  "defaults": {"bmax_inverse_GeV": 1.5, "Q02_GeV2": 2.4, "g2": 0.84, "gq_GeV2": 0.106, "gh_GeV2": 0.042},
+  "nonperturbative": {
+    "common": "g2*ln(b/bstar)*0.5*ln(Q2/Q02)",
+    "SIDIS_UU_width": "gq+gh/z^2", "SIDIS_Collins_width": "gq+(gh-gc)/z^2",
+    "SIA_UU_width": "gh*(1/z1^2+1/z2^2)", "SIA_Collins_width": "(gh-gc)*(1/z1^2+1/z2^2)",
+    "domain": "b>0, Q2>Lambda^2, 0<z<=1, gh-gc>0 for Collins Gaussian convergence",
+    "derivatives": "gc is differentiable; fixed kinematics/coupling/model settings are not fitted by this component"
+  },
+  "validation_policy": {
+    "coupling_max_relative": 0.000000000002,
+    "integrated_coupling_max_abs": 0.00000000001,
+    "sudakov_max_abs": 0.0000000002,
+    "quadrature_refinement_max_abs": 0.0000000001,
+    "nonperturbative_identity_max_abs": 0.00000000001,
+    "derivative_max_scaled": 0.0000001,
+    "orders": [16, 32, 64],
+    "collinear_grids": [801, 1601, 3201],
+    "collinear_max_scaled": 0.0001,
+    "collinear_max_moment_relative": 0.0001,
+    "refinement_error_ratio_max": 0.6
+  },
+  "not_implemented": ["Wilson/hard matching coefficients", "unpolarized CT10/DSSV/DSS input interface", "Bessel transforms and physical SIDIS/SIA/STAR predictions", "historical fit and uncertainty calibration", "production admission and same-contract historical HOPPET comparison"]
+}
