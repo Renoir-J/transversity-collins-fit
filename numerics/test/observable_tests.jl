@@ -57,6 +57,26 @@ end
     end
 end
 
+@testset "different supplied angular scalars propagate to all parameter derivatives" begin
+    # Under the same uniform synthetic two-angle measure, <s/(1+c)>=1/2
+    # while <s>/<1+c>=1/3. The expected scaling is independent of the evaluator.
+    context=observable_fixture(:SIA);theta=collect(kpsy_published_parameters().values)
+    mean_input=SIAMeanOfRatio(.5;source="synthetic uniform two-angle sample",
+        averaging_measure="uniform weights [0.5,0.5] at cos_squared(theta) [0,1]; fixed other kinematics")
+    ratio_input=SIAAngularFactor(1/3;source="same synthetic uniform two-angle sample")
+    for interval in (nothing,(.05,.35)),ratio in (:UL,:UC)
+        momentum=interval===nothing ? nothing : MomentumRule(interval...;order=8)
+        mean=sia_observable(context;ratio=ratio,angular=mean_input,momentum=momentum,source="synthetic different-scalar regression")
+        previous=sia_observable(context;ratio=ratio,angular=ratio_input,momentum=momentum,source="synthetic different-scalar regression")
+        value=predict_observable(previous,theta)
+        gradient=ForwardDiff.gradient(t->predict_observable(previous,t),theta)
+        hessian=ForwardDiff.hessian(t->predict_observable(previous,t),theta)
+        @test isfinite(value) && value!=0 && isapprox(predict_observable(mean,theta),1.5value;rtol=1e-12,atol=1e-16)
+        @test any(v->v!=0,gradient) && all(isapprox.(ForwardDiff.gradient(t->predict_observable(mean,t),theta),1.5.*gradient;rtol=1e-12,atol=1e-16))
+        @test any(v->v!=0,hessian) && all(isapprox.(ForwardDiff.hessian(t->predict_observable(mean,t),theta),1.5.*hessian;rtol=1e-12,atol=1e-16))
+    end
+end
+
 @testset "momentum measure, depolarization and charge-category algebra" begin
     for order in (8,16,32)
         rule=MomentumRule(.1,.9;order=order)
