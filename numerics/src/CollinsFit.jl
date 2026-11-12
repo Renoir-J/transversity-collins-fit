@@ -21,6 +21,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        initial_transversity, initial_collins, trento_first_moment,
        prepare_initial_conditions, initial_distributions, evolve_initial_conditions,
        initial_source_grids,
+       HoppetPlan, HoppetPointPlan, hoppet_evaluate, hoppet_generator,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -119,6 +120,7 @@ include("Matching.jl")
 include("Leptonic.jl")
 include("LeptonicInputs.jl")
 include("InitialConditions.jl")
+include("Hoppet.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)

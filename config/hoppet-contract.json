@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HOPPET-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "status": "RECONSTRUCTED_COMPONENT_NOT_PRODUCTION_ADMITTED",
+  "upstream": {"url": "https://github.com/hoppet-code/hoppet.git", "commit": "feda4f2f64d0131f489ad1cf7728ec6be186cc56", "tree": "74ca10a0e1455d0031585baac6fd569d179adfd0", "unchanged": true},
+  "physics_contract": "config/evolution-contract.json",
+  "quantities": ["transversity", "KPSY_Hhat3_homogeneous"],
+  "kernel": "CF*(2*z*[1/(1-z)]_+ + 3/2*delta(1-z)); CF=4/3; no flavor/gluon mixing",
+  "weight_mapping": "Project inputs/outputs are unweighted h in increasing x. HOPPET receives x*h in increasing y=-ln(x); non-delta kernel pieces include the additional z Jacobian. Conversion occurs exactly once on each side.",
+  "time_mapping": {
+    "tau": "integral_Q02^Q2 alpha_s(q2)/(2*pi) dln(q2), computed in Julia using the selected contracted coupling",
+    "auxiliary_alpha": 1.0,
+    "auxiliary_Q_start_GeV": 100.0,
+    "auxiliary_Q_end_GeV": "100*exp(pi*tau)",
+    "auxiliary_coupling_nloop": 0,
+    "explicit_evolution_nloop": 1,
+    "step_setting": "The pinned ev_evolve omits optional du when calling ev_SetModuleConsts. SetDefaultEvolutionDu(du) is therefore applied under the isolated construction lock, then the previous DefaultEvolutionDu is restored. Test that changing du measurably changes the coarse result and converges.",
+    "meaning": "An auxiliary constant-coupling interval solves the identical autonomous fixed-nf LO equation exp(tau*P). Auxiliary scales/coupling are not physical inputs or a substitute running-coupling prescription.",
+    "supported_tau": [-1.0, 1.0],
+    "threshold_matching": false
+  },
+  "discretization": {
+    "grid": "single or locked nested uniform y grids; x=exp(-y); h(1)=0; no extrapolation below exp(-ymax)",
+    "declared_boundary": "The caller may supply xmin (or ymax, exclusively). The final native x is the exact declared Float64 xmin and ymax=-log(xmin). This canonicalizes only the domain endpoint after the log/exp round trip, not interior knots, source values or acceptance tests. Queries at xmin are admitted; nextfloat toward zero is rejected.",
+    "nested_grid": {"ymax": [0.01,0.03,0.08,0.2,0.5,2.0,"declared ymax"], "dy_divisors": [729,243,81,27,9,3,1], "locking": "Use upstream InitGridDef(...,locked=true), including its declared rounding of native subgrid extents/steps. Return the sorted union of exact native x values; shared nodes use their finest native representation. Preserve distinct floating point knots."},
+    "order": "negative HOPPET interpolation order, default -6; supported -2 through -10",
+    "cache": "One retained HOPPET scalar grid_conv per supplied fixed tau, extracted from the nonsinglet evolution operator; no dense x-by-x operator cache",
+    "identity": "tau=0 is an explicit identity on the constrained endpoint subspace",
+    "adjoint": "Each native negative-order subgrid has C^T=R*C*R. Transpose upstream locked-grid decanting in reverse assignment order; transpose exact node gather/select and x-weight conversions; remove the h(1) coordinate. Reuse upstream convolution on every native subgrid, with basis and dot-product checks; do not rewrite the forward solver.",
+    "evaluation": "Upstream EvalGridQuant interpolates the weighted x*h; divide by the requested x once. Queries are fixed coordinates, with strict support checks.",
+    "scale_interpolation": "Not implicit: only supplied fixed scales are evaluated. Any later interpolation needs its own refinement checks."
+  },
+  "derivatives": {
+    "coordinates": "Initial ordinates/physical shape parameters only; all operator settings are fixed",
+    "method": "Julia explicitly batches primal and ForwardDiff tangent components through the same fixed linear Float64 ABI; supports nested duals only after Hessian checks",
+    "settings": "Reject AD in grid, coupling, scales, tau, order, nf and solver tolerances; a fitted setting requires dU",
+    "foreign_callbacks": false
+  },
+  "state": "One active context per loaded bridge, guarded by generation handles and a Julia process lock. Numerical jobs remain isolated processes; upstream SAVE/global state is not claimed thread-safe.",
+  "validation_policy": {
+    "scope": "same-equation analytic/Mellin, fixed-grid, AD and resource pilots; not production G2/G2AD/G2PERF",
+    "analytic_input": "h0=x*(1-x)^3, plus signed/scaled and affine initial columns",
+    "ymax": 13.815510557964274,
+    "dy_refinements": [0.1, 0.05, 0.025],
+    "du_refinements": [0.05, 0.025, 0.0125],
+    "order": -6,
+    "convolution_eps": 1e-10,
+    "point_probes": [0.005, 0.02, 0.1, 0.3, 0.6, 0.85, 0.95],
+    "mellin_max_scaled": 0.0001,
+    "moment_max_relative": 0.0001,
+    "generator_max_scaled": 0.0001,
+    "error_scale": "max(abs(reference),0.01*max(abs(reference_vector)))",
+    "identity_max_abs": 1e-12,
+    "composition_max_scaled": 1e-7,
+    "adjoint_max_scaled": 1e-10,
+    "derivative_max_scaled": 1e-7,
+    "retained_backend_speed": "Measure cold preparation, warm batched application and stored payload at matching accuracy; informational until a physical workload and frozen G2PERF policy are admitted."
+  },
+  "original_author_code_recovered": false,
+  "remaining": ["physical input interpolation/refinement and scalable many-scale matching assembly", "historical backend/grid/settings comparison", "publication observables and physical process fixtures", "production derivative/performance/coverage admission"]
+}
