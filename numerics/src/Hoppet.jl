@@ -28,7 +28,7 @@ struct HoppetPlan
     construction::Symbol
     native_nodes::Int
     coefficient_payload_bytes::Int64
-    signature::UInt
+    signature::String
 end
 
 function verified_hoppet_build(path)
@@ -103,7 +103,7 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
             status[]==0 && all(diff(x).>0) && last(x)==1 || error("invalid HOPPET grid")
             ccall(state.functions[:cf_hoppet_info],Cvoid,(Int64,Cint,Ref{Cint},Ref{Int64},Ref{Cint}),state.context,n[],native,payload,status)
             status[]==0 || error("missing HOPPET resource metadata")
-            signature=hash((x,qs,times))
+            signature=numerical_snapshot((x,qs,times))
             finalizer(close,state)
             HoppetPlan(state,x,qs,q0,times,quantity,nf,model,lambda,layout,construction,native[],payload[],signature)
         catch
@@ -133,7 +133,7 @@ Base.isopen(plan::HoppetPlan)=plan.state.context!=0
 
 function hoppet_valid(plan,initial;endpoint=true)
     isopen(plan) || error("closed HOPPET plan")
-    hash((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
+    numerical_snapshot((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
     size(initial,1)==length(plan.grid) && size(initial,2)>0 && all(isfinite,initial) || error("invalid HOPPET initial shape/values")
     endpoint && !all(iszero,selectdim(initial,1,size(initial,1))) && error("h(1)=0 is required")
 end
@@ -220,7 +220,7 @@ function hoppet_rows(plan::HoppetPlan,node;collins=false)
     collins && plan.layout!=:single && error("regular matching rows require a single query-bound grid")
     lock(HOPPET_NATIVE_LOCK) do
         isopen(plan) || error("closed HOPPET plan")
-        hash((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
+        numerical_snapshot((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
         rows=zeros(length(plan.tau),length(plan.grid));status=Ref{Cint}(0)
         operation=collins ? :cf_hoppet_collins_rows : :cf_hoppet_rows
         ccall(plan.state.functions[operation],Cvoid,
@@ -250,7 +250,8 @@ end
 
 struct HoppetPointBlock
     indices::Vector{Int}
-    rows::Matrix{Float64}
+    rows::FixedRowMatrix
+    HoppetPointBlock(indices::Vector{Int},rows::AbstractMatrix{Float64})=new(copy(indices),fixed_rows(rows))
 end
 
 "Detached query-bound rows from retained HOPPET; no native context in the fit."
@@ -267,7 +268,7 @@ struct HoppetPointPlan
     blocks::Vector{HoppetPointBlock}
     coefficient_payload_bytes::Int64
     row_native_max_scaled::Float64
-    signature::UInt
+    signature::String
 end
 
 "Distinct process-matched rows; physical alpha_s, never the auxiliary coupling."
@@ -286,7 +287,7 @@ struct HoppetMatchingPlan
     row_native_max_scaled::Float64
     process::Symbol
     alpha::Vector{Float64}
-    signature::UInt
+    signature::String
 end
 
 function prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
@@ -327,7 +328,7 @@ function prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=1024,
             row_error=maximum(abs.(actual-reference)./max.(abs.(reference),.01maximum(abs,reference),1e-15))
             isfinite(row_error) && row_error<=contract["validation_policy"]["row_native_max_scaled"] || error("query-row/native mismatch")
             push!(row_errors,row_error)
-            prepared[query]=(grid=copy(x),rows=rows)
+            prepared[query]=(grid=copy(x),rows=fixed_rows(rows))
             append!(coordinates,x)
             scales,times=copy(plan.Q2),copy(plan.tau)
         finally
@@ -354,7 +355,7 @@ function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
                          quantity=:transversity,order=-6,eps=1e-10,du=.0125,construction=:batched_probes)
     data=prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=intervals,nf=nf,
         quantity=quantity,order=order,eps=eps,du=du,construction=construction)
-    HoppetPointPlan(data...,hash((data.grid,data.queries,data.Q2,data.tau)))
+    HoppetPointPlan(data...,hoppet_point_snapshot(data...))
 end
 
 function HoppetMatchingPlan(buildfile,queries,Q2,Q02,coupling;process,
@@ -370,11 +371,23 @@ function HoppetMatchingPlan(buildfile,queries,Q2,Q02,coupling;process,
     data=prepare_hoppet_points(buildfile,queries,q2,q0,coupling;quantity=quantity,intervals=intervals,
         nf=nf,order=order,eps=eps,du=du,construction=construction,
         matching=(process=process,channel=channel,alpha=alpha))
-    HoppetMatchingPlan(data...,process,alpha,hash((data.grid,data.queries,data.Q2,data.tau,process,alpha)))
+    HoppetMatchingPlan(data...,process,alpha,hoppet_point_snapshot(data...;process=process,alpha=alpha))
 end
 
-hoppet_point_signature(plan::HoppetPointPlan)=hash((plan.grid,plan.queries,plan.Q2,plan.tau))
-hoppet_point_signature(plan::HoppetMatchingPlan)=hash((plan.grid,plan.queries,plan.Q2,plan.tau,plan.process,plan.alpha))
+function hoppet_point_snapshot(grid,queries,Q2,Q02,tau,quantity,nf,intervals,construction,blocks,payload,row_error;
+                               process=nothing,alpha=nothing)
+    numerical_snapshot((grid,queries,Q2,Q02,tau,quantity,nf,intervals,construction,
+        [(block.indices,block.rows) for block in blocks],payload,row_error,process,alpha))
+end
+function hoppet_point_signature(plan::HoppetPointPlan)
+    hoppet_point_snapshot(plan.grid,plan.queries,plan.Q2,plan.Q02,plan.tau,plan.quantity,plan.nf,
+        plan.intervals,plan.construction,plan.blocks,plan.coefficient_payload_bytes,plan.row_native_max_scaled)
+end
+function hoppet_point_signature(plan::HoppetMatchingPlan)
+    hoppet_point_snapshot(plan.grid,plan.queries,plan.Q2,plan.Q02,plan.tau,plan.quantity,plan.nf,
+        plan.intervals,plan.construction,plan.blocks,plan.coefficient_payload_bytes,plan.row_native_max_scaled;
+        process=plan.process,alpha=plan.alpha)
+end
 
 function hoppet_point_valid(plan,initial;endpoint=true)
     hoppet_point_signature(plan)==plan.signature || error("mutated HOPPET point settings/grid")

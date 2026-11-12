@@ -76,6 +76,7 @@ jobs:
               julia --project=numerics numerics/bin/check_polarized.jl .runtime/hoppet/build.json runs/ci-polarized/analytic.json | tee runs/ci-polarized/analytic-native.log
               ;;
             inputs)
+              julia --project=numerics numerics/bin/check_numerical_cache.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-polarized/cache-integrity.json | tee runs/ci-polarized/cache-integrity-native.log
               julia --project=numerics numerics/bin/check_polarized_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-polarized/inputs.json | tee runs/ci-polarized/inputs-native.log
               ;;
           esac

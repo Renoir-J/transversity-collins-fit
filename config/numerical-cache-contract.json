@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-NUMERICAL-CACHE-001",
+  "scope": "fixed_numerical_cache_integrity",
+  "production_ready": false,
+  "physical_extraction": false,
+  "equation_change": false,
+  "snapshot": "SHA256 over complete dense primitive array bytes, with numeric types, array element types and dimensions, tuple/sequence framing, sorted string-keyed metadata, and an explicit native-endian marker. Ordinary Julia hash is not an integrity digest. Retained row matrices are copied into owned read-only storage and fully snapshotted once; subsequent signatures bind their immutable stored digest. Other accessible mutable arrays are completely streamed on validation.",
+  "row_ownership": "Public writes and writes through views are errors. copy returns an independent mutable matrix. Trusted multiplication delegates read-only use to the retained dense BLAS/generic arithmetic; it does not expose storage. Duplicate queries may share the same owned row object and retain the parent payload accounting.",
+  "covered_components": [
+    "native HOPPET mutable grid, requested scales and auxiliary times",
+    "detached point/matching metadata, every block index and row coefficient",
+    "polarized initial grids, source bases and cached logarithms",
+    "prepared polarized context fixed flavor, CSS, quadrature, provider and provenance arrays",
+    "derived observable momentum rules, weights, denominators, angular/source metadata"
+  ],
+  "checks": "Compare the stored immutable snapshot with current fixed data before a public numerical application. A mismatch is an explicit error. Fitted initial columns and their derivatives are not snapshot inputs.",
+  "preservation": "No kernel, solver, sign, mass or z factor, evolution/matching prescription, physical cut, angular definition, data selection or likelihood changes. Existing numerical and derivative tolerances remain unchanged.",
+  "limitations": [
+    "An in-memory mutation guard is not an authenticated serialized production cache",
+    "Constructors and program source remain trusted; private getfield/raw-storage access, unsafe memory access and forged internal objects are outside the supported API and are not secured by this guard",
+    "Exact byte snapshots can detect changes that leave one tested prediction numerically unchanged",
+    "Record complete-check overhead separately; do not infer a production G2PERF pass or relax a failed budget",
+    "Historical fit, data covariance/overlap, jet kernels, production admission and interval coverage remain separate requirements"
+  ],
+  "source_bindings": "The receipt binds its producer, all numerical source files, all scientific configuration JSON files, the Julia locks and the pinned reference inventory/review, plus verified native and parton builds. Administrative GitHub/task/action metadata is excluded."
+}
