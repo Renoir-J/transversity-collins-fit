@@ -489,27 +489,32 @@ def crosscheck_besiii(views, paths):
     return reports
 
 
-def run_intake(manifest_path, cache, output, *, seed_root=None, offline=False):
-    manifest = read_json(manifest_path)
+def _locked_sources(manifest):
     sources = manifest["sources"]
     if len({s["id"] for s in sources}) != len(sources) or len({s["filename"] for s in sources}) != len(sources):
         raise ValueError("duplicate locked source ID or filename")
     if any(not re.fullmatch(r"[a-f0-9]{64}", s["sha256"]) for s in sources):
         raise ValueError("invalid locked source SHA256")
-    paths, views = {}, []
+    return sources
+
+
+def _candidate_from_sources(manifest_sha256, sources, paths):
+    views = []
     adapters = {"hermes_xlsx": parse_hermes, "belle_html": parse_belle,
                 "besiii_html": parse_besiii, "star510_html": parse_star510,
                 "star_hepdata": parse_star_hepdata}
     for source in sources:
-        seed = Path(seed_root) / source["seed_path"] if seed_root else None
-        paths[source["id"]] = acquire(source, cache, seed, offline)
         kind = source.get("adapter", {}).get("kind")
         if kind:
             views.extend(adapters[kind](paths[source["id"]], source))
-    candidate = {"schema_version": 1, "scope": "experimental_candidate", "production_ready": False,
-                 "manifest_sha256": file_hash(manifest_path), "views": views,
-                 "sources": [{"id": s["id"], "url": s["url"], "sha256": s["sha256"],
-                              "version": s["version"]} for s in sources]}
+    return {"schema_version": 1, "scope": "experimental_candidate", "production_ready": False,
+            "manifest_sha256": manifest_sha256, "views": views,
+            "sources": [{"id": s["id"], "url": s["url"], "sha256": s["sha256"],
+                         "version": s["version"]} for s in sources]}
+
+
+def _source_decisions(candidate, paths):
+    views = candidate["views"]
     summary = validate_candidate(candidate)
     summary["primary_candidate_views"] = [v["id"] for v in views if v["role"] == "primary_candidate"]
     choose_views(candidate, summary["primary_candidate_views"])
@@ -523,10 +528,34 @@ def run_intake(manifest_path, cache, output, *, seed_root=None, offline=False):
         raise ValueError("lattice source differs from the selected original-paper constraint")
     summary["lattice_JAM_crosscheck"] = {"passed": True, "value": 0.936, "sigma": 0.025, "mu_GeV": 2}
     summary["source_manifest_digest"] = digest(candidate["sources"])
-    summary["source_manifest_sha256"] = file_hash(manifest_path)
-    summary["source_fingerprint"] = source_fingerprint(Path(__file__).resolve().parents[2])
-    summary["completed_at"] = utc_now()
+    summary["source_manifest_sha256"] = candidate["manifest_sha256"]
     summary["status"] = "CANDIDATES_VALIDATED_PRODUCTION_BLOCKED"
+    return summary
+
+
+def _check_source_snapshot(manifest_path, manifest_sha256, fingerprint, sources, cache):
+    if file_hash(manifest_path) != manifest_sha256:
+        raise ValueError("experimental source manifest changed during intake verification")
+    if source_fingerprint(Path(__file__).resolve().parents[2]) != fingerprint:
+        raise ValueError("experimental parser/configuration changed during intake verification")
+    for source in sources:
+        acquire(source, cache, offline=True)
+
+
+def run_intake(manifest_path, cache, output, *, seed_root=None, offline=False):
+    manifest_sha256 = file_hash(manifest_path)
+    manifest = read_json(manifest_path)
+    sources = _locked_sources(manifest)
+    fingerprint = source_fingerprint(Path(__file__).resolve().parents[2])
+    paths = {}
+    for source in sources:
+        seed = Path(seed_root) / source["seed_path"] if seed_root else None
+        paths[source["id"]] = acquire(source, cache, seed, offline)
+    candidate = _candidate_from_sources(manifest_sha256, sources, paths)
+    summary = _source_decisions(candidate, paths)
+    _check_source_snapshot(manifest_path, manifest_sha256, fingerprint, sources, cache)
+    summary["source_fingerprint"] = fingerprint
+    summary["completed_at"] = utc_now()
     output = Path(output)
     atomic_json(output / "candidates.json", candidate)
     summary["candidate_file_sha256"] = file_hash(output / "candidates.json")
@@ -535,17 +564,34 @@ def run_intake(manifest_path, cache, output, *, seed_root=None, offline=False):
 
 
 def verify_intake(manifest_path, cache, output):
+    manifest_sha256 = file_hash(manifest_path)
     manifest = read_json(manifest_path)
+    sources = _locked_sources(manifest)
+    fingerprint = source_fingerprint(Path(__file__).resolve().parents[2])
     output = Path(output)
-    report = read_json(output / "intake-report.json")
-    if report["source_manifest_sha256"] != file_hash(manifest_path):
+    report_path, candidate_path = output / "intake-report.json", output / "candidates.json"
+    report_sha256, candidate_sha256 = file_hash(report_path), file_hash(candidate_path)
+    report = read_json(report_path)
+    if report.get("source_manifest_sha256") != manifest_sha256:
         raise ValueError("stale experimental source manifest")
-    if report["source_fingerprint"] != source_fingerprint(Path(__file__).resolve().parents[2]):
+    if report.get("source_fingerprint") != fingerprint:
         raise ValueError("stale experimental parser/configuration")
-    if report["candidate_file_sha256"] != file_hash(output / "candidates.json"):
+    if report.get("candidate_file_sha256") != candidate_sha256:
         raise ValueError("experimental candidate artifact was changed")
-    for source in manifest["sources"]:
-        acquire(source, cache, offline=True)
-    validate_candidate(read_json(output / "candidates.json"))
-    return {"verified": True, "production_ready": False, "views": report["views"],
-            "points_across_overlapping_views": report["points_across_overlapping_views"]}
+    paths = {source["id"]: acquire(source, cache, offline=True) for source in sources}
+    candidate = read_json(candidate_path)
+    validate_candidate(candidate)
+    reconstructed = _candidate_from_sources(manifest_sha256, sources, paths)
+    if digest(candidate) != digest(reconstructed):
+        raise ValueError("experimental candidate differs from locked source replay")
+    expected = _source_decisions(reconstructed, paths)
+    expected.update(source_fingerprint=fingerprint, candidate_file_sha256=candidate_sha256)
+    if (set(report) != set(expected) | {"completed_at"}
+            or digest({key: value for key, value in report.items() if key != "completed_at"}) != digest(expected)
+            or not isinstance(report["completed_at"], str) or not report["completed_at"]):
+        raise ValueError("experimental intake report differs from locked source replay")
+    _check_source_snapshot(manifest_path, manifest_sha256, fingerprint, sources, cache)
+    if file_hash(candidate_path) != candidate_sha256 or file_hash(report_path) != report_sha256:
+        raise ValueError("experimental cached artifacts changed during source replay")
+    return {"verified": True, "production_ready": False, "views": expected["views"],
+            "points_across_overlapping_views": expected["points_across_overlapping_views"]}
