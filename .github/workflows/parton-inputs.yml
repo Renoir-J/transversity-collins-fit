@@ -10,6 +10,7 @@ on:
       - config/css-contract.json
       - config/hoppet-*.json
       - config/matched-rows-contract.json
+      - config/polarized-process-contract.json
       - bridges/**
       - fortran/check_dss*.f90
       - fortran/hoppet_bridge.f90
