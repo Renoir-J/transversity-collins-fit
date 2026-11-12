@@ -1,0 +1,48 @@
+name: Experimental source intake
+
+on:
+  pull_request:
+    paths:
+      - config/experimental-sources.json
+      - src/collinsflow/experimental.py
+      - workflow/experimental-intake.smk
+      - pyproject.toml
+      - requirements.lock
+      - .github/workflows/experimental-intake.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: experimental-intake-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  intake:
+    name: locked experimental sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+      - name: Acquire and cross-check public sources
+        run: |
+          snakemake --snakefile workflow/experimental-intake.smk --cores 2 --config output=runs/experimental-intake
+          python -c "import json; r=json.load(open('runs/experimental-intake/intake-report.json')); assert r['views']==82 and r['points_across_overlapping_views']==773 and r['production_ready'] is False; assert len(r['HERMES_3D_primary_binning'])==2 and all(x['passed'] for x in r['HERMES_3D_primary_binning']) and all(x['passed'] for x in r['BESIII_primary_vs_JAM']); assert r['STAR_source_review']['hepdata_views']==56"
+      - name: Upload intake evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: experimental-intake-${{ github.sha }}
+          path: runs/experimental-intake
+          retention-days: 30

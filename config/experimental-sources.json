@@ -1,0 +1,972 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-11",
+  "status": "EXPERIMENTAL_CANDIDATES_NOT_ADMITTED",
+  "sources": [
+    {
+      "id": "HERMES_JAM_3700",
+      "filename": "HERMES2020_3700.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3700.xlsx",
+      "sha256": "fc1edb2354d7626ffda42eff00d7ce0a938ffcf63c9d1e6623c0dae5d232b19d",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3700.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_plus_x",
+        "hadron": "pi+",
+        "dimension": 1,
+        "projection": "x",
+        "sheet": "Sheet1",
+        "bins": {
+          "x": [
+            "xmin",
+            "xmax"
+          ]
+        },
+        "expected_rows": 7,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3701",
+      "filename": "HERMES2020_3701.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3701.xlsx",
+      "sha256": "8676e88e631c82b4be5520de54d7d6a9fbd62e66c88f68c82848be8a0ec662ed",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3701.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_plus_z",
+        "hadron": "pi+",
+        "dimension": 1,
+        "projection": "z",
+        "sheet": "Sheet1",
+        "bins": {
+          "z": [
+            "zmin",
+            "zmax"
+          ]
+        },
+        "expected_rows": 10,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3702",
+      "filename": "HERMES2020_3702.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3702.xlsx",
+      "sha256": "c37833b6674fdf4ce370ebb242b0d4447f5579e7b71afa49629c798e88124624",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3702.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_plus_pT",
+        "hadron": "pi+",
+        "dimension": 1,
+        "projection": "pT",
+        "sheet": "Sheet1",
+        "bins": {
+          "pT_GeV": [
+            "pTmin",
+            "pTmax"
+          ]
+        },
+        "expected_rows": 7,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3703",
+      "filename": "HERMES2020_3703.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3703.xlsx",
+      "sha256": "88f0072f3b7cdda2efdd2fe825c6259bdcdecb2ea6e311f8b1b186ad2d7700f6",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3703.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_zero_x",
+        "hadron": "pi0",
+        "dimension": 1,
+        "projection": "x",
+        "sheet": "Sheet1",
+        "bins": {
+          "x": [
+            "xmin",
+            "xmax"
+          ]
+        },
+        "expected_rows": 7,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3704",
+      "filename": "HERMES2020_3704.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3704.xlsx",
+      "sha256": "474565fb7e1fab936e0af2f407c5f1913dc23aba3eac74dfd2e0f6722d9a7c23",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3704.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_zero_z",
+        "hadron": "pi0",
+        "dimension": 1,
+        "projection": "z",
+        "sheet": "Sheet1",
+        "bins": {
+          "z": [
+            "zmin",
+            "zmax"
+          ]
+        },
+        "expected_rows": 10,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3705",
+      "filename": "HERMES2020_3705.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3705.xlsx",
+      "sha256": "d1d190df0adc33d47079ed5660e2c72b470637aef8df30aeb36a3e7977c9a00a",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3705.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_zero_pT",
+        "hadron": "pi0",
+        "dimension": 1,
+        "projection": "pT",
+        "sheet": "Sheet1",
+        "bins": {
+          "pT_GeV": [
+            "pTmin",
+            "pTmax"
+          ]
+        },
+        "expected_rows": 7,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3706",
+      "filename": "HERMES2020_3706.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3706.xlsx",
+      "sha256": "3ff2db0f7f26957e00b43bce130e18dcc05f940f99675264fc0db11f2359729a",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3706.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_minus_x",
+        "hadron": "pi-",
+        "dimension": 1,
+        "projection": "x",
+        "sheet": "Sheet1",
+        "bins": {
+          "x": [
+            "xmin",
+            "xmax"
+          ]
+        },
+        "expected_rows": 7,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3707",
+      "filename": "HERMES2020_3707.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3707.xlsx",
+      "sha256": "0f3724fac34bb3d48147694da2c582018808da07990da8bb8a1bb6a55df50835",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3707.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_minus_z",
+        "hadron": "pi-",
+        "dimension": 1,
+        "projection": "z",
+        "sheet": "Sheet1",
+        "bins": {
+          "z": [
+            "zmin",
+            "zmax"
+          ]
+        },
+        "expected_rows": 10,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3708",
+      "filename": "HERMES2020_3708.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3708.xlsx",
+      "sha256": "159dd083b84837a81652a447da19f0125a70c8ae2031f592db56620a9a27d060",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3708.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_minus_pT",
+        "hadron": "pi-",
+        "dimension": 1,
+        "projection": "pT",
+        "sheet": "Sheet1",
+        "bins": {
+          "pT_GeV": [
+            "pTmin",
+            "pTmax"
+          ]
+        },
+        "expected_rows": 7,
+        "depolarization_column": "depol"
+      }
+    },
+    {
+      "id": "HERMES_JAM_3709",
+      "filename": "HERMES2020_3709.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3709.xlsx",
+      "sha256": "e0e0daa422fd6b767ec1d1a3608e3366e7e7bda1ec82695452a48337121cebc9",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3709.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_plus_3D",
+        "hadron": "pi+",
+        "dimension": 3,
+        "projection": "3D",
+        "sheet": "Sheet1",
+        "bins": {
+          "x": [
+            "xmin",
+            "xmax"
+          ],
+          "z": [
+            "zmin",
+            "zmax"
+          ],
+          "pT_GeV": [
+            "pTmin",
+            "pTmax"
+          ]
+        },
+        "expected_rows": 64,
+        "depolarization_column": "depol",
+        "corrections": [
+          {
+            "source_excel_row": 14,
+            "column": "zmin",
+            "old_value": 0.049,
+            "new_value": 0.49,
+            "reference": "https://arxiv.org/html/2007.07755v1#S3.T5",
+            "reason": "Primary Table 5 defines the upper-z interval as (0.49,0.70]; pinned secondary transcription has an extra zero."
+          },
+          {
+            "source_excel_row": 15,
+            "column": "zmin",
+            "old_value": 0.049,
+            "new_value": 0.49,
+            "reference": "https://arxiv.org/html/2007.07755v1#S3.T5",
+            "reason": "Primary Table 5 defines the upper-z interval as (0.49,0.70]; pinned secondary transcription has an extra zero."
+          },
+          {
+            "source_excel_row": 16,
+            "column": "zmin",
+            "old_value": 0.049,
+            "new_value": 0.49,
+            "reference": "https://arxiv.org/html/2007.07755v1#S3.T5",
+            "reason": "Primary Table 5 defines the upper-z interval as (0.49,0.70]; pinned secondary transcription has an extra zero."
+          },
+          {
+            "source_excel_row": 17,
+            "column": "zmin",
+            "old_value": 0.049,
+            "new_value": 0.49,
+            "reference": "https://arxiv.org/html/2007.07755v1#S3.T5",
+            "reason": "Primary Table 5 defines the upper-z interval as (0.49,0.70]; pinned secondary transcription has an extra zero."
+          }
+        ]
+      }
+    },
+    {
+      "id": "HERMES_JAM_3710",
+      "filename": "HERMES2020_3710.xlsx",
+      "publication": "arXiv:2007.07755v1",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sidis/expdata/3710.xlsx",
+      "sha256": "90a084749da90ee76ed69da4028e82362b06775d64980f63ae8fda1eeba9dbd6",
+      "seed_path": "external/jam3d_dev_lib/database/sidis/expdata/3710.xlsx",
+      "source_kind": "secondary_transcription",
+      "adapter": {
+        "kind": "hermes_xlsx",
+        "view_id": "HERMES2020_pi_minus_3D",
+        "hadron": "pi-",
+        "dimension": 3,
+        "projection": "3D",
+        "sheet": "Sheet1",
+        "bins": {
+          "x": [
+            "xmin",
+            "xmax"
+          ],
+          "z": [
+            "zmin",
+            "zmax"
+          ],
+          "pT_GeV": [
+            "pTmin",
+            "pTmax"
+          ]
+        },
+        "expected_rows": 64,
+        "depolarization_column": "depole"
+      }
+    },
+    {
+      "id": "JAM_SIA_3000",
+      "filename": "JAM_sia_3000.xlsx",
+      "publication": "arXiv:1507.06824v2",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sia/expdata/3000.xlsx",
+      "sha256": "3a05cb304351b9281002953f83908ffeef09d0e255ed288af432de90d2387a1f",
+      "seed_path": "external/jam3d_dev_lib/database/sia/expdata/3000.xlsx",
+      "source_kind": "secondary_crosscheck"
+    },
+    {
+      "id": "JAM_SIA_3001",
+      "filename": "JAM_sia_3001.xlsx",
+      "publication": "arXiv:1507.06824v2",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sia/expdata/3001.xlsx",
+      "sha256": "8e3d805b4c7c010e90315f64f3a3d05932101c937eaeb1e4f3490fb4fd74788e",
+      "seed_path": "external/jam3d_dev_lib/database/sia/expdata/3001.xlsx",
+      "source_kind": "secondary_crosscheck"
+    },
+    {
+      "id": "JAM_SIA_3002",
+      "filename": "JAM_sia_3002.xlsx",
+      "publication": "arXiv:1507.06824v2",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sia/expdata/3002.xlsx",
+      "sha256": "6ba89df27e16626d8d3f6c887e1fe417135ab4f9f80437ba8d317487043d4f16",
+      "seed_path": "external/jam3d_dev_lib/database/sia/expdata/3002.xlsx",
+      "source_kind": "secondary_crosscheck"
+    },
+    {
+      "id": "JAM_SIA_3003",
+      "filename": "JAM_sia_3003.xlsx",
+      "publication": "arXiv:1507.06824v2",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/sia/expdata/3003.xlsx",
+      "sha256": "34fff74f10ecbbc703184ecdcab416e24032cbe04fb329345fbf8230348758f2",
+      "seed_path": "external/jam3d_dev_lib/database/sia/expdata/3003.xlsx",
+      "source_kind": "secondary_crosscheck"
+    },
+    {
+      "id": "JAM_lattice_2000",
+      "filename": "JAM_lattice_2000.xlsx",
+      "publication": "arXiv:1909.00485v2",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/database/lattice/expdata/2000.xlsx",
+      "sha256": "4b62d969c87d9f4c7668dfc1070baffb2b5da6fa5ea9f82c202a6a41b9a4a90c",
+      "seed_path": "external/jam3d_dev_lib/database/lattice/expdata/2000.xlsx",
+      "source_kind": "secondary_crosscheck"
+    },
+    {
+      "id": "arxiv_1909.01857v1",
+      "filename": "arxiv-1909.01857v1.html",
+      "publication": "arXiv:1909.01857v1",
+      "version": "1909.01857v1",
+      "url": "https://arxiv.org/html/1909.01857v1",
+      "sha256": "c504675476ca540a426d294006330ebc19f93b4269d4502dd717c613f29c979b",
+      "seed_path": "references/papers/1909.01857v1.html",
+      "source_kind": "primary_paper_table",
+      "adapter": {
+        "kind": "belle_html",
+        "tables": [
+          {
+            "table_id": "A2.T7",
+            "family": "charged_pt",
+            "hadron": "pi_charged_pair",
+            "expected_rows": 20,
+            "columns": 11,
+            "one_dimensional_rows": 4,
+            "observables": {
+              "A12_UL": 9,
+              "A12_UC": 10
+            }
+          },
+          {
+            "table_id": "A2.T8",
+            "family": "charged_z",
+            "hadron": "pi_charged_pair",
+            "expected_rows": 31,
+            "columns": 11,
+            "one_dimensional_rows": 6,
+            "observables": {
+              "A12_UL": 9,
+              "A12_UC": 10
+            }
+          },
+          {
+            "table_id": "A2.T9",
+            "family": "pi0_z",
+            "hadron": "pi0_pi_charged_pair",
+            "expected_rows": 31,
+            "columns": 10,
+            "one_dimensional_rows": 6,
+            "observables": {
+              "A12_pi0": 9
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "arxiv_1507.06824v2",
+      "filename": "arxiv-1507.06824v2.html",
+      "publication": "arXiv:1507.06824v2",
+      "version": "1507.06824v2",
+      "url": "https://arxiv.org/html/1507.06824v2",
+      "sha256": "c088d09ee89c3e8d0f45b9af2aa2c08bbb02c9fc491947d21d8f0ef0f79ecc92",
+      "seed_path": "data/raw/arxiv-1507.06824v2.html",
+      "source_kind": "primary_paper_table",
+      "adapter": {
+        "kind": "besiii_html"
+      }
+    },
+    {
+      "id": "arxiv_2507.16355v2",
+      "filename": "arxiv-2507.16355v2.html",
+      "publication": "arXiv:2507.16355v2",
+      "version": "2507.16355v2",
+      "url": "https://arxiv.org/html/2507.16355v2",
+      "sha256": "80480e5e5449179a35fa207f12c51ffbc15becee420769b3b5d2dabd0b0e1d2b",
+      "seed_path": "references/papers/2507.16355v2.html",
+      "source_kind": "primary_paper_table",
+      "adapter": {
+        "kind": "star510_html"
+      }
+    },
+    {
+      "id": "arxiv_2007.07755v1",
+      "filename": "arxiv-2007.07755v1.html",
+      "publication": "arXiv:2007.07755v1",
+      "version": "2007.07755v1",
+      "url": "https://arxiv.org/html/2007.07755v1",
+      "sha256": "16f52b92664f6367c93b3113a69e002eb7efdb3749f1e6d1c20d75e442ac0c2e",
+      "seed_path": "references/papers/2007.07755v1.html",
+      "source_kind": "primary_binning_and_convention_crosscheck"
+    },
+    {
+      "id": "STAR200_HEPData_v1",
+      "filename": "STAR200-HEPData-v1.tar.gz",
+      "publication": "arXiv:2205.11800v2",
+      "version": "hepdata.130778.v1",
+      "url": "https://www.hepdata.net/download/submission/ins2087127/1/yaml",
+      "sha256": "e71495bb838710f3c9161698ea55213c8fb69033a5c0f467f0c27a8de13d3269",
+      "seed_path": "data/raw/STAR200-HEPData-v1.tar.gz",
+      "source_kind": "primary_HEPData_archive",
+      "adapter": {
+        "kind": "star_hepdata",
+        "doi": "10.17182/hepdata.130778.v1",
+        "energy_GeV": 200,
+        "tables": [
+          {
+            "data_file": "table14Top2015_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t24",
+            "hadron": "pi+",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2015"
+          },
+          {
+            "data_file": "table14Top2015_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t25",
+            "hadron": "pi-",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2015"
+          },
+          {
+            "data_file": "table14Top2012_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t26",
+            "hadron": "pi+",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2012"
+          },
+          {
+            "data_file": "table14Top2012_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t27",
+            "hadron": "pi-",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2012"
+          },
+          {
+            "data_file": "table14Bottom2015_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t28",
+            "hadron": "pi+",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2015"
+          },
+          {
+            "data_file": "table14Bottom2015_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t29",
+            "hadron": "pi-",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2015"
+          },
+          {
+            "data_file": "table14Bottom2012_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t30",
+            "hadron": "pi+",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2012"
+          },
+          {
+            "data_file": "table14Bottom2012_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t31",
+            "hadron": "pi-",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "2012"
+          },
+          {
+            "data_file": "table15Top_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t32",
+            "hadron": "pi+",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table15Top_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t33",
+            "hadron": "pi-",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table15Bottom_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t34",
+            "hadron": "pi+",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table15Bottom_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t35",
+            "hadron": "pi-",
+            "coordinate": "jet_pT_GeV",
+            "expected_rows": 10,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16TopLeft_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t36",
+            "hadron": "pi+",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16TopLeft_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t37",
+            "hadron": "pi-",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16TopMid_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t38",
+            "hadron": "pi+",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16TopMid_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t39",
+            "hadron": "pi-",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16TopRight_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t40",
+            "hadron": "pi+",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16TopRight_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t41",
+            "hadron": "pi-",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16BottomLeft_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t42",
+            "hadron": "pi+",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16BottomLeft_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t43",
+            "hadron": "pi-",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16BottomMid_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t44",
+            "hadron": "pi+",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16BottomMid_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t45",
+            "hadron": "pi-",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16BottomRight_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t46",
+            "hadron": "pi+",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table16BottomRight_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t47",
+            "hadron": "pi-",
+            "coordinate": "z",
+            "expected_rows": 8,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17TopLeft_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t48",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17TopLeft_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t49",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17TopMid_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t50",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17TopMid_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t51",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17TopRight_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t52",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17TopRight_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t53",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17BottomLeft_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t54",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17BottomLeft_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t55",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17BottomMid_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t56",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17BottomMid_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t57",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17BottomRight_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t58",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table17BottomRight_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t59",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18Top_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t60",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18Top_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t61",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18MidUp_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t62",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18MidUp_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t63",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18MidDown_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t64",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18MidDown_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t65",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18Bottom_piPlus.yaml",
+            "view_id": "STAR200_HEPData_t66",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          },
+          {
+            "data_file": "table18Bottom_piMinus.yaml",
+            "view_id": "STAR200_HEPData_t67",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "combined_2012_2015"
+          }
+        ]
+      }
+    },
+    {
+      "id": "STAR510_HEPData_v1",
+      "filename": "STAR510-HEPData-v1.tar.gz",
+      "publication": "arXiv:2507.16355v2",
+      "version": "hepdata.160728.v1",
+      "url": "https://www.hepdata.net/download/submission/ins2952956/1/yaml",
+      "sha256": "bcf7c2cd9aa2ccfae756b8f718fa614f397dcefb5d79c4953b9d2732e1a38f01",
+      "seed_path": "data/raw/STAR510-HEPData-v1.tar.gz",
+      "source_kind": "primary_HEPData_archive",
+      "adapter": {
+        "kind": "star_hepdata",
+        "doi": "10.17182/hepdata.160728.v1",
+        "energy_GeV": 510,
+        "tables": [
+          {
+            "data_file": "figure2_$\\pi^+$.yaml",
+            "view_id": "STAR510_HEPData_t1",
+            "hadron": "pi+",
+            "coordinate": "jet_xT",
+            "expected_rows": 13,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure2_$\\pi^-$.yaml",
+            "view_id": "STAR510_HEPData_t2",
+            "hadron": "pi-",
+            "coordinate": "jet_xT",
+            "expected_rows": 13,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure3_$\\pi^+$.yaml",
+            "view_id": "STAR510_HEPData_t3",
+            "hadron": "pi+",
+            "coordinate": "z",
+            "expected_rows": 7,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure3_$\\pi^-$.yaml",
+            "view_id": "STAR510_HEPData_t4",
+            "hadron": "pi-",
+            "coordinate": "z",
+            "expected_rows": 7,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.1<z<0.2$_$\\pi^+$.yaml",
+            "view_id": "STAR510_HEPData_t5",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.1<z<0.2$_$\\pi^-$.yaml",
+            "view_id": "STAR510_HEPData_t6",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 6,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.2<z<0.3$_$\\pi^+$.yaml",
+            "view_id": "STAR510_HEPData_t7",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.2<z<0.3$_$\\pi^-$.yaml",
+            "view_id": "STAR510_HEPData_t8",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 5,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.3<z<0.4$_$\\pi^+$.yaml",
+            "view_id": "STAR510_HEPData_t9",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 4,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.3<z<0.4$_$\\pi^-$.yaml",
+            "view_id": "STAR510_HEPData_t10",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 4,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.4<z<0.8$_$\\pi^+$.yaml",
+            "view_id": "STAR510_HEPData_t11",
+            "hadron": "pi+",
+            "coordinate": "jT_GeV",
+            "expected_rows": 3,
+            "sample": "2017"
+          },
+          {
+            "data_file": "figure4_$0.4<z<0.8$_$\\pi^-$.yaml",
+            "view_id": "STAR510_HEPData_t12",
+            "hadron": "pi-",
+            "coordinate": "jT_GeV",
+            "expected_rows": 3,
+            "sample": "2017"
+          }
+        ]
+      }
+    }
+  ],
+  "known_unavailable_sources": [
+    {
+      "id": "STAR_physical_bin_acceptance_and_covariance",
+      "status": "official archives acquired; low/high plot coordinate intervals are systematic error boxes, not physical integration edges; binning/covariance review remains required"
+    },
+    {
+      "id": "COMPASS2022_final_tables",
+      "paper": "2401.00309",
+      "status": "not_acquired; unidentified-hadron mixture and overlap review required"
+    }
+  ]
+}

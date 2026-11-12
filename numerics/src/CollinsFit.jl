@@ -19,6 +19,7 @@ matrix(rows) = isempty(rows) ? zeros(0, 0) : reduce(vcat, permutedims.(Vector{Fl
 
 function load_context(datafile, kernelfile)
     d, k = JSON.parsefile(datafile), JSON.parsefile(kernelfile)
+    d["scope"] in ("synthetic_closure", "production") || error("experimental candidates are not admitted fit data")
     length(d["points"]) == length(k["bins"]) || error("kernel/data size mismatch")
     [p["id"] for p in d["points"]] == [b["point_id"] for b in k["bins"]] || error("kernel point order mismatch")
     d["scope"] == k["scope"] || error("kernel/data scope mismatch")

@@ -4,6 +4,8 @@ This project uses a **Julia numerical core with Python/Snakemake job orchestrati
 
 The current implementation supports **synthetic closure runs; production physics fits remain blocked**. The 66-point fixture exercises predictions, covariance and nuisance handling, derivatives, multistart optimization, replicas, holdouts and artifact validation. It contains no experimental measurements. The original KPSY15 fitting program and modified HOPPET implementation have not been located.
 
+Experimental intake is now available separately: it acquires 22 pinned sources and normalizes 773 amplitudes across 82 overlapping candidate views. Candidates preserve source locators, units, statistical/systematic components, bin corrections and unresolved admission requirements. They are rejected by the fitting path. See the [experimental data review](docs/experimental-data.md).
+
 ## Running the workflow
 
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.
@@ -30,6 +32,8 @@ collinsflow readiness  # Expected exit code 2 while production prerequisites are
 ```
 
 CI runs the tests, Fortran ABI checks and complete Snakemake closure workflow on Linux. Run artifacts are retained for 30 days. Changes to `main` use pull requests and squash merges; see the [Git policy](docs/git-policy.md).
+
+Acquire and validate experimental candidates with `snakemake --snakefile workflow/experimental-intake.smk --cores 2`. Raw and normalized outputs remain outside Git. A separate source-intake workflow verifies public downloads and hashes when the source manifest or parser changes.
 
 ## Project status and interfaces
 

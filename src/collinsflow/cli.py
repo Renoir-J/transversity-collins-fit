@@ -5,6 +5,7 @@ import json
 import sys
 
 from .data import normalize_table, plan_update, validate_dataset
+from .experimental import run_intake
 from .pipeline import Blocked, execute, production_readiness, root_path, run_stage
 from .provenance import read_json
 
@@ -13,6 +14,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("readiness")
+    intake = commands.add_parser("intake")
+    intake.add_argument("--manifest", default="config/experimental-sources.json")
+    intake.add_argument("--cache", default="data/raw/intake")
+    intake.add_argument("--output", default="data/normalized/intake")
+    intake.add_argument("--seed-root")
+    intake.add_argument("--offline", action="store_true")
     validate = commands.add_parser("validate-data")
     validate.add_argument("data")
     normalize = commands.add_parser("normalize")
@@ -35,7 +42,10 @@ def main():
             missing = production_readiness(root_path())
             print(json.dumps({"production_ready": not missing, "missing": missing}, indent=2))
             return 2 if missing else 0
-        if args.command == "validate-data":
+        if args.command == "intake":
+            result = run_intake(args.manifest, args.cache, args.output,
+                                seed_root=args.seed_root, offline=args.offline)
+        elif args.command == "validate-data":
             result = validate_dataset(read_json(args.data))
         elif args.command == "normalize":
             result = normalize_table(args.source, args.mapping, args.output)

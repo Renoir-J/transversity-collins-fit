@@ -1,4 +1,4 @@
-using Test, CollinsFit, ForwardDiff, LinearAlgebra
+using Test, CollinsFit, ForwardDiff, LinearAlgebra, JSON
 
 @testset "LO transversity moments and fixed-operator AD" begin
     @test transversity_moment(1) ≈ -2/3
@@ -10,6 +10,20 @@ using Test, CollinsFit, ForwardDiff, LinearAlgebra
     theta = [0.4, -0.1]
     @test ForwardDiff.jacobian(f, theta) ≈ U * Diagonal([0.8, exp(-0.1)])
     @test dot([0.3, 0.7], f(theta)) ≈ dot(operator_adjoint(U, [0.3, 0.7]), [theta[1]^2, exp(theta[2])])
+end
+
+@testset "experimental intake cannot enter a numerical fit" begin
+    root = normpath(joinpath(@__DIR__, "../.."))
+    data = JSON.parsefile(joinpath(root, "fixtures/closure/data.json"))
+    kernel = JSON.parsefile(joinpath(root, "fixtures/closure/kernel.json"))
+    data["scope"] = "experimental_candidate"
+    kernel["scope"] = "experimental_candidate"
+    mktempdir() do directory
+        datafile, kernelfile = joinpath(directory, "data.json"), joinpath(directory, "kernel.json")
+        CollinsFit.writejson(datafile, data)
+        CollinsFit.writejson(kernelfile, kernel)
+        @test_throws ErrorException load_context(datafile, kernelfile)
+    end
 end
 
 @testset "synthetic optimizer and prediction recovery" begin
