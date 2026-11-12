@@ -74,6 +74,7 @@ jobs:
               ;;
             inputs)
               julia --project=numerics numerics/bin/check_observable_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-observables/inputs.json | tee runs/ci-observables/inputs-native.log
+              julia --project=numerics numerics/bin/check_sidis_conventions.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-observables/sidis-source.json | tee runs/ci-observables/sidis-source-native.log
               ;;
           esac
       - name: Upload scoped numerical evidence

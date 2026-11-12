@@ -28,6 +28,7 @@
     "structure_function_ratio": "FUT/FUU; no depolarization factor",
     "sin_phi_sum_amplitude": "DNN(y)*FUT/FUU, DNN=2*(1-y)/(1+(1-y)^2); phi_h+phi_s convention",
     "selection": "Caller must explicitly select the publication convention and source; no automatic depolarization or angle-sign inference",
+    "source_convention_contract": "config/sidis-convention-contract.json",
     "kinematics": "Fixed point or reported means; finite P integration fixes all other kinematics, so the common sigma0 cancels. General x/z/Q2/y acceptance integration is not supplied."
   },
   "SIA": {
