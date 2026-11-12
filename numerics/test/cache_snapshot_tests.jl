@@ -34,6 +34,17 @@ Base.show(io::IO,::Type{SyntheticSnapshotFloat})=print(io,synthetic_snapshot_typ
     @test CollinsFit.numerical_snapshot(array)==old_array
 end
 
+@testset "owned-row block type name retains parent framing" begin
+    fixture=JSON.parsefile(joinpath(@__DIR__,"../../fixtures/closure/snapshot-owned-block.json"))
+    blocks=[(Int[1,2],CollinsFit.fixed_rows(reshape([.25,.5,.75,1.],2,2))),
+            (Int[3],CollinsFit.fixed_rows(reshape([.125,.375],2,1)))]
+    @test fixture["scope"]=="synthetic_cache_integrity_fixture"
+    @test fixture["native_endian"]==Int(Base.ENDIAN_BOM)
+    @test fixture["native_word_size"]==Sys.WORD_SIZE
+    @test CollinsFit.snapshot_type_name(eltype(blocks))==fixture["type_name"]
+    @test CollinsFit.numerical_snapshot(blocks)==fixture["snapshot"]
+end
+
 @testset "complete fixed-array snapshots and typed metadata" begin
     snapshot=CollinsFit.numerical_snapshot
     values=reshape(collect(1.:100000.),100,1000)

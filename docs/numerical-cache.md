@@ -12,11 +12,13 @@ sequences and sorted string-keyed metadata. An explicit native-endian marker is
 included. Accessible mutable arrays are checked completely before application.
 
 Names for the 14 built-in Julia primitive numeric types are stored as immutable
-strings at module load. Other types keep runtime `string(T)` formatting. This
+strings at module load, together with the internal `(indices, owned rows)` block
+element type. Other types keep runtime `string(T)` formatting. This
 reduces repeated type-display work without changing a snapshot byte or sampling
 array content. Parent-generated synthetic scalar/matrix digests cover all 14
 types and a composite metadata example; a custom-type display regression checks
-the fallback. These digest fixtures explicitly declare their native-endian format.
+the fallback. A separate parent golden covers the block framing and declares its
+native word size. These fixtures explicitly declare their native-endian format.
 
 Retained row matrices are large and fixed. Preparation copies each distinct
 matrix into owned storage, computes its complete snapshot once and exposes a

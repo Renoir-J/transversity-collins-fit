@@ -77,6 +77,8 @@ struct FixedRowMatrix <: AbstractMatrix{Float64}
         new(storage,numerical_snapshot(storage))
     end
 end
+@eval snapshot_type_name(::Type{Tuple{Vector{Int},FixedRowMatrix}})=
+    $(string(Tuple{Vector{Int},FixedRowMatrix}))
 fixed_rows(rows::FixedRowMatrix)=rows
 fixed_rows(rows::AbstractMatrix{Float64})=FixedRowMatrix(rows)
 Base.size(rows::FixedRowMatrix)=size(getfield(rows,:_storage))
