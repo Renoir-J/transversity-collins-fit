@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "sources": [
+    {
+      "filename": "CT10nlo.info",
+      "url": "https://lhapdfsets.web.cern.ch/current/CT10nlo/CT10nlo.info",
+      "sha256": "0af15a7b84026509e24fd682180b4b955918d9ba4bd90c25e2155fc69f09284a",
+      "source_kind": "official_LHAPDF_distribution",
+      "id": "CT10_info",
+      "group": "CT10nlo",
+      "version": "DataVersion4",
+      "seed_path": "references/sources/physics-inputs/CT10nlo.info"
+    },
+    {
+      "filename": "CT10nlo_0000.dat",
+      "url": "https://lhapdfsets.web.cern.ch/current/CT10nlo/CT10nlo_0000.dat",
+      "sha256": "debe4b3a9dc9f319fb39b27b2553a6ed8abf72718a2c728c4cfc532e52cfe1b7",
+      "source_kind": "official_LHAPDF_distribution",
+      "id": "CT10_central",
+      "group": "CT10nlo",
+      "version": "DataVersion4",
+      "seed_path": "references/sources/physics-inputs/CT10nlo_0000.dat"
+    },
+    {
+      "filename": "DSSV08.f",
+      "url": "https://raw.githubusercontent.com/ChristopherCocuzza/Resume/c15b5855986098a1caeb604df67766e276573f00/Analysis/analysis/qpdlib/sets/DSSV/dssv.f",
+      "sha256": "a97383691a9a04250b8926b0c1782a9653cfd4092ce04ba6b9560c8e38aded8f",
+      "source_kind": "secondary_code_distribution",
+      "id": "DSSV08_code",
+      "group": "DSSV08",
+      "version": "c15b5855986098a1caeb604df67766e276573f00",
+      "seed_path": "references/sources/physics-inputs/DSSV08.f"
+    },
+    {
+      "filename": "DSSV08-GRID.NLO",
+      "url": "https://raw.githubusercontent.com/ChristopherCocuzza/Resume/c15b5855986098a1caeb604df67766e276573f00/Analysis/analysis/qpdlib/sets/DSSV/Grids/DSSV-GRID.NLO",
+      "sha256": "85e7f501c9089635104d4ca078a88afdfca59d228c4a0122dc165da0c9e18408",
+      "source_kind": "secondary_code_distribution",
+      "id": "DSSV08_grid",
+      "group": "DSSV08",
+      "version": "c15b5855986098a1caeb604df67766e276573f00",
+      "seed_path": "references/sources/physics-inputs/DSSV08-GRID.NLO"
+    },
+    {
+      "filename": "DSS14.f",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/obslib/AN_pp/Collins_hadron_in_jet_Kang/fDSS.f",
+      "sha256": "39d43aa2d15a8cca2792bfad53c0de09c97c1359d39819872f076d50dfecd3e0",
+      "source_kind": "secondary_code_distribution",
+      "id": "DSS14_code",
+      "group": "DSS14",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "seed_path": "references/sources/physics-inputs/DSS14.f"
+    },
+    {
+      "filename": "PI_DSS14.GRID",
+      "url": "https://raw.githubusercontent.com/pitonyak25/jam3d_dev_lib/3717fe101f6d7d4fb403c7256e3ca10de57b3e5f/obslib/AN_pp/Collins_hadron_in_jet_Kang/PI_DSS14.GRID",
+      "sha256": "0558ae539d34084d05f3d79a77c97665d8952a1057423aa23dd0e6a8de55d724",
+      "source_kind": "secondary_code_distribution",
+      "id": "DSS14_grid",
+      "group": "DSS14",
+      "version": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f",
+      "seed_path": "references/sources/physics-inputs/PI_DSS14.GRID"
+    },
+    {
+      "id": "LHAPDF_source",
+      "group": "LHAPDF",
+      "filename": "LHAPDF-6.5.6.tar.gz",
+      "url": "https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.5.6.tar.gz",
+      "sha256": "6b8b7e38dc26a977a24f5a321215b7054c14a4469d04134d70cb93a860eeeea7",
+      "source_kind": "official_source_release",
+      "version": "6.5.6",
+      "seed_path": ".runtime/lhapdf-sources/LHAPDF-6.5.6.tar.gz"
+    }
+  ]
+}

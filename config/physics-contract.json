@@ -30,6 +30,7 @@
   "experimental_data_manifest": "config/experimental-sources.json",
   "reconstructed_collinear_evolution_contract": "config/evolution-contract.json",
   "reconstructed_css_contract": "config/css-contract.json",
+  "reconstructed_parton_input_contract": "config/parton-contract.json",
   "data_admission": {
     "candidate_scope": "experimental_candidate",
     "candidate_enters_optimizer": false,

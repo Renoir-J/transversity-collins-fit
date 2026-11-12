@@ -46,5 +46,6 @@
     "collinear_max_moment_relative": 0.0001,
     "refinement_error_ratio_max": 0.6
   },
-  "not_implemented": ["Wilson/hard matching coefficients", "unpolarized CT10/DSSV/DSS input interface", "Bessel transforms and physical SIDIS/SIA/STAR predictions", "historical fit and uncertainty calibration", "production admission and same-contract historical HOPPET comparison"]
+  "parton_input_contract": "config/parton-contract.json",
+  "not_implemented": ["Wilson/hard matching coefficients", "Bessel transforms and physical SIDIS/SIA/STAR predictions", "historical fit and uncertainty calibration", "production admission and same-contract historical HOPPET comparison"]
 }

@@ -51,7 +51,7 @@ def utc_now():
 def computational_sources(root):
     root = Path(root)
     files = []
-    for directory in ("src", "numerics/src", "numerics/bin", "fortran", "workflow", "config", "fixtures"):
+    for directory in ("src", "numerics/src", "numerics/bin", "fortran", "bridges", "workflow", "config", "fixtures"):
         files.extend(p for p in (root / directory).rglob("*") if p.is_file()
                      and not any(part == "__pycache__" or part.endswith(".egg-info") for part in p.parts)
                      and p.suffix not in {".so", ".dll", ".dylib", ".o", ".mod"}

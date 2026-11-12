@@ -10,6 +10,8 @@ A [reconstructed LO collinear evolution component](docs/evolution.md) now covers
 
 [Reconstructed two-loop coupling and CSS factors](docs/css.md) are available under a separate explicit contract. Independent analytic, adaptive-integration and derivative checks cover these components; matching coefficients, physical process assembly and historical reproduction remain incomplete.
 
+[Reconstructed CT10/DSSV08/DSS14 input interfaces](docs/parton-inputs.md) retain locked source versions and compare against unchanged reference programs. Default queries reject unsupported ranges; explicit reference extrapolation does not authorize production fits.
+
 ## Running the workflow
 
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.
