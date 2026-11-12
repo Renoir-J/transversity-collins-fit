@@ -135,15 +135,30 @@ function initial_conditions(x,z,soffer,ff;provenance=Dict{String,Any}("input_kin
     InitialConditions(xs,zs,Float64.(soffer),Float64.(ff),2.4,copy(provenance))
 end
 
-"Load strict Q0 support once; no provider callbacks enter initial parameter evaluation."
-function prepare_initial_conditions(pdf::CT10Input,helicity::LegacyPartonInput,ff::LegacyPartonInput,x,z)
-    helicity.kind==:DSSV08 && ff.kind==:DSS14 || error("DSSV08 and DSS14 inputs required")
-    xs,zs = collinear_grid(x),collinear_grid(z)
-    first(xs)>=1e-5 && first(zs)>=.05 || error("initial grid outside strict input support")
+"Strict u/d Soffer inputs at the contracted initial scale."
+function prepare_initial_soffer(pdf::CT10Input,helicity::LegacyPartonInput,x)
+    helicity.kind==:DSSV08 || error("DSSV08 input required")
+    xs=collinear_grid(x)
+    first(xs)>=1e-5 || error("initial grid outside strict input support")
     all(x -> parton_domain(pdf,x,2.4)["within_grid"],xs) || error("initial PDF extrapolation is not admitted")
     values = ct10_batch(pdf,[2,1],xs,fill(2.4,length(xs)))
     soffer = [(values[f,j]/x+parton_helicity(helicity,pid,x,2.4))/2 for (f,pid) in enumerate((2,1)),(j,x) in enumerate(xs)]
+    xs,soffer
+end
+
+"Strict four pi+ fragmentation bases, without an unnecessary PDF dependency."
+function prepare_initial_ff(ff::LegacyPartonInput,z)
+    ff.kind==:DSS14 || error("DSS14 input required")
+    zs=collinear_grid(z)
+    first(zs)>=.05 || error("initial grid outside strict input support")
     bases = hcat([pion_ff(ff,[2,1,3,-3],1,y,2.4) for y in zs]...)
+    zs,bases
+end
+
+"Load strict Q0 support once; no provider callbacks enter initial parameter evaluation."
+function prepare_initial_conditions(pdf::CT10Input,helicity::LegacyPartonInput,ff::LegacyPartonInput,x,z)
+    xs,soffer=prepare_initial_soffer(pdf,helicity,x)
+    zs,bases=prepare_initial_ff(ff,z)
     initial_conditions(xs,zs,soffer,bases;provenance=Dict{String,Any}("input_kind"=>"pinned_CT10_DSSV08_DSS14",
         "scope"=>"reconstructed_theory","production_ready"=>false,"initial_extrapolation"=>false,
         "input_manifest_sha256"=>bytes2hex(sha256(read(PARTON_MANIFEST)))))

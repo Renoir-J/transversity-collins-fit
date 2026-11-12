@@ -15,7 +15,7 @@ module collins_hoppet_bridge
   real(dp), allocatable, save :: times(:)
   integer(c_int64_t), save :: generation=0_c_int64_t
   logical, save :: active=.false.
-  public :: cf_hoppet_abi, cf_hoppet_open, cf_hoppet_close, cf_hoppet_grid
+  public :: cf_hoppet_abi, cf_hoppet_open, cf_hoppet_open_batched, cf_hoppet_close, cf_hoppet_grid
   public :: cf_hoppet_forward, cf_hoppet_adjoint, cf_hoppet_generator, cf_hoppet_evaluate
   public :: cf_hoppet_info, cf_hoppet_rows, cf_hoppet_collins, cf_hoppet_collins_rows
 contains
@@ -67,6 +67,25 @@ contains
     real(c_double), intent(in) :: tau(ntau)
     integer(c_int), intent(out) :: n,status
     integer(c_int64_t), intent(out) :: handle
+    call open_context(ymax,lower_x,dy,order,layout,eps,du,nf,ntau,tau,n,handle,status,.false.)
+  end subroutine
+
+  subroutine cf_hoppet_open_batched(ymax,lower_x,dy,order,layout,eps,du,nf,ntau,tau,n,handle,status) bind(C)
+    real(c_double), value :: ymax,lower_x,dy,eps,du
+    integer(c_int), value :: order,layout,nf,ntau
+    real(c_double), intent(in) :: tau(ntau)
+    integer(c_int), intent(out) :: n,status
+    integer(c_int64_t), intent(out) :: handle
+    call open_context(ymax,lower_x,dy,order,layout,eps,du,nf,ntau,tau,n,handle,status,.true.)
+  end subroutine
+
+  subroutine open_context(ymax,lower_x,dy,order,layout,eps,du,nf,ntau,tau,n,handle,status,batched)
+    real(c_double), intent(in) :: ymax,lower_x,dy,eps,du
+    integer(c_int), intent(in) :: order,layout,nf,ntau
+    real(c_double), intent(in) :: tau(ntau)
+    integer(c_int), intent(out) :: n,status
+    integer(c_int64_t), intent(out) :: handle
+    logical, intent(in) :: batched
     type(dglap_holder), target :: holder
     type(running_coupling), target :: auxiliary
     type(evln_operator) :: evop
@@ -141,18 +160,76 @@ contains
     ! ev_SetModuleConsts. Use the public default setter, then restore it.
     saved_du=DefaultEvolutionDu()
     call SetDefaultEvolutionDu(du)
-    do k=1,ntau
-      if (tau(k)==0.0_dp) cycle
-      call InitEvlnOperator(holder,evop,auxiliary,100.0_dp,100.0_dp*exp(pi*tau(k)),nloop=1,du=du)
-      call InitGridConv(kernels(k),evop%P%NS_plus)
-      call Delete(evop)
-    end do
+    if (batched) then
+      call prepare_batched_kernels(holder,auxiliary,nf,du)
+    else
+      do k=1,ntau
+        if (tau(k)==0.0_dp) cycle
+        call InitEvlnOperator(holder,evop,auxiliary,100.0_dp,100.0_dp*exp(pi*tau(k)),nloop=1,du=du)
+        call InitGridConv(kernels(k),evop%P%NS_plus)
+        call Delete(evop)
+      end do
+    end if
     call SetDefaultEvolutionDu(saved_du)
     call Delete(generator)
     call Delete(holder)
     call Delete(auxiliary)
     generation=generation+1_c_int64_t
     active=.true.; n=u; handle=generation; status=0_c_int
+  end subroutine
+
+  ! Advance retained derived probes, not an evop that EvolveGeneric would reset.
+  subroutine prepare_batched_kernels(holder,auxiliary,nf,du)
+    type(dglap_holder), intent(in), target :: holder
+    type(running_coupling), intent(in), target :: auxiliary
+    integer, intent(in) :: nf
+    real(dp), intent(in) :: du
+    real(dp), pointer :: working(:,:,:)=>null(), exported(:,:,:)=>null()
+    type(split_mat) :: snapshot
+    integer, allocatable :: permutation(:)
+    integer :: direction,it,k,previous,probe,position
+    real(dp) :: Q_previous,Q_current
+    logical :: duplicate
+    allocate(permutation(size(times)))
+    call indexx(times,permutation)
+    do direction=1,-1,-2
+      previous=0; Q_previous=100.0_dp
+      do it=1,size(times)
+        position=it
+        if (direction==-1) position=size(times)+1-it
+        k=permutation(position)
+        if (direction==1 .and. times(k)<=0.0_dp) cycle
+        if (direction==-1 .and. times(k)>=0.0_dp) cycle
+        if (.not. associated(working)) call GetDerivedSplitMatProbes(grid,nf,working)
+        duplicate=.false.
+        if (previous>0) duplicate=times(k)==times(previous)
+        if (duplicate) then
+          call InitGridConv(kernels(k),kernels(previous))
+        else
+          Q_current=100.0_dp*exp(pi*times(k))
+          call DisableGridLocking()
+          do probe=1,size(working,3)
+            call EvolveGeneric(holder,auxiliary,Q_previous,Q_current,pdf=working(:,:,probe),nloop=1,du=du)
+          end do
+          allocate(exported(lbound(working,1):ubound(working,1),lbound(working,2):ubound(working,2), &
+                            lbound(working,3):ubound(working,3)))
+          exported=working
+          call AllocSplitMat(grid,snapshot,nf)
+          ! This call consumes exported and restores the grid-lock override.
+          call SetDerivedSplitMat(snapshot,exported)
+          nullify(exported)
+          call InitGridConv(kernels(k),snapshot%NS_plus)
+          call Delete(snapshot)
+          Q_previous=Q_current
+        end if
+        previous=k
+      end do
+      if (associated(working)) then
+        deallocate(working)
+        nullify(working)
+        call RestoreGridLocking()
+      end if
+    end do
   end subroutine
 
   logical function valid(handle,n)

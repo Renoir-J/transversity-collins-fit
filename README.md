@@ -12,13 +12,15 @@ A [reconstructed LO collinear evolution component](docs/evolution.md) now covers
 
 [Reconstructed CT10/DSSV08/DSS14 input interfaces](docs/parton-inputs.md) retain locked source versions and compare against unchanged reference programs. Default queries reject unsupported ranges; explicit reference extrapolation does not authorize production fits.
 
-[SIDIS/SIA matching and Fourier-Bessel components](docs/leptonic.md) assemble structure functions from supplied matched legs. Analytic comparisons cover normalization, charge conjugation and derivatives. A pinned-input unpolarized pilot keeps unsupported-scale queries explicitly labeled; efficient many-scale polarized integration, observable adapters and the historical fit remain incomplete.
+[SIDIS/SIA matching and Fourier-Bessel components](docs/leptonic.md) assemble structure functions from supplied matched legs. Analytic comparisons cover normalization, charge conjugation and derivatives. Pinned-input pilots keep unsupported-scale queries explicitly labeled; observable adapters and the historical fit remain incomplete.
 
-[Initial transversity/Collins parameterizations](docs/initial-conditions.md) now retain physical boundary values and connect strict initial inputs to fixed-scale LO evolution. These are reconstructed components; efficient many-scale integration, observable adapters and the historical fit remain incomplete.
+[Initial transversity/Collins parameterizations](docs/initial-conditions.md) retain physical boundary values and connect strict initial inputs to fixed-scale LO evolution. These remain reconstructed components; observable adapters and the historical fit are incomplete.
 
 A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use the same contracted LO equation. They retain upstream convolution/evolution and fix the x-weight, auxiliary-time and derivative conventions explicitly. Physical source-knot checks use query-aligned native grids; the rejected global-grid pilot remains documented. These components do not admit production fits or establish physical fitting throughput.
 
 [Evolved polarized matching rows](docs/matched-rows.md) combine fixed-scale evolution with SIDIS/SIA Wilson coefficients before fitting. Physical alpha_s, process constants and the homogeneous Collins approximation are explicit. Generic Julia row products retain parameter derivatives after native preparation closes. Observable assembly and production admission remain separate requirements.
+
+[Polarized leptonic process contexts](docs/polarized-processes.md) join the initial family, every supplied radial evolution/matching scale and signed SIDIS/SIA structure functions. Retained probe batching reduces repeated native preparation, and fixed Julia row products handle fitted parameters and nested derivatives. Analytic and pinned-input validation have separate producers; these contexts do not admit experimental observables or fits.
 
 ## Running the workflow
 

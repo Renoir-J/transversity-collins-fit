@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HOPPET-BATCH-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "parent_contract": "config/hoppet-contract.json",
+  "default_construction": "batched_probes",
+  "reference_construction": "independent",
+  "equation_change": false,
+  "scale_interpolation": false,
+  "algorithm": "Sort the supplied nonzero tau values into separate positive/negative branches, each starting from fresh identity-derived split-matrix probes. Advance the working pdf probes between adjacent auxiliary scales using retained EvolveGeneric(pdf=...,nloop=1). Export an operator at every requested tau with AllocSplitMat/SetDerivedSplitMat. Keep outputs in requested order; copy duplicate operators and retain an explicit tau0 identity.",
+  "ownership": "GetDerivedSplitMatProbes allocates its returned array. Keep working probes alive for each branch; export from a fresh copy because SetDerivedSplitMat consumes/deallocates its probes. Delete exported temporary split matrices and deallocate working arrays explicitly.",
+  "grid_locking": "GetDerivedProbes overrides native grid locking; export restores it. Call public DisableGridLocking before each incremental probe evolution and RestoreGridLocking after each branch. No ordinary distribution is evaluated with the override active. Construction remains serialized inside an isolated process.",
+  "time_step": "Use the same physical-to-auxiliary time mapping and effective public default-du setter as the parent contract. New segment boundaries can change RK discretization error, requiring independent Mellin/physical/derivative checks. Never assume EvolveGeneric(evop=...) advances an existing operator; its implementation reinitializes probes.",
+  "reference": "The unchanged independent-construction C entry point remains available. Compare identical requested scales, grids, solver settings, initial inputs and matching conventions before reporting timing ratios.",
+  "validation_policy": {
+    "value_max_scaled": 0.0001,
+    "operator_row_max_scaled": 0.0001,
+    "derivative_max_scaled": 0.0000001,
+    "adjoint_max_scaled": 1e-10,
+    "identity_max_abs": 0.0,
+    "queries": [0.0065,0.1,0.8],
+    "mixed_Q2_GeV2": [100.0,0.6,2.4,10.0,0.6,1000.0,2.4,0.56,1e20],
+    "resource_scales": 64,
+    "resource_Q2_GeV2": [0.6,10000.0],
+    "physical_radial_workload": "Use the actual source/scale-knot-split radial rule from the leptonic pilot, not an identity array or substituted evenly spaced physical scales. Evaluate its requested mu_b squared scales. Compare selected native-independent scales and independent analytic Mellin values; report actual cold/warm time and coefficient payload without G2PERF admission."
+  },
+  "limits": ["Construction optimization only; original kernel, coupling, thresholds and matching conventions remain separately contracted", "No production fitting-throughput, peak-memory or uncertainty-coverage certificate", "Full physical process/observable, source-range, historical and data/likelihood admission remain required"]
+}

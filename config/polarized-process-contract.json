@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-POLARIZED-PROCESS-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "source": "https://arxiv.org/html/1505.05589v1",
+  "equations": [67,68,73,74,105,108,109],
+  "contracts": ["config/initial-contract.json", "config/css-contract.json", "config/parton-contract.json", "config/leptonic-contract.json", "config/matched-rows-contract.json", "config/hoppet-batch-contract.json"],
+  "outputs": "Signed UU and Collins structure functions at fixed kinematics, integrated over the explicitly supplied finite radial interval. No angular factor, depolarization factor, double ratio, bin integration, acceptance or data likelihood is inferred.",
+  "initial_conditions": "KPSY-INITIAL-001 at Q0 squared=2.4 GeV squared, fixed nf=5 and Lambda=0.225 GeV. Only valence u/d transversity; four independent pi+ Collins bases u,d,s,sbar. Heavy Collins and sea transversity are exactly zero. Preserve the parent charge-independent strange Collins prescription, including unequal s/sbar bases; do not silently change this historical approximation.",
+  "initial_sampling": "Strict CT10/DSSV08 Soffer samples and DSS14 four-basis samples are prepared once at Q0. Negative Soffer inputs are rejected, not clipped. Parameter factors and derivatives remain Julia generic arithmetic. Explicit analytic samples are permitted for mathematical validation, never as substituted physical inputs.",
+  "evolution_and_matching": "Prepare retained query-bound matched rows at every actual mu_b squared radial scale, with physical alpha_s and process-specific matching. No scale interpolation or replaced identity-scale workload. Fixed scales and matching settings are not fit parameters.",
+  "flavors": "Complete ordered PDG basis [-5,-4,-3,-2,-1,1,2,3,4,5]. SIDIS pairs equal flavors; SIA pairs the second leg with the opposite PDG flavor exactly once.",
+  "unpolarized_charge_basis": "Every supplied fragmentation matrix is the matched pi+ basis. Pi- is obtained by charge conjugation and pi0 by the arithmetic average. SIDIS first matrix is a proton PDF basis. Charge changes reuse the fixed bases and never conjugate an already conjugated matrix.",
+  "targets": "Built-in proton/neutron use exact u/d isospin interchange, including antiquarks for unpolarized PDFs. Explicit impulse-model targets require a source and separate fixed (proton,neutron) weights for numerator and denominator. Weights are algebraic model inputs, not an experimental nuclear-target admission; no unrequested normalization, effective polarization or dilution factor is inserted.",
+  "assembly": "Use full first-order matched legs multiplied as in KPSY-LEPTONIC-001, apply CSS once, then the signed J0/J1/J2 radial transforms. gc remains generic; gh-gc must be positive. Preserve the parent z and Hhat3 mass convention. No positivity clamp or automatic ratio is allowed.",
+  "reuse": "Changing fixed transverse momentum recomputes only Fourier weights and cached UU. Changing pion charges reassembles from the stored pi+ bases. Neither operation reloads providers or reconstructs native evolution. Context/source mutation is rejected; serialized production cache admission remains a separate requirement.",
+  "numerical_loop": "Fitted initial columns, fixed Julia row products, CSS gc damping and radial sums only. Float64-backed nested ForwardDiff values transport primal/tangent columns through Julia BLAS. BigFloat-backed derivatives retain generic row arithmetic as an independent numerical reference. No provider, Fortran, Python or language-model callback inside parameter evaluation.",
+  "validation_policy": {
+    "relative_floor": 1e-8,
+    "physical_value_max_scaled": 1e-4,
+    "derivative_max_scaled": 1e-7,
+    "algebra_max_scaled": 1e-12,
+    "finite_difference_steps": [1e-4,1e-5],
+    "finite_difference_reference_bits": 256,
+    "refinements": [
+      {"matching_order":4,"radial_order":8,"intervals":512},
+      {"matching_order":8,"radial_order":16,"intervals":1024},
+      {"matching_order":16,"radial_order":32,"intervals":2048},
+      {"matching_order":32,"radial_order":32,"intervals":4096}
+    ],
+    "radial_bounds": [12,24,32],
+    "refinement_policy": "Keep all coarse failures and compare final adjacent levels under the unchanged physical tolerance. Exhausting the declared budget is FAIL. Do not silently downsample radial scales to meet an ABI limit. Separate analytic assembly, pinned-input refinement, derivative and resource reports; passing a synthetic algebra fixture does not satisfy physical validation."
+  },
+  "limitations": [
+    "Structure functions only; no experimental observable or fit admission",
+    "SIA hadron-2 frame only; thrust-frame A12 is not supplied by relabeling A0",
+    "Homogeneous Collins evolution omits full twist-three mixing",
+    "Source scale extrapolation is explicit reference policy only; initial samples remain strict",
+    "Original author implementation and historical 262-point fit are not reproduced",
+    "Nuclear prescriptions, bins, acceptance, data covariance/overlap, production derivatives/performance and interval coverage require separate evidence"
+  ]
+}

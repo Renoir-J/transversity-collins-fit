@@ -27,6 +27,7 @@
     "nested_grid": {"ymax": [0.01,0.03,0.08,0.2,0.5,2.0,"declared ymax"], "dy_divisors": [729,243,81,27,9,3,1], "locking": "Use upstream InitGridDef(...,locked=true), including its declared rounding of native subgrid extents/steps. Return the sorted union of exact native x values; shared nodes use their finest native representation. Preserve distinct floating point knots."},
     "order": "negative HOPPET interpolation order, default -6; supported -2 through -10",
     "cache": "One retained HOPPET scalar grid_conv per supplied fixed tau, extracted from the nonsinglet evolution operator; no dense x-by-x operator cache",
+    "construction": "config/hoppet-batch-contract.json selects batched_probes by default and retains independent construction as an explicit reference. Both evaluate each supplied tau without scale interpolation.",
     "identity": "tau=0 is an explicit identity on the constrained endpoint subspace",
     "adjoint": "Each native negative-order subgrid has C^T=R*C*R. Transpose upstream locked-grid decanting in reverse assignment order; transpose exact node gather/select and x-weight conversions; remove the h(1) coordinate. Reuse upstream convolution on every native subgrid, with basis and dot-product checks; do not rewrite the forward solver.",
     "evaluation": "Upstream EvalGridQuant interpolates the weighted x*h; divide by the requested x once. Queries are fixed coordinates, with strict support checks.",

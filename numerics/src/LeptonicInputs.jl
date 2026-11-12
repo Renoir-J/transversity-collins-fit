@@ -1,4 +1,16 @@
 # Prepare fixed unpolarized matching matrices outside the fitted-parameter loop.
+"Source-scale-knot-split radial edges used by the reconstructed input pilot."
+function parton_radial_edges(model::KPSYCSS,dss::LegacyPartonInput,input_root,B)
+    dss.kind==:DSS14 || error("DSS14 scale knots required")
+    bound=fixed_scalar(B,"radial bound");bound>0 || error("positive radial bound required")
+    grid=readlines(verified_parton_asset(input_root,"CT10_central"))
+    q2knots=vcat(parse.(Float64,split(grid[5])).^2,dss.q2)
+    c02=4exp(-2Float64(Base.MathConstants.eulergamma))
+    bknots=[inv(sqrt(q/c02-inv(model.bmax^2))) for q in q2knots if q>c02/model.bmax^2]
+    base=[0.,1e-7,1e-6,1e-5,1e-4,.001,.005,.02,.05,.1,.2,.4,.7,1.,1.5,2.,3.,4.,6.,8.,12.,16.,20.,24.]
+    sort(unique(vcat(filter(<(bound),base),filter(b -> 0<b<bound,bknots),bound)))
+end
+
 function matched_pdf_inputs(input::CT10Input,model,radial,x,flavors,order)
     gridfile = verified_parton_asset(input.input_root,"CT10_central")
     knots = parse.(Float64,split(readlines(gridfile)[4]))

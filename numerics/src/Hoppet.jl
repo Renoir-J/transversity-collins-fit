@@ -25,6 +25,7 @@ struct HoppetPlan
     coupling_model::Symbol
     lambda_GeV::Union{Nothing,Float64}
     layout::Symbol
+    construction::Symbol
     native_nodes::Int
     coefficient_payload_bytes::Int64
     signature::UInt
@@ -49,10 +50,12 @@ function verified_hoppet_build(path)
 end
 
 function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
-                    ymax=nothing,xmin=nothing,dy=.025,order=-6,layout=:nested,eps=1e-10,du=.0125)
+                    ymax=nothing,xmin=nothing,dy=.025,order=-6,layout=:nested,eps=1e-10,du=.0125,
+                    construction=:batched_probes)
     quantity in (:transversity,:KPSY_Hhat3_homogeneous) || error("unsupported HOPPET quantity/convention")
     nf isa Integer && !(nf isa Bool) && 3<=nf<=6 || error("fixed integer nf from three to six required")
     layout in (:single,:nested) || error("choose single or nested HOPPET grid")
+    construction in (:independent,:batched_probes) || error("unsupported retained construction method")
     order isa Integer && !(order isa Bool) && -10<=order<=-2 || error("negative order -2 through -10 required")
     qs=[fixed_scalar(q,"Q2") for q in Q2]; q0=fixed_scalar(Q02,"Q02")
     1<=length(qs)<=4096 && q0>0 && all(>(0),qs) || error("finite positive fixed scales required")
@@ -83,13 +86,14 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
     lock(HOPPET_NATIVE_LOCK) do
         library=Libdl.dlopen(receipt["library"])
         state=HoppetState(library,0,Dict(name=>Libdl.dlsym(library,name) for name in
-            (:cf_hoppet_open,:cf_hoppet_close,:cf_hoppet_grid,:cf_hoppet_forward,
+            (:cf_hoppet_open,:cf_hoppet_open_batched,:cf_hoppet_close,:cf_hoppet_grid,:cf_hoppet_forward,
              :cf_hoppet_adjoint,:cf_hoppet_generator,:cf_hoppet_evaluate,:cf_hoppet_info,:cf_hoppet_rows,
              :cf_hoppet_collins,:cf_hoppet_collins_rows)))
         try
             ccall(Libdl.dlsym(library,:cf_hoppet_abi),Cint,())==1 || error("wrong HOPPET ABI")
             n=Ref{Cint}(0); context=Ref{Int64}(0); status=Ref{Cint}(0)
-            ccall(state.functions[:cf_hoppet_open],Cvoid,
+            operation=construction==:batched_probes ? :cf_hoppet_open_batched : :cf_hoppet_open
+            ccall(state.functions[operation],Cvoid,
                 (Cdouble,Cdouble,Cdouble,Cint,Cint,Cdouble,Cdouble,Cint,Cint,Ptr{Cdouble},Ref{Cint},Ref{Int64},Ref{Cint}),
                 y,lower,d,order,layout==:nested ? 1 : 0,e,u,nf,length(times),times,n,context,status)
             status[]==0 || error("HOPPET initialization rejected (status $(status[])); use one active context per isolated job")
@@ -101,7 +105,7 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
             status[]==0 || error("missing HOPPET resource metadata")
             signature=hash((x,qs,times))
             finalizer(close,state)
-            HoppetPlan(state,x,qs,q0,times,quantity,nf,model,lambda,layout,native[],payload[],signature)
+            HoppetPlan(state,x,qs,q0,times,quantity,nf,model,lambda,layout,construction,native[],payload[],signature)
         catch
             close(state)
             rethrow()
@@ -134,8 +138,8 @@ function hoppet_valid(plan,initial;endpoint=true)
     endpoint && !all(iszero,selectdim(initial,1,size(initial,1))) && error("h(1)=0 is required")
 end
 
-# Linearity transports every tangent, including nested ForwardDiff values. The
-# components are concatenated along the batch dimension before crossing the ABI.
+# Linearity transports every tangent, including nested ForwardDiff values.
+# Components share a batch through either the Float64 ABI or detached Julia rows.
 function hoppet_dual_batch(operation,initial::AbstractArray{ForwardDiff.Dual{T,V,N}}) where {T,V,N}
     pieces=(map(ForwardDiff.value,initial),ntuple(k -> map(v -> ForwardDiff.partials(v)[k],initial),N)...)
     combined=operation(cat(pieces...;dims=2))
@@ -259,6 +263,7 @@ struct HoppetPointPlan
     quantity::Symbol
     nf::Int
     intervals::Int
+    construction::Symbol
     blocks::Vector{HoppetPointBlock}
     coefficient_payload_bytes::Int64
     row_native_max_scaled::Float64
@@ -275,6 +280,7 @@ struct HoppetMatchingPlan
     quantity::Symbol
     nf::Int
     intervals::Int
+    construction::Symbol
     blocks::Vector{HoppetPointBlock}
     coefficient_payload_bytes::Int64
     row_native_max_scaled::Float64
@@ -284,7 +290,8 @@ struct HoppetMatchingPlan
 end
 
 function prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
-                               quantity=:transversity,order=-6,eps=1e-10,du=.0125,matching=nothing)
+                               quantity=:transversity,order=-6,eps=1e-10,du=.0125,matching=nothing,
+                               construction=:batched_probes)
     intervals isa Integer && !(intervals isa Bool) && 11<=intervals<=20000 || error("fixed interval count 11..20000 required")
     qs=[fixed_scalar(x,"query fraction") for x in queries]
     !isempty(qs) && all(x -> 0<x<=1,qs) && any(<(1),qs) || error("interior queries in (0,1), with optional endpoint, required")
@@ -295,7 +302,7 @@ function prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=1024,
     for query in unique(qs)
         query==1 && continue
         plan=HoppetPlan(verification,Q2,Q02,coupling;nf=nf,quantity=quantity,xmin=query,
-            dy=-log(query)/intervals,order=order,layout=:single,eps=eps,du=du)
+            dy=-log(query)/intervals,order=order,layout=:single,eps=eps,du=du,construction=construction)
         try
             n,nt=length(plan.grid),length(plan.tau)
             rows=hoppet_rows(plan,1)
@@ -340,18 +347,19 @@ function prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=1024,
     bytes=sum(sizeof(native.rows) for native in values(prepared))
     verified_hoppet_build(buildfile)==verification.receipt || error("HOPPET build changed during point preparation")
     (grid=grid,queries=qs,Q2=scales,Q02=fixed_scalar(Q02,"Q02"),tau=times,quantity=quantity,nf=nf,
-        intervals=intervals,blocks=blocks,coefficient_payload_bytes=bytes,row_native_max_scaled=maximum(row_errors))
+        intervals=intervals,construction=construction,blocks=blocks,coefficient_payload_bytes=bytes,row_native_max_scaled=maximum(row_errors))
 end
 
 function HoppetPointPlan(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
-                         quantity=:transversity,order=-6,eps=1e-10,du=.0125)
+                         quantity=:transversity,order=-6,eps=1e-10,du=.0125,construction=:batched_probes)
     data=prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=intervals,nf=nf,
-        quantity=quantity,order=order,eps=eps,du=du)
+        quantity=quantity,order=order,eps=eps,du=du,construction=construction)
     HoppetPointPlan(data...,hash((data.grid,data.queries,data.Q2,data.tau)))
 end
 
 function HoppetMatchingPlan(buildfile,queries,Q2,Q02,coupling;process,
-                            quantity=:KPSY_Hhat3_homogeneous,intervals=1024,nf=5,order=-6,eps=1e-10,du=.0125)
+                            quantity=:KPSY_Hhat3_homogeneous,intervals=1024,nf=5,order=-6,eps=1e-10,du=.0125,
+                            construction=:batched_probes)
     quantity in (:transversity,:KPSY_Hhat3_homogeneous) || error("unsupported polarized matching quantity")
     channel=quantity==:transversity ? :transversity : :collins
     matching_channel(process,channel)
@@ -360,7 +368,7 @@ function HoppetMatchingPlan(buildfile,queries,Q2,Q02,coupling;process,
         [alpha_lo(q,q0,fixed_scalar(coupling,"matching alpha0");nf=nf) for q in q2]
     all(a -> isfinite(a) && a>0,alpha) || error("finite positive physical matching coupling required")
     data=prepare_hoppet_points(buildfile,queries,q2,q0,coupling;quantity=quantity,intervals=intervals,
-        nf=nf,order=order,eps=eps,du=du,
+        nf=nf,order=order,eps=eps,du=du,construction=construction,
         matching=(process=process,channel=channel,alpha=alpha))
     HoppetMatchingPlan(data...,process,alpha,hash((data.grid,data.queries,data.Q2,data.tau,process,alpha)))
 end
@@ -374,14 +382,24 @@ function hoppet_point_valid(plan,initial;endpoint=true)
     endpoint && !all(iszero,initial[end,:]) && error("h(1)=0 is required")
 end
 
-function apply_operator(plan::Union{HoppetPointPlan,HoppetMatchingPlan},initial::AbstractMatrix{T}) where {T<:Real}
+function apply_point_rows(plan,initial::AbstractMatrix{T}) where {T<:Real}
     hoppet_point_valid(plan,initial)
     result=zeros(promote_type(T,Float64),length(plan.queries),size(initial,2),length(plan.tau))
     for (i,block) in enumerate(plan.blocks)
         isempty(block.indices) && continue
-        result[i,:,:]=permutedims(block.rows*view(initial,block.indices,:))
+        # A contiguous Float64 gather lets BLAS share all tangent columns. The
+        # high-precision reference retains the independent generic arithmetic.
+        selected=T===Float64 ? initial[block.indices,:] : view(initial,block.indices,:)
+        result[i,:,:]=permutedims(block.rows*selected)
     end
     result
+end
+apply_operator(plan::Union{HoppetPointPlan,HoppetMatchingPlan},initial::AbstractMatrix{<:Real})=apply_point_rows(plan,initial)
+function apply_operator(plan::Union{HoppetPointPlan,HoppetMatchingPlan},initial::AbstractMatrix{<:ForwardDiff.Dual})
+    if initial_primal(zero(eltype(initial))) isa Float64
+        return hoppet_dual_batch(x -> apply_operator(plan,x),initial)
+    end
+    apply_point_rows(plan,initial)
 end
 apply_operator(plan::Union{HoppetPointPlan,HoppetMatchingPlan},initial::AbstractVector)=dropdims(apply_operator(plan,reshape(initial,:,1));dims=2)
 
