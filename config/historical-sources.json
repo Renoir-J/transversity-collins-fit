@@ -852,7 +852,9 @@
           "reported_systematic": "sys_u"
         },
         "angular_column": "S2/1+C2",
-        "angular_average_status": "publication_review_pending"
+        "angular_average_status": "publication_mean_of_ratio",
+        "primary_crosscheck_id": "BaBar2014_primary_TeX_v2",
+        "frame": "hadron2"
       }
     },
     {
@@ -895,7 +897,9 @@
           "reported_systematic": "sys_u"
         },
         "angular_column": "S2/1+C2",
-        "angular_average_status": "publication_review_pending"
+        "angular_average_status": "publication_mean_of_ratio",
+        "primary_crosscheck_id": "BaBar2014_primary_TeX_v2",
+        "frame": "hadron2"
       }
     },
     {
@@ -940,7 +944,9 @@
           "reported_systematic": "sys_u"
         },
         "angular_column": "S2/1+C2",
-        "angular_average_status": "publication_review_pending"
+        "angular_average_status": "publication_mean_of_ratio",
+        "primary_crosscheck_id": "BaBar2014_primary_TeX_v2",
+        "frame": "hadron2"
       }
     },
     {
@@ -986,7 +992,9 @@
           "reported_systematic": "syt_u"
         },
         "angular_column": "S2/1+C2",
-        "angular_average_status": "publication_review_pending"
+        "angular_average_status": "publication_mean_of_ratio",
+        "primary_crosscheck_id": "BaBar2014_primary_TeX_v2",
+        "frame": "hadron2"
       }
     },
     {
@@ -1274,6 +1282,26 @@
       "reaction": "MU+ DEUT --> MU+ PI- X",
       "hadron": "pi-",
       "projection": "z"
+    }
+  ],
+  "sia_primary_sources": [
+    {
+      "id": "BaBar2014_primary_TeX_v2",
+      "filename": "BaBar2014_v2_source.tar.gz",
+      "publication": "1309.5278v2",
+      "version": "arXiv v2",
+      "url": "https://arxiv.org/src/1309.5278v2",
+      "sha256": "a471da0c932fb6e253c4533c79e0e89be6f6bbfd0332d8abf9481bd614896de7",
+      "seed_path": ".runtime/papers/1309.5278v2.src",
+      "member": "paper.tex",
+      "member_sha256": "d09a5e123c96a5aa12ecd0e95e4f134021f48126b74b8aeac19df101263ec61b",
+      "measurement_unit": "percent",
+      "frame": "hadron2",
+      "table_rows": {
+        "tab:totZul": 36,
+        "tab:totZuc": 36,
+        "tab:totPt": 9
+      }
     }
   ]
 }

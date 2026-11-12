@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "id": "KPSY15-HISTORICAL-DATA-002",
+  "id": "KPSY15-HISTORICAL-DATA-003",
   "scope": "historical_benchmark_candidate",
   "production_ready": false,
   "physical_extraction": false,
@@ -70,13 +70,13 @@
     "target": "Already extracted neutron; measured target material 3He. Do not apply effective-polarization/dilution extraction twice.",
     "raw_source_policy": "Keep original XLSX bytes and headers unchanged; record explicit source-row remapping"
   },
-  "SIA_units": "Declared percent input; convert central/statistical/reported-systematic values by0.01. Error columns are explicit per source; BaBar1003 uses the literal legacy spelling syt_u. Preserve that name and pending primary numerical review. Preserve angular average type as unresolved until publication review.",
+  "SIA_units": "Declared percent input; retain the existing central/statistical/reported-systematic conversion by0.01. Error columns are explicit per source; BaBar1003 retains the literal legacy spelling syt_u, now checked against the primary systematic column. BaBar RF0 tables label a mean of the angular ratio; record that definition without changing the supplied scalar. Belle publication-version and angular-source runtime review remain pending.",
   "missing_values": "Preserve missing means/bounds and their blockers. Do not infer <P> as <z1>*<qT>, physical bin edges from neighboring means, or covariance from error columns.",
   "limitations": [
     "Historical candidate intake only; no historical fit, extraction or production admission",
-    "Primary numerical crosschecks remain pending except Hall A and the six COMPASS deuteron ALL-pion views",
+    "Primary numerical crosschecks remain pending except Hall A, six COMPASS deuteron ALL-pion views and four BaBar RF0 views",
     "COMPASS proton error_u composition, deuteron missing systematic covariance, source-phase mapping and all updated-fit admission remain open",
-    "SIA angular means and momentum integration/acceptance require publication-specific review",
+    "BaBar angular source definition is reviewed; joint angle/kinematic acceptance, SIA momentum integration and other publication-specific angular reviews remain unresolved",
     "Overlapping projections, unavailable covariance, nuclear prescriptions and model systematics remain explicit",
     "Original author fitting program and modified HOPPET are not recovered; no chi2 reproduction threshold is selected"
   ],
@@ -130,5 +130,37 @@
       ]
     },
     "effect_on_intake": "Evidence only; no proton uncertainty or likelihood is transformed. Pointwise numerical/source error review remains pending. Historical normalization-exclusion and updated-fit nuisance decisions are separate."
+  },
+  "BaBar_primary": {
+    "publication": "1309.5278v2",
+    "legacy_publication": "1309.5278",
+    "url": "https://arxiv.org/abs/1309.5278v2",
+    "archive_sha256": "a471da0c932fb6e253c4533c79e0e89be6f6bbfd0332d8abf9481bd614896de7",
+    "member": "paper.tex",
+    "member_sha256": "d09a5e123c96a5aa12ecd0e95e4f134021f48126b74b8aeac19df101263ec61b",
+    "frame": "hadron2",
+    "measurement_unit": "percent",
+    "views": 4,
+    "raw_points": 90,
+    "numeric_cells": 954,
+    "tables": {
+      "UL_z1_z2": "tab:totZul",
+      "UC_z1_z2": "tab:totZuc",
+      "UL_pT": "tab:totPt RF0 section",
+      "UC_pT": "tab:totPt RF0 section"
+    },
+    "comparison": "Exact decimal equality of raw table-reported z1/z2/pT means, angular mean, amplitudes, stat/sys errors and projection bounds before existing percent conversion; all raw rows checked",
+    "angular_definition": "mean_of_angular_ratio",
+    "angular_expression": "<sin^2(theta2)/(1+cos^2(theta2))>",
+    "averaging_measure": "Publication-reported average in each RF0 hadron-2 bin; joint angle/kinematic acceptance weighting is unresolved",
+    "unit_basis": "Percent conventions of the reviewed paper and RF0 results; the momentum table does not repeat a percent sign in its header",
+    "normalization_effect": "No sign, normalization, central/error, kinematic mean or selection change; no ratio-of-means conversion or additional correction applied",
+    "review_limits": [
+      "Legacy Q and source fields not listed in the selected tables are not certified by this table comparison",
+      "Reported P means and integrated views do not define general joint-acceptance integration",
+      "Covariance, overlapping UL/UC samples and z/P projections remain unresolved",
+      "Belle manual web comparison is not an automated pinned-source crosscheck",
+      "No historical likelihood, physical fit, production or historical-fit admission"
+    ]
   }
 }
