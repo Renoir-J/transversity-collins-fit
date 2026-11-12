@@ -5,6 +5,8 @@ on:
     paths:
       - config/experimental-sources.json
       - src/collinsflow/experimental.py
+      - scripts/check_cached_experimental.py
+      - tests/test_experimental.py
       - workflow/experimental-intake.smk
       - pyproject.toml
       - requirements.lock
@@ -39,6 +41,8 @@ jobs:
         run: |
           snakemake --snakefile workflow/experimental-intake.smk --cores 2 --config output=runs/experimental-intake
           python -c "import json; r=json.load(open('runs/experimental-intake/intake-report.json')); assert r['views']==82 and r['points_across_overlapping_views']==773 and r['production_ready'] is False; assert len(r['HERMES_3D_primary_binning'])==2 and all(x['passed'] for x in r['HERMES_3D_primary_binning']) and all(x['passed'] for x in r['BESIII_primary_vs_JAM']); assert r['STAR_source_review']['hepdata_views']==56"
+      - name: Verify source-derived cached candidate decisions
+        run: python scripts/check_cached_experimental.py config/experimental-sources.json data/raw/intake runs/experimental-intake
       - name: Upload intake evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
