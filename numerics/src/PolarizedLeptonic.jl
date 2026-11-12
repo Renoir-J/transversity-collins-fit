@@ -186,25 +186,40 @@ function collins_flavor_columns(bases,charge,flavors)
     result
 end
 
-"Complete reconstructed structure functions; angular factors and bin adapters are separate."
-function polarized_structure(context::PolarizedLeptonicPlan,p::KPSYParameters)
+"Transient responses for one parameter value; never cached across parameter calls."
+function evolved_polarized_columns(context::PolarizedLeptonicPlan,p::KPSYParameters)
     polarized_context_valid(context)
     p.gh==context.leptonic.model.gh || error("initial/CSS width mismatch")
     first=apply_operator(context.first_operator,polarized_initial_columns(context.first_samples,p))
+    second=context.leptonic.process==:SIDIS ?
+        apply_operator(context.second_operator,polarized_initial_columns(context.second_samples,p)) : nothing
+    first,second
+end
+
+function polarized_flavor_legs(context,first,second;charges=context.charges)
+    length(charges)==2 || error("two charge slots required")
+    cs=(pion_charge(charges[1]),pion_charge(charges[2]))
     flavors=context.leptonic.flavors
     if context.leptonic.process==:SIDIS
+        cs[2]==0 || error("SIDIS has one pion charge")
         hp=zeros(eltype(first),length(flavors),size(first,3))
         for (f,pid) in enumerate(flavors)
             pid in (2,1) && (hp[f,:]=first[1,pid==2 ? 1 : 2,:])
         end
         target=context.target
         pol1=target.polarized[1].*hp+target.polarized[2].*hp[isospin_indices(flavors),:]
-        second=apply_operator(context.second_operator,polarized_initial_columns(context.second_samples,p))
-        pol2=collins_flavor_columns(second[1,:,:],context.charges[1],flavors)
+        pol2=collins_flavor_columns(second[1,:,:],cs[1],flavors)
     else
-        pol1=collins_flavor_columns(first[1,:,:],context.charges[1],flavors)
-        pol2=collins_flavor_columns(first[2,:,:],context.charges[2],flavors)
+        pol1=collins_flavor_columns(first[1,:,:],cs[1],flavors)
+        pol2=collins_flavor_columns(first[2,:,:],cs[2],flavors)
     end
+    pol1,pol2
+end
+
+"Complete reconstructed structure functions; angular factors and bin adapters are separate."
+function polarized_structure(context::PolarizedLeptonicPlan,p::KPSYParameters)
+    first,second=evolved_polarized_columns(context,p)
+    pol1,pol2=polarized_flavor_legs(context,first,second)
     (UU=context.unpolarized,Collins=leptonic_collins(context.leptonic,pol1,pol2,p.values[13]))
 end
 polarized_structure(context::PolarizedLeptonicPlan,theta::AbstractVector)=polarized_structure(context,KPSYParameters(theta;gh=context.leptonic.model.gh))

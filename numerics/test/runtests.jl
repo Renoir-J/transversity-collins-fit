@@ -4,6 +4,8 @@ include("parton_tests.jl")
 include("leptonic_tests.jl")
 include("initial_tests.jl")
 include("polarized_tests.jl")
+include("observable_tests.jl")
+include("observable_reference_tests.jl")
 
 @testset "LO transversity moments and fixed-operator AD" begin
     @test transversity_moment(1) ≈ -2/3

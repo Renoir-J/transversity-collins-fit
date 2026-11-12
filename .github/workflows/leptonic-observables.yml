@@ -1,0 +1,92 @@
+name: Leptonic observable references
+
+on:
+  pull_request:
+    paths:
+      - config/*-contract.json
+      - config/*-sources.json
+      - bridges/**
+      - fortran/hoppet_bridge.f90
+      - fortran/check_dss*.f90
+      - numerics/**
+      - src/collinsflow/parton.py
+      - src/collinsflow/hoppet.py
+      - src/collinsflow/provenance.py
+      - scripts/prepare_parton_inputs.py
+      - scripts/prepare_hoppet.py
+      - requirements.lock
+      - .github/workflows/leptonic-observables.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: leptonic-observables-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  references:
+    name: observables ${{ matrix.kind }}
+    runs-on: ubuntu-latest
+    # Operational time allowance only; no numerical threshold is relaxed.
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [analytic, inputs]
+    env:
+      JULIA_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v3.0.3
+        with:
+          version: '1.12.6'
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
+        with:
+          delete-old-caches: 'false'
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+          julia --project=numerics -e 'using Pkg; Pkg.instantiate()'
+      - name: Build locked input references
+        if: matrix.kind == 'inputs'
+        run: python scripts/prepare_parton_inputs.py
+      - name: Build retained HOPPET and run upstream tests
+        run: python scripts/prepare_hoppet.py
+      - name: Validate scoped observables
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runs/ci-observables
+          case '${{ matrix.kind }}' in
+            analytic)
+              julia --project=numerics numerics/bin/check_observables.jl .runtime/hoppet/build.json runs/ci-observables/analytic.json | tee runs/ci-observables/analytic-native.log
+              ;;
+            inputs)
+              julia --project=numerics numerics/bin/check_observable_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-observables/inputs.json | tee runs/ci-observables/inputs-native.log
+              ;;
+          esac
+      - name: Upload scoped numerical evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: observables-${{ matrix.kind }}-${{ github.sha }}
+          path: |
+            runs/ci-observables
+            .runtime/hoppet/build.json
+            .runtime/hoppet/build.log
+            .runtime/hoppet/upstream-tests.log
+            .runtime/parton-inputs/build.json
+            .runtime/parton-inputs/build.log
+          include-hidden-files: true
+          retention-days: 30

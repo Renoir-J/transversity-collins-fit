@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-LEPTONIC-OBS-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "source": "https://arxiv.org/html/1505.05589v1",
+  "equations": [3,4,5,76,81,82,83,84,85,86,87,88,89,90,91,92],
+  "parent_contract": "config/polarized-process-contract.json",
+  "SIDIS": {
+    "structure_function_ratio": "FUT/FUU; no depolarization factor",
+    "sin_phi_sum_amplitude": "DNN(y)*FUT/FUU, DNN=2*(1-y)/(1+(1-y)^2); phi_h+phi_s convention",
+    "selection": "Caller must explicitly select the publication convention and source; no automatic depolarization or angle-sign inference",
+    "kinematics": "Fixed point or reported means; finite P integration fixes all other kinematics, so the common sigma0 cancels. General x/z/Q2/y acceptance integration is not supplied."
+  },
+  "SIA": {
+    "frame": "hadron2 only",
+    "U": "sum (+,-) and (-,+) structure functions",
+    "L": "sum (+,+) and (-,-) structure functions",
+    "C": "U+L before division",
+    "UL": "angular*(CollinsU/UUU-CollinsL/UUL)",
+    "UC": "angular*(CollinsU/UUU-(CollinsU+CollinsL)/(UUU+UUL))",
+    "angular": "Explicit source-labeled fixed ratio <sin^2(theta)>/<1+cos^2(theta)>, not a mean of pointwise ratios",
+    "approximation": "Paper's linearized double-ratio amplitude; do not substitute the Fourier coefficient of an exact nonlinear ratio"
+  },
+  "momentum_integration": "Finite supplied [Pmin,Pmax], positive fixed Gauss nodes/weights with the P*dP Jacobian. Project the P quadrature onto fixed J0/J1/J2 radial weights once. Integrate each numerator and denominator before division or charge-category ratios. Uniform P acceptance is an explicit reconstruction assumption, not an experimental acceptance correction.",
+  "evaluation": "Reuse prepared initial/evolution responses once per parameter evaluation for all SIA charge pairs. All fitted arithmetic and derivatives remain Julia. No provider/native/Python/model calls in the numerical loop. Settings and angular factors are fixed.",
+  "denominators": "Require finite positive final UU denominators; retain signed integrands and numerators. No absolute-value or positivity clamp, and no arbitrary bound on the fitted asymmetry is inserted.",
+  "validation_policy": {
+    "relative_floor": 1e-8,
+    "algebra_max_scaled": 1e-12,
+    "analytic_integral_max_scaled": 1e-10,
+    "physical_value_max_scaled": 1e-4,
+    "momentum_refinement_max_scaled": 1e-7,
+    "derivative_max_scaled": 1e-7,
+    "momentum_orders": [8,16,32,64,128],
+    "minimum_momentum_order": 32,
+    "finite_difference_steps": [1e-4,1e-5],
+    "finite_difference_reference_bits": 256,
+    "refinement_policy": "Retain coarse levels. At or above order32 accept only an adjacent-order momentum difference at or below momentum_refinement_max_scaled=1e-7, declared before formal runs. Joint radial/evolution refinement and independent physical references retain physical_value_max_scaled=1e-4. Budget exhaustion is FAIL. Source/parameter/grid limits remain those of the parent contracts."
+  },
+  "limitations": [
+    "No experimental admission, historical fit or real-data extraction",
+    "Publication angle signs, depolarization removal, acceptance, bin definitions, covariance and overlap require separate reviewed adapters",
+    "No thrust-frame, eta, unidentified-hadron or STAR observable",
+    "No general multidimensional acceptance integration or production performance/coverage certificate",
+    "Parent missing-code, source-extrapolation, Collins-approximation and production cache limitations remain"
+  ]
+}
