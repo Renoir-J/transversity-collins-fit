@@ -12,7 +12,9 @@ A [reconstructed LO collinear evolution component](docs/evolution.md) now covers
 
 [Reconstructed CT10/DSSV08/DSS14 input interfaces](docs/parton-inputs.md) retain locked source versions and compare against unchanged reference programs. Default queries reject unsupported ranges; explicit reference extrapolation does not authorize production fits.
 
-[SIDIS/SIA matching and Fourier-Bessel components](docs/leptonic.md) assemble structure functions from supplied matched legs. Analytic comparisons cover normalization, charge conjugation and derivatives. A pinned-input unpolarized pilot keeps unsupported-scale queries explicitly labeled; fitted polarized inputs, observable adapters and the historical fit remain incomplete.
+[SIDIS/SIA matching and Fourier-Bessel components](docs/leptonic.md) assemble structure functions from supplied matched legs. Analytic comparisons cover normalization, charge conjugation and derivatives. A pinned-input unpolarized pilot keeps unsupported-scale queries explicitly labeled; efficient many-scale polarized integration, observable adapters and the historical fit remain incomplete.
+
+[Initial transversity/Collins parameterizations](docs/initial-conditions.md) now retain physical boundary values and connect strict initial inputs to fixed-scale LO evolution. These are reconstructed components; efficient many-scale integration, observable adapters and the historical fit remain incomplete.
 
 ## Running the workflow
 

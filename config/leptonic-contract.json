@@ -3,6 +3,7 @@
   "id": "KPSY-LEPTONIC-001",
   "scope": "reconstructed_theory",
   "production_ready": false,
+  "initial_condition_contract": "config/initial-contract.json",
   "precision": "Float64 inputs, nodes, weights and numerical evaluation; cached Gauss roots/weights prepared at 192 bits then rounded once",
   "source": "https://arxiv.org/html/1505.05589v1",
   "equations": [37,38,48,49,50,51,58,67,68,73,74,101,102,103,104,105,108,109],
@@ -69,7 +70,7 @@
   },
   "limitations": [
     "No historical 262-point fit or new physical extraction",
-    "Fitted initial parameterizations, scalable many-scale evolution, reviewed bin/acceptance adapters and experimental likelihood admission remain required",
+    "Initial parameterizations are separately reconstructed; scalable many-scale integration, reviewed bin/acceptance adapters and experimental likelihood admission remain required",
     "Finite integration bounds and low/high-scale input prescriptions require physical refinement and sensitivity checks",
     "No STAR jet kernel, finite-R matching, production derivative/performance gate or interval-coverage certification",
     "Analytic component comparisons and reconstructed input checks cannot authorize production"

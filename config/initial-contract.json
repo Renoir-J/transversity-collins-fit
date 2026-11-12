@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-INITIAL-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "source": "https://arxiv.org/html/1505.05589v1",
+  "equations": [58,110,111,112,113,114,115],
+  "Q02_GeV2": 2.4,
+  "parameter_order": ["Nh_u","Nh_d","a_u","a_d","b_u","b_d","Nc_u","Nc_d","alpha_u","alpha_d","beta_u","beta_d","gc_GeV2"],
+  "published_parameters": [0.85,-1.0,0.69,1.79,0.05,7.0,-0.262,0.195,1.69,0.32,0.0,0.0,0.0236],
+  "published_parameter_role": "Table 1 rounded central values, not a new fit or an exact historical optimizer state",
+  "overall_sign": "simultaneously flipping Nh_u, Nh_d, Nc_u and Nc_d leaves leptonic products invariant before sign-sensitive external constraints; paper chooses positive u; no automatic canonicalization in a lattice-constrained fit",
+  "domains": {
+    "Nh": "closed [-1,1]",
+    "a_b": "closed nonnegative for point values; normalization derivatives at zero are singular and rejected, except the identically zero x=1 endpoint",
+    "alpha_beta": "closed nonnegative reconstruction domain; original MINUIT bounds were not recovered",
+    "Nc": "finite dimensionful amplitudes in GeV; no automatic unit-interval or positivity bound",
+    "gc": "finite with gc<gh for the supplied fixed CSS gh (default 0.042 GeV2)",
+    "decoder": "direct physical coordinates; no exp/tanh-only mapping of closed boundaries"
+  },
+  "transversity": {
+    "formula": "Nh*x^a*(1-x)^b*(a+b)^(a+b)/(a^a*b^b)*(f1+g1)/2",
+    "normalization": "evaluate in logs with continuous t*ln(t)=0 at t=0; x=1 returns zero with zero parameter derivatives",
+    "Soffer": "fixed nonnegative (f1+g1)/2, reject negative input without clipping",
+    "flavors": "u,d active; all antiquark, strange and heavy transversities zero in this historical family"
+  },
+  "Collins": {
+    "quantity": "dimensionful KPSY Hhat3, not Trento first moment",
+    "favored": "Nc_u*z^alpha_u*(1-z)^beta_u*D_pi+/u",
+    "unfavored": "Nc_d*z^alpha_d*(1-z)^beta_d*D_pi+/d",
+    "pi_plus_favored": [2,-1], "pi_minus_favored": [-2,1],
+    "light_unfavored": "remaining u,d,ubar,dbar flavors use the same unfavored basis, not a separate antiquark DSS FF",
+    "strange": "Nc_d*z^alpha_d*(1-z)^beta_d times the separate D_pi+/s or D_pi+/sbar basis for either pion charge",
+    "pi_zero": "explicit isospin reconstruction extension: average of plus and minus",
+    "heavy": "zero heavy Collins is an explicit reconstruction assumption; no author-code recovery or experimental heavy-flavor admission is claimed",
+    "endpoint": "D(1)=0; return zero before logs/powers, including beta=0 and all parameter derivatives",
+    "Trento": "H1perp(1)=-Hhat3/(2*z*M_h), with explicit positive caller-supplied mass"
+  },
+  "evolution": {
+    "interface": "fixed-grid generic Julia matrix application to the initial flavor matrices",
+    "operators": "distinct transversity and explicitly tagged KPSY_Hhat3_homogeneous operators; same fixed-nf LO kernel under COLLINEAR-LO-002",
+    "settings": "Q02=2.4, asymptotic_two_loop, nf=5, Lambda=0.225; no fitted setting derivatives",
+    "resources": "dense operator reference only; no claim of a scalable many-b fitting backend"
+  },
+  "input_support": "strict initial-scale CT10/DSSV08/DSS14; x>=1e-5, z>=0.05, grids end at one; no extrapolated full tensor charge",
+  "validation_policy": {
+    "formula_max_scaled": 0.00000000001,
+    "positivity_max_relative_excess": 0.000000000001,
+    "derivative_max_scaled": 0.0000001,
+    "endpoint_max_abs": 0,
+    "physical_grids": [801,1601,3201],
+    "physical_grid_alignment": "log/sqrt background augmented with all locked CT10/DSSV/DSS knots in strict support and the declared probes; preserve distinct source literal values; background-only pilot failed unchanged targets",
+    "affine_generator_max_abs": 0.0000000001,
+    "evolved_refinement_max_scaled": 0.0001,
+    "relative_floor": 0.00000001
+  },
+  "limitations": [
+    "No historical fit or production extraction; printed Table 1 values are rounded",
+    "Heavy Collins and neutral-pion extension are declared reconstruction assumptions",
+    "Dense operator applications do not establish many-scale performance or production derivative admission",
+    "Source-range sensitivity, experimental target/axis/acceptance/overlap/covariance and uncertainty coverage remain open"
+  ]
+}

@@ -93,6 +93,12 @@ function apply_operator(operator::CollinearLOOperator, initial::AbstractVector)
     operator.matrix * initial
 end
 
+function apply_operator(operator::CollinearLOOperator, initial::AbstractMatrix)
+    size(initial,1)==length(operator.grid) && size(initial,2)>0 || error("initial matrix/grid size mismatch")
+    all(isfinite,initial) && all(iszero,initial[end,:]) || error("finite initial columns with h(1)=0 required")
+    operator.matrix*initial
+end
+
 function operator_adjoint(operator::CollinearLOOperator, cotangent::AbstractVector)
     length(cotangent) == length(operator.grid) && all(isfinite, cotangent) || error("invalid collinear cotangent")
     result = transpose(operator.matrix) * cotangent

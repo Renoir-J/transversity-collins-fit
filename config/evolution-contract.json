@@ -40,6 +40,7 @@
     "identity_semigroup_max_abs": 0.0000000001,
     "derivative_max_scaled": 0.0000001
   },
-  "remaining_for_KPSY": ["historical coupling/backend and original grid/settings comparison", "full CSS assembly and matching coefficients", "unpolarized PDFs/FFs and exact conventions", "historical dataset and 13-parameter/262-point benchmark", "independent physical-process and derivative certification"],
+  "initial_condition_contract": "config/initial-contract.json",
+  "remaining_for_KPSY": ["historical coupling/backend and original grid/settings comparison", "scalable many-scale physical cache and observable adapters", "source-range prescriptions and input convention admission", "historical dataset and 13-parameter/262-point benchmark", "independent physical-process and derivative certification"],
   "original_author_code_recovered": false
 }

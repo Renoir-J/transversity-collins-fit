@@ -17,6 +17,10 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        sidis_fourier, sia_fourier, leptonic_plan, leptonic_structure,
        leptonic_unpolarized, leptonic_collins,
        prepare_unpolarized_sidis, prepare_unpolarized_sia,
+       KPSYParameters, InitialConditions, kpsy_published_parameters,
+       initial_transversity, initial_collins, trento_first_moment,
+       prepare_initial_conditions, initial_distributions, evolve_initial_conditions,
+       initial_source_grids,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -114,6 +118,7 @@ include("PartonInputs.jl")
 include("Matching.jl")
 include("Leptonic.jl")
 include("LeptonicInputs.jl")
+include("InitialConditions.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)

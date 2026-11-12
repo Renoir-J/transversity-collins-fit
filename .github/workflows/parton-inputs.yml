@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - config/parton-*.json
+      - config/initial-contract.json
+      - config/leptonic-contract.json
+      - config/evolution-contract.json
+      - config/css-contract.json
       - bridges/**
       - fortran/check_dss*.f90
       - numerics/**
@@ -55,6 +59,7 @@ jobs:
         run: |
           julia --project=numerics numerics/bin/check_parton_inputs.jl .runtime/parton-inputs/build.json runs/ci-parton/validation.json
           julia --project=numerics numerics/bin/check_leptonic_inputs.jl .runtime/parton-inputs/build.json runs/ci-parton/leptonic-inputs.json
+          julia --project=numerics numerics/bin/check_initial_inputs.jl .runtime/parton-inputs/build.json runs/ci-parton/initial-inputs.json
       - name: Upload input comparison evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
