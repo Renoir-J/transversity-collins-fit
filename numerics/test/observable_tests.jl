@@ -16,6 +16,67 @@ function observable_fixture(process)
         target=process==:SIDIS ? NucleonTarget(:proton) : nothing,charges=process==:SIDIS ? (1,0) : (1,-1))
 end
 
+@testset "explicit SIA angular source types and averaging measures" begin
+    # Explicitly synthetic angles and weights, not experimental averages.
+    cos2=[0.,1.];sin2=1 .-cos2;uniform=[.5,.5]
+    mean_of_ratio=sum(uniform.*sin2./(1 .+cos2))
+    ratio_of_means=sum(uniform.*sin2)/(1+sum(uniform.*cos2))
+    event_weights=uniform.*(1 .+cos2);event_weights./=sum(event_weights)
+    @test mean_of_ratio==.5
+    @test ratio_of_means ≈ 1/3 rtol=1e-14
+    @test mean_of_ratio != ratio_of_means
+    @test sum(event_weights.*sin2./(1 .+cos2)) ≈ ratio_of_means rtol=1e-14
+    angular=SIAMeanOfRatio(.6;source="synthetic event average",averaging_measure="fixed synthetic event weights")
+    @test angular.value==.6 && angular.averaging_measure=="fixed synthetic event weights"
+    for value in (-.01,1.01,NaN,Inf,true)
+        @test_throws ErrorException SIAMeanOfRatio(value;source="synthetic",averaging_measure="synthetic weights")
+    end
+    @test_throws ErrorException SIAMeanOfRatio(.6;source=" ",averaging_measure="synthetic weights")
+    @test_throws ErrorException SIAMeanOfRatio(.6;source="synthetic",averaging_measure=" ")
+    @test_throws UndefKeywordError SIAMeanOfRatio(.6;source="missing measure")
+    @test_throws ErrorException ForwardDiff.derivative(t->SIAMeanOfRatio(.6+t;source="synthetic",averaging_measure="fixed").value,0.)
+    sums=sia_charge_sums((UU=100.,Collins=10.),(UU=10.,Collins=2.),(UU=20.,Collins=6.),(UU=1.,Collins=-.1))
+    ratio_input=SIAAngularFactor(.6;source="synthetic acceptance average")
+    for ratio in (:UL,:UC)
+        @test sia_double_ratio(sums,ratio,angular)==sia_double_ratio(sums,ratio,ratio_input)
+    end
+    context=observable_fixture(:SIA);theta=collect(kpsy_published_parameters().values)
+    for interval in (nothing,(.05,.35)),ratio in (:UL,:UC)
+        momentum=interval===nothing ? nothing : MomentumRule(interval...;order=8)
+        point=sia_observable(context;ratio=ratio,angular=angular,momentum=momentum,source="synthetic source-kind fixture")
+        previous=sia_observable(context;ratio=ratio,angular=ratio_input,momentum=momentum,source="synthetic source-kind fixture")
+        @test predict_observable(point,theta)==predict_observable(previous,theta)
+        @test point.provenance["angular_definition"]=="mean_of_angular_ratio"
+        @test point.provenance["angular_averaging_measure"]==angular.averaging_measure
+        @test previous.provenance["angular_definition"]=="ratio_of_angular_means"
+        @test point.provenance["production_ready"]===false && point.provenance["physical_extraction"]===false
+        @test ForwardDiff.gradient(t->predict_observable(point,t),theta)==ForwardDiff.gradient(t->predict_observable(previous,t),theta)
+        @test ForwardDiff.hessian(t->predict_observable(point,t),theta)==ForwardDiff.hessian(t->predict_observable(previous,t),theta)
+        point.provenance["angular_averaging_measure"]="changed after preparation"
+        @test_throws ErrorException predict_observable(point,theta)
+    end
+end
+
+@testset "different supplied angular scalars propagate to all parameter derivatives" begin
+    # Under the same uniform synthetic two-angle measure, <s/(1+c)>=1/2
+    # while <s>/<1+c>=1/3. The expected scaling is independent of the evaluator.
+    context=observable_fixture(:SIA);theta=collect(kpsy_published_parameters().values)
+    mean_input=SIAMeanOfRatio(.5;source="synthetic uniform two-angle sample",
+        averaging_measure="uniform weights [0.5,0.5] at cos_squared(theta) [0,1]; fixed other kinematics")
+    ratio_input=SIAAngularFactor(1/3;source="same synthetic uniform two-angle sample")
+    for interval in (nothing,(.05,.35)),ratio in (:UL,:UC)
+        momentum=interval===nothing ? nothing : MomentumRule(interval...;order=8)
+        mean=sia_observable(context;ratio=ratio,angular=mean_input,momentum=momentum,source="synthetic different-scalar regression")
+        previous=sia_observable(context;ratio=ratio,angular=ratio_input,momentum=momentum,source="synthetic different-scalar regression")
+        value=predict_observable(previous,theta)
+        gradient=ForwardDiff.gradient(t->predict_observable(previous,t),theta)
+        hessian=ForwardDiff.hessian(t->predict_observable(previous,t),theta)
+        @test isfinite(value) && value!=0 && isapprox(predict_observable(mean,theta),1.5value;rtol=1e-12,atol=1e-16)
+        @test any(v->v!=0,gradient) && all(isapprox.(ForwardDiff.gradient(t->predict_observable(mean,t),theta),1.5.*gradient;rtol=1e-12,atol=1e-16))
+        @test any(v->v!=0,hessian) && all(isapprox.(ForwardDiff.hessian(t->predict_observable(mean,t),theta),1.5.*hessian;rtol=1e-12,atol=1e-16))
+    end
+end
+
 @testset "momentum measure, depolarization and charge-category algebra" begin
     for order in (8,16,32)
         rule=MomentumRule(.1,.9;order=order)

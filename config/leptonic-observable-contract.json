@@ -1,11 +1,28 @@
 {
   "schema_version": 1,
-  "id": "KPSY-LEPTONIC-OBS-001",
+  "id": "KPSY-LEPTONIC-OBS-002",
   "scope": "reconstructed_theory",
   "production_ready": false,
   "physical_extraction": false,
   "source": "https://arxiv.org/html/1505.05589v1",
-  "equations": [3,4,5,76,81,82,83,84,85,86,87,88,89,90,91,92],
+  "equations": [
+    3,
+    4,
+    5,
+    76,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92
+  ],
   "parent_contract": "config/polarized-process-contract.json",
   "SIDIS": {
     "structure_function_ratio": "FUT/FUU; no depolarization factor",
@@ -20,22 +37,37 @@
     "C": "U+L before division",
     "UL": "angular*(CollinsU/UUU-CollinsL/UUL)",
     "UC": "angular*(CollinsU/UUU-(CollinsU+CollinsL)/(UUU+UUL))",
-    "angular": "Explicit source-labeled fixed ratio <sin^2(theta)>/<1+cos^2(theta)>, not a mean of pointwise ratios",
+    "angular": {
+      "ratio_of_angular_means": "SIAAngularFactor supplies a fixed source-labeled scalar <sin^2(theta)>/<1+cos^2(theta)>.",
+      "mean_of_angular_ratio": "SIAMeanOfRatio supplies a fixed source-labeled scalar <sin^2(theta)/(1+cos^2(theta))> and a nonblank declared averaging measure.",
+      "policy": "Preserve the declared source kind. No inference from a scalar value, reconstruction of component means or numerical angular distribution in the fit loop. The measure descriptor records caller provenance; it is not an experimental admission certificate.",
+      "measure_relation": "With factorized fixed other kinematics and event weights proportional to acceptance*(1+cos^2(theta)), a mean of the pointwise ratio under event weights equals a ratio of means under acceptance weights. Under the same arbitrary weights the two expressions generally differ.",
+      "bin_limit": "A scalar factor does not certify factorization of joint angle/momentum/energy/acceptance weights or equality across charge categories."
+    },
     "approximation": "Paper's linearized double-ratio amplitude; do not substitute the Fourier coefficient of an exact nonlinear ratio"
   },
   "momentum_integration": "Finite supplied [Pmin,Pmax], positive fixed Gauss nodes/weights with the P*dP Jacobian. Project the P quadrature onto fixed J0/J1/J2 radial weights once. Integrate each numerator and denominator before division or charge-category ratios. Uniform P acceptance is an explicit reconstruction assumption, not an experimental acceptance correction.",
   "evaluation": "Reuse prepared initial/evolution responses once per parameter evaluation for all SIA charge pairs. All fitted arithmetic and derivatives remain Julia. No provider/native/Python/model calls in the numerical loop. Settings and angular factors are fixed.",
   "denominators": "Require finite positive final UU denominators; retain signed integrands and numerators. No absolute-value or positivity clamp, and no arbitrary bound on the fitted asymmetry is inserted.",
   "validation_policy": {
-    "relative_floor": 1e-8,
+    "relative_floor": 1e-08,
     "algebra_max_scaled": 1e-12,
     "analytic_integral_max_scaled": 1e-10,
-    "physical_value_max_scaled": 1e-4,
-    "momentum_refinement_max_scaled": 1e-7,
-    "derivative_max_scaled": 1e-7,
-    "momentum_orders": [8,16,32,64,128],
+    "physical_value_max_scaled": 0.0001,
+    "momentum_refinement_max_scaled": 1e-07,
+    "derivative_max_scaled": 1e-07,
+    "momentum_orders": [
+      8,
+      16,
+      32,
+      64,
+      128
+    ],
     "minimum_momentum_order": 32,
-    "finite_difference_steps": [1e-4,1e-5],
+    "finite_difference_steps": [
+      0.0001,
+      1e-05
+    ],
     "finite_difference_reference_bits": 256,
     "refinement_policy": "Retain coarse levels. At or above order32 accept only an adjacent-order momentum difference at or below momentum_refinement_max_scaled=1e-7, declared before formal runs. Joint radial/evolution refinement and independent physical references retain physical_value_max_scaled=1e-4. Budget exhaustion is FAIL. Source/parameter/grid limits remain those of the parent contracts."
   },
@@ -44,6 +76,49 @@
     "Publication angle signs, depolarization removal, acceptance, bin definitions, covariance and overlap require separate reviewed adapters",
     "No thrust-frame, eta, unidentified-hadron or STAR observable",
     "No general multidimensional acceptance integration or production performance/coverage certificate",
-    "Parent missing-code, source-extrapolation, Collins-approximation and production cache limitations remain"
-  ]
+    "Parent missing-code, source-extrapolation, Collins-approximation and production cache limitations remain",
+    "Explicit source-kind/measure metadata does not approve a publication adapter, joint acceptance factorization, covariance or event overlap."
+  ],
+  "angular_source_references": [
+    {
+      "publication": "0805.2975v1",
+      "url": "https://arxiv.org/abs/0805.2975v1",
+      "location": "Tables IV/V: mean of the pointwise angular ratio",
+      "scope": "source notation; no data admission"
+    },
+    {
+      "DOI": "10.1103/PhysRevD.86.039905",
+      "url": "https://journals.aps.org/prd/abstract/10.1103/PhysRevD.86.039905",
+      "location": "Belle2012 erratum replaces asymmetry Tables IV/V; preserve corrected-input provenance and avoid a second correction",
+      "scope": "version provenance; full primary table matching is a separate data gate"
+    },
+    {
+      "publication": "1309.5278v2",
+      "url": "https://arxiv.org/abs/1309.5278v2",
+      "location": "Double-ratio angular integration discussion and Tables I/II/III",
+      "scope": "source notation; no general acceptance claim"
+    }
+  ],
+  "synthetic_angular_fixture": {
+    "scope": "explicitly synthetic mathematical averaging check",
+    "cos_squared": [
+      0.0,
+      1.0
+    ],
+    "uniform_weights": [
+      0.5,
+      0.5
+    ],
+    "event_weights": [
+      0.6,
+      0.4
+    ],
+    "paired_acceptance_weights": [
+      0.75,
+      0.25
+    ],
+    "effective_factor": 0.6,
+    "averaging_measure": "synthetic fixed event weights [0.6,0.4] at cos_squared(theta) [0,1]; fixed other kinematics",
+    "reference_policy": "Independent BigFloat weighted averages; equal effective factors share the independent scalar/adaptive finite-difference arrays. Both typed prediction paths are checked separately."
+  }
 }

@@ -33,6 +33,26 @@ struct SIAAngularFactor
 end
 SIAAngularFactor(value;source)=SIAAngularFactor(fixed_scalar(value,"ratio of angular means"),String(source))
 
+"Source-labeled mean of pointwise angular ratios, with its declared averaging measure."
+struct SIAMeanOfRatio
+    value::Float64
+    source::String
+    averaging_measure::String
+    function SIAMeanOfRatio(value::Float64,source::String,averaging_measure::String)
+        isfinite(value) && 0<=value<=1 || error("finite mean of angular ratios in [0,1] required")
+        !isempty(strip(source)) && !isempty(strip(averaging_measure)) || error("explicit angular source and averaging measure required")
+        new(value,source,averaging_measure)
+    end
+end
+SIAMeanOfRatio(value;source,averaging_measure)=SIAMeanOfRatio(
+    fixed_scalar(value,"mean of angular ratios"),String(source),String(averaging_measure))
+
+sia_angular_metadata(a::SIAAngularFactor)=Dict{String,Any}(
+    "angular_definition"=>"ratio_of_angular_means","angular_source"=>a.source,"angular_factor"=>a.value)
+sia_angular_metadata(a::SIAMeanOfRatio)=Dict{String,Any}(
+    "angular_definition"=>"mean_of_angular_ratio","angular_source"=>a.source,"angular_factor"=>a.value,
+    "angular_averaging_measure"=>a.averaging_measure)
+
 function depolarization_factor(y)
     value=fixed_scalar(y,"fixed SIDIS y")
     0<=value<=1 || error("SIDIS y must lie in [0,1]")
@@ -52,7 +72,7 @@ function sia_charge_sums(pp,pm,mp,mm)
     (U=U,L=L,C=(UU=U.UU+L.UU,Collins=U.Collins+L.Collins))
 end
 
-function sia_double_ratio(sums,ratio,angular::SIAAngularFactor)
+function sia_double_ratio(sums,ratio,angular::Union{SIAAngularFactor,SIAMeanOfRatio})
     ratio in (:UL,:UC) || error("SIA double ratio must be UL or UC")
     sums.C.UU==sums.U.UU+sums.L.UU && sums.C.Collins==sums.U.Collins+sums.L.Collins || error("charged category must be the sum of unlike and like categories")
     denominator=ratio==:UL ? sums.L : sums.C
@@ -118,7 +138,7 @@ function assemble_observable(kind,context,momentum,angular,source;extra=Dict{Str
         [U,L]
     end
     foreach(physical_denominator,denominators)
-    metadata=Dict{String,Any}("contract_id"=>"KPSY-LEPTONIC-OBS-001","scope"=>"reconstructed_theory",
+    metadata=Dict{String,Any}("contract_id"=>"KPSY-LEPTONIC-OBS-002","scope"=>"reconstructed_theory",
         "production_ready"=>false,"physical_extraction"=>false,"process"=>string(context.leptonic.process),
         "definition"=>string(kind),"source"=>String(source),"context_provenance"=>deepcopy(context.provenance),
         "kinematics"=>(momentum===nothing ? "fixed_kinematics" : "fixed_other_kinematics_finite_P_integral"),
@@ -148,13 +168,12 @@ function sidis_observable(context::PolarizedLeptonicPlan;definition,y=nothing,mo
             "depolarization_removed"=>definition==:structure_function_ratio))
 end
 
-function sia_observable(context::PolarizedLeptonicPlan;ratio,angular::SIAAngularFactor,momentum=nothing,source)
+function sia_observable(context::PolarizedLeptonicPlan;ratio,angular::Union{SIAAngularFactor,SIAMeanOfRatio},momentum=nothing,source)
     context.leptonic.process==:SIA || error("SIA hadron2 context required")
     ratio in (:UL,:UC) || error("SIA double ratio must be UL or UC")
-    assemble_observable(ratio,context,momentum,angular.value,source;
-        extra=Dict{String,Any}("frame"=>"hadron2","double_ratio_approximation"=>"linearized",
-            "angular_definition"=>"ratio_of_angular_means","angular_source"=>angular.source,
-            "angular_factor"=>angular.value))
+    extra=Dict{String,Any}("frame"=>"hadron2","double_ratio_approximation"=>"linearized")
+    merge!(extra,sia_angular_metadata(angular))
+    assemble_observable(ratio,context,momentum,angular.value,source;extra=extra)
 end
 
 function observable_valid(observable)

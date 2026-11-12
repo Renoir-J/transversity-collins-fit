@@ -21,10 +21,11 @@ function analytic_observable_checks(buildfile,progressfile)
             radial=RadialRule(analytic_edges(24.);order=setting["radial_order"])
             context=analytic_context(buildfile,process,model,radial;intervals=setting["intervals"])
             values=all_observable_values(context,theta)
+            source_values=angular_source_level(context,theta,values,level,policy,checks)
             error=isempty(levels[label]) ? nothing : scaled(values,last(levels[label])["values"])
             accepted=level>=3 && error!==nothing && error<=policy["physical_value_max_scaled"]
             push!(levels[label],Dict("setting"=>setting,"radial_nodes"=>length(radial.b),"values"=>values,
-                "previous_level_max_error"=>error,"refinement_accepted"=>accepted))
+                "previous_level_max_error"=>error,"refinement_accepted"=>accepted,"mean_of_angular_ratio_values"=>source_values))
             coarse[process]=get(coarse,process,context);fine[process]=context
             writejson(progressfile,Dict("status"=>"IN_PROGRESS","scope"=>"reconstructed_theory","production_ready"=>false,
                 "sources"=>sources,"refinements"=>levels))
@@ -78,11 +79,13 @@ function analytic_observable_checks(buildfile,progressfile)
         check("$process finite-bound observable extension 24 to 32",scaled(tail[end]["values"],tail[end-1]["values"]),policy["physical_value_max_scaled"])
         append!(derivatives,observable_derivatives(coarse[process],theta,policy,checks))
     end
+    source_checks=angular_source_checks(fine[:SIA],coarse[:SIA],theta,oracles,derivatives,contract,checks;
+        reference_tolerance=policy["physical_value_max_scaled"],reference_scope="independent Mellin/adaptive values at the same fixed effective angular factor")
     check("source/build stability",observable_source_hashes(@__FILE__)==sources && bytes2hex(sha256(read(buildfile)))==build_hash &&
         CollinsFit.verified_hoppet_build(buildfile)==build ? 0. : 1.,0.)
     observable_result(checks,sources,contract;build=build,build_sha256=build_hash,refinements=levels,tails=tails,
         momentum_refinements=momentum,independent_mellin_references=oracles,derivative_checks=derivatives,
-        parameters=theta,input_scope="analytic polynomial initial and unpolarized inputs; native matched evolution; no physical source replacement")
+        angular_source_checks=source_checks,parameters=theta,input_scope="analytic polynomial initial and unpolarized inputs; native matched evolution; no physical source replacement")
 end
 
 buildfile=isempty(ARGS) ? joinpath(OBS_ROOT,".runtime/hoppet/build.json") : ARGS[1]

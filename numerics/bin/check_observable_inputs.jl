@@ -49,6 +49,7 @@ function pinned_observable_checks(nativefile,inputfile,progressfile)
                 radial=RadialRule(parton_radial_edges(model,ff,inputs["input_root"],24.);order=setting["radial_order"])
                 context=nothing;cold=@elapsed context=prepare(process,radial,setting)
                 values=all_observable_values(context,theta)
+                source_values=angular_source_level(context,theta,values,level,policy,checks)
                 error=isempty(levels[label]) ? nothing : scaled(values,last(levels[label])["values"])
                 accepted=level>=3 && error!==nothing && error<=policy["physical_value_max_scaled"]
                 meta=context.provenance
@@ -61,7 +62,7 @@ function pinned_observable_checks(nativefile,inputfile,progressfile)
                 check("$process level $level finite signed observables",all(isfinite,values) ? 0. : 1.,0.)
                 push!(levels[label],Dict("setting"=>setting,"radial_nodes"=>length(radial.b),"values"=>values,
                     "previous_level_max_error"=>error,"refinement_accepted"=>accepted,"provenance"=>meta,
-                    "preparation_seconds_informational"=>cold))
+                    "preparation_seconds_informational"=>cold,"mean_of_angular_ratio_values"=>source_values))
                 coarse[process]=get(coarse,process,context);fine[process]=context
                 writejson(progressfile,Dict("status"=>"IN_PROGRESS","scope"=>"reconstructed_theory","production_ready"=>false,
                     "sources"=>sources,"refinements"=>levels,"build_sha256"=>hashes[nativefile],"input_build_sha256"=>hashes[inputfile]))
@@ -106,11 +107,13 @@ function pinned_observable_checks(nativefile,inputfile,progressfile)
                 "observable_pair_seconds"=>projected,"original_point_composition_seconds"=>original,
                 "median_observable_pair_seconds"=>median(projected),"median_original_point_composition_seconds"=>median(original)))
         end
+        source_checks=angular_source_checks(fine[:SIA],coarse[:SIA],theta,direct,derivatives,contract,checks;
+            reference_tolerance=policy["analytic_integral_max_scaled"],reference_scope="independent original-point/adaptive-P composition at the same fixed effective angular factor")
         check("source/build stability",observable_source_hashes(@__FILE__)==sources && all(bytes2hex(sha256(read(p)))==h for (p,h) in hashes) &&
             CollinsFit.verified_hoppet_build(nativefile)==native && CollinsFit.verify_parton_build(inputfile)==inputs ? 0. : 1.,0.)
         observable_result(checks,sources,contract;build=native,build_sha256=hashes[nativefile],input_build_sha256=hashes[inputfile],
             refinements=levels,tails=tails,momentum_refinements=momentum,direct_point_references=direct,derivative_checks=derivatives,
-            resource_pilots=resources,parameters=theta,
+            angular_source_checks=source_checks,resource_pilots=resources,parameters=theta,
             input_scope="strict pinned CT10/DSSV08/DSS14 initial samples; explicit reference mu_b scale extrapolation; no experimental admission")
     finally
         close(pdf)
