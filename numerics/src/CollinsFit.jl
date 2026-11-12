@@ -21,7 +21,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        initial_transversity, initial_collins, trento_first_moment,
        prepare_initial_conditions, initial_distributions, evolve_initial_conditions,
        initial_source_grids,
-       HoppetPlan, HoppetPointPlan, hoppet_evaluate, hoppet_generator,
+       HoppetPlan, HoppetPointPlan, HoppetMatchingPlan, hoppet_evaluate, hoppet_generator,
        profile_nuisance, writejson, run_job
 
 struct Context

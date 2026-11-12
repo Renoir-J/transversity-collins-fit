@@ -35,6 +35,7 @@
   "reconstructed_initial_contract": "config/initial-contract.json",
   "reconstructed_hoppet_contract": "config/hoppet-contract.json",
   "reconstructed_hoppet_point_contract": "config/hoppet-point-contract.json",
+  "reconstructed_matched_rows_contract": "config/matched-rows-contract.json",
   "data_admission": {
     "candidate_scope": "experimental_candidate",
     "candidate_enters_optimizer": false,

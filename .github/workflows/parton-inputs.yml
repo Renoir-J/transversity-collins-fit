@@ -9,6 +9,7 @@ on:
       - config/evolution-contract.json
       - config/css-contract.json
       - config/hoppet-*.json
+      - config/matched-rows-contract.json
       - bridges/**
       - fortran/check_dss*.f90
       - fortran/hoppet_bridge.f90
@@ -72,6 +73,11 @@ jobs:
           julia --project=numerics numerics/bin/check_hoppet.jl .runtime/hoppet/build.json runs/ci-parton/hoppet.json | tee runs/ci-parton/hoppet-native.log
           julia --project=numerics numerics/bin/check_hoppet_points.jl .runtime/hoppet/build.json runs/ci-parton/hoppet-points.json | tee runs/ci-parton/hoppet-points-native.log
           julia --project=numerics numerics/bin/check_hoppet_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-parton/hoppet-inputs.json query_rows | tee runs/ci-parton/hoppet-inputs-native.log
+      - name: Check evolved polarized matching rows and physical inputs
+        shell: bash
+        run: |
+          julia --project=numerics numerics/bin/check_matched_rows.jl .runtime/hoppet/build.json runs/ci-parton/matched-rows.json | tee runs/ci-parton/matched-rows-native.log
+          julia --project=numerics numerics/bin/check_matched_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-parton/matched-inputs.json | tee runs/ci-parton/matched-inputs-native.log
       - name: Upload input comparison evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

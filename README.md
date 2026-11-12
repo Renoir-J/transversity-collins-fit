@@ -18,6 +18,8 @@ A [reconstructed LO collinear evolution component](docs/evolution.md) now covers
 
 A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use the same contracted LO equation. They retain upstream convolution/evolution and fix the x-weight, auxiliary-time and derivative conventions explicitly. Physical source-knot checks use query-aligned native grids; the rejected global-grid pilot remains documented. These components do not admit production fits or establish physical fitting throughput.
 
+[Evolved polarized matching rows](docs/matched-rows.md) combine fixed-scale evolution with SIDIS/SIA Wilson coefficients before fitting. Physical alpha_s, process constants and the homogeneous Collins approximation are explicit. Generic Julia row products retain parameter derivatives after native preparation closes. Observable assembly and production admission remain separate requirements.
+
 ## Running the workflow
 
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.
