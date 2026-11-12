@@ -56,13 +56,15 @@ end
     root = normpath(joinpath(@__DIR__, "../.."))
     data = JSON.parsefile(joinpath(root, "fixtures/closure/data.json"))
     kernel = JSON.parsefile(joinpath(root, "fixtures/closure/kernel.json"))
-    data["scope"] = "experimental_candidate"
-    kernel["scope"] = "experimental_candidate"
-    mktempdir() do directory
-        datafile, kernelfile = joinpath(directory, "data.json"), joinpath(directory, "kernel.json")
-        CollinsFit.writejson(datafile, data)
-        CollinsFit.writejson(kernelfile, kernel)
-        @test_throws ErrorException load_context(datafile, kernelfile)
+    for scope in ("experimental_candidate", "historical_benchmark_candidate")
+        data["scope"] = scope
+        kernel["scope"] = scope
+        mktempdir() do directory
+            datafile, kernelfile = joinpath(directory, "data.json"), joinpath(directory, "kernel.json")
+            CollinsFit.writejson(datafile, data)
+            CollinsFit.writejson(kernelfile, kernel)
+            @test_throws ErrorException load_context(datafile, kernelfile)
+        end
     end
 end
 
