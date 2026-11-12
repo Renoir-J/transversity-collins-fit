@@ -26,6 +26,19 @@
     "seed": 20261111,
     "replicas": 32,
     "physics_results": false
+  },
+  "experimental_data_manifest": "config/experimental-sources.json",
+  "data_admission": {
+    "candidate_scope": "experimental_candidate",
+    "candidate_enters_optimizer": false,
+    "publication_specific_prediction_prescription": true,
+    "HERMES2020": "structure-function asymmetry with epsilon prefactors removed; use reported-mean interpretation for the published acceptance systematics",
+    "Belle2019": "percent-valued source tables; preserve thrust axis, angular factor and overlapping projections",
+    "BESIII2016": "fraction-valued v2; preserve exchanged z-bin union and ratio of angular averages",
+    "STAR200_and_STAR510": "official HEPData pion Collins tables acquired; horizontal systematic error-box intervals are not physical integration bins; retain source qualifiers and block admission pending binning/acceptance/covariance review",
+    "STAR510_supplement": "14-point jet-pT supplement and 13-point HEPData Figure 2 use different published binning; preserve as overlapping alternatives without inventing edges or combining the views",
+    "unknown_systematic_correlations": "retain components; never silently diagonalize",
+    "multiplicative_polarization_systematics": "retain relative uncertainty and shared correlation group; certified likelihood implementation required",
+    "source_corrections": "Only explicit cell-level corrections tied to a locked source and primary-paper evidence; preserve raw bytes and test the complete published bin partition."
   }
 }
-

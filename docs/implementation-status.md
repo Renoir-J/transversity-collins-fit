@@ -6,11 +6,11 @@ ADR-001, 2026-11-11. Issues and milestones track progress. Software capability a
 |---|---|---|
 | Julia prediction/likelihood/AD/optimization | Implemented for finite synthetic kernels | Golden fixture, nuisance identity, derivative and HVP checks |
 | Multistart, parametric replicas, process holdouts | Implemented for closure | Numerical reports / CI; replicas are not posterior samples |
-| Python data validation and CSV/XLSX normalization | Implemented | Explicit mappings, units/signs, covariance and overlap |
+| Python data validation and CSV/XLSX/HTML/YAML normalization | Implemented for first experimental intake | Twenty-two pinned sources; 773 amplitudes in 82 overlapping views; source corrections and primary/JAM cross-checks |
 | Snakemake 12-stage DAG / receipts / cache / outputs | Implemented | Linux integration and negative admission tests |
 | Fixed Float64 batched Fortran ABI | Implemented | Cross-language application test; no HOPPET operator builder |
 | GitHub progress and Git rules | Configured | Milestones, issues, PR/CI, hooks; server enforcement recorded separately |
-| Updated experimental data | Pending review and normalization | Candidate/source index exists |
+| Updated experimental data | First candidate batch acquired; production review pending | HERMES/Belle/BESIII and official STAR200/510 pion Collins tables; STAR physical binning, COMPASS tables, covariance and admission remain open |
 | KPSY CSS historical reproduction | Blocked on source or independent reconstruction | Author's modified HOPPET and fitting program not located |
 | Production theory | Pending | Process-accurate bins/acceptance, evolution, matching and independent fixtures |
 | Production gradients/performance/interval coverage | Pending | Synthetic checks do not certify physical implementations |

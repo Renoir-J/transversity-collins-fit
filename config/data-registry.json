@@ -47,7 +47,7 @@
       "id": "HERMES2020",
       "paper": "2007.07755",
       "process": "SIDIS",
-      "status": "primary paper cached; JAM tables acquired, not yet normalized",
+      "status": "200 candidate amplitudes normalized from pinned JAM tables; two 64-bin charged-pion grids checked against primary Table V; four explicit secondary-source zmin corrections; covariance/admission pending",
       "role": "replace overlapping older HERMES bins",
       "new_since_KPSY15": true,
       "flags": [
@@ -86,7 +86,7 @@
       "id": "BESIII_3650",
       "paper": "1507.06824",
       "process": "SIA",
-      "status": "primary paper cached; JAM table catalogue acquired",
+      "status": "22 final-v2 fraction-valued candidates normalized from primary Table I and cross-checked against all four pinned JAM transcriptions; covariance/admission pending",
       "role": "low-Q candidate update",
       "new_since_KPSY15": true,
       "flags": [
@@ -100,7 +100,7 @@
       "id": "Belle2019",
       "paper": "1909.01857",
       "process": "SIA",
-      "status": "primary paper and appendix tables read; machine normalization pending",
+      "status": "133 candidate amplitudes normalized from primary Tables VII-IX with percent conversion and projection/UL-UC separation; covariance/admission pending",
       "role": "candidate update with supported pion channels",
       "new_since_KPSY15": true,
       "flags": [
@@ -114,7 +114,7 @@
       "paper": "2205.11800",
       "process": "pp_hadron_in_jet",
       "sqrt_s_GeV": 200,
-      "status": "paper/cuts read; current official machine tables not imported",
+      "status": "official HEPData v1 acquired: 328 pion Collins amplitudes across 44 views in Figures 14-18; physical integration bins, acceptance and covariance remain under review",
       "role": "main new jet constraint",
       "flags": [
         "2012 and 2015 samples",
@@ -129,7 +129,7 @@
       "paper": "2507.16355",
       "process": "pp_hadron_in_jet",
       "sqrt_s_GeV": 510,
-      "status": "paper and supplement read; HEPData cited by paper, record retrieval returned 403; tables not imported",
+      "status": "official HEPData v1 acquired: 76 amplitudes across 12 pion Collins views; 14-point positive-pion supplement retained separately because its binning differs from 13-point HEPData Figure 2; physical integration bins, acceptance and covariance remain under review",
       "role": "main high-energy new jet constraint",
       "flags": [
         "2017 sample",
@@ -149,7 +149,7 @@
       "uncertainty": 0.025,
       "scheme": "MSbar",
       "mu_GeV": 2,
-      "status": "primary paper Table XI and JAM default selection identified; exact JAM xlsx cross-check pending",
+      "status": "primary Table XI constraint and pinned JAM lattice/2000.xlsx agree: gT=0.936+-0.025 at 2 GeV; correlated flavor charges not added",
       "role": "historical lattice scenario",
       "flags": [
         "same ensemble flavor components correlated",
@@ -167,5 +167,7 @@
       "status": "identified through JAM references; not all original numerical inputs reviewed",
       "role": "alternative-ensemble sensitivity studies; no naive independent averaging"
     }
-  ]
+  ],
+  "experimental_intake_manifest": "config/experimental-sources.json",
+  "candidate_scope": "experimental_candidate; never admitted directly to fitting"
 }
