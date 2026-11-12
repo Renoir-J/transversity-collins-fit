@@ -35,6 +35,7 @@ mutable struct CT10Input
     destroy::Ptr{Nothing}
     limits::NTuple{4,Float64}
     policy::Symbol
+    input_root::String
 end
 
 function CT10Input(buildfile; policy=:strict)
@@ -59,7 +60,7 @@ function CT10Input(buildfile; policy=:strict)
                 error("missing CT10 grid limits")
             all(isapprox.(limits,[1e-8,1.0,1.3^2,1e10];rtol=1e-12)) || error("unexpected CT10 grid limits")
             input = CT10Input(handle,context,Libdl.dlsym(handle,:collins_lha_batch),
-                Libdl.dlsym(handle,:collins_lha_close),Tuple(limits),policy)
+                Libdl.dlsym(handle,:collins_lha_close),Tuple(limits),policy,root)
             finalizer(close,input)
             input
         catch
@@ -221,13 +222,22 @@ function pion_components(raw,charge)
 end
 
 "Unweighted D_i^π using PDG flavors; c=cbar and b=bbar are each half the grid total."
+function pion_flavor_index(pid)
+    pid isa Integer && !(pid isa Bool) && (pid == 21 || 1 <= abs(pid) <= 5) || error("unsupported DSS14 flavor")
+    pid == 21 ? 9 : abs(pid) == 5 ? 8 : abs(pid) == 4 ? 7 :
+        pid == 2 ? 1 : pid == -2 ? 2 : pid == 1 ? 3 : pid == -1 ? 4 : pid == 3 ? 5 : 6
+end
 function pion_ff(input::LegacyPartonInput,pid,charge,z,Q2;policy=:strict)
     input.kind == :DSS14 || error("pion FF requires DSS14")
-    pid isa Integer && !(pid isa Bool) && (pid == 21 || 1 <= abs(pid) <= 5) || error("unsupported DSS14 flavor")
+    index = pion_flavor_index(pid)
     components = pion_components(weighted_components(input,z,Q2;policy=policy),charge)
-    index = pid == 21 ? 9 : abs(pid) == 5 ? 8 : abs(pid) == 4 ? 7 :
-        pid == 2 ? 1 : pid == -2 ? 2 : pid == 1 ? 3 : pid == -1 ? 4 : pid == 3 ? 5 : 6
     components[index]/z
+end
+function pion_ff(input::LegacyPartonInput,pids::AbstractVector,charge,z,Q2;policy=:strict)
+    input.kind == :DSS14 && !isempty(pids) || error("nonempty DSS14 flavor list required")
+    indices = pion_flavor_index.(pids)
+    components = pion_components(weighted_components(input,z,Q2;policy=policy),charge)
+    components[indices]./z
 end
 
 function parton_domain(input::CT10Input,x,Q2)

@@ -8,9 +8,11 @@ Experimental intake is now available separately: it acquires 22 pinned sources a
 
 A [reconstructed LO collinear evolution component](docs/evolution.md) now covers transversity and the explicitly defined KPSY homogeneous Hhat3 approximation with independent x-space/Mellin checks. It does not supply the complete CSS model or a production physics fit.
 
-[Reconstructed two-loop coupling and CSS factors](docs/css.md) are available under a separate explicit contract. Independent analytic, adaptive-integration and derivative checks cover these components; matching coefficients, physical process assembly and historical reproduction remain incomplete.
+[Reconstructed two-loop coupling and CSS factors](docs/css.md) are available under a separate explicit contract. Independent analytic, adaptive-integration and derivative checks cover these components; fitted polarized process assembly and historical reproduction remain incomplete.
 
 [Reconstructed CT10/DSSV08/DSS14 input interfaces](docs/parton-inputs.md) retain locked source versions and compare against unchanged reference programs. Default queries reject unsupported ranges; explicit reference extrapolation does not authorize production fits.
+
+[SIDIS/SIA matching and Fourier-Bessel components](docs/leptonic.md) assemble structure functions from supplied matched legs. Analytic comparisons cover normalization, charge conjugation and derivatives. A pinned-input unpolarized pilot keeps unsupported-scale queries explicitly labeled; fitted polarized inputs, observable adapters and the historical fit remain incomplete.
 
 ## Running the workflow
 

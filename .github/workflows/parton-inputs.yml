@@ -52,7 +52,9 @@ jobs:
       - name: Build unmodified locked source references
         run: python scripts/prepare_parton_inputs.py
       - name: Compare native interfaces and explicit range policies
-        run: julia --project=numerics numerics/bin/check_parton_inputs.jl .runtime/parton-inputs/build.json runs/ci-parton/validation.json
+        run: |
+          julia --project=numerics numerics/bin/check_parton_inputs.jl .runtime/parton-inputs/build.json runs/ci-parton/validation.json
+          julia --project=numerics numerics/bin/check_leptonic_inputs.jl .runtime/parton-inputs/build.json runs/ci-parton/leptonic-inputs.json
       - name: Upload input comparison evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
