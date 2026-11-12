@@ -15,8 +15,8 @@ ADR-001, 2026-11-11. Issues and milestones track progress. Software capability a
 | Production theory | Pending | Process-accurate bins/acceptance, evolution, matching and independent fixtures |
 | Production gradients/performance/interval coverage | Pending | Synthetic checks do not certify physical implementations |
 | B0–B4 / V1 real fits and publication grids | Blocked on production gates | No new physical extraction reported |
-| FeynFacet NLO jet matching | Separate milestone | Inclusive hard functions alone are insufficient |
+| NLO jet matching | Separate milestone | Inclusive hard functions alone are insufficient |
 | Bayesian sampling / reweighting | Not implemented | Optional after closure and prior/calibration checks |
 
-The research Page and numerical-workflow document remain background specifications. This repository and its CI artifacts describe current implementation progress. Production does not silently substitute a synthetic or mismatched approximation.
+This repository and its CI artifacts describe implementation progress. Detailed local working notes are excluded from Git. Production does not silently substitute a synthetic or mismatched approximation.
 
