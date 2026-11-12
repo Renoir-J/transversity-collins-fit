@@ -5,6 +5,7 @@ include("leptonic_tests.jl")
 include("initial_tests.jl")
 include("polarized_tests.jl")
 include("observable_tests.jl")
+include("sidis_convention_tests.jl")
 include("observable_reference_tests.jl")
 include("cache_snapshot_tests.jl")
 

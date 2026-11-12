@@ -59,6 +59,44 @@ function depolarization_factor(y)
     2(1-value)/(1+(1-value)^2)
 end
 
+"Fixed SIDIS phase and normalization for an already spin/dilution-normalized amplitude."
+struct SIDISAsymmetryConvention
+    phase::Symbol
+    normalization::Symbol
+    y::Union{Nothing,Float64}
+    source::String
+    function SIDISAsymmetryConvention(phase,normalization,y,source)
+        phase in (:sin_phi_sum,:sin_phi_sum_minus_pi) || error("explicit supported SIDIS phase required")
+        normalization in (:DNN_removed,:fixed_y_DNN_included) || error("explicit supported SIDIS DNN normalization required")
+        source isa AbstractString && !isempty(strip(source)) || error("nonblank SIDIS convention source required")
+        value=if normalization==:DNN_removed
+            y===nothing || error("DNN is already removed; do not supply y for another correction")
+            nothing
+        else
+            y===nothing && error("fixed-y DNN-included amplitude requires y")
+            fixed=fixed_scalar(y,"fixed SIDIS convention y")
+            0<fixed<=1 || error("fixed SIDIS convention requires 0<y<=1")
+            fixed
+        end
+        new(phase,normalization,value,String(source))
+    end
+end
+SIDISAsymmetryConvention(;phase,normalization,y=nothing,source)=SIDISAsymmetryConvention(phase,normalization,y,source)
+
+function sidis_convention_metadata(convention::SIDISAsymmetryConvention)
+    shifted=convention.phase==:sin_phi_sum_minus_pi
+    removed=convention.normalization==:DNN_removed
+    Dict{String,Any}("sidis_convention_contract_id"=>"KPSY-SIDIS-CONVENTION-001",
+        "phase_definition"=>string(convention.phase),
+        "angle_convention"=>(shifted ? "sin(phi_h+phi_s-pi)" : "sin(phi_h+phi_s)"),
+        "phase_factor"=>(shifted ? -1. : 1.),
+        "normalization"=>string(convention.normalization),"depolarization_removed"=>removed,
+        "DNN_factor"=>(removed ? 1. : depolarization_factor(convention.y)),"y"=>convention.y,
+        "DNN_evaluation"=>(removed ? "not_applied_already_removed" : "fixed_y"),
+        "spin_dilution_normalization"=>"already removed; no f or P_T factor applied",
+        "mapping_scope"=>"same virtual-photon/lepton-plane azimuth axes; no experimental admission")
+end
+
 function physical_denominator(value)
     value isa Real && !(value isa Bool) && isfinite(value) && value>0 || error("finite positive final unpolarized denominator required")
     value
@@ -126,7 +164,7 @@ end
 
 function assemble_observable(kind,context,momentum,angular,source;extra=Dict{String,Any}())
     polarized_context_valid(context)
-    allowed=context.leptonic.process==:SIDIS ? (:structure_function_ratio,:sin_phi_sum_amplitude) : (:UL,:UC)
+    allowed=context.leptonic.process==:SIDIS ? (:structure_function_ratio,:sin_phi_sum_amplitude,:source_collins_amplitude) : (:UL,:UC)
     kind in allowed || error("observable definition/process mismatch")
     source isa AbstractString && !isempty(source) || error("explicit observable source required")
     uu,collins=observable_weights(context,momentum)
@@ -166,6 +204,13 @@ function sidis_observable(context::PolarizedLeptonicPlan;definition,y=nothing,mo
     assemble_observable(definition,context,momentum,angular,source;
         extra=Dict{String,Any}("y"=>value,"angle_convention"=>"sin(phi_h+phi_s)",
             "depolarization_removed"=>definition==:structure_function_ratio))
+end
+
+function sidis_observable(context::PolarizedLeptonicPlan,convention::SIDISAsymmetryConvention;momentum=nothing)
+    context.leptonic.process==:SIDIS || error("SIDIS context required")
+    metadata=sidis_convention_metadata(convention)
+    angular=metadata["phase_factor"]*metadata["DNN_factor"]
+    assemble_observable(:source_collins_amplitude,context,momentum,angular,convention.source;extra=metadata)
 end
 
 function sia_observable(context::PolarizedLeptonicPlan;ratio,angular::Union{SIAAngularFactor,SIAMeanOfRatio},momentum=nothing,source)
