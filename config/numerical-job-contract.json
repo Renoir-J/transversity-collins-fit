@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "NUMERICAL-JOB-SCOPE-001",
+  "scope": "numerical_job_protocol",
+  "production_ready": false,
+  "physical_extraction": false,
+  "production_backend_implemented": false,
+  "architecture_decision": "ADR-001",
+  "entry": "numerics/bin/run_job.jl -> CollinsFit.run_job",
+  "current_backend": "Finite preintegrated linear/bilinear synthetic kernels only; reconstructed physical validators use their separate explicit interfaces.",
+  "required_job_scope": "synthetic_closure",
+  "required_data_scope": "synthetic_closure",
+  "required_kernel_scope": "synthetic_closure",
+  "scope_rules": [
+    "Require an explicit exact string in the job, data and kernel JSON objects. Do not infer a job's scope from inputs or supply a missing scope by default.",
+    "Reject production, reconstructed_theory, experimental_candidate, historical_benchmark_candidate and all unknown, missing, empty or non-string scopes.",
+    "Check the job object and scope before data/kernel IO, numerical dispatch, thread reconfiguration or output creation.",
+    "The loader checks the data object/scope before opening the kernel, then checks the kernel object/scope before constructing its numerical context.",
+    "After loading, require job/data/kernel scope equality. A production request must never execute a synthetic fallback.",
+    "Relabeling a synthetic fixture as production does not implement a production backend or authorize scientific admission. A metadata boolean cannot enable it."
+  ],
+  "unchanged_numerics": [
+    "No change to predictions, parameter transformations, covariance/nuisance likelihood, optimizer, replicas, integration, source conventions, evolution, cuts or data overlap.",
+    "All numerical evaluation remains Julia; the guard runs once at the JSON entry/loading boundary, not inside the numerical loop.",
+    "Existing explicit synthetic jobs remain supported; no production job is implemented here."
+  ],
+  "validation": [
+    "Preserve the pre-fix read-only gap probe and failing targeted loader tests; no production fit is executed by these probes.",
+    "Reject unsupported or missing job scopes with absent input paths, proving rejection precedes input IO and any fit action.",
+    "Reject relabeled production inputs, candidate/reconstructed scopes, missing fields, scalar aliases and non-object roots; rejected requests create no output.",
+    "Execute a valid explicitly synthetic benchmark job and the complete Linux regression/closure workflow."
+  ],
+  "future_production_requirement": "A separate implemented scientific admission path with reviewed physical data/kernels, benchmarks and frozen production policy is required before extending the executor. Do not replace this guard with a boolean override.",
+  "limitations": [
+    "This is a declared JSON-interface consistency boundary, not a cryptographic authorization system or a sandbox for arbitrary trusted Julia code.",
+    "It does not certify physical processes, experimental data, a historical fit, performance or interval coverage. All existing scientific prerequisites remain."
+  ]
+}

@@ -39,9 +39,20 @@ end
 
 matrix(rows) = isempty(rows) ? zeros(0, 0) : reduce(vcat, permutedims.(Vector{Float64}.(rows)))
 
+"The finite-kernel JSON executor currently implements synthetic closure only."
+function require_synthetic_numerical_scope(value,label)
+    (value isa AbstractString && value=="synthetic_closure") ||
+        error("$label requires explicit scope=\"synthetic_closure\"; production and other scopes are not implemented")
+    "synthetic_closure"
+end
+
 function load_context(datafile, kernelfile)
-    d, k = JSON.parsefile(datafile), JSON.parsefile(kernelfile)
-    d["scope"] in ("synthetic_closure", "production") || error("experimental candidates are not admitted fit data")
+    d = JSON.parsefile(datafile)
+    d isa AbstractDict || error("data must be a JSON object with explicit scope")
+    require_synthetic_numerical_scope(get(d,"scope",nothing),"data")
+    k = JSON.parsefile(kernelfile)
+    k isa AbstractDict || error("kernel must be a JSON object with explicit scope")
+    require_synthetic_numerical_scope(get(k,"scope",nothing),"kernel")
     length(d["points"]) == length(k["bins"]) || error("kernel/data size mismatch")
     [p["id"] for p in d["points"]] == [b["point_id"] for b in k["bins"]] || error("kernel point order mismatch")
     d["scope"] == k["scope"] || error("kernel/data scope mismatch")
@@ -294,8 +305,11 @@ function writejson(path, result)
 end
 
 function run_job(job)
+    job isa AbstractDict || error("numerical job must be a JSON object with explicit scope")
+    requested_scope = require_synthetic_numerical_scope(get(job,"scope",nothing),"job")
     BLAS.set_num_threads(1)
     context = load_context(job["data"], job["kernel"])
+    requested_scope==context.data["scope"]==context.kernel["scope"] || error("job/data/kernel scope mismatch")
     action = job["action"]
     result = if action == "benchmark"
         benchmark_report(context)

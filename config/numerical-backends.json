@@ -31,7 +31,9 @@
         "objective(parameters, immutable_context)",
         "value_and_gradient!(gradient, parameters, immutable_context)"
       ],
-      "status": "Complete Julia job CLI implemented for finite-kernel synthetic closure; production admission blocked"
+      "status": "Complete Julia job CLI implemented for finite-kernel synthetic closure; production admission blocked",
+      "scope_contract": "config/numerical-job-contract.json",
+      "scope_policy": "Require explicit matching synthetic_closure scopes in job/data/kernel; reject production and missing/unsupported scopes before numerical dispatch."
     },
     "runtime": "Linux or WSL2 Linux filesystem",
     "precision": "Float64 reference; complex arithmetic where Mellin inversion requires it; reduced precision only after separate validation",
