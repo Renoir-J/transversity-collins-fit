@@ -1,0 +1,84 @@
+name: Native precision qualification
+
+on:
+  pull_request:
+    paths:
+      - config/*-contract.json
+      - numerics/**
+      - fixtures/native_precision/**
+      - fortran/hoppet_bridge.f90
+      - src/collinsflow/hoppet.py
+      - src/collinsflow/provenance.py
+      - scripts/prepare_hoppet.py
+      - requirements.lock
+      - .github/workflows/native-precision.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-precision-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      JULIA_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Retain exact parent adapter as an unqualified diagnostic reference
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 1f993ce01460dfa4c4b502d0216982e1c5b1e784
+          path: .runtime/native-parent
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v3.0.3
+        with:
+          version: '1.12.6'
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
+        with:
+          delete-old-caches: 'false'
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+          julia --project=numerics -e 'using Pkg; Pkg.instantiate()'
+      - name: Build both adapters from unchanged pinned native source
+        run: |
+          python scripts/prepare_hoppet.py
+          PYTHONPATH=.runtime/native-parent/src python .runtime/native-parent/scripts/prepare_hoppet.py
+      - name: Reject synthetic zero-status native errors and close their contexts
+        run: julia --project=numerics -e 'using Test, CollinsFit; include("numerics/test/native_precision_tests.jl")'
+      - name: Preserve parent diagnostics and compare the repaired native kernels
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runs/ci-native-precision
+          julia --project=.runtime/native-parent/numerics numerics/bin/check_native_precision.jl parent .runtime/native-parent/.runtime/hoppet/build.json runs/ci-native-precision/parent.json | tee runs/ci-native-precision/parent.log
+          julia --project=numerics numerics/bin/check_native_precision.jl candidate .runtime/hoppet/build.json runs/ci-native-precision/candidate.json runs/ci-native-precision/parent.json | tee runs/ci-native-precision/candidate.log
+      - name: Upload complete evidence including failures
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-precision-${{ github.sha }}
+          path: |
+            runs/ci-native-precision
+            .runtime/hoppet/build.json
+            .runtime/hoppet/build.log
+            .runtime/hoppet/upstream-tests.log
+            .runtime/native-parent/.runtime/hoppet/build.json
+            .runtime/native-parent/.runtime/hoppet/build.log
+            .runtime/native-parent/.runtime/hoppet/upstream-tests.log
+          include-hidden-files: true
+          retention-days: 30

@@ -146,8 +146,19 @@ contains
     allocate(unique_xs(u),representative(u))
     unique_xs=ordered(:u); representative=targets(:u)
     call qcd_SetNf(nf)
-    call InitDglapHolder(grid,holder,nloop=1,nflo=nf,nfhi=nf)
-    call Delete(holder%P_LO)
+    ! Allocate only the fixed-nf holder used by the retained LO solver. The
+    ! generic initializer would integrate unused unpolarized kernels and then
+    ! discard them, including their otherwise hidden precision failures.
+    holder%grid=grid
+    holder%factscheme=factscheme_MSbar
+    holder%nloop=1
+    allocate(holder%allP(1,nf:nf),holder%allC(3,nf:nf))
+    do k=1,3
+      holder%allC(k,nf)%grid=grid
+      holder%allC(k,nf)%HO=.false.
+      holder%allC(k,nf)%delta=0.0_dp
+    end do
+    call SetNfDglapHolder(holder,nf)
     call InitSplitMat(grid,holder%P_LO,nf)
     call InitGridConv(grid,generator,transversity_kernel)
     ! Every quark/antiquark evolves independently, with no gluon component.

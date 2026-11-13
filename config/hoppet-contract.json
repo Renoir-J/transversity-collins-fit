@@ -39,6 +39,29 @@
     "settings": "Reject AD in grid, coupling, scales, tau, order, nf and solver tolerances; a fitted setting requires dU",
     "foreign_callbacks": false
   },
+  "native_precision": {
+    "id": "KPSY-NATIVE-PRECISION-001",
+    "holder_initialization": "The project adapter allocates one fixed-nf LO dglap_holder using the pinned public derived types, SetNfDglapHolder and zero InitSplitMat. Initialize its three unused coefficient headers explicitly with HO=false and delta=0. Insert the unchanged transversity kernel only. Do not first construct and discard unpolarized LO splitting functions.",
+    "retained_algorithms": "Keep the exact grids, solver eps/du, constrained endpoint, transversity/Collins kernels, coupling, evolution, convolution, interpolation, batched probes and adjoints. No external source or acceptance threshold changes.",
+    "diagnostic_guard": "Julia serializes native operations and stderr redirection under HOPPET_NATIVE_LOCK, flushes C stdio, replays native stderr, and rejects TOO HIGH ACCURACY REQUIRED even when the native ABI status is zero. Register a returned native context before checking diagnostics so a rejected constructor closes it. Never silently retry with looser settings or another backend.",
+    "validation_policy": {
+      "native_precision_errors_allowed": 0,
+      "parent_retained_prediction_max_abs": 0.0,
+      "same_grid_row_native_max_scaled": 1e-10,
+      "point_Mellin_max_scaled": 0.0001,
+      "point_reference_floor": 1e-8,
+      "constructor_cases": [
+        {"label": "nested", "xmin": 0.0065, "dy": 0.1, "layout": "nested"},
+        {"label": "fine_query", "xmin": 0.1, "intervals": 2048, "layout": "single"},
+        {"label": "near_endpoint", "xmin": 0.95, "intervals": 512, "layout": "single"},
+        {"label": "control", "xmin": 0.1, "intervals": 1024, "layout": "single"}
+      ],
+      "constructions": ["independent", "batched_probes"],
+      "nf_cases": [3, 4, 5, 6],
+      "scope": "Reject native diagnostic failures; compare retained fixed-grid predictions bit-for-bit against the parent adapter, then run unchanged component/process refinements. Synthetic zero-status error injection must reject and release its native context. This does not certify arbitrary kinematics or production physics."
+    },
+    "historical_limitations": "Earlier declared comparisons remain recorded together with their native precision warnings. A new zero-error run cannot rewrite those runs or grant a uniform endpoint/native-accuracy certificate. The STAR common-grid endpoint limitation remains open."
+  },
   "state": "One active context per loaded bridge, guarded by generation handles and a Julia process lock. Numerical jobs remain isolated processes; upstream SAVE/global state is not claimed thread-safe.",
   "validation_policy": {
     "scope": "same-equation analytic/Mellin, fixed-grid, AD and resource pilots; not production G2/G2AD/G2PERF",

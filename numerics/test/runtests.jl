@@ -1,4 +1,5 @@
 using Test, CollinsFit, ForwardDiff, LinearAlgebra, JSON
+include("native_precision_tests.jl")
 include("css_tests.jl")
 include("parton_tests.jl")
 include("leptonic_tests.jl")
