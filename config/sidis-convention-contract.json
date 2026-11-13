@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-SIDIS-CONVENTION-001",
+  "parent_contract": "config/leptonic-observable-contract.json",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "canonical_ratio": "R=FUT^sin(phi_h+phi_s)/FUU under KPSY Eqs.3-5, with azimuths measured about the virtual-photon axis from the lepton plane and phi_s denoting target transverse spin.",
+  "input_normalization": "Amplitude has already been divided by target spin magnitude and dilution. Raw count epsilon=f*P_T*DNN*A_Coll is outside this API; no f or P_T correction is performed.",
+  "allowed_conventions": [
+    {"phase": "sin_phi_sum", "normalization": "DNN_removed", "factor": "+1"},
+    {"phase": "sin_phi_sum", "normalization": "fixed_y_DNN_included", "factor": "+DNN(y)"},
+    {"phase": "sin_phi_sum_minus_pi", "normalization": "DNN_removed", "factor": "-1"},
+    {"phase": "sin_phi_sum_minus_pi", "normalization": "fixed_y_DNN_included", "factor": "-DNN(y)"}
+  ],
+  "selection": "Required phase, normalization and nonblank source. No inference from experiment name, measured sign, fitted parameters or supplied scalar. The immutable carrier has no user-supplied angular-factor field.",
+  "fixed_y": "Only DNN-included mode takes fixed 0<y<=1, DNN=2*(1-y)/(1+(1-y)^2). Booleans and fitted/dual settings are rejected. DNN-removed mode rejects y, preventing a second correction. At y=1 the included amplitude is zero; no inversion by zero DNN is performed.",
+  "averaging": "This is a fixed-y prediction, including when a caller explicitly supplies a reported mean as an approximation. DNN(<y>) need not equal <DNN>, and <DNN*f*P_T> need not equal the product of means. Already corrected data receive no second correction. A finite P integral keeps y and all other kinematics fixed; no joint bin/acceptance average is inferred.",
+  "parameter_convention": "The phase acts only on the final observable. It does not redefine h1 or Hhat3, repeat the KPSY-to-Trento relation Hhat3=-2*z*M_h*H1perp(1), change the J1 minus sign, introduce a mass/z factor, or change evolution.",
+  "primary_references": [
+    {
+      "url": "https://arxiv.org/html/1505.05589v1",
+      "reviewed_PDF_sha256": "f56ce8c7c5fdfb3034725ed1ece2c6f3981ce0a2d847eecb85fbdc19dd51f0d3",
+      "location": "Fig.1 and Eqs.3-5; Eqs.55,58 separately define the KPSY/Trento Collins relation",
+      "fact": "Canonical spin-normalized sin(phi_h+phi_s) amplitude is DNN*R."
+    },
+    {
+      "url": "https://arxiv.org/abs/0802.2160v2",
+      "reviewed_PDF_sha256": "7bdcae73e26cfc80fdf6edeb7f36e9c03d3d3f97cccacc955329ab9f0ed40045",
+      "location": "Fig.2 and Collins-asymmetry definition; primary LaTeX source lines185-211 and597-623 in the reviewed source snapshot",
+      "fact": "Phi_C=phi_h+phi_S-pi; epsilon_C=f*P_T*DNN*A_Coll. The conditional same-axis phase conversion gives A_Coll=-R."
+    },
+    {
+      "url": "https://doi.org/10.1103/PhysRevLett.133.101903",
+      "primary_copy": "https://iris.unito.it/retrieve/f66c8c3b-e2ba-41ee-91bf-f624b15f6650/PhysRevLett.133.101903.pdf",
+      "reviewed_PDF_sha256": "f2398c5112b991e07e57dacc3594545b622db56c2741ab580063ac58f567cd20",
+      "location": "Fig.1, Collins modulation definition and extraction discussion on journal page5",
+      "fact": "phi_Coll=phi_h+phi_S-pi and epsilon_Coll=DNN*f*P_T*A_Coll; extracted data have already been divided by mean(DNN*f*P_T). Species, source-version and nuclear gates remain separate."
+    }
+  ],
+  "validation_policy": {
+    "threshold_source": "config/leptonic-observable-contract.json validation_policy; all targets inherited unchanged",
+    "synthetic_projection": "256-bit adaptive Fourier projection of independently constructed positive counts N=1+DNN*R*sin(phi_h+phi_s), R=+/-1/8, y=2/5, three target-spin azimuths. Project onto the declared harmonic and divide by the known DNN only in removed mode. This reference never calls the implementation convention-factor function.",
+    "physical_inputs": "Pinned CT10/DSSV08/DSS14 with explicit reference scale extrapolation. Point and finite P predictions, all13 parameter gradients and HVPs use independent scalar/BigFloat composition at shared fixed native rows. This checks the phase and normalization adapter, not an independent evolution solution or experimental admission.",
+    "counterfactuals": "Retain unshifted-phase and repeated-DNN alternatives as demonstrably different at nonzero fixtures. Constructor and metadata mutation checks fail closed.",
+    "derivatives": "Use inherited full13 inward direction, 256-bit references, finite-difference steps1e-4 and1e-5 and scaled derivative target1e-7 with floor1e-8. No thresholds are fitted to results."
+  },
+  "limitations": [
+    "Conditional same-axis mathematical phase/normalization conversion, not an experimental data-admission certificate",
+    "No raw-count spin/dilution correction, target-mass/longitudinal mixture or multidimensional acceptance integration",
+    "No unidentified-hadron mixture, deuteron nuclear prescription, covariance, nuisance or overlap decision",
+    "Historical reproduction, original author-code and homogeneous Collins-evolution limitations remain",
+    "No likelihood, production performance certification, uncertainty coverage or real-data extraction"
+  ]
+}

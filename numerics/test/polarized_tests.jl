@@ -11,9 +11,9 @@ function synthetic_polarized_operator(process,kind,queries,radial,model)
         rows[:,findfirst(==(query),grid)].=1 .+ 0.01 .* radial.b
         push!(blocks,CollinsFit.HoppetPointBlock(collect(eachindex(grid)),rows))
     end
-    HoppetMatchingPlan(grid,collect(queries),q2,model.Q02,tau,kind,5,32,:synthetic_fixture,
-        blocks,sum(sizeof(b.rows) for b in blocks),0.,process,alpha,
-        hash((grid,collect(queries),q2,tau,process,alpha)))
+    data=(grid,collect(queries),q2,model.Q02,tau,kind,5,32,:synthetic_fixture,
+        blocks,sum(sizeof(b.rows) for b in blocks),0.)
+    HoppetMatchingPlan(data...,process,alpha,CollinsFit.hoppet_point_snapshot(data...;process=process,alpha=alpha))
 end
 
 @testset "cached initial columns preserve the physical parameter family" begin

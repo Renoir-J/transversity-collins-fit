@@ -12,7 +12,7 @@ Unpolarized fragmentation matrices always represent pi+. Pi- conjugates that bas
 
 `NucleonTarget(:proton)` and `NucleonTarget(:neutron)` use exact u/d isospin interchange, including antiquarks in the unpolarized sum. Other targets require a source and separate fixed proton/neutron weights for the denominator and numerator. These implement impulse-model algebra; test weights are not a reviewed nuclear prescription. No dilution or effective-polarization factor is inferred.
 
-`with_momentum(context, P)` reuses providers, rows, initial samples and CSS arrays, changing Fourier weights and cached UU. `with_pion_charges(context, c1, c2)` reassembles from pi+ bases. SIDIS requires a zero second charge slot. Mutation checks bind the context's fixed unpolarized/CSS arrays, metadata and initial samples. Operator metadata checks follow the parent row contract; complete row-coefficient mutation protection, production serialization and cache admission remain separate work.
+`with_momentum(context, P)` reuses providers, rows, initial samples and CSS arrays, changing Fourier weights and cached UU. `with_pion_charges(context, c1, c2)` reassembles from pi+ bases. SIDIS requires a zero second charge slot. Mutation checks bind the context's fixed unpolarized/CSS arrays, metadata and initial samples. The [fixed-cache snapshot contract](numerical-cache.md) covers all accessible mutable settings and source arrays. Retained row matrices have owned read-only storage and a complete construction-time snapshot; block indices are checked on application. Production serialization and cache admission remain separate work.
 
 ## Preparing a context
 

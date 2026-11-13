@@ -22,7 +22,11 @@ A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use
 
 [Polarized leptonic process contexts](docs/polarized-processes.md) join the initial family, every supplied radial evolution/matching scale and signed SIDIS/SIA structure functions. Retained probe batching reduces repeated native preparation, and fixed Julia row products handle fitted parameters and nested derivatives. Analytic and pinned-input validation have separate producers; these contexts do not admit experimental observables or fits.
 
+[Normalized leptonic observables](docs/leptonic-observables.md) add explicit SIDIS depolarization conventions, hadron2 SIA U/L/C ratios and finite P*dP integration at fixed other kinematics. Separate analytic and pinned-input producers check values, refinement and full-parameter derivatives. Dataset-specific signs, acceptance, covariance/overlap and production fit admission still require review.
+
 ## Running the workflow
+
+[Historical KPSY candidate intake](docs/historical-data.md) preserves 26 source-locked historical views, the published SIDIS projection cut and an exact primary-table check of the Hall A legacy column remapping. Candidate normalization does not admit a historical or updated fit.
 
 Use Linux or WSL2 with Python 3.12 and Julia 1.12.6. Keep environments and run directories on the Linux filesystem. Each numerical job uses one process and one Julia, BLAS and OpenMP thread.
 
