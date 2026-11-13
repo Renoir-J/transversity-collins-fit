@@ -48,7 +48,9 @@
     "STAR510_supplement": "14-point jet-pT supplement and 13-point HEPData Figure 2 use different published binning; preserve as overlapping alternatives without inventing edges or combining the views",
     "unknown_systematic_correlations": "retain components; never silently diagonalize",
     "multiplicative_polarization_systematics": "retain relative uncertainty and shared correlation group; certified likelihood implementation required",
-    "source_corrections": "Only explicit cell-level corrections tied to a locked source and primary-paper evidence; preserve raw bytes and test the complete published bin partition."
+    "source_corrections": "Only explicit cell-level corrections tied to a locked source and primary-paper evidence; preserve raw bytes and test the complete published bin partition.",
+    "COMPASS2022_partial": "Unidentified h+/h- partial-2022 candidates only. Preserve the published sin(phi_h+phi_S-pi) convention and already-removed DNN*f*Pt; no further sign/depolarization change. Keep er_stat and er_tot without inferred systematic decomposition; joint covariance, scale inclusion, full-sample replacement, nuclear/species, bin/acceptance and source-version reviews block admission."
   },
-  "fixed_numerical_cache_contract": "config/numerical-cache-contract.json"
+  "fixed_numerical_cache_contract": "config/numerical-cache-contract.json",
+  "experimental_COMPASS2022_contract": "config/compass-2022-data-contract.json"
 }

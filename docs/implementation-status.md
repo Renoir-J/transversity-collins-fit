@@ -6,7 +6,7 @@ ADR-001, 2026-11-11. Issues and milestones track progress. Software capability a
 |---|---|---|
 | Julia prediction/likelihood/AD/optimization | Implemented for finite synthetic kernels | Golden fixture, nuisance identity, derivative and HVP checks |
 | Multistart, parametric replicas, process holdouts | Implemented for closure | Numerical reports / CI; replicas are not posterior samples |
-| Python data validation and CSV/XLSX/HTML/YAML normalization | Implemented for first experimental intake | Twenty-two pinned sources; 773 amplitudes in 82 overlapping views; source corrections and primary/JAM cross-checks |
+| Python data validation and CSV/XLSX/HTML/YAML/DAT normalization | Implemented for candidate intake | Twenty-three pinned sources; 825 amplitudes in 88 overlapping views; source corrections, primary/JAM cross-checks and partial-2022 COMPASS stat/total preservation |
 | Snakemake 12-stage DAG / receipts / cache / outputs | Implemented | Linux integration and negative admission tests |
 | Fixed Float64 batched Fortran ABI | Implemented | Cross-language fixed-operator application; separate retained-HOPPET construction contract |
 | LO collinear evolution | Reconstructed component; not production admitted | Analytic cell integration, x-space/Mellin refinement and initial-parameter derivatives; [scope and limits](evolution.md) |
@@ -20,7 +20,7 @@ ADR-001, 2026-11-11. Issues and milestones track progress. Software capability a
 | Normalized leptonic observables and finite P integration | Reconstructed implementation under validation; not production admitted | Explicit SIDIS depolarization choice, hadron2 SIA U/L/C ratios and angular source types/measures, projected P*dP quadrature and independent analytic/pinned-input producers; [scope and limits](leptonic-observables.md) |
 | Prepared numerical cache integrity | Implemented in memory; production admission pending | Complete typed snapshots, owned read-only rows and source-locked mutation producer; [scope and limits](numerical-cache.md) |
 | GitHub progress and Git rules | Configured | Milestones, issues, PR/CI, hooks; server enforcement recorded separately |
-| Updated experimental data | First candidate batch acquired; production review pending | HERMES/Belle/BESIII and official STAR200/510 pion Collins tables; STAR physical binning, COMPASS tables, covariance and admission remain open |
+| Updated experimental data | Candidate batch acquired; production review pending | HERMES/Belle/BESIII, official STAR200/510 pion tables and 52 partial-2022 COMPASS unidentified-hadron candidates; full-2022 tables, STAR physical binning, covariance, species/nuclear treatment and admission remain open |
 | KPSY CSS historical reproduction | Blocked on source or independent reconstruction | Author's modified HOPPET and fitting program not located |
 | Historical 262-amplitude data intake | Candidate implementation; no fit admission | Source-locked historical views, published cut, Hall A primary remap, exact primary COMPASS deuteron/BaBar RF0 checks, source-derived cache replay and explicit uncertainty/convention blockers; [scope and limits](historical-data.md) |
 | Production theory | Pending | Process-accurate bins/acceptance, evolution, matching and independent fixtures |

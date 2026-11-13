@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-11-11",
+  "as_of": "2026-11-12",
   "status": "EXPERIMENTAL_CANDIDATES_NOT_ADMITTED",
   "sources": [
     {
@@ -956,6 +956,66 @@
           }
         ]
       }
+    },
+    {
+      "id": "COMPASS2022_partial_public_tables",
+      "filename": "COMPASS2022-partial-public-tables.tar.gz",
+      "publication": "arXiv:2401.00309; Phys.Rev.Lett.133,101903",
+      "version": "public_archive_sha256_4287a629578739bbe00675ef4e563d2af7437eb45b4c84005649498b8a12af76",
+      "url": "https://wwwcompass.cern.ch/compass/publications/papers/cern-ep_2023-308/HEPdata_tables.tar.gz",
+      "sha256": "4287a629578739bbe00675ef4e563d2af7437eb45b4c84005649498b8a12af76",
+      "seed_path": "data/raw/COMPASS2022-partial-public-tables.tar.gz",
+      "source_kind": "primary_collaboration_public_archive",
+      "discovery_page": "https://wwwcompass.cern.ch/compass/publications/papers/",
+      "HTTP_last_modified_observed": "Sat, 20 Jan 2024 19:32:36 GMT",
+      "source_version_status": "Public archive served 2026-11-12, HTTP Last-Modified 2024-01-20; exact hashes are pinned. Relationship to the final September 2024 journal revision requires review; no final-version tag inferred.",
+      "adapter": {
+        "kind": "compass2022_dat",
+        "contract": "COMPASS2022-DATA-001",
+        "member": "HEPdata_tables/Collins.dat",
+        "member_sha256": {
+          "HEPdata_tables/Collins.dat": "9d0b80a53567aef1342e072c1d7902bb67e3713f252b76f63ec770d7349ee884",
+          "HEPdata_tables/Sivers.dat": "3c9326f45b9146e1c75f7e79d8fa282652999cf485ab027f1f3e4c0d7b2c8bcf"
+        },
+        "tables": [
+          {
+            "view_id": "COMPASS2022_partial_h_plus_x",
+            "hadron": "h+",
+            "projection": "x",
+            "expected_rows": 9
+          },
+          {
+            "view_id": "COMPASS2022_partial_h_plus_z",
+            "hadron": "h+",
+            "projection": "z",
+            "expected_rows": 8
+          },
+          {
+            "view_id": "COMPASS2022_partial_h_plus_pT",
+            "hadron": "h+",
+            "projection": "pT",
+            "expected_rows": 9
+          },
+          {
+            "view_id": "COMPASS2022_partial_h_minus_x",
+            "hadron": "h-",
+            "projection": "x",
+            "expected_rows": 9
+          },
+          {
+            "view_id": "COMPASS2022_partial_h_minus_z",
+            "hadron": "h-",
+            "projection": "z",
+            "expected_rows": 8
+          },
+          {
+            "view_id": "COMPASS2022_partial_h_minus_pT",
+            "hadron": "h-",
+            "projection": "pT",
+            "expected_rows": 9
+          }
+        ]
+      }
     }
   ],
   "known_unavailable_sources": [
@@ -964,9 +1024,9 @@
       "status": "official archives acquired; low/high plot coordinate intervals are systematic error boxes, not physical integration edges; binning/covariance review remains required"
     },
     {
-      "id": "COMPASS2022_final_tables",
-      "paper": "2401.00309",
-      "status": "not_acquired; unidentified-hadron mixture and overlap review required"
+      "id": "COMPASS2022_complete_preliminary_tables",
+      "paper": "2610.36224",
+      "status": "complete-2022 numerical tables not acquired; the pinned partial-2022 archive is not a complete-sample source"
     }
   ]
 }

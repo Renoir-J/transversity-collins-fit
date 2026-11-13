@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "COMPASS2022-DATA-001",
+  "scope": "experimental_candidate",
+  "production_ready": false,
+  "physical_extraction": false,
+  "primary_sources": [
+    {
+      "url": "https://wwwcompass.cern.ch/compass/publications/papers/",
+      "locator": "CERN-EP/2023-308; PRL 133, 101903; tab link"
+    },
+    {
+      "url": "https://wwwcompass.cern.ch/compass/publications/papers/cern-ep_2023-308/HEPdata_tables.tar.gz",
+      "locator": "HEPdata_tables/Collins.dat, all six sections"
+    },
+    {
+      "url": "https://doi.org/10.1103/PhysRevLett.133.101903",
+      "locator": "published pp. 101903-3 to 101903-5; Collins angle, selection, normalization and uncertainties"
+    }
+  ],
+  "source_identity_header": "Collins asymmetry (COMPASS deuteron 2022 data (~70%))",
+  "sample": "partial_2022_approximately_70_percent",
+  "final_paper_sample_description": "seven out of ten periods, about two thirds of total 2022 statistics",
+  "source_version_status": "Public archive served 2026-11-12, HTTP Last-Modified 2024-01-20; exact hashes are pinned. Relationship to the final September 2024 journal revision requires review; no final-version tag inferred.",
+  "numeric_field_order": [
+    "bin_low",
+    "bin_high",
+    "x",
+    "y",
+    "z",
+    "pT_GeV",
+    "W_GeV",
+    "Q2_GeV2",
+    "Asym",
+    "er_stat",
+    "er_tot"
+  ],
+  "unit": "fraction",
+  "hadron_species": [
+    "h+",
+    "h-"
+  ],
+  "hadron_mixture": "Unidentified charged hadrons. The paper reports approximate pion fractions; do not substitute these for a certified species mixture or relabel h as pi.",
+  "published_angle_convention": "published_COMPASS_sin(phi_h+phi_S-pi)_DNN_f_Pt_removed",
+  "source_normalization": "Published Collins amplitudes are already divided by mean(DNN*f*Pt). Preserve values and sign; apply no additional depolarization, dilution or target-polarization correction.",
+  "published_cuts": {
+    "Q2_GeV2_min": 1,
+    "y": [
+      0.1,
+      0.9
+    ],
+    "W_GeV_min": 5,
+    "pT_GeV_min": 0.1,
+    "z_min": 0.2,
+    "inequalities": "strict"
+  },
+  "projection_bins": "Use only the printed projection edges and all six reported means; do not infer multidimensional integration cells or an acceptance model from the means.",
+  "error_policy": "Preserve er_stat and er_tot separately. er_tot is reported total error, not a systematic component or an independent extra uncertainty. Never infer a point systematic by subtracting rounded variances, diagonalize an absent covariance, or count both columns independently.",
+  "reported_scale_uncertainties": [
+    {
+      "name": "target_polarization",
+      "relative_sigma": 0.03,
+      "inclusion_in_er_tot": "not_established",
+      "correlation": "requires_review",
+      "applied_to_likelihood": false
+    },
+    {
+      "name": "target_dilution_factor",
+      "relative_sigma": 0.02,
+      "inclusion_in_er_tot": "not_established",
+      "correlation": "requires_review",
+      "applied_to_likelihood": false
+    }
+  ],
+  "overlap_group": "COMPASS_deuteron_2022_sample",
+  "overlap_with": [
+    "COMPASS_deuteron_2022_complete"
+  ],
+  "replacement_policy": "Partial and complete 2022 results are alternatives; a complete-sample scenario replaces the partial result. Keep x/z/pT projections and charge views as conservative alternatives until joint covariance/selection review.",
+  "derived_results_policy": "The paper-derived transversity and truncated tensor charges reuse proton/deuteron and Belle information; do not add them as independent constraints beside their input measurements.",
+  "production_blockers": [
+    "unidentified_hadron_mixture_not_certified",
+    "deuteron_nuclear_prescription_not_certified",
+    "source_version_relationship_to_final_paper_requires_review",
+    "total_error_decomposition_and_scale_inclusion_unresolved",
+    "systematic_and_projection_covariance_unresolved",
+    "partial_and_complete_sample_overlap_requires_selection",
+    "published_convention_to_theory_not_certified",
+    "bin_and_acceptance_prescription_not_certified",
+    "process_adapter_not_certified"
+  ]
+}
