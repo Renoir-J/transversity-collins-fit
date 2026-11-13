@@ -13,7 +13,7 @@ from .provenance import atomic_json, file_hash, read_json, utc_now
 
 
 def prepare(root, destination, *, source=None, offline=False, cmake="cmake",
-            fc="gfortran", fc_flags=(), jobs=2):
+            fc="gfortran", fc_flags=(), jobs=2, with_coupling_reference=False):
     root, destination = Path(root).resolve(), Path(destination).resolve()
     if os.name != "posix":
         raise ValueError("build HOPPET on Linux/WSL")
@@ -62,6 +62,16 @@ def prepare(root, destination, *, source=None, offline=False, cmake="cmake",
         root / "config/matched-rows-contract.json", root / "config/hoppet-batch-contract.json",
         root / "fortran/hoppet_bridge.f90", root / "src/collinsflow/hoppet.py",
         root / "src/collinsflow/provenance.py", root / "scripts/prepare_hoppet.py"]
+    reference = None
+    if with_coupling_reference:
+        coupling_contract = root / "config/native-coupling-contract.json"
+        policy = read_json(coupling_contract)
+        paper = destination / "paper.html"
+        if policy["upstream"] != upstream or not paper.is_file() or file_hash(paper) != policy["primary_source"]["sha256"]:
+            raise ValueError("native coupling reference requires the locked upstream and primary paper")
+        project_sources.extend([coupling_contract, root / "fortran/native_coupling_reference.f90",
+                                root / "scripts/prepare_native_coupling.py", paper])
+        reference = destination / "native_coupling_reference"
     upstream_paths = [source / p for p in capture([*git, "ls-files"]).splitlines()]
     source_links = {str(p): os.readlink(p) for p in upstream_paths if p.is_symlink()}
     if any(not Path(p).resolve().is_relative_to(source) for p in source_links):
@@ -92,12 +102,18 @@ def prepare(root, destination, *, source=None, offline=False, cmake="cmake",
             "-I" + str(build / "include/hoppet"), "-J" + str(build),
             str(root / "fortran/hoppet_bridge.f90"), str(build / "lib/libhoppet.a"),
             "-lstdc++", "-o", str(binary)])
+        if reference:
+            run([fc, *fc_flags, "-O2", "-ffree-line-length-none",
+                 "-I" + str(build / "include/hoppet"), "-J" + str(build),
+                 str(root / "fortran/native_coupling_reference.f90"), str(build / "lib/libhoppet.a"),
+                 "-lstdc++", "-o", str(reference)])
     dependencies = {}
-    for line in capture(["ldd", str(binary)]).splitlines():
-        match = re.search(r"=>\s+(/\S+)", line)
-        if match:
-            dependency = Path(match[1]).resolve()
-            dependencies[str(dependency)] = file_hash(dependency)
+    for executable in [binary, *([reference] if reference else [])]:
+        for line in capture(["ldd", str(executable)]).splitlines():
+            match = re.search(r"=>\s+(/\S+)", line)
+            if match:
+                dependency = Path(match[1]).resolve()
+                dependencies[str(dependency)] = file_hash(dependency)
     if not any("libgfortran" in p for p in dependencies):
         raise ValueError("Fortran runtime dependency is unresolved")
     if capture([*git, "status", "--porcelain"]):
@@ -106,12 +122,17 @@ def prepare(root, destination, *, source=None, offline=False, cmake="cmake",
         raise ValueError("source changed during HOPPET build")
     if any(os.readlink(p) != target for p, target in source_links.items()):
         raise ValueError("source link changed during HOPPET build")
-    atomic_json(receipt_path, {"status": "BUILT_NOT_VALIDATED", "scope": "reconstructed_theory",
+    receipt = {"status": "BUILT_NOT_VALIDATED", "scope": "reconstructed_theory",
         "production_ready": False, "ABI_version": 1, "upstream": upstream,
         "source": str(source), "source_clean": True, "library": str(binary),
         "upstream_ctest_executed": True,
         "source_hashes": source_hashes, "source_links": source_links,
         "output_hashes": {str(binary): file_hash(binary), str(test_log): file_hash(test_log), **dependencies},
         "commands": commands, "versions": {"Fortran": capture([fc, "--version"]).splitlines()[0],
-        "CMake": capture([cmake, "--version"]).splitlines()[0]}, "completed_at": utc_now()})
+        "CMake": capture([cmake, "--version"]).splitlines()[0]}, "completed_at": utc_now()}
+    if reference:
+        receipt["output_hashes"][str(reference)] = file_hash(reference)
+        receipt["coupling_reference"] = {"executable": str(reference), "protocol": policy["native_reference"]["protocol"],
+                                         "contract_sha256": file_hash(coupling_contract), "paper_sha256": file_hash(paper)}
+    atomic_json(receipt_path, receipt)
     return str(receipt_path)
