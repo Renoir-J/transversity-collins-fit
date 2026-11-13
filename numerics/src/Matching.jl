@@ -46,11 +46,12 @@ end
 
 function matching_channel(process,channel)
     ((process == :SIDIS && channel in (:pdf,:transversity,:ff,:collins)) ||
-     (process == :SIA && channel in (:ff,:collins))) || error("unsupported process/matching channel")
+     (process in (:SIA,:STAR_C11) && channel in (:ff,:collins))) || error("unsupported process/matching channel")
 end
 
 function matching_delta(process,channel)
     matching_channel(process,channel)
+    process == :STAR_C11 && return 0.
     process == :SIDIS ? -8/3 : (pi^2-8)/3
 end
 

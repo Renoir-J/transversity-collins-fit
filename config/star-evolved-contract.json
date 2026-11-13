@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "STAR-EVOLVED-C11-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "model": "Massless tree hard scattering coupled to collinear incoming PDFs/h1 and one standard-axis fragmentation TMD, with canonical Collins-11 matching and Q=mu=pT. This is a declared reconstruction, not recovered STAR17 author code or finite-R/NLO siTMDFJF matching.",
+  "inherited_contracts": [
+    "STAR-BORN-001",
+    "KPSY-INITIAL-001",
+    "KPSY-CSS-001",
+    "KPSY-HOPPET-POINTS-001",
+    "KPSY-MATCHED-ROWS-001",
+    "KPSY-NUMERICAL-CACHE-001"
+  ],
+  "sources": {
+    "KPSY": {
+      "url": "https://arxiv.org/html/1505.05589v1",
+      "sha256": "65bfdfaa9b221741b9d724fd637f85f6595cb7ccfdeead1874963ab09e9e5cb2",
+      "equations": "26-27,58,139,142-148; Hhat3 and single-TMD conventions"
+    },
+    "standard_TMD_in_jets": {
+      "url": "https://arxiv.org/html/1705.08443v2",
+      "sha256": "c62afef8cd024cf6dbbdf6591caa7666b98c1a3ff6d121e28f0be9fbdb595541",
+      "equations": "9-12,58-60,64-69,71-72,77-78 and paragraph following69; Collins-11 constants absent"
+    },
+    "STAR17": {
+      "url": "https://arxiv.org/html/1707.00913v2",
+      "sha256": "98c4fbc98064e856aafc7a5f900c1f2c39a334126d39da0d6530cdfc1da72b36",
+      "equations": "1-6,13-19; historical pT scale prescription and phenomenological scope"
+    }
+  },
+  "conventions": {
+    "basis": "Complete explicit ordered PDG basis -5..-1,1..5,21; massless nf5. Incoming fA/fB and h1 are unweighted, not x*f.",
+    "scales": "Incoming fA/fB and h1 at mu^2=pT^2; outgoing D/Hhat3 evaluated and matched at mu_b^2=c0^2/bstar^2; evolve h1 and Hhat3 from Q0^2=2.4 with fixed nf5/Lambda=.225.",
+    "beam": "Incoming h1 is collinear. No incoming TMD, SIDIS transversity matching coefficient, lepton DNN or incoming intrinsic gq is inserted.",
+    "single_quark_exponent": "Spert_single_q=0.5*Spert_KPSY_pair; SNP_q=0.5*css_np_common+gh*b^2/z^2. For Collins use gh-gc instead of gh.",
+    "signed_limits": "Preserve mu_b>Q signed Sudakov integration; no cap, no positivity clamp and no fitted-parameter/provider callback.",
+    "historical_ambiguity": "The printed STAR17 dmu/mu formula followed by its half-leg prescription does not by itself fix the historical implementation. Canonical normalization is chosen explicitly using KPSY dmu^2/mu^2 and1705.08443 single-TMD equations. No claim of literal author-code recovery.",
+    "quark_matching": "Cqq=delta+(alpha_s/pi)*CF*((1-v)/2+(1+v^2)*log(v)/(1-v)); Cgq=(alpha_s/pi)*CF*(v/2+(1+(1-v)^2)*log(v)/v). Delta coefficient at O(alpha_s) is zero in C11.",
+    "Collins_matching": "Match and evolve canonical Hhat3, with regular coefficient2*CF*v*log(v)/(1-v) and zero C11 O(alpha_s) delta. Existing retained matched-row operators are extended to process STAR_C11 only for ff/collins. No full twist3 mixing is claimed.",
+    "Fourier": "D=integral b db J0(jT*b/z)/(2*pi*z^2)*matched_D*exp(-S_q); C=jT/(z*Mh)*H1perp_Trento=-integral b^2 db J1(jT*b/z)/(4*pi*z^3)*matched_Hhat3*exp(-S_C). No additional -1/(2z) is applied after this transform.",
+    "moment_map": "M= Mh*H1perp(1)=-Hhat3/(2*z). Evolving/matching M instead would require conjugating the convolution kernel by1/v; applying the unchanged Hhat3 kernel to M is invalid.",
+    "phase": "Canonical sin(phiS-phiH); sin(phiH-phiS) flips the final amplitude once. Differential jT=0 gives zero UT and is not an integral sentinel.",
+    "hard_measure": "Use STAR-BORN-001 absolute alpha_s^2/[S*xa*xb*(xa*S+U)] at every xa node. Supplied jet/bin/jT Jacobians and acceptance weights multiply UU and UT before division; never average point asymmetries."
+  },
+  "fragmentation_choices": {
+    "quark_only": "Outgoing gluon TMD is zero; incoming gluons and collinear Dg-to-quark matching remain included. gluon_model must be none.",
+    "quark_and_gluon": "Requires explicit gluon_model=casimir_common_same_intrinsic_1705. Gluon Collins is zero; unpolarized gluon matching sums all nf5 quark and antiquark FFs once each.",
+    "gluon_matching": "Cgg=delta+(alpha_s/pi)*2*CA*(v*log(v)/(1-v)+(1-v)*log(v)/v+v*(1-v)*log(v)); Cqg=(alpha_s/pi)*TR*(v*(1-v)+(v^2+(1-v)^2)*log(v)). C11 delta constant zero. log(v)*plus-distribution has its ordinary finite endpoint limit.",
+    "gluon_exponent": "Single exponent=0.5*integral dln(mu^2)[Ag*ln(Q^2/mu^2)+Bg], Ag=CA/CF*Aq through alpha_s^2, Bg=-(11*CA/3-4*TR*nf/3)*alpha_s/(2*pi). SNP_g=CA/CF*0.5*css_np_common+gh*b^2/z^2. Same intrinsic gh is an explicit phenomenological assumption from1705 Eq78, not extracted evidence."
+  },
+  "preparation": {
+    "parameter_family": "Same thirteen physical KPSY parameters. Sea/heavy h1 and heavy/gluon Collins remain zero at Q0 under the inherited family; no additional fitted gluon parameters.",
+    "fixed_work": "Prepare native HOPPET rows, input samples, PDFs/FFs, hard/flavor contractions and Fourier weights before parameter evaluation. Julia performs generic initial functions, retained row products, damping and contractions during evaluation/AD.",
+    "bin_interface": "Explicit supplied contexts/nonnegative measure weights and nonblank source. MomentumRule includes jT*djT; caller explicitly selects jT_djT or d2jT (adds2*pi). No acceptance or bin edges are inferred from horizontal errors.",
+    "integrity": "Own copies of mutable supplied numerical arrays; snapshot all fixed cached scalars, arrays and provenance, and independently validate live retained operator/sample signatures. Mutation rejects rather than silently rebuilding.",
+    "jet_axis": "Only standard axis. Positive jet radius is recorded; changing R alone does not implement finite-R matching. Scale prescription historical_pT_C11 must be explicit.",
+    "range": "Provider reference extrapolation, if explicitly selected, is recorded and cannot admit data. Initial Q0 Soffer/FF samples always require strict inherited support."
+  },
+  "validation_policy": {
+    "relative_floor": 1e-08,
+    "algebra_max_scaled": 1e-11,
+    "derivative_max_scaled": 1e-07,
+    "physical_value_max_scaled": 0.0001,
+    "finite_difference_reference_bits": 256,
+    "finite_difference_steps": [
+      0.0001,
+      1e-05
+    ],
+    "radial_orders": [
+      8,
+      16,
+      32
+    ],
+    "radial_bounds": [
+      24.0,
+      32.0
+    ],
+    "outer_orders": [
+      16,
+      32,
+      64,
+      128,
+      256
+    ],
+    "evolution_intervals": [
+      256,
+      512,
+      1024
+    ],
+    "derivative_fixture": "Interior synthetic KPSY point, Nhd=-.91,beta_u=.4,beta_d=.7, other coordinates from rounded published parameters. Full13 gradient and directional HVP against256-bit fourth-order finite differences of a scalar reference assembly. Shared retained evolution/provider samples are not independent evolution evidence.",
+    "reference": "Independent scalar full flavor assembly and recoil-rapidity measure; direct single-leg Sudakov and coefficient formulas, analytic Gaussian Fourier/moment controls, retained STAR/SIA delta-removal identity, explicit supplied-bin ratios. Refinements retain all coarse levels and compare declared final levels. No threshold tuning after failure.",
+    "scope": "Reconstructed point/bin kernels and separately labeled analytic/synthetic controls. Not publication-matched acceptance, complete twist3 evolution, throughput, fitted data or calibrated coverage."
+  },
+  "remaining_production_requirements": [
+    "Historical author-code recovery or separately reviewed reconstruction and independent physical benchmark",
+    "Publication-matched STAR finite-R/axis/acceptance model and updated data covariance/overlap admission",
+    "Validated homogeneous Collins approximation and independent evolution/integration fixtures",
+    "Near-endpoint h1 interpolation error qualification across the intended physical workload; no inherited uniform pointwise query-aligned accuracy certificate",
+    "Frozen production gradient, performance and uncertainty coverage gates",
+    "Production numerical executor and real-data fit"
+  ],
+  "beam_preparation": {
+    "algorithm": "One common single-log-grid HOPPET context spanning all declared beam queries. Evolve the zero-endpoint identity basis once at pT^2, use unchanged native interpolation to all xa queries, then detach flavor-independent query rows and close the native context before parameter evaluation.",
+    "reason": "The initial per-query log-grid construction encountered upstream TOO HIGH ACCURACY REQUIRED events; the pinned integrator returns zero on that error path. The initial run is retained as unqualified, not PASS.",
+    "domain": "Use the full declared physical xa nodes without endpoint cuts or clipping. Common grid starts at the smallest query; includes x=1 exactly and retains h1(1)=0.",
+    "precision_guard": "Capture native preparation stderr and reject TOO HIGH ACCURACY REQUIRED even if the C ABI returns status0. Validation producers retain the diagnostic log. No relaxation of eps, native solver order, physical thresholds or acceptance targets.",
+    "carrier": "HoppetPointPlan is the detached generic row carrier, tagged STAR_common_grid_batched_probes or STAR_common_grid_independent. This new geometry is certified by this contract, not by the old query-aligned point-plan checks.",
+    "storage": "Temporary beam preparation may hold O(Ngrid^2) basis/evolved arrays for one physical scale; detached rows use O(Nquery*Ngrid). This is not a physical fit-throughput certificate.",
+    "checks": "Require native-forward versus detached-row agreement at the inherited row tolerance; independent Mellin and full recoil/Fourier comparisons and final grid/outer refinements at unchanged STAR thresholds. Preserve original error logs and diagnostics.",
+    "local_limit": "The exploratory common-grid diagnostic at1024 intervals has about0.014 maximum scaled local h1 error near x=.999 under the old component relative-floor criterion. It is retained without a PASS label. This contract tests xa-integrated STAR observables against independent Mellin/recoil integrals, not uniform near-endpoint component accuracy. No endpoint cut or clipping is inserted."
+  }
+}

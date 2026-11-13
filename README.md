@@ -26,6 +26,8 @@ A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use
 
 ## Running the workflow
 
+A [coupled STAR point/bin reconstruction](docs/star-evolved.md) joins Born hard factors, collinear h1 evolution and a single C11 fragmentation TMD. Quark-only and explicit assumed-gluon models have separate scoped checks. This is reconstructed theory under validation; measured acceptance, independent physical benchmarks and production fit admission remain open.
+
 A [fixed-weight leptonic bin interface](docs/leptonic-bins.md) composes prepared nodes across supplied kinematics by integrating polarized numerators and unpolarized yields separately. Quadrature, cross-section and acceptance weights are explicit. It does not admit experimental data or certify physical acceptance.
 
 [Historical KPSY candidate intake](docs/historical-data.md) preserves 26 source-locked historical views, the published SIDIS projection cut and an exact primary-table check of the Hall A legacy column remapping. Candidate normalization does not admit a historical or updated fit.

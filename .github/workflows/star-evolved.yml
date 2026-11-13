@@ -1,0 +1,83 @@
+name: Coupled STAR references
+
+on:
+  pull_request:
+    paths:
+      - config/*-contract.json
+      - config/parton-sources.json
+      - numerics/**
+      - fortran/hoppet_bridge.f90
+      - src/collinsflow/hoppet.py
+      - src/collinsflow/parton.py
+      - src/collinsflow/provenance.py
+      - scripts/prepare_hoppet.py
+      - scripts/prepare_parton_inputs.py
+      - requirements.lock
+      - .github/workflows/star-evolved.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: star-evolved-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  references:
+    name: STAR ${{ matrix.kind }}
+    runs-on: ubuntu-latest
+    # Operational time budget; scientific acceptance remains in the contract.
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [analytic, inputs]
+    env:
+      JULIA_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v3.0.3
+        with:
+          version: '1.12.6'
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
+        with:
+          delete-old-caches: 'false'
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+          julia --project=numerics -e 'using Pkg; Pkg.instantiate()'
+      - name: Build locked parton references
+        if: matrix.kind == 'inputs'
+        run: python scripts/prepare_parton_inputs.py
+      - name: Build unchanged retained HOPPET and run upstream tests
+        run: python scripts/prepare_hoppet.py
+      - name: Validate reconstructed STAR point and bin kernels
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runs/ci-star
+          julia --project=numerics numerics/bin/check_star_evolved.jl '${{ matrix.kind }}' .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-star/${{ matrix.kind }}.json | tee runs/ci-star/${{ matrix.kind }}-native.log
+      - name: Upload scoped evidence including failures
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: star-evolved-${{ matrix.kind }}-${{ github.sha }}
+          path: |
+            runs/ci-star
+            .runtime/hoppet/build.json
+            .runtime/hoppet/build.log
+            .runtime/hoppet/upstream-tests.log
+            .runtime/parton-inputs/build.json
+            .runtime/parton-inputs/build.log
+          include-hidden-files: true
+          retention-days: 30
