@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-PAPER-MOMENTS-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "primary_source": {
+    "url": "https://arxiv.org/html/1505.05589v1",
+    "version": "1505.05589v1",
+    "sha256": "65bfdfaa9b221741b9d724fd637f85f6595cb7ccfdeead1874963ab09e9e5cb2",
+    "bytes": 1239637,
+    "math_anchors": {
+      "S3.E110.m1": "h_{1}^{q}(x,Q_{0})=N_{q}^{h}x^{a_{q}}(1-x)^{b_{q}}\\frac{(a_{q}+b_{q})^{a_{q}+b_{q}}}{a_{q}^{a_{q}}b_{q}^{b_{q}}}\\frac{1}{2}\\left(f_{1}^{q}(x,Q_{0})+g_{1}^{q}(x,Q_{0})\\right)\\ ,",
+      "S3.E127.m1": "\\displaystyle\\delta q^{[x_{\\rm min},x_{\\rm max}]}\\left(Q^{2}\\right)\\equiv\\int_{x_{\\rm min}}^{x_{\\rm max}}dx\\,h_{1}^{q}(x,Q^{2})\\ .",
+      "S3.SS5.p2.m4": "0.0065<x_{B}<0.35",
+      "S3.SS5.p2.m6": "Q^{2}=10",
+      "S3.SS5.p2.m9": "Q^{2}=10",
+      "S3.E128.m1": "\\displaystyle\\delta u^{[0.0065,0.35]}",
+      "S3.E128.m3": "\\displaystyle+0.30_{-0.12}^{+0.08}\\ ,",
+      "S3.E129.m1": "\\displaystyle\\delta d^{[0.0065,0.35]}",
+      "S3.E129.m3": "\\displaystyle-0.20_{-0.11}^{+0.28}\\ ,",
+      "S3.E130.m1": "\\displaystyle\\delta u^{[0.0065,0.35]}",
+      "S3.E130.m3": "\\displaystyle+0.30_{-0.07}^{+0.04}\\ ,",
+      "S3.E131.m1": "\\displaystyle\\delta d^{[0.0065,0.35]}",
+      "S3.E131.m3": "\\displaystyle-0.20_{-0.07}^{+0.12}\\ .",
+      "S3.T1.m1": "N_{u}^{h}",
+      "S3.T1.m2": "0.85\\pm 0.09",
+      "S3.T1.m3": "a_{u}",
+      "S3.T1.m4": "0.69\\pm 0.04",
+      "S3.T1.m5": "b_{u}",
+      "S3.T1.m6": "0.05\\pm 0.04",
+      "S3.T1.m7": "N_{d}^{h}",
+      "S3.T1.m8": "-1.0\\pm 0.13",
+      "S3.T1.m9": "a_{d}",
+      "S3.T1.m10": "1.79\\pm 0.32",
+      "S3.T1.m11": "b_{d}",
+      "S3.T1.m12": "7.00\\pm 2.65"
+    }
+  },
+  "definition": {
+    "equation": 127,
+    "quantity": "unweighted h1^q, not x*h1 or a TMD",
+    "x_range": [
+      0.0065,
+      0.35
+    ],
+    "Q2_GeV2": 10.0,
+    "Q02_GeV2": 2.4,
+    "flavors": {
+      "u": 2,
+      "d": 1
+    },
+    "antiquarks": "zero in the historical initial family; no subtraction ambiguity",
+    "endpoint_policy": "Integrate only the measured-x window; no full-x extrapolation"
+  },
+  "reported_centers": {
+    "u": 0.3,
+    "d": -0.2
+  },
+  "reported_center_equations": {
+    "90CL": [
+      128,
+      129
+    ],
+    "68CL": [
+      130,
+      131
+    ]
+  },
+  "historical_initial_contract": "config/initial-contract.json",
+  "historical_evolution_contract": "config/evolution-contract.json",
+  "input_contract": "config/parton-contract.json",
+  "coupling": {
+    "model": "asymptotic_two_loop",
+    "nf": 5,
+    "Lambda_GeV": 0.225
+  },
+  "numerical_policy": {
+    "native_intervals": [
+      256,
+      512,
+      1024,
+      2048,
+      4096
+    ],
+    "dense_background_nodes": [
+      801,
+      1601,
+      3201,
+      6401
+    ],
+    "refinement_rule": "Evaluate the first three resolutions of each ladder. Extend within the frozen budget while its last pair fails or the independent cross comparison fails. No threshold changes.",
+    "native_grid": "single grid at literal xmin=0.0065; dy=-log(xmin)/intervals; include endpoint 1",
+    "dense_grid": "independent log/sqrt background plus locked input knots, clipped to xmin and augmented by both integration bounds",
+    "native_order": -6,
+    "native_eps": 1e-10,
+    "native_du": 0.0125,
+    "moment_integration": "exact integral of the piecewise-linear interpolant in x; clip first/last cells to the requested bounds",
+    "independent_integration": "QuadGK of the dense evolved interpolant in log(x), split at every grid knot; dx=x*dlog(x)",
+    "refinement_max_scaled": 0.0001,
+    "cross_max_scaled": 0.0001,
+    "relative_floor": 1e-08,
+    "initial_formula_max_scaled": 1e-11,
+    "adjoint_max_scaled": 1e-11,
+    "integration_max_scaled": 1e-11,
+    "endpoint_max_abs": 0,
+    "reference_quad_rtol": 1e-12,
+    "reference_quad_atol_per_cell": 1e-15,
+    "rounding_reference_bits": 256
+  },
+  "printed_value_policy": {
+    "raw_center_max_abs": 0.005,
+    "criterion": "Each moment at the literal rounded Table 1 center must differ from its printed paper center by at most half a last printed digit. This check is separate from numerical convergence.",
+    "statistical_intervals_are_tolerances": false,
+    "parameter_rounding": {
+      "role": "diagnostic only; cannot rescue any failed center or numerical check",
+      "coordinates": [
+        "Nh_u",
+        "Nh_d",
+        "a_u",
+        "a_d",
+        "b_u",
+        "b_d"
+      ],
+      "printed_literals": [
+        "0.85",
+        "-1.0",
+        "0.69",
+        "1.79",
+        "0.05",
+        "7.00"
+      ],
+      "half_last_digits": [
+        0.005,
+        0.05,
+        0.005,
+        0.005,
+        0.005,
+        0.005
+      ],
+      "bounds": [
+        [
+          0.845,
+          0.855
+        ],
+        [
+          -1.0,
+          -0.95
+        ],
+        [
+          0.685,
+          0.695
+        ],
+        [
+          1.785,
+          1.795
+        ],
+        [
+          0.045,
+          0.055
+        ],
+        [
+          6.995,
+          7.005
+        ]
+      ],
+      "domain_clipping": "Intersect Nh intervals with [-1,1]; no optimizer-bound state was recovered",
+      "method": "Evaluate all 64 vertices of the six-dimensional printing box using the final native moment functional; include the center separately",
+      "limitation": "Vertex ranges are sampled sensitivity ranges, not certified extrema over the continuous box or recovered fit uncertainties"
+    }
+  },
+  "status_policy": "PASS only if every numerical and raw-center check passes; missing or failed checks remain FAIL. No production readiness artifact is created.",
+  "limitations": [
+    "Printed Table 1 centers are rounded; exact historical optimizer states and original KPSY/modified-HOPPET code remain unlocated",
+    "The reference uses an independent evolution discretization and initial formula but shares the locked physical input sources",
+    "This checks two collinear partial moments only; it does not reproduce SIDIS/SIA/STAR observables, historical chi2, covariance, uncertainty coverage, full twist-3 evolution or a new extraction",
+    "Final tensor-charge reporting at Q=2 GeV is a separate future product; this paper benchmark is at Q2=10 GeV2",
+    "Production readiness and G2PERF remain false; synthetic closure cannot replace this check"
+  ]
+}
