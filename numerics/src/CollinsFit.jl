@@ -30,6 +30,8 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        LeptonicBinPlan, leptonic_bin, predict_bin,
        JetBornKinematics, JetBornPlan, jet_born_xmin, jet_born_prefactor,
        jet_born_contractions, jet_born_structure, jet_born_integrals, jet_born_asymmetry, jet_collins_fourier_moment,
+       StarFragmentationPlan, StarPointPlan, StarBinPlan, star_fragmentation_plan, star_point_plan,
+       prepare_star_point, star_structure, star_collins, predict_star, star_bin, star_momentum_bin,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -145,6 +147,7 @@ include("PolarizedLeptonic.jl")
 include("LeptonicObservables.jl")
 include("LeptonicBins.jl")
 include("JetBorn.jl")
+include("StarEvolved.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)
