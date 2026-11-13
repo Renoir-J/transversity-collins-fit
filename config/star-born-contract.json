@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "STAR-BORN-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "full_STAR_TMD_observable_implemented": false,
+  "sources": {
+    "unpolarized": {"url": "https://pdg.lbl.gov/2025/reviews/rpp2025-rev-cross-section-formulae.pdf", "equations": "51.4-51.7, 51.9-51.12", "pages_visually_checked": [1, 2], "sha256": "78132ec7eb7ae2f078b71b98b492f324559e3e17f2850ac55547116f57029711"},
+    "spin_transfer": {"url": "https://arxiv.org/html/hep-ph/9305309v1", "equations": "21-26; first incoming parton polarized, observed outgoing parton defines t", "sha256": "3efafa6f3ee01ec3b08a0d31005f630ecc5abe498aa1e9b4e9d34275abb308b1"},
+    "jet_TMD_prescription": {"url": "https://arxiv.org/html/1707.00913v2", "equations": "1-6; phenomenology in Sec.3", "sha256": "98c4fbc98064e856aafc7a5f900c1f2c39a334126d39da0d6530cdfc1da72b36"},
+    "early_hard_factors": {"url": "https://arxiv.org/html/0709.3272v1", "equations": "3; the earlier Collins convention and angular phase must be converted together", "sha256": "db4dabbe468b9814e18c27223609d2abda8210ae632e091eb322306e86b0b02b"},
+    "legacy_code": {"repository": "https://github.com/pitonyak25/jam3d_dev_lib", "commit": "3717fe101f6d7d4fb403c7256e3ca10de57b3e5f", "path": "obslib/AN_pp/AN_theory0_hadinjet.py", "git_blob_sha256": "f580b2477ee1a17402f42e3dbf5882d9d62a38af9b5c67dbfc99f97e9ac0eb4f", "role": "Reduced hard/flavor expressions only; its Gaussian transverse dependence is a different model. No pickle deserialization or upstream imports."},
+    "FeynFacet": {"repository": "https://github.com/qcdphysics/FeynFacet", "commit": "e68bc3b51517dce9342310315ec4d3fd49a12bc9", "assets": [{"path": "Coefficients/PartonicBorn.wl", "bytes": 8107, "git_blob_sha256": "859d0015ee8fe8bd0a2cfdeb17defe46997b2f86094914ec6ac5b86c5f09747f"}, {"path": "Coefficients/ProtonProtonTransfer.wl", "bytes": 109202, "git_blob_sha256": "6acbdfa6eed5ae6f5b1fd4988419ab3d28e7d79a3345749eb5570fb3297156a5"}], "role": "Pinned plain Born coefficient expressions are reference evidence. Native WSL readiness is NOT_READY (Wolfram not found); no fresh FeynCalc/FORM/Tracer derivation is claimed. Inclusive NLO transfer is not a finite-R jet observable."}
+  },
+  "hard_convention": {
+    "theory": "SU(3), massless on-shell 2-to-2 scattering, tree hard factors, unpolarized initial spin/color averages",
+    "invariants": "s=(p_a+p_b)^2>0, t=(p_a-p_c)^2<0, u=(p_b-p_c)^2<0, s+t+u=0; c is the tagged observed parton",
+    "UU": "d sigma/dt = pi*alpha_s^2/s^2 * H_U; H_U=4*s/alpha_s^2 * (d sigma/dOmega)_PDG",
+    "UT": "H_T = T_abc_CHL * H_U, with the outgoing spin difference at fixed incoming transverse spin. No extra factor2 or lepton DNN.",
+    "identical_final_particles": "One tagged observed-parton channel; no additional 1/2 or duplicated identical observed channel. Distinct observed species are separate entries.",
+    "nonzero_transfer": ["qg->q", "qq->q", "q qbar->q", "q qbar->qbar", "q qprime->q", "q qbarprime->q"],
+    "zero_transfer": "Incoming gluon, observed gluon, or observed different quark flavor. Charge-conjugate channels use identical hard factors."
+  },
+  "flavor_contract": {
+    "basis": "Explicit distinct PDG IDs:21 and complete signed quark/antiquark pairs with abs(pid)=1..5. Order is caller-declared and retained as an immutable tuple.",
+    "model_choice_required": ["quark_only", "quark_and_gluon"],
+    "interpretation": "quark_only omits outgoing gluon fragmentation, not incoming gluons. quark_and_gluon is the Born algebra extension; a physical gluon TMD is not supplied here.",
+    "heavy": "All declared hard flavors are massless; heavy-flavor support is not a heavy-mass matching or experimental admission certificate.",
+    "inputs": "fA/fB are unweighted collinear f1 at x_a/x_b. D is the supplied TMD D1. hA is unweighted collinear h1. C already includes jperp/(z*M_h)*H1perp in the Trento convention. Do not use x*f arrays without their declared conversion.",
+    "input_dimensions": "Flavor vectors for a point; flavor-by-node matrices for supplied-node integration. Algebraic contractions permit signed renormalized responses; a physical asymmetry requires positive total F_UU. No clipping."
+  },
+  "kinematics_and_measure": {
+    "hadronic": "S=sqrt_s^2; T=-sqrt_s*pT*exp(-eta); U=-sqrt_s*pT*exp(eta)",
+    "x_a_min": "xT*exp(eta)/(2-xT*exp(-eta)), xT=2*pT/sqrt_s",
+    "x_b": "-x_a*T/(x_a*S+U); quadrature nodes must lie strictly inside x_a_min<x_a<1 and0<x_b<1",
+    "delta_jacobian": "1/(x_a*S+U)",
+    "common_prefactor": "alpha_s^2/[S*x_a*x_b*(x_a*S+U)], multiplying each supplied-node UU and UT contraction before integration",
+    "measure": "Explicit nonnegative supplied quadrature/Jacobian/acceptance weights with a nonempty source descriptor. Include the declared jet and jperp coordinate measures; e.g. d^2pT=2*pi*pT*dpT after full jet-azimuth integration.",
+    "ratio": "Sum weighted polarized cross sections and unpolarized yields separately, then divide. A common normalization at fixed pT need not cancel through pT integration.",
+    "published_baseline": "STAR17 uses reported mean pT/jperp and an eta integral at200/500GeV, Q=mu=pT, with quark TMD fragmentation. It is not a new510GeV data or acceptance prescription."
+  },
+  "Collins_bridge": {
+    "canonical_phase": "sin(phiS-phiH)",
+    "opposite_phase": "sin(phiH-phiS) changes the signed amplitude once",
+    "moment": "The STAR J1 Fourier moment is M_h*H1perp(1)=-Hhat3/(2*z), using the KPSY initial contract. It is not the dimensionless Trento first moment.",
+    "gaussian_identity": "For H1perp=2*z^2*M_h^2*H1perp(1)*exp(-jperp^2/w)/(pi*w^2), C=-Hhat3*jperp*exp(-jperp^2/w)/(pi*w^2). Its full d^2jperp integral is -sqrt(pi)*Hhat3/(2*sqrt(w)).",
+    "zero": "Differential jperp=0 gives C=0; it must not select the integrated moment. No jperp sentinel is used by this interface."
+  },
+  "validation_policy": {
+    "algebra_max_scaled": 1e-12,
+    "relative_floor": 1e-8,
+    "derivative_max_scaled": 1e-7,
+    "finite_difference_steps": [0.0001, 0.00001],
+    "finite_difference_reference_bits": 256,
+    "integration_max_scaled": 1e-10,
+    "integration_orders": [8, 16, 32, 64, 128, 256],
+    "integration_reference": "Independent recoil-rapidity integral using x_a=(pT/sqrt_s)*(exp(eta)+exp(y_d)), x_b=(pT/sqrt_s)*(exp(-eta)+exp(-y_d)), and measure alpha_s^2/(S^2*x_a*x_b) dy_d. Integrate UU and UT separately with adaptive rtol=atol=1e-13 and require both estimated relative errors below algebra_max_scaled. Compare yields normalized by S^2/alpha_s^2 before applying the relative floor; retain all coarse orders and require the declared final order.",
+    "derivative_reference": "Interior synthetic KPSY initial-family point (Nhd=-0.91, beta_u=0.4, beta_d=0.7; other coordinates from the rounded published point); full 13-column gradients and directional HVP against 256-bit fourth-order central finite differences of independent pinned legacy contractions. This is not a boundary derivative check. Shared analytic initial functions are explicitly not independent evolution evidence. Both finite-difference steps must pass.",
+    "source_arithmetic": "Interpret literal arithmetic in pinned expressions as exact rationals for algebra checks; this is not execution of the original Python Float64 program or Wolfram code.",
+    "scope": "Exact-rational and independent PDG/CHL channel checks; all flavor routing, common prefactors, supplied-node ratio algebra and separately labeled synthetic response/Gaussian normalization controls. These do not certify full evolved STAR predictions, measured acceptance or production throughput/coverage."
+  },
+  "not_implemented": ["Coupled evolved h1/Collins/unpolarized TMD preparation for the complete STAR observable", "Physical gluon TMD fragmentation and heavy-mass matching", "Finite-R/NLO jet matching and a fresh native FeynFacet derivation", "Publication-matched STAR benchmarks, updated-data covariance/overlap admission, frozen production gradient/performance/coverage policy", "Real-data fitting, physical extraction or an alternative production JSON executor"]
+}

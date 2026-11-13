@@ -44,7 +44,7 @@ jobs:
           julia --project=numerics -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
       - name: Source and data checks
         run: |
-          ruff check src tests scripts/make_closure_fixture.py
+          ruff check src tests scripts/make_closure_fixture.py scripts/prepare_star_born_references.py
           python -m pytest -q
           python scripts/plan_workflow.py validate
           python scripts/check_repository.py
@@ -53,6 +53,10 @@ jobs:
           julia --project=numerics numerics/bin/check_css.jl runs/ci/css-validation.json
           julia --project=numerics numerics/bin/check_leptonic.jl runs/ci/leptonic-validation.json
           julia --project=numerics numerics/bin/check_initial.jl runs/ci/initial-validation.json
+      - name: Pinned STAR Born source and numerical checks
+        run: |
+          python scripts/prepare_star_born_references.py
+          julia --project=numerics numerics/bin/check_jet_born.jl .runtime/star-born-references/reference-data.json runs/ci/star-born-validation.json
       - name: Fortran batch bridge
         run: |
           make -C fortran
@@ -67,8 +71,11 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: closure-validation-${{ github.sha }}
+          # Only the explicitly listed parsed reference file is selected from .runtime.
+          include-hidden-files: true
           path: |
             runs/ci
             bridge-validation.json
+            .runtime/star-born-references/reference-data.json
           retention-days: 30
 

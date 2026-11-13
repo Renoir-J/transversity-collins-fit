@@ -10,6 +10,7 @@ include("observable_reference_tests.jl")
 include("leptonic_bin_tests.jl")
 include("cache_snapshot_tests.jl")
 include("job_scope_tests.jl")
+include("jet_born_tests.jl")
 
 @testset "LO transversity moments and fixed-operator AD" begin
     @test transversity_moment(1) ≈ -2/3
