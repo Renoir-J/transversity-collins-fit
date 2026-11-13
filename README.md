@@ -22,6 +22,8 @@ A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use
 
 A [native coupling diagnostic](docs/native-coupling.md) compares the pinned HOPPET running coupling with an independent 256-bit Julia beta-function solution. It records the difference from the existing asymptotic prescription without changing the fitting core, selecting a production coupling or replacing the failed paper-moment benchmark in draft #35.
 
+A [source-locked KPSY partial-moment benchmark](docs/kpsy-paper-moments.md) compares two numerical evolution paths with the paper's printed tensor-charge centers. The numerical checks pass, but both center comparisons fail at the rounded Table 1 parameters. The failure and separate printing sensitivity are retained; this does not admit a historical or production fit.
+
 [Evolved polarized matching rows](docs/matched-rows.md) combine fixed-scale evolution with SIDIS/SIA Wilson coefficients before fitting. Physical alpha_s, process constants and the homogeneous Collins approximation are explicit. Generic Julia row products retain parameter derivatives after native preparation closes. Observable assembly and production admission remain separate requirements.
 
 [Polarized leptonic process contexts](docs/polarized-processes.md) join the initial family, every supplied radial evolution/matching scale and signed SIDIS/SIA structure functions. Retained probe batching reduces repeated native preparation, and fixed Julia row products handle fitted parameters and nested derivatives. Analytic and pinned-input validation have separate producers; these contexts do not admit experimental observables or fits.
