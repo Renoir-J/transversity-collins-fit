@@ -52,17 +52,7 @@ star_model_payload(m)=(m.bmax,m.Q02,m.g2,m.gq,m.gh,m.coupling.lambda_GeV,m.coupl
 star_radial_payload(r)=(r.b,r.db,r.edges,r.order)
 
 "Reject native precision errors even when a retained ABI reports status zero."
-function star_native_checked(f)
-    mktemp() do _,stream
-        result=redirect_stderr(stream) do
-            f()
-        end
-        flush(stream);seekstart(stream);diagnostic=read(stream,String)
-        occursin("TOO HIGH ACCURACY REQUIRED",diagnostic) &&
-            error("unqualified HOPPET preparation: native integrator returned zero on a precision error; captured stderr: $diagnostic")
-        result
-    end
-end
+star_native_checked(f)=hoppet_native_checked(f,"STAR preparation")
 
 "One stable common native beam grid; detach the full evolution/interpolation map."
 function star_beam_operator(buildfile,queries,Q2,model::KPSYCSS;intervals=1024,construction=:batched_probes)

@@ -2,6 +2,31 @@
 const HOPPET_NATIVE_LOCK=ReentrantLock()
 const HOPPET_CONTRACT=normpath(joinpath(@__DIR__,"../../config/hoppet-contract.json"))
 
+"Preserve native diagnostics and reject silent zero-return integration failures."
+function hoppet_native_checked(f,operation="native operation")
+    lock(HOPPET_NATIVE_LOCK) do
+        mktemp() do _,stream
+            previous=stderr;diagnostic=""
+            value=try
+                redirect_stderr(stream) do
+                    try
+                        f()
+                    finally
+                        flush(stderr)
+                        Base.Libc.flush_cstdio()
+                    end
+                end
+            finally
+                flush(stream);seekstart(stream);diagnostic=read(stream,String)
+                isempty(diagnostic) || (write(previous,diagnostic);flush(previous))
+            end
+            failures=count("TOO HIGH ACCURACY REQUIRED",diagnostic)
+            failures==0 || error("HOPPET $operation rejected $failures native precision error(s); native stderr was preserved")
+            value
+        end
+    end
+end
+
 # An internal token for one serial point-plan preparation. Verify the complete
 # build once before and once after assembling its rows, rather than per query.
 struct HoppetBuildVerification
@@ -93,11 +118,14 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
             ccall(Libdl.dlsym(library,:cf_hoppet_abi),Cint,())==1 || error("wrong HOPPET ABI")
             n=Ref{Cint}(0); context=Ref{Int64}(0); status=Ref{Cint}(0)
             operation=construction==:batched_probes ? :cf_hoppet_open_batched : :cf_hoppet_open
-            ccall(state.functions[operation],Cvoid,
-                (Cdouble,Cdouble,Cdouble,Cint,Cint,Cdouble,Cdouble,Cint,Cint,Ptr{Cdouble},Ref{Cint},Ref{Int64},Ref{Cint}),
-                y,lower,d,order,layout==:nested ? 1 : 0,e,u,nf,length(times),times,n,context,status)
+            hoppet_native_checked("context construction") do
+                ccall(state.functions[operation],Cvoid,
+                    (Cdouble,Cdouble,Cdouble,Cint,Cint,Cdouble,Cdouble,Cint,Cint,Ptr{Cdouble},Ref{Cint},Ref{Int64},Ref{Cint}),
+                    y,lower,d,order,layout==:nested ? 1 : 0,e,u,nf,length(times),times,n,context,status)
+                # A status-zero context still needs cleanup if diagnostics reject it.
+                state.context=context[]
+            end
             status[]==0 || error("HOPPET initialization rejected (status $(status[])); use one active context per isolated job")
-            state.context=context[]
             x=zeros(n[]); native=Ref{Cint}(0); payload=Ref{Int64}(0)
             ccall(state.functions[:cf_hoppet_grid],Cvoid,(Int64,Cint,Ptr{Cdouble},Ref{Cint}),state.context,n[],x,status)
             status[]==0 && all(diff(x).>0) && last(x)==1 || error("invalid HOPPET grid")
@@ -150,7 +178,7 @@ function hoppet_dual_batch(operation,initial::AbstractArray{ForwardDiff.Dual{T,V
 end
 
 function apply_operator(plan::HoppetPlan,initial::AbstractMatrix{Float64})
-    lock(HOPPET_NATIVE_LOCK) do
+    hoppet_native_checked("forward evolution") do
         hoppet_valid(plan,initial)
         result=Array{Float64}(undef,size(initial)...,length(plan.tau)); status=Ref{Cint}(0)
         GC.@preserve plan initial result ccall(plan.state.functions[:cf_hoppet_forward],Cvoid,
@@ -165,7 +193,7 @@ apply_operator(plan::HoppetPlan,initial::AbstractVector)=dropdims(apply_operator
 apply_operator(plan::HoppetPlan,initial::AbstractMatrix)=error("HOPPET supports Float64 and nested Float64 ForwardDiff values")
 
 function operator_adjoint(plan::HoppetPlan,g::AbstractArray{Float64,3})
-    lock(HOPPET_NATIVE_LOCK) do
+    hoppet_native_checked("adjoint evolution") do
         hoppet_valid(plan,g;endpoint=false)
         size(g,3)==length(plan.tau) || error("HOPPET cotangent scale count mismatch")
         result=zeros(size(g,1),size(g,2)); status=Ref{Cint}(0)
@@ -180,7 +208,7 @@ operator_adjoint(plan::HoppetPlan,g::AbstractArray{<:ForwardDiff.Dual,3})=hoppet
 operator_adjoint(plan::HoppetPlan,g::AbstractMatrix)=vec(operator_adjoint(plan,reshape(g,size(g,1),1,size(g,2))))
 
 function hoppet_generator(plan::HoppetPlan,initial::AbstractMatrix{Float64})
-    lock(HOPPET_NATIVE_LOCK) do
+    hoppet_native_checked("generator construction/application") do
         hoppet_valid(plan,initial)
         result=zeros(size(initial)); status=Ref{Cint}(0)
         ccall(plan.state.functions[:cf_hoppet_generator],Cvoid,
@@ -196,7 +224,7 @@ hoppet_generator(plan::HoppetPlan,initial::AbstractVector)=vec(hoppet_generator(
 function hoppet_evaluate(plan::HoppetPlan,initial::AbstractMatrix{Float64},queries)
     q=[fixed_scalar(v,"HOPPET query fraction") for v in queries]
     !isempty(q) && all(v -> first(plan.grid)<=v<=1,q) || error("HOPPET query outside support")
-    lock(HOPPET_NATIVE_LOCK) do
+    hoppet_native_checked("interpolation") do
         hoppet_valid(plan,initial)
         result=zeros(length(q),size(initial,2)); status=Ref{Cint}(0)
         ccall(plan.state.functions[:cf_hoppet_evaluate],Cvoid,
@@ -218,7 +246,7 @@ function hoppet_rows(plan::HoppetPlan,node;collins=false)
     node isa Integer && !(node isa Bool) && 1<=node<=length(plan.grid) || error("fixed valid grid node required")
     collins isa Bool || error("fixed Collins row selection required")
     collins && plan.layout!=:single && error("regular matching rows require a single query-bound grid")
-    lock(HOPPET_NATIVE_LOCK) do
+    hoppet_native_checked("selected rows") do
         isopen(plan) || error("closed HOPPET plan")
         numerical_snapshot((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
         rows=zeros(length(plan.tau),length(plan.grid));status=Ref{Cint}(0)
@@ -234,7 +262,7 @@ end
 "Full retained regular matching, used to check detached row construction."
 function hoppet_collins_regular(plan::HoppetPlan,initial::AbstractMatrix{Float64})
     plan.layout==:single || error("regular matching requires a single query-bound grid")
-    lock(HOPPET_NATIVE_LOCK) do
+    hoppet_native_checked("Collins regular matching") do
         hoppet_valid(plan,initial)
         result=zeros(size(initial));status=Ref{Cint}(0)
         ccall(plan.state.functions[:cf_hoppet_collins],Cvoid,
