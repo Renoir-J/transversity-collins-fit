@@ -27,6 +27,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        polarized_leptonic_plan, prepare_polarized_sidis, prepare_polarized_sia, polarized_structure, with_momentum, with_pion_charges,
        MomentumRule, SIAAngularFactor, SIAMeanOfRatio, SIDISAsymmetryConvention, LeptonicObservablePlan, depolarization_factor,
        sia_charge_sums, sia_double_ratio, sidis_observable, sia_observable, predict_observable,
+       LeptonicBinPlan, leptonic_bin, predict_bin,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -129,6 +130,7 @@ include("CacheSnapshots.jl")
 include("Hoppet.jl")
 include("PolarizedLeptonic.jl")
 include("LeptonicObservables.jl")
+include("LeptonicBins.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)

@@ -57,7 +57,7 @@ function prepare_generic_reference(context;momentum_interval=nothing,y=.4,angula
             [initial_collins(p,pid,1,x,samples.bases[:,j]) for (j,x) in enumerate(samples.grid),pid in (2,1,3,-3)]
         end
     end
-    function prediction(theta)
+    function polarized_integrals(theta)
         p=KPSYParameters(theta;gh=model.gh)
         first=apply_operator(context.first_operator,initial_columns(context.first_samples,p))
         second=plan.process==:SIDIS ? apply_operator(context.second_operator,initial_columns(context.second_samples,p)) : nothing
@@ -77,17 +77,20 @@ function prepare_generic_reference(context;momentum_interval=nothing,y=.4,angula
                 polweights[j]*damp[j]*value
             end
         end
+        plan.process==:SIDIS ? [polarized(context.charges...)] : [polarized(c...) for c in PAIRS]
+    end
+    function prediction(theta)
+        values=polarized_integrals(theta)
         if plan.process==:SIDIS
-            ratio=polarized(context.charges...)/denominators[1]
+            ratio=values[1]/denominators[1]
             [ratio,angular_y(y)*ratio]
         else
-            values=[polarized(c...) for c in PAIRS]
             U,L=values[2]+values[3],values[1]+values[4]
             DU,DL=denominators[2]+denominators[3],denominators[1]+denominators[4]
             angular.*[U/DU-L/DL,U/DU-(U+L)/(DU+DL)]
         end
     end
-    (predict=prediction,denominators=denominators,uu_weights=weights,collins_weights=polweights,
+    (predict=prediction,polarized_integrals=polarized_integrals,denominators=denominators,uu_weights=weights,collins_weights=polweights,
      scope="generic_fixed_row_scalar_assembly_and_adaptive_P_reference")
 end
 

@@ -228,7 +228,8 @@ function observable_valid(observable)
         observable.collins_weights,observable.denominators,observable.angular,observable.provenance)==observable.signature || error("mutated observable settings, weights or metadata")
 end
 
-function predict_observable(observable::LeptonicObservablePlan,p::KPSYParameters)
+"Signed polarized integrals before angular multiplication or normalization."
+function observable_polarized_integrals(observable::LeptonicObservablePlan,p::KPSYParameters)
     observable_valid(observable)
     context=observable.context;plan=context.leptonic
     first,second=evolved_polarized_columns(context,p)
@@ -238,10 +239,20 @@ function predict_observable(observable::LeptonicObservablePlan,p::KPSYParameters
         finite_transform(observable.collins_weights,flavor_product(plan,A,D).*damping)
     end
     if plan.process==:SIDIS
-        observable.angular*polarized(context.charges...)/observable.denominators[1]
+        (polarized(context.charges...),)
     else
         U=polarized(1,-1)+polarized(-1,1)
         L=polarized(1,1)+polarized(-1,-1)
+        (U,L)
+    end
+end
+
+function predict_observable(observable::LeptonicObservablePlan,p::KPSYParameters)
+    integrals=observable_polarized_integrals(observable,p)
+    if observable.context.leptonic.process==:SIDIS
+        observable.angular*integrals[1]/observable.denominators[1]
+    else
+        U,L=integrals
         right=observable.kind==:UL ? L/observable.denominators[2] : (U+L)/sum(observable.denominators)
         observable.angular*(U/observable.denominators[1]-right)
     end
