@@ -75,4 +75,6 @@ The third producer checks the source convention separately. A 256-bit adaptive F
 
 ## Remaining scientific admission
 
+The child [fixed-weight bin interface](leptonic-bins.md) now composes prepared nodes across supplied kinematics by summing angular-weighted numerators and unpolarized yields before division. It requires explicit quadrature, cross-section and acceptance weights. It does not recover experimental acceptance or supply an admitted data adapter.
+
 Historical 262-point reproduction, reviewed publication conventions, multidimensional bins/acceptance, covariance and overlap choices, nuclear prescriptions, STAR, production cache/gradient/performance certification and uncertainty coverage remain open. Original author-code and homogeneous-Collins-evolution limitations remain. This component cannot authorize a real-data extraction or close those requirements.

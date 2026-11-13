@@ -71,10 +71,12 @@ jobs:
           case '${{ matrix.kind }}' in
             analytic)
               julia --project=numerics numerics/bin/check_observables.jl .runtime/hoppet/build.json runs/ci-observables/analytic.json | tee runs/ci-observables/analytic-native.log
+              julia --project=numerics numerics/bin/check_leptonic_bins.jl analytic .runtime/hoppet/build.json - runs/ci-observables/analytic-bins.json | tee runs/ci-observables/analytic-bins-native.log
               ;;
             inputs)
               julia --project=numerics numerics/bin/check_observable_inputs.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-observables/inputs.json | tee runs/ci-observables/inputs-native.log
               julia --project=numerics numerics/bin/check_sidis_conventions.jl .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-observables/sidis-source.json | tee runs/ci-observables/sidis-source-native.log
+              julia --project=numerics numerics/bin/check_leptonic_bins.jl inputs .runtime/hoppet/build.json .runtime/parton-inputs/build.json runs/ci-observables/inputs-bins.json | tee runs/ci-observables/inputs-bins-native.log
               ;;
           esac
       - name: Upload scoped numerical evidence

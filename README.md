@@ -4,7 +4,7 @@ This project uses a **Julia numerical core with Python/Snakemake job orchestrati
 
 The current implementation supports **synthetic closure runs; production physics fits remain blocked**. The 66-point fixture exercises predictions, covariance and nuisance handling, derivatives, multistart optimization, replicas, holdouts and artifact validation. It contains no experimental measurements. The original KPSY15 fitting program and modified HOPPET implementation have not been located.
 
-Experimental intake is now available separately: it acquires 22 pinned sources and normalizes 773 amplitudes across 82 overlapping candidate views. Candidates preserve source locators, units, statistical/systematic components, bin corrections and unresolved admission requirements. They are rejected by the fitting path. See the [experimental data review](docs/experimental-data.md).
+Experimental intake is now available separately: it acquires 23 pinned sources and normalizes 825 amplitudes across 88 overlapping candidate views. Candidates preserve source locators, units, statistical/systematic components, bin corrections and unresolved admission requirements. They are rejected by the fitting path. See the [experimental data review](docs/experimental-data.md).
 
 A [reconstructed LO collinear evolution component](docs/evolution.md) now covers transversity and the explicitly defined KPSY homogeneous Hhat3 approximation with independent x-space/Mellin checks. It does not supply the complete CSS model or a production physics fit.
 
@@ -25,6 +25,8 @@ A [retained HOPPET adapter and query-bound Julia row caches](docs/hoppet.md) use
 [Normalized leptonic observables](docs/leptonic-observables.md) add explicit SIDIS depolarization conventions, hadron2 SIA U/L/C ratios and finite P*dP integration at fixed other kinematics. Separate analytic and pinned-input producers check values, refinement and full-parameter derivatives. Dataset-specific signs, acceptance, covariance/overlap and production fit admission still require review.
 
 ## Running the workflow
+
+A [fixed-weight leptonic bin interface](docs/leptonic-bins.md) composes prepared nodes across supplied kinematics by integrating polarized numerators and unpolarized yields separately. Quadrature, cross-section and acceptance weights are explicit. It does not admit experimental data or certify physical acceptance.
 
 [Historical KPSY candidate intake](docs/historical-data.md) preserves 26 source-locked historical views, the published SIDIS projection cut and an exact primary-table check of the Hall A legacy column remapping. Candidate normalization does not admit a historical or updated fit.
 

@@ -7,6 +7,7 @@ include("polarized_tests.jl")
 include("observable_tests.jl")
 include("sidis_convention_tests.jl")
 include("observable_reference_tests.jl")
+include("leptonic_bin_tests.jl")
 include("cache_snapshot_tests.jl")
 
 @testset "LO transversity moments and fixed-operator AD" begin

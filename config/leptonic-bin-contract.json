@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-LEPTONIC-BIN-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "source": "https://arxiv.org/html/1505.05589v1",
+  "equations": [3, 5, 76, 80, 81, 82, 83, 84],
+  "parent_contract": "config/leptonic-observable-contract.json",
+  "purpose": "Compose fixed prepared leptonic nodes across supplied phase-space quadrature without averaging normalized asymmetries.",
+  "fixed_weights": {
+    "required_metadata": ["source", "measure", "weight_definition", "acceptance"],
+    "domain": "Finite nonnegative Float64 quadrature/acceptance/cross-section weights; each category has nonzero support. No fitted or signed quadrature weights.",
+    "normalization": "Supply the full differential cross-section prefactor, quadrature/Jacobian and acceptance once. A common global normalization cancels. No unit normalization or missing-prefactor inference.",
+    "SIDIS": "One vector w_i. For the dx dy dz d2P measure in Eq.3 it includes sigma0(x,y,Q2), proportional to [1+(1-y)^2]/(y*Q2). A change of integration coordinates requires its Jacobian. Fixed-point source DNN/phase stays in each node's angular factor a_i.",
+    "SIA": "An N-by-2 matrix w_iU,w_iL includes quadrature, cross-section prefactor proportional to (1+cos(theta)^2)/Q2 and supplied category acceptance. A point-angle node a_i=sin(theta)^2/(1+cos(theta)^2) retains the angular correlation. A source-averaged angular scalar is valid only under an independently reviewed conditional averaging/factorization prescription.",
+    "momentum": "Each node is either a point or an existing finite-P integral. Do not apply its P*dP Jacobian again. Mixing point and P-integrated nodes is rejected. Other phase-space measures and dependencies are caller supplied."
+  },
+  "SIDIS": "A_bin=sum_i(w_i*a_i*N_i)/sum_i(w_i*D_i). The source phase and DNN convention must agree across nodes, while fixed y may vary. DNN(mean(y)) is not substituted for the weighted numerator. An event-level DNN correction or division by an averaged DNN requires a separately derived experimental adapter.",
+  "SIA": {
+    "integrals": "N_U=sum_i(w_iU*a_i*N_iU); D_U=sum_i(w_iU*D_iU); likewise L. C is the sum of integrated U and L yields, not a third independent sample.",
+    "UL": "N_U/D_U-N_L/D_L",
+    "UC": "N_U/D_U-(N_U+N_L)/(D_U+D_L)",
+    "approximation": "Same linearized double-ratio convention as the parent; no exact nonlinear-ratio Fourier coefficient. Category-dependent fixed acceptance weights are explicit. All node angular-source definitions must agree."
+  },
+  "invariants": [
+    "All nodes share process, model/settings, flavor basis, target, pion charge, phase and normalization convention; Q2, x, z, y, P and allowed conditional angular factors may vary.",
+    "Preparation owns the weights and node vector; complete typed snapshots guard all weight entries, integrated denominators, metadata and each node. Descendant row/source checks remain mandatory.",
+    "At each parameter value all fitted evaluation and derivatives remain in Julia. No native evolution, provider, Python or language-model calls occur inside evaluation.",
+    "Signed polarized numerators remain signed. Require finite positive integrated unpolarized yields. Do not clamp predictions or insert acceptance/data-admission defaults."
+  ],
+  "validation_policy": {
+    "algebra_max_scaled": 1e-12,
+    "analytic_integral_max_scaled": 1e-10,
+    "physical_composition_max_scaled": 1e-4,
+    "derivative_max_scaled": 1e-7,
+    "relative_floor": 1e-8,
+    "finite_difference_steps": [0.0001, 0.00001],
+    "finite_difference_reference_bits": 256,
+    "synthetic_joint_acceptance": {
+      "SIDIS_y_interval": [0.2, 0.8],
+      "auxiliary_interval": [0, 1],
+      "SIDIS_y_orders": [4, 8, 16],
+      "auxiliary_order": 2,
+      "SIA_cos_theta_interval": [-1, 1],
+      "SIA_cos_theta_order": 4,
+      "scope": "synthetic mathematical quadrature only; closed integrals are independent of the implemented bin projector; no experimental acceptance claim"
+    },
+    "policy_origin": "Reuse the unchanged parent algebra, analytic, physical and derivative targets; freeze before validation. Fixed finite-sum checks do not establish quadrature, acceptance or underlying evolution accuracy."
+  },
+  "limitations": [
+    "No experimental candidate, historical or updated fit is admitted; all production flags remain false.",
+    "This interface consumes explicit prepared nodes and fixed weights; it does not recover an experiment's joint acceptance, kinematic correlations, covariance or overlap.",
+    "No automatic beam relation, phase-space support, low-transverse-momentum cut, unit conversion or conditional angular-measure inference. Those belong to a reviewed source adapter.",
+    "Finite node composition alone is not a multidimensional quadrature-convergence certificate. Reference comparisons sharing fixed native rows do not independently validate evolution.",
+    "All parent original-code, Collins-evolution, source-extrapolation, performance and interval-coverage limitations remain."
+  ]
+}
