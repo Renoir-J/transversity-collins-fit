@@ -1,0 +1,77 @@
+name: Native coupling references
+
+on:
+  pull_request:
+    paths:
+      - config/native-coupling-contract.json
+      - config/hoppet-contract.json
+      - config/evolution-contract.json
+      - config/css-contract.json
+      - fortran/native_coupling_reference.f90
+      - src/collinsflow/hoppet.py
+      - src/collinsflow/provenance.py
+      - numerics/**
+      - scripts/prepare_native_coupling.py
+      - scripts/prepare_hoppet.py
+      - requirements.lock
+      - .github/workflows/native-coupling.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-coupling-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coupling-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      JULIA_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v3.0.3
+        with:
+          version: '1.12.6'
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
+        with:
+          delete-old-caches: 'false'
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+          julia --project=numerics -e 'using Pkg; Pkg.instantiate()'
+      - name: Lock primary evidence and build the unchanged pinned comparator
+        run: python scripts/prepare_native_coupling.py
+      - name: Validate alpha, evolution time, Mellin controls and protocol rejection
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runs/ci-native-coupling
+          julia --project=numerics numerics/bin/check_native_coupling.jl .runtime/native-coupling/build.json runs/ci-native-coupling/validation.json | tee runs/ci-native-coupling/job.log
+      - name: Preserve complete evidence including failures
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: native-coupling-${{ github.sha }}
+          path: |
+            runs/ci-native-coupling
+            .runtime/native-coupling/build.json
+            .runtime/native-coupling/build.log
+            .runtime/native-coupling/upstream-tests.log
+            .runtime/native-coupling/native_coupling_reference
+            .runtime/native-coupling/libcollins_hoppet.so
+            .runtime/native-coupling/paper.html
+            .runtime/native-coupling/paper.receipt.json
+          include-hidden-files: true
+          retention-days: 30
