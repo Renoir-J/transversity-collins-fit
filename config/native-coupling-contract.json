@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "id": "HOPPET-COUPLING-DIAGNOSTIC-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_coupling_recovered": false,
+  "primary_source": {
+    "url": "https://arxiv.org/html/1505.05589v1",
+    "version": "1505.05589v1",
+    "sha256": "65bfdfaa9b221741b9d724fd637f85f6595cb7ccfdeead1874963ab09e9e5cb2",
+    "bytes": 1239637,
+    "math_anchors": {
+      "S3.SS1.p6.m4": "Q_{0}^{2}=2.4",
+      "S3.SS1.p6.m6": "\\alpha_{s}(Q_{0})=0.327",
+      "S3.SS1.p6.m8": "n_{f}=5",
+      "S3.SS1.p6.m9": "\\Lambda_{QCD}=0.225",
+      "S3.SS1.p6.m10": "\\alpha_{s}(M_{Z})=0.118"
+    }
+  },
+  "upstream": {
+    "url": "https://github.com/hoppet-code/hoppet.git",
+    "commit": "feda4f2f64d0131f489ad1cf7728ec6be186cc56",
+    "tree": "74ca10a0e1455d0031585baac6fd569d179adfd0",
+    "unchanged": true
+  },
+  "native_reference": {
+    "entry": "InitRunningCoupling local object; Value; Delete; no streamlined grid or discarded splitting functions",
+    "implementation": "Pinned qcd_coupling delegates use_nah=true to new_as differential-equation solver; old analytic entry is disabled",
+    "protocol": "CF-COUPLING-1",
+    "isolation": "A fresh Fortran comparator process for each complete batch; no sharing SAVE/module state or callbacks in numerical fitting",
+    "source": "fortran/native_coupling_reference.f90"
+  },
+  "settings": {
+    "Q02_GeV2": 2.4,
+    "alpha0_literal": 0.327,
+    "nf": 5,
+    "Lambda_GeV": 0.225,
+    "Q2_probes_GeV2": [
+      2.4,
+      10.0,
+      1000.0
+    ],
+    "MZ_probe_GeV": 91.1876,
+    "reported_alpha_MZ": 0.118,
+    "native_nloop": 2
+  },
+  "models": [
+    {
+      "id": "asymptotic_Lambda_0p225",
+      "role": "unchanged COLLINEAR-LO-002/KPSY-CSS-001 explicit 1/L expansion; alpha0 derived from Lambda"
+    },
+    {
+      "id": "native_literal_alpha0_0p327",
+      "role": "native exact-RG diagnostic with paper literal alpha0; not claimed to recover author settings"
+    },
+    {
+      "id": "native_matched_asymptotic_alpha0",
+      "role": "native exact-RG diagnostic at the asymptotic Q0 value, isolating the running-definition difference"
+    }
+  ],
+  "independent_reference": {
+    "precision_bits": 256,
+    "bisection_iterations": "bits+16 with adjacent-value stop",
+    "beta": "dalpha/dlnQ2 = -B0*alpha^2-B1*alpha^3; B0=beta0/(4*pi), B1=beta1/(16*pi^2)",
+    "implicit": "F(alpha)=1/alpha+c*log(alpha/(1+c*alpha)), c=B1/B0; F(alphaQ)=F(alpha0)+B0*log(Q2/Q02)",
+    "time": "tau=(2/beta0)*log(alpha0*(1+c*alphaQ)/(alphaQ*(1+c*alpha0)))",
+    "one_loop": "c=0; alphaQ=alpha0/(1+B0*alpha0*log(Q2/Q02))",
+    "numerical_owner": "Julia owns roots, quadrature, evolution-time and Mellin calculations; Fortran is a pinned native comparator"
+  },
+  "validation_policy": {
+    "native_dt_refinements": [
+      0.2,
+      0.1,
+      0.05,
+      0.025,
+      0.0125,
+      0.00625
+    ],
+    "quadrature_orders": [
+      16,
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
+    "refinement_selection": "Evaluate at least three dt levels and three quadrature orders. Extend within these budgets until final alpha, dt and quadrature/reference comparisons pass. Retain every coarse result as accepted or unresolved; do not relax thresholds.",
+    "alpha_max_scaled": 1e-10,
+    "anchor_max_scaled": 1e-13,
+    "time_max_scaled": 1e-10,
+    "dt_refinement_max_scaled": 1e-10,
+    "quadrature_refinement_max_scaled": 1e-10,
+    "mellin_factor_max_scaled": 1e-10,
+    "composition_max_scaled": 1e-10,
+    "relative_floor": 1e-12,
+    "implicit_residual_max_abs": 1e-60,
+    "one_loop_nf_controls": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "one_loop_control_dt": 0.05,
+    "one_loop_max_scaled": 1e-11,
+    "Mellin_N_controls": [
+      1,
+      2,
+      3
+    ],
+    "protocol_failures_must_reject": true,
+    "native_precision_errors_allowed": 0
+  },
+  "native_input_domain": {
+    "Q02_GeV2": [
+      2.4,
+      100000000.0
+    ],
+    "Q2_GeV2": "Q02<=Q2<=1e8; forward-only comparator",
+    "alpha0": "0<alpha0<=0.4",
+    "nf": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "nloop": [
+      1,
+      2
+    ],
+    "dt": [
+      0.0001,
+      0.2
+    ],
+    "query_count": [
+      1,
+      20000
+    ]
+  },
+  "diagnostic_only": {
+    "asymptotic_vs_exact_differences": "Record values and differences with model identities; no threshold declares the prescriptions identical",
+    "printed_MZ_value": "Report deviations from the printed 0.118 without claiming recovery of the historical coupling",
+    "physical_partial_moments_evaluated": false,
+    "paper_benchmark_replaced": false
+  },
+  "limitations": [
+    "Current pinned upstream HOPPET is not recovered KPSY modified-HOPPET code; historical running, flavor thresholds and exact settings remain unresolved",
+    "No production coupling selection, no change to COLLINEAR-LO-002 or the failed KPSY-PAPER-MOMENTS-001 raw-center comparisons",
+    "No physical h1/Collins moments, historical fit, data likelihood, covariance, uncertainty coverage or G2PERF admission",
+    "Only fixed coupling/settings are compared; no fitted-setting derivatives or native concurrency guarantee"
+  ]
+}
