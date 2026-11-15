@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-JOINT-REPORT-FP-001",
+  "scope": "synthetic_closure_report_arithmetic",
+  "production_ready": false,
+  "statistical_model_changed": false,
+  "scientific_acceptance_thresholds_changed": false,
+  "purpose": "Validate the stored Hessian-vector product without requiring a second machine's BLAS summation order to reproduce identical bits. Preserve the earlier direct-auditor failure.",
+  "arithmetic": "Finite IEEE binary64 operands, round-to-nearest, at most 2*n elementary operations per dot product; FMA or reassociation may reduce or reorder those operations. Reject unsupported dimensions, nonfinite operands and potential overflow.",
+  "unit_roundoff": "u=2^-53",
+  "absolute_rounding_allowance": "eta=2^-1074 (one smallest positive binary64 value, conservatively bounding a subnormal rounding error)",
+  "exact_reference": "Convert each stored binary64 operand to an exact Rational{BigInt}; form each row's exact dot product s and absolute product sum a without floating-point arithmetic.",
+  "bound": "k=2*n; gamma=k*u/(1-k*u). Require k*u<1, a<floatmax(binary64)/2 and |stored_hvp_i-s_i|<=gamma*a_i+k*eta/(1-k*u), using exact rational comparisons.",
+  "derivation": "Each multiplication/addition contributes a relative error bounded by u and, conservatively, an absolute subnormal error eta. Collecting at most k factors (1+delta) gives gamma_k; the geometric accumulation of absolute errors is at most k*eta/(1-k*u). Any summation order satisfying this model obeys the same bound. The range guard prevents intermediate overflow. No empirical safety multiplier is fitted.",
+  "unchanged": "All producer checks, the 1e-11 profile/algebra target, 1e-7 derivative target, finite-difference steps, raw operands and all historical/production gate failures remain unchanged. This is a report-reader arithmetic fix, not a new accepted physical result.",
+  "tests": ["distinct legal summation orders on an exactly specified cancellation example", "genuine product corruption rejects", "nonfinite or malformed operands reject", "current local and CI report operands under the fixed rule", "all altered-report and cached rejection/restoration controls"],
+  "primary_reference": "https://eprints.maths.manchester.ac.uk/2689/1/paper.pdf"
+}

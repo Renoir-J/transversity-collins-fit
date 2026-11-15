@@ -26,6 +26,8 @@ A [source-locked KPSY partial-moment benchmark](docs/kpsy-paper-moments.md) comp
 
 A [coupling-only partial-moment diagnostic](docs/coupling-moments.md) connects three predefined coupling profiles to fixed-time LO evolution. Source-bound whole Julia jobs check the interface before any physical sensitivity calculation. This extension preserves the failed historical benchmark and does not select a production coupling.
 
+A [joint prediction/profile interface](docs/joint-likelihood.md) joins prepared SIDIS/SIA/STAR points and bins under thirteen physical parameters, with full correlated covariance, theory-scaled nuisance errors and process holdouts. Separate analytic and pinned-input whole jobs validate its algebra and derivatives using explicitly synthetic observations. Real-data fitting, bounded optimization and production admission remain incomplete.
+
 [Evolved polarized matching rows](docs/matched-rows.md) combine fixed-scale evolution with SIDIS/SIA Wilson coefficients before fitting. Physical alpha_s, process constants and the homogeneous Collins approximation are explicit. Generic Julia row products retain parameter derivatives after native preparation closes. Observable assembly and production admission remain separate requirements.
 
 [Polarized leptonic process contexts](docs/polarized-processes.md) join the initial family, every supplied radial evolution/matching scale and signed SIDIS/SIA structure functions. Retained probe batching reduces repeated native preparation, and fixed Julia row products handle fitted parameters and nested derivatives. Analytic and pinned-input validation have separate producers; these contexts do not admit experimental observables or fits.

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-JOINT-PROFILE-001",
+  "scope": "reconstructed_theory_component",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "purpose": "Join prepared SIDIS/SIA/STAR observables under the same 13-parameter physical family and a covariance-aware profiled Gaussian objective, as a prerequisite to the real-data fit executor.",
+  "observation_scope": "The current likelihood constructor accepts explicitly synthetic observations only. Experimental candidates, historical candidates and production data are rejected. There is no real-data admission or optimizer fallback.",
+  "prediction_contract": {
+    "children": ["LeptonicObservablePlan", "LeptonicBinPlan", "StarPointPlan", "StarBinPlan"],
+    "parameters": "KPSYParameters, 13 direct physical coordinates; retain the original closed bounds and unsupported singular shape derivatives",
+    "common_model": ["bmax", "Q02", "g2", "gq", "gh", "Lambda", "nf"],
+    "settings": "Fixed source/model/geometry/coupling settings only; no setting derivatives or language-model/Python callbacks",
+    "ordering": "Unique nonempty point identifiers; data point order must match prepared prediction order exactly",
+    "processes": ["SIDIS", "SIA", "STAR_200", "STAR_510"],
+    "STAR_point_phase": "Required explicit sin_phiS_minus_phiH or sin_phiH_minus_phiS; bin plans retain their own phase and reject a second one",
+    "leptonic_phase": "Inherited unchanged from the prepared observable or bin; no further angular or DNN factor",
+    "lattice": "A separately validated full-x tensor-charge/endpoint plan is still required; do not replace it with a truncated moment or ignore an unsupported observation",
+    "ownership": "Own identifier/observation tuples, fixed numerical data and metadata; validate child snapshots and reject mutation of observations, covariance, nuisance settings or provenance"
+  },
+  "likelihood": {
+    "residual": "r(theta)=y-t(theta)",
+    "conditional_model": "y=t(theta)+[A+diag(t(theta))*R]*nu+epsilon; epsilon~N(0,C), nu~N(0,S), independent",
+    "covariance": "C is the explicitly supplied finite symmetric positive-definite fixed data covariance; no diagonalization, clipping, inferred missing error or overlap treatment",
+    "nuisance": "A and R have the same ordered source-group columns. A is in asymmetry units, R is relative. S is the explicitly supplied symmetric positive-definite nuisance covariance; no unspecified group correlations are inferred.",
+    "profile": "Let S=L*L'. B(theta)=[A+diag(t(theta))*R]*L. Minimize (r-B*a)'*inv(C)*(r-B*a)+a'*a over a; report original nu=L*a.",
+    "differentiation": "Differentiate the complete profiled objective, including the theory dependence of B(theta). Both gradient and nested HVP remain Julia computations.",
+    "not_marginal_likelihood": "This is a nuisance-profile chi2. Do not add logdet(C+B*B') or label it a marginalized Bayesian posterior.",
+    "historical_normalizations": "No nuisance is assigned to an experimental source here. KPSY Eq116 normalization exclusion and all updated-fit polarization/normalization choices require separate reviewed data policies.",
+    "subsets": "Explicit point/process selections retain the marginal covariance submatrix, all nuisance columns and the complete nuisance prior; no block-independence assumption or conditional-on-held-out-data covariance"
+  },
+  "validation_policy": {
+    "algebra_max_scaled": 1e-11,
+    "derivative_max_scaled": 1e-7,
+    "relative_floor": 1e-8,
+    "finite_difference_steps": [0.0001, 0.00005],
+    "reference_bits": 256,
+    "derivative_reference": "Independent augmented least-squares/QR profiling in BigFloat, with central differences at both frozen steps and Richardson cancellation of the leading h^2 term for all 13 gradient coordinates and a full HVP. Retain coarse operands.",
+    "scope_of_fixture": "Mixed prepared point/bin process contexts with explicitly synthetic source rows and observations. These test joint assembly and inference algebra, not native evolution or physical experimental admission.",
+    "controls": ["independent augmented QR and effective-covariance identities", "correlated cross-process covariance", "theory-scaled versus data-scaled multiplicative errors", "correlated nuisance prior and source-column reparameterization", "zero-nuisance reduction", "signed phase/point order", "point/process holdouts", "complete 13-coordinate gradient and HVP", "snapshot mutation rejection", "candidate/production scope rejection"],
+    "physical_inputs": "A separate whole-Julia-job producer must prepare current pinned-input process contexts and repeat the joint checks. Synthetic fixtures do not certify that path.",
+    "status": "Any absent, stale, unsupported or failed required check remains FAIL. Existing failed KPSY center benchmarks and production prerequisites are unchanged."
+  },
+  "limitations": [
+    "This component does not yet implement the real-data fitting job loader, bounded optimizer, replica fitting, inference coverage or publication products",
+    "Current physical process plans remain reconstructed and unadmitted; all acceptance, overlap, covariance, source and original-code limitations persist",
+    "No full-x lattice moment, bin acceptance, sign, matching, coupling or evolution prescription is changed",
+    "No experimental observation is silently converted to synthetic or admitted by a passed synthetic receipt",
+    "Production/extraction/G2PERF remain false; physical joint fitting and a real-data executor still require completion"
+  ]
+}

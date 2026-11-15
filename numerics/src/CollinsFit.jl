@@ -33,6 +33,9 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        jet_born_contractions, jet_born_structure, jet_born_integrals, jet_born_asymmetry, jet_collins_fourier_moment,
        StarFragmentationPlan, StarPointPlan, StarBinPlan, star_fragmentation_plan, star_point_plan,
        prepare_star_point, star_structure, star_collins, predict_star, star_bin, star_momentum_bin,
+       JointObservation, JointPredictionModel, JointGaussianLikelihood, predict_joint,
+       joint_profile, joint_objective, joint_value_and_gradient!, joint_subset, joint_holdout,
+       joint_model_metadata, joint_likelihood_metadata,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -149,6 +152,7 @@ include("LeptonicObservables.jl")
 include("LeptonicBins.jl")
 include("JetBorn.jl")
 include("StarEvolved.jl")
+include("JointLikelihood.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)
