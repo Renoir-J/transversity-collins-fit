@@ -49,6 +49,7 @@ struct HoppetPlan
     nf::Int
     coupling_model::Symbol
     lambda_GeV::Union{Nothing,Float64}
+    time_profile::Union{Nothing,PreparedEvolutionTimes}
     layout::Symbol
     construction::Symbol
     native_nodes::Int
@@ -102,11 +103,14 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
     times,model,lambda = if coupling isa AsymptoticTwoLoopCoupling
         coupling.nf==nf || error("coupling/nf mismatch")
         (evolution_time.(Ref(coupling),qs,q0),:asymptotic_two_loop,coupling.lambda_GeV)
+    elseif coupling isa PreparedEvolutionTimes
+        (prepared_times(coupling,qs,q0;nf=nf),:prepared_times,nothing)
     else
         a=fixed_scalar(coupling,"alpha0")
         ([-2log(alpha_lo(q,q0,a;nf=nf)/a)/(11-2nf/3) for q in qs],:one_loop,nothing)
     end
     all(t -> isfinite(t) && abs(t)<=1,times) || error("unsupported auxiliary evolution-time interval")
+    profile=coupling isa PreparedEvolutionTimes ? coupling : nothing
     receipt=buildfile isa HoppetBuildVerification ? buildfile.receipt : verified_hoppet_build(buildfile)
     lock(HOPPET_NATIVE_LOCK) do
         library=Libdl.dlopen(receipt["library"])
@@ -131,9 +135,9 @@ function HoppetPlan(buildfile,Q2,Q02,coupling;nf=5,quantity=:transversity,
             status[]==0 && all(diff(x).>0) && last(x)==1 || error("invalid HOPPET grid")
             ccall(state.functions[:cf_hoppet_info],Cvoid,(Int64,Cint,Ref{Cint},Ref{Int64},Ref{Cint}),state.context,n[],native,payload,status)
             status[]==0 || error("missing HOPPET resource metadata")
-            signature=numerical_snapshot((x,qs,times))
+            signature=hoppet_time_snapshot(x,qs,times,profile)
             finalizer(close,state)
-            HoppetPlan(state,x,qs,q0,times,quantity,nf,model,lambda,layout,construction,native[],payload[],signature)
+            HoppetPlan(state,x,qs,q0,times,quantity,nf,model,lambda,profile,layout,construction,native[],payload[],signature)
         catch
             close(state)
             rethrow()
@@ -159,9 +163,14 @@ end
 Base.close(plan::HoppetPlan)=close(plan.state)
 Base.isopen(plan::HoppetPlan)=plan.state.context!=0
 
+# Preserve historical cache bytes for existing constructors. The opt-in path
+# also binds the immutable scale labels, source/model identity and fixed time data.
+hoppet_time_snapshot(grid,Q2,tau,profile)=profile===nothing ? numerical_snapshot((grid,Q2,tau)) :
+    numerical_snapshot((grid,Q2,tau,profile))
+
 function hoppet_valid(plan,initial;endpoint=true)
     isopen(plan) || error("closed HOPPET plan")
-    numerical_snapshot((plan.grid,plan.Q2,plan.tau))==plan.signature || error("mutated HOPPET settings/grid")
+    hoppet_time_snapshot(plan.grid,plan.Q2,plan.tau,plan.time_profile)==plan.signature || error("mutated HOPPET settings/grid")
     size(initial,1)==length(plan.grid) && size(initial,2)>0 && all(isfinite,initial) || error("invalid HOPPET initial shape/values")
     endpoint && !all(iszero,selectdim(initial,1,size(initial,1))) && error("h(1)=0 is required")
 end
@@ -321,6 +330,7 @@ end
 function prepare_hoppet_points(buildfile,queries,Q2,Q02,coupling;intervals=1024,nf=5,
                                quantity=:transversity,order=-6,eps=1e-10,du=.0125,matching=nothing,
                                construction=:batched_probes)
+    coupling isa PreparedEvolutionTimes && error("prepared times are not admitted by point-row adapters")
     intervals isa Integer && !(intervals isa Bool) && 11<=intervals<=20000 || error("fixed interval count 11..20000 required")
     qs=[fixed_scalar(x,"query fraction") for x in queries]
     !isempty(qs) && all(x -> 0<x<=1,qs) && any(<(1),qs) || error("interior queries in (0,1), with optional endpoint, required")
@@ -389,6 +399,7 @@ end
 function HoppetMatchingPlan(buildfile,queries,Q2,Q02,coupling;process,
                             quantity=:KPSY_Hhat3_homogeneous,intervals=1024,nf=5,order=-6,eps=1e-10,du=.0125,
                             construction=:batched_probes)
+    coupling isa PreparedEvolutionTimes && error("prepared times do not supply physical Wilson-matching alpha_s")
     quantity in (:transversity,:KPSY_Hhat3_homogeneous) || error("unsupported polarized matching quantity")
     channel=quantity==:transversity ? :transversity : :collins
     matching_channel(process,channel)

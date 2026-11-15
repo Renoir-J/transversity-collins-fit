@@ -13,6 +13,21 @@ struct CollinearLOOperator
     nf::Int
     coupling_model::Symbol
     lambda_GeV::Union{Nothing,Float64}
+    time_profile::Union{Nothing,PreparedEvolutionTimes}
+    prepared_signature::Union{Nothing,String}
+end
+
+collinear_prepared_snapshot(x,U,quantity,q2,q0,profile)=numerical_snapshot(
+    (x,U,quantity,q2,q0,profile.alpha0,profile.nf,:prepared_times,nothing,profile))
+
+function collinear_prepared_valid(operator::CollinearLOOperator)
+    profile=operator.time_profile
+    profile===nothing && return nothing
+    operator.coupling_model==:prepared_times && operator.lambda_GeV===nothing &&
+        operator.nf==profile.nf && operator.alpha0==profile.alpha0 &&
+        collinear_prepared_snapshot(operator.grid,operator.matrix,operator.quantity,operator.Q2,operator.Q02,profile)==
+        operator.prepared_signature || error("mutated prepared collinear operator/settings")
+    nothing
 end
 
 function collinear_grid(grid)
@@ -73,7 +88,7 @@ function collinear_lo_operator(grid, Q2, Q02, alpha0; nf=3, quantity=:transversi
     tau = -2log(alpha / alpha0) / (11 - 2nf / 3)
     U = Matrix(exp(UpperTriangular(tau * collinear_lo_generator(x))))
     all(isfinite, U) || error("nonfinite collinear evolution operator")
-    CollinearLOOperator(x, U, quantity, Q2, Q02, alpha0, nf, :one_loop, nothing)
+    CollinearLOOperator(x, U, quantity, Q2, Q02, alpha0, nf, :one_loop, nothing, nothing, nothing)
 end
 
 "LO splitting with the explicitly specified asymptotic two-loop running coupling."
@@ -84,22 +99,36 @@ function collinear_lo_operator(grid, Q2, Q02, coupling::AsymptoticTwoLoopCouplin
     U = Matrix(exp(UpperTriangular(tau * collinear_lo_generator(x))))
     all(isfinite, U) || error("nonfinite collinear evolution operator")
     CollinearLOOperator(x, U, quantity, Q2, Q02, alpha_s(coupling,Q02), coupling.nf,
-                        :asymptotic_two_loop, coupling.lambda_GeV)
+                        :asymptotic_two_loop, coupling.lambda_GeV, nothing, nothing)
+end
+
+"An explicitly supplied fixed time; the profile does not reconstruct alpha_s."
+function collinear_lo_operator(grid,Q2,Q02,profile::PreparedEvolutionTimes;quantity=:transversity)
+    quantity in (:transversity,:KPSY_Hhat3_homogeneous) || error("unsupported collinear quantity/convention")
+    x=collinear_grid(grid);q2=fixed_scalar(Q2,"Q2");q0=fixed_scalar(Q02,"Q02")
+    tau=only(prepared_times(profile,[q2],q0))
+    U=Matrix(exp(UpperTriangular(tau*collinear_lo_generator(x))))
+    all(isfinite,U) || error("nonfinite collinear evolution operator")
+    signature=collinear_prepared_snapshot(x,U,quantity,q2,q0,profile)
+    CollinearLOOperator(x,U,quantity,q2,q0,profile.alpha0,profile.nf,:prepared_times,nothing,profile,signature)
 end
 
 function apply_operator(operator::CollinearLOOperator, initial::AbstractVector)
+    collinear_prepared_valid(operator)
     length(initial) == length(operator.grid) || error("initial distribution/grid size mismatch")
     all(isfinite, initial) && iszero(last(initial)) || error("finite initial distribution with h(1)=0 required")
     operator.matrix * initial
 end
 
 function apply_operator(operator::CollinearLOOperator, initial::AbstractMatrix)
+    collinear_prepared_valid(operator)
     size(initial,1)==length(operator.grid) && size(initial,2)>0 || error("initial matrix/grid size mismatch")
     all(isfinite,initial) && all(iszero,initial[end,:]) || error("finite initial columns with h(1)=0 required")
     operator.matrix*initial
 end
 
 function operator_adjoint(operator::CollinearLOOperator, cotangent::AbstractVector)
+    collinear_prepared_valid(operator)
     length(cotangent) == length(operator.grid) && all(isfinite, cotangent) || error("invalid collinear cotangent")
     result = transpose(operator.matrix) * cotangent
     # The last ordinate is constrained to zero and is not a fitted coordinate.
