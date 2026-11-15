@@ -35,7 +35,7 @@ function sia_qt_fixture(z1,settings)
     blocks=CollinsFit.HoppetPointBlock[]
     for query in (z1,z2)
         rows=zeros(length(scales),length(grid))
-        rows[:,findfirst(==(query),grid)].=1 .+ .01.*radial.b
+        rows[:,findfirst(==(query),grid)].=1 .+ .01 .*radial.b
         push!(blocks,CollinsFit.HoppetPointBlock(collect(eachindex(grid)),rows))
     end
     data=(grid,[z1,z2],scales,model.Q02,times,:KPSY_Hhat3_homogeneous,5,32,:synthetic_fixture,
