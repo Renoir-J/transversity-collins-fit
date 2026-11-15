@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-JOINT-PINNED-INPUTS-001",
+  "parent_contract": "config/joint-likelihood-contract.json",
+  "scope": "synthetic_closure_with_reconstructed_pinned_input_model",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "purpose": "Repeat joint prediction/profile algebra and complete parameter derivatives with actual pinned-input process contexts; observations, kinematics and covariance remain explicit validation fixtures.",
+  "model": "Unchanged default KPSYCSS, nf5, Lambda=0.225, Q02=2.4 and 13 physical parameter family",
+  "input_policy": "CT10 policy=:reference and matching range_policy=:reference, explicitly recording reference extrapolation; initial Soffer/FF samples retain their existing strict preparation",
+  "preparation": {
+    "radial_edges_GeV_inverse": [0.0, 0.25, 1.0, 4.0, 8.0],
+    "radial_order": 4,
+    "matching_order": 8,
+    "native_intervals": 1024,
+    "native_construction": "batched_probes",
+    "SIDIS": {"Q2": 4.0, "P": 0.2, "x": 0.15, "z": 0.3, "target": "isolated proton", "charge": 1},
+    "SIA": {"Q2": 110.0, "P": 0.2, "z1": 0.3, "z2": 0.5, "frame": "hadron2", "charges": [1, -1]},
+    "STAR": {"sqrt_s": [200.0, 510.0], "pT": 20.0, "eta": 0.3, "z": 0.3, "jT": 0.25, "charge": 1,
+      "fragmentation": "quark_only", "gluon_model": "none", "jet_radius": 0.6, "axis": "standard",
+      "scale_prescription": "historical_pT_C11", "outer_order": 4}
+  },
+  "bin_and_angular_fixtures": "Reuse the explicitly synthetic point/bin weights, angular scalar and covariance of JointLikelihoodReference. No experimental acceptance, physical bin edges, missing projection mean or source-specific nuisance is inferred.",
+  "derivative_direction": [0.2, 0.1, 0.1, -0.2, 0.02, 0.1, 0.2, -0.1, 0.1, -0.1, 0.1, -0.2, 0.01],
+  "numerical_policy": "Inherit all algebra, finite-difference/BigFloat and derivative thresholds unchanged from KPSY-JOINT-PROFILE-001",
+  "validation_scope": "Shared fixed prepared process rows; independent Gaussian/QR profiling and finite differences. This does not supply new independent evolution, radial/outer quadrature convergence or publication-observable benchmarks.",
+  "limitations": [
+    "The deliberately small preparation orders are not a production accuracy or throughput certificate",
+    "Quark-only STAR fragmentation is an explicit validation assumption; no gluon model or finite-R NLO matching is admitted",
+    "Synthetic observation scope is retained even with physical input tables; no real-data fit, optimizer execution, coverage or extraction",
+    "Original failed KPSY benchmarks, native endpoint limitations, acceptance/data/covariance/overlap and full-x lattice requirements remain unchanged"
+  ]
+}
