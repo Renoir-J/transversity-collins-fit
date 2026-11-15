@@ -192,17 +192,30 @@ struct StarPointPlan
     scale_prescription::Symbol
     measure_source::String
     provenance::Dict{String,Any}
+    born_signature::String
     signature::String
+    function StarPointPlan(born,weights,couplings,fA,fB,operator,samples,fragmentation,
+            unpolarized_coefficients,transfer_coefficients,jet_radius,axis,scale_prescription,
+            measure_source,provenance,signature)
+        # These tuples contain only immutable JetBornPlan/Term/Kinematics values.
+        # No caller-provided digest is accepted by this constructor.
+        owned=Tuple(born)
+        born_signature=star_born_signature(owned)
+        new(owned,weights,couplings,fA,fB,operator,samples,fragmentation,unpolarized_coefficients,
+            transfer_coefficients,jet_radius,axis,scale_prescription,measure_source,provenance,born_signature,signature)
+    end
 end
 
 star_born_payload(b)=(b.pids,b.fragmentation,
     Tuple(getfield(b.kinematics,n) for n in fieldnames(JetBornKinematics)),
     Tuple((t.a,t.b,t.c,t.unpolarized_kind,t.transfer_kind,t.unpolarized,t.transfer) for t in b.terms))
-function star_point_snapshot(born,weights,couplings,fA,fB,op,samples,ff,U,T,R,axis,scale,source,meta)
-    numerical_snapshot((Tuple(star_born_payload(b) for b in born),weights,couplings,fA,fB,
+star_born_signature(born)=numerical_snapshot(("KPSY-STAR-IMMUTABLE-BORN-CACHE-001",Tuple(star_born_payload(b) for b in born)))
+function star_point_snapshot_from_born_signature(born_signature,weights,couplings,fA,fB,op,samples,ff,U,T,R,axis,scale,source,meta)
+    numerical_snapshot(("STAR-POINT-IMMUTABLE-BORN-002",born_signature,weights,couplings,fA,fB,
         hoppet_point_signature(op),star_sample_payload(samples),star_fragmentation_signature(ff),U,T,R,axis,scale,source,meta))
 end
-star_point_signature(p::StarPointPlan)=star_point_snapshot(p.born,p.weights,p.couplings,p.fA,p.fB,p.operator,
+star_point_snapshot(born,args...)=star_point_snapshot_from_born_signature(star_born_signature(born),args...)
+star_point_signature(p::StarPointPlan)=star_point_snapshot_from_born_signature(p.born_signature,p.weights,p.couplings,p.fA,p.fB,p.operator,
     p.samples,p.fragmentation,p.unpolarized_coefficients,p.transfer_coefficients,p.jet_radius,p.axis,
     p.scale_prescription,p.measure_source,p.provenance)
 function star_point_valid(p::StarPointPlan)

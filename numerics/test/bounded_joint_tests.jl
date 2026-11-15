@@ -1,4 +1,5 @@
 using Test, CollinsFit, ForwardDiff
+include("star_immutable_cache_tests.jl")
 if !isdefined(@__MODULE__,:JointLikelihoodReference)
     include("../bin/JointLikelihoodReference.jl")
 end
