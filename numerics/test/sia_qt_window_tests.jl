@@ -52,3 +52,21 @@ include("../bin/SIAQTChecks.jl")
     @test_throws ErrorException ObservableReference.reference_weights(context,nothing;coordinate=:qT)
     @test_throws ErrorException ObservableReference.reference_weights(context,(0.,1.);coordinate=:unknown)
 end
+
+@testset "fourth-order derivative reference against closed smooth functions" begin
+    contract=JSON.parsefile(QT_FD_CONTRACT);policy=contract["policy"]
+    setprecision(policy["reference_bits"]) do
+        x=BigFloat(.01)
+        for (f,closed) in ((t->t^3,3x^2),(t->exp(7t),7exp(7x)))
+            steps=BigFloat.(policy["central_steps"])
+            raw=[(f(x+h)-f(x-h))/(2h) for h in steps]
+            fourth=[qt_richardson(raw[i],raw[i+1]) for i in 1:2]
+            @test all(abs(value-closed)/max(abs(closed),policy["relative_floor"])<=policy["derivative_max_scaled"] for value in fourth)
+            @test abs(fourth[1]-fourth[2])/max(abs(fourth[2]),policy["relative_floor"])<=policy["derivative_max_scaled"]
+        end
+        h=BigFloat(first(policy["central_steps"]))
+        raw=((x+h)^3-(x-h)^3)/(2h)
+        @test abs(raw-3x^2)/abs(3x^2)>policy["derivative_max_scaled"]
+        @test Float64(raw-3x^2)==Float64(h^2)
+    end
+end

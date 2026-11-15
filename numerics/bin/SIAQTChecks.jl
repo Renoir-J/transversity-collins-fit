@@ -4,10 +4,11 @@ isdefined(@__MODULE__,:ObservableReference) || include("ObservableChecks.jl")
 using .ObservableReference
 
 const QT_CONTRACT=joinpath(@__DIR__,"../../config/sia-qt-window-contract.json")
+const QT_FD_CONTRACT=joinpath(@__DIR__,"../../config/sia-qt-fd-reference-contract.json")
 
 function sia_qt_sources(producer)
     merge(observable_source_hashes(producer),Dict(relpath(p,OBS_ROOT)=>bytes2hex(sha256(read(p)))
-        for p in (QT_CONTRACT,@__FILE__)))
+        for p in (QT_CONTRACT,QT_FD_CONTRACT,@__FILE__)))
 end
 
 qt_vector(x::Number)=[x]
@@ -78,7 +79,9 @@ function qt_analytic_moments(z,interval,policy,checks)
     records
 end
 
-function qt_derivatives(prediction,reference,theta,direction,policy,checks,label)
+qt_richardson(coarse,fine)=(4 .*fine.-coarse)./3
+
+function qt_derivatives(prediction,reference,theta,direction,policy,fd_policy,checks,label)
     J=ForwardDiff.jacobian(prediction,theta)
     H=reduce(vcat,[permutedims(ForwardDiff.hessian(t->prediction(t)[i],theta)*direction) for i in 1:2])
     refJ=ForwardDiff.jacobian(reference,theta)
@@ -87,8 +90,8 @@ function qt_derivatives(prediction,reference,theta,direction,policy,checks,label
     qt_check!(checks,label*" all13 independent qT HVP",H,refH,policy["HVP_max_scaled"],policy)
     qt_check!(checks,label*" SIA transversity gradient columns are zero",J[:,1:6],zeros(2,6),0.,policy)
     records=[]
-    for step in policy["finite_difference_steps"]
-        record=setprecision(policy["finite_difference_reference_bits"]) do
+    for step in fd_policy["central_steps"]
+        record=setprecision(fd_policy["reference_bits"]) do
             t=BigFloat.(theta);h=BigFloat(step);d=BigFloat.(direction)
             stencils=[];fd=zeros(BigFloat,2,13)
             for j in 1:13
@@ -102,21 +105,51 @@ function qt_derivatives(prediction,reference,theta,direction,policy,checks,label
             fdh=(plusJ-minusJ)/(2h)
             Dict("step_binary64"=>step,"step_decimal"=>string(h),"reference_bits"=>precision(h),
                 "gradient"=>qt_rows(Float64.(fd)),"HVP"=>qt_rows(Float64.(fdh)),
+                "gradient_decimal"=>qt_rows(string.(fd)),"HVP_decimal"=>qt_rows(string.(fdh)),
                 "value_stencils"=>stencils,"directional_plus_gradient_decimal"=>qt_rows(string.(plusJ)),
                 "directional_minus_gradient_decimal"=>qt_rows(string.(minusJ)))
         end
         fd=reduce(vcat,permutedims.(record["gradient"]));fdh=reduce(vcat,permutedims.(record["HVP"]))
-        qt_check!(checks,label*" all13 256-bit central FD gradient step=$step",J,fd,policy["derivative_max_scaled"],policy)
-        qt_check!(checks,label*" 256-bit central FD HVP step=$step",H,fdh,policy["HVP_max_scaled"],policy)
+        # Retain raw misses explicitly; only the prospectively frozen fourth-order method is a new gate.
+        record["raw_gradient_scaled_error"]=observable_scaled(vec(J),vec(fd),policy)
+        record["raw_HVP_scaled_error"]=observable_scaled(vec(H),vec(fdh),policy)
+        record["raw_gradient_target_met"]=record["raw_gradient_scaled_error"]<=policy["derivative_max_scaled"]
+        record["raw_HVP_target_met"]=record["raw_HVP_scaled_error"]<=policy["HVP_max_scaled"]
         push!(records,record)
     end
+    fourth=[]
+    for level in 1:2
+        record=setprecision(fd_policy["reference_bits"]) do
+            matrices(key,i)=parse.(BigFloat,reduce(vcat,permutedims.(records[i][key])))
+            gradient=qt_richardson(matrices("gradient_decimal",level),matrices("gradient_decimal",level+1))
+            hvp=qt_richardson(matrices("HVP_decimal",level),matrices("HVP_decimal",level+1))
+            Dict("level"=>level,"method_order"=>4,"coarse_step"=>records[level]["step_binary64"],
+                "fine_step"=>records[level+1]["step_binary64"],"gradient"=>qt_rows(Float64.(gradient)),
+                "HVP"=>qt_rows(Float64.(hvp)),"gradient_decimal"=>qt_rows(string.(gradient)),"HVP_decimal"=>qt_rows(string.(hvp)))
+        end
+        gradient=reduce(vcat,permutedims.(record["gradient"]));hvp=reduce(vcat,permutedims.(record["HVP"]))
+        qt_check!(checks,label*" all13 fourth-order FD gradient level=$level",J,gradient,policy["derivative_max_scaled"],policy)
+        qt_check!(checks,label*" fourth-order FD HVP level=$level",H,hvp,policy["HVP_max_scaled"],policy)
+        push!(fourth,record)
+    end
+    qt_check!(checks,label*" adjacent fourth-order gradient stability",
+        reduce(vcat,permutedims.(fourth[1]["gradient"])),reduce(vcat,permutedims.(fourth[2]["gradient"])),policy["derivative_max_scaled"],policy)
+    qt_check!(checks,label*" adjacent fourth-order HVP stability",
+        reduce(vcat,permutedims.(fourth[1]["HVP"])),reduce(vcat,permutedims.(fourth[2]["HVP"])),policy["HVP_max_scaled"],policy)
     Dict("gradient"=>qt_rows(J),"HVP"=>qt_rows(H),"reference_gradient"=>qt_rows(refJ),
-        "reference_HVP"=>qt_rows(refH),"direction"=>direction,"finite_differences"=>records)
+        "reference_HVP"=>qt_rows(refH),"direction"=>direction,"finite_differences"=>records,"fourth_order_references"=>fourth,
+        "acceptance_reference_method"=>"two fourth-order Richardson levels and adjacent-level stability",
+        "raw_central_stencils_are_diagnostics"=>true)
 end
 
 function validate_sia_qt_windows(producer)
     sources=sia_qt_sources(producer);contract=JSON.parsefile(QT_CONTRACT)
     policy=contract["validation_policy"];settings=contract["synthetic_fixture"]
+    fd_contract=JSON.parsefile(QT_FD_CONTRACT);fd_policy=fd_contract["policy"]
+    fd_policy["central_steps"][1:2]==policy["finite_difference_steps"] &&
+        fd_policy["reference_bits"]==policy["finite_difference_reference_bits"] &&
+        all(fd_policy[k]==policy[k] for k in ("relative_floor","derivative_max_scaled","HVP_max_scaled")) ||
+        error("FD reference addendum must preserve original steps, precision and acceptance targets")
     theta=Float64.(settings["parameters"]);direction=Float64.(settings["direction"])
     checks=Dict{String,Any}[];cases=[]
     angular=SIAAngularFactor(settings["angular_factor"];source="synthetic acceptance angular ratio")
@@ -156,7 +189,7 @@ function validate_sia_qt_windows(producer)
         qt_assert!(checks,label*" angular source kinds remain distinct",
             obs.provenance["angular_definition"]=="ratio_of_angular_means" && first(alternate).provenance["angular_definition"]=="mean_of_angular_ratio" &&
             first(alternate).provenance["angular_averaging_measure"]==mean.averaging_measure,policy)
-        derivatives=qt_derivatives(prediction,reference.predict,theta,direction,policy,checks,label)
+        derivatives=qt_derivatives(prediction,reference.predict,theta,direction,policy,fd_policy,checks,label)
         qt_check!(checks,label*" equal scalar angular paths all13 gradient",ForwardDiff.jacobian(t->observable_values(alternate,t),theta),
             reduce(vcat,permutedims.(derivatives["gradient"])),0.,policy)
         # A common omitted z^2 cancels from ratios, so absolute yield checks are essential.
@@ -182,6 +215,8 @@ function validate_sia_qt_windows(producer)
         "production_ready"=>false,"physical_extraction"=>false,"G2PERF_pass"=>false,"experimental_data_admitted"=>false,
         "historical_fit_ready"=>false,"full_runtime_revalidated"=>false,"native_evolution_accuracy_verified"=>false,
         "contract_id"=>contract["id"],"contract_sha256"=>bytes2hex(sha256(read(QT_CONTRACT))),
-        "sources"=>sources,"checks"=>checks,"cases"=>cases,"limitations"=>contract["limitations"],
+        "FD_reference_contract_id"=>fd_contract["id"],"FD_reference_contract_sha256"=>bytes2hex(sha256(read(QT_FD_CONTRACT))),
+        "original_raw_reference_report"=>fd_contract["reason"],
+        "sources"=>sources,"checks"=>checks,"cases"=>cases,"limitations"=>vcat(contract["limitations"],fd_contract["limitations"]),
         "ratio_counterfactual"=>Dict("ratio_of_integrals"=>correct,"average_of_ratios"=>wrong),"julia_version"=>string(VERSION))
 end
