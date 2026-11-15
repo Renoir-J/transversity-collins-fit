@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-SIA-QT-WINDOW-001",
+  "scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "experimental_data_admitted": false,
+  "parent_contracts": [
+    "config/leptonic-observable-contract.json",
+    "config/polarized-process-contract.json"
+  ],
+  "primary_source": {
+    "url": "https://arxiv.org/html/1505.05589v1",
+    "sha256": "65bfdfaa9b221741b9d724fd637f85f6595cb7ccfdeead1874963ab09e9e5cb2",
+    "anchors": [
+      "Eqs76/78/79: hadron2 frame and P_hperp/z1 Fourier variable",
+      "Eqs82/85/86/91/92: separate integrated polarized and unpolarized yields",
+      "III.2/III.3: qT=P_hperp/z1<3.5GeV and reported-mean kinematics"
+    ],
+    "scope": "Equation and cut provenance only; no recovered author program, joint acceptance or experimental admission"
+  },
+  "definition": {
+    "process": "SIA hadron2-frame A0 only",
+    "coordinate": "qT=P_hperp/z1 at fixed theory z1; use the z1 already present in the prepared context",
+    "bounds": "Require explicit finite 0<=lower_qT<upper_qT, a nonblank source and nonblank lower-limit provenance; neither endpoint is inferred from the experiment name or a reported mean",
+    "map": "Pmin=z1*lower_qT, Pmax=z1*upper_qT",
+    "jacobian": "P*dP=z1^2*qT*dqT; absolute U/L polarized and unpolarized integrals must all retain this Jacobian before normalization",
+    "UU_qT_weight": "integral dqT*qT*J0(qT*b) times db*b/(2*pi)",
+    "Collins_qT_weight": "integral dqT*qT*J2(qT*b) times db*b^3/(8*pi*z1*z2)",
+    "ratio": "Integrate the four signed charge-pair yields, sum U/L and C=U+L, then form the parent's linearized UL/UC amplitude",
+    "angular": "Preserve the supplied SIAAngularFactor or SIAMeanOfRatio kind, value, source and measure unchanged; no conversion between angular averages",
+    "fixed_parameters": "Window limits, z1 and quadrature are fixed preparation settings; differentiation of cuts or kinematic variables is unsupported",
+    "lower_zero_scope": "Zero is a caller-declared radial origin in the synthetic test, not a newly certified experimental lower cut"
+  },
+  "validation_policy": {
+    "relative_floor": 1e-8,
+    "algebra_max_scaled": 1e-12,
+    "analytic_integral_max_scaled": 1e-10,
+    "adaptive_integral_max_scaled": 1e-10,
+    "momentum_refinement_max_scaled": 1e-7,
+    "derivative_max_scaled": 1e-7,
+    "HVP_max_scaled": 1e-7,
+    "momentum_orders": [
+      8,
+      16,
+      32,
+      64,
+      128
+    ],
+    "minimum_momentum_order": 32,
+    "finite_difference_steps": [
+      0.0001,
+      0.00005
+    ],
+    "finite_difference_reference_bits": 256,
+    "refinement_policy": "Retain all coarse levels; at or above order32 accept only an adjacent-order difference within the fixed parent limit. Exhaustion is FAIL; do not widen a limit after observing a result.",
+    "absolute_yield_policy": "Compare projected radial weights and separate unnormalized U/L yields, not only asymmetries: omitting a common Jacobian at fixed z can cancel from the ratio and must still fail."
+  },
+  "synthetic_fixture": {
+    "z1_values": [
+      0.25,
+      0.55
+    ],
+    "z2": 0.5,
+    "Q2": 110,
+    "qT_windows_GeV": [
+      [
+        0,
+        3.5
+      ],
+      [
+        0.25,
+        1.25
+      ]
+    ],
+    "radial_edges": [
+      0,
+      0.25,
+      1,
+      4,
+      8
+    ],
+    "radial_order": 8,
+    "parameters": [
+      0.5,
+      -0.4,
+      0.8,
+      1.2,
+      2.3,
+      3.1,
+      0.3,
+      -0.25,
+      0.6,
+      0.8,
+      1.1,
+      1.7,
+      0.01
+    ],
+    "angular_factor": 0.6,
+    "angular_kinds": [
+      "ratio_of_angular_means",
+      "mean_of_angular_ratio"
+    ],
+    "ratios": [
+      "UL",
+      "UC"
+    ],
+    "direction": [
+      0.02,
+      0.03,
+      0.01,
+      0.02,
+      0.01,
+      0.01,
+      0.02,
+      0.02,
+      0.01,
+      0.02,
+      0.03,
+      0.03,
+      0.001
+    ],
+    "row_scope": "Explicitly synthetic fixed response rows, polynomial initial inputs and uniform momentum acceptance; no native evolution accuracy or physical data",
+    "required_checks": [
+      "Exact P-bound mapping and retained cut/angular provenance",
+      "Absolute P*dP polynomial/Gaussian moments against closed 256-bit integrals",
+      "Projected P weights, separate charge-category yields and ratios versus independent adaptive qT integration",
+      "Adjacent momentum refinements with all levels retained",
+      "All thirteen gradient columns and HVP against independent scalar qT reference and two-step 256-bit finite differences; SIA transversity columns must remain zero",
+      "Equal angular scalars preserve both typed paths without relabelling their source definitions",
+      "Invalid/nonfinite/differentiated bounds, missing provenance, wrong process and stale quadrature/metadata reject",
+      "Counterfactual missing common Jacobian is detected through absolute integrals even where the ratio is unchanged",
+      "Counterfactual average of pointwise asymmetries does not replace ratio of integrated yields"
+    ]
+  },
+  "limitations": [
+    "No experimental rows, values, errors, selection, covariance or overlap are changed; historical262 and current candidate825 intake remain as before",
+    "Not a full z-bin/event acceptance integration, finite-mass energy/momentum-fraction conversion or identification of mean(P/z) with mean(P)/mean(z)",
+    "The qT<3.5 upper-cut source does not certify the rest of a publication's acceptance or lower limit; unresolved Belle corrected primary bytes remain unresolved",
+    "No Y term, thrust-frame A12, altered signs/mass/z factors, evolution or likelihood; parent physical-accuracy/missing-code limitations stay explicit",
+    "No historical chi2 reproduction, real-data executor/admission, optimizer/replica coverage, full-x lattice or production performance certificate",
+    "Generic fixed-row scalar references share prepared evolution rows and initial functions; they independently test integration/assembly, not an independent evolution solution"
+  ]
+}
