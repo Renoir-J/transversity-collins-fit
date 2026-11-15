@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-SIA-QT-FD-REFERENCE-001",
+  "scope": "numerical_reference_method_for_reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "parent_contract": "config/sia-qt-window-contract.json",
+  "reason": {
+    "retained_report_head": "c45d15aa2b7aefa9190b73e4e1a653cadc2be3f9",
+    "retained_report_sha256": "7d979dc5b7e38597f18155fac61a822ae2f06a31502951088902d10fe4749911",
+    "retained_status": "FAIL",
+    "failed_checks": 8,
+    "observation": "All eight failures are raw central-difference gradient checks dominated by gc. Halving the original step gives approximately factor4 error reduction; independent scalar-qT and projected-P AD gradients agree to about6.1e-16 on these fixed rows.",
+    "inference": "This is consistent with second-order central-stencil truncation, not evidence that the original failed derivative checks passed. No extrapolated candidate is used to set this policy."
+  },
+  "preservation": "The physical qT mapping, all initial samples/rows, cut values, angles, prediction/derivative formulas and base contract bytes remain unchanged. Preserve original FAIL and all raw central-stencil operands. This addendum prospectively replaces only the raw second-order reference acceptance method.",
+  "policy": {
+    "reference_bits": 256,
+    "central_steps": [
+      0.0001,
+      0.00005,
+      0.000025
+    ],
+    "grid_origin": "Retain both original steps and add their fixed halving; no error-dependent step selection",
+    "central_gradient": "D_h[j]=(f(theta+h*e_j)-f(theta-h*e_j))/(2h) for every one of thirteen coordinates",
+    "central_HVP": "G_h=(Jacobian(f_ref,theta+h*d)-Jacobian(f_ref,theta-h*d))/(2h), retaining every output/coordinate",
+    "fourth_order": "R_h=(4*D_(h/2)-D_h)/3, entrywise; retain R_h and R_(h/2) from the three central steps",
+    "Taylor_basis": "For a smooth interior scalar entry, D_h=fprime+h^2*fthird/6+h^4*ffifth/120+O(h^6). Thus R_h=fprime-h^4*ffifth/480+O(h^6). The same entrywise argument applies to directional Jacobian differences.",
+    "acceptance": "Both coarse and refined fourth-order gradients/HVPs must meet the original fixed target against the candidate AD result, and both adjacent fourth-order differences must meet that same target. Every case and all thirteen coordinates are required; never choose a favorable stencil or discard a failed case.",
+    "relative_floor": 1e-8,
+    "derivative_max_scaled": 1e-7,
+    "HVP_max_scaled": 1e-7,
+    "raw_central_stencil_scope": "Retain values and errors with target-met booleans as diagnostics. A raw stencil that misses1e-7 remains recorded as missing1e-7; the previous raw-only report remains FAIL. Only the explicitly labelled fourth-order method is eligible for the new reference gate.",
+    "unsupported": "No boundary derivative recovery, differentiated cuts/kinematics, global identifiability, production G2AD or interval-coverage claim"
+  },
+  "validation": {
+    "closed_functions": [
+      "x^3 at x=0.01: second-order bias is h^2 and fourth-order formula recovers3*x^2",
+      "exp(7*x) at x=0.01: independently known derivative7*exp(7*x)"
+    ],
+    "fixed_rows": "Use exactly the four cases,13-vector,direction and momentum quadrature policy from the unchanged parent contract",
+    "preservation_checks": "Compare all retained absolute-yield/refinement vectors, AD gradients/HVPs, initial two raw finite-difference records and predictions bitwise against the original report; new source/status bindings necessarily differ."
+  },
+  "limitations": [
+    "A higher-order numerical reference is not a change to physical accuracy or experimental admission",
+    "Prepared evolution rows and initial functions are shared evidence; evolution is not independently solved",
+    "All original missing-code/data/covariance/acceptance/overlap/full-x/production limitations remain",
+    "No validation target is widened or threshold chosen after the extrapolated candidate"
+  ]
+}
