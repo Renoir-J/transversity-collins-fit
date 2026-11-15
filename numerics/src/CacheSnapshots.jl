@@ -46,6 +46,10 @@ function snapshot_update!(context,value::NamedTuple)
     snapshot_update!(context,keys(value))
     snapshot_update!(context,values(value))
 end
+function snapshot_update!(context,profile::PreparedEvolutionTimes)
+    snapshot_tag!(context,"PREPARED-EVOLUTION-TIMES-001")
+    snapshot_update!(context,prepared_time_metadata(profile))
+end
 function snapshot_update!(context,value::AbstractDict)
     all(key->key isa String,keys(value)) || error("fixed snapshot metadata requires string keys")
     snapshot_tag!(context,"D$(length(value)):")
