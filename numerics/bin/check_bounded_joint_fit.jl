@@ -90,7 +90,8 @@ function main()
     report=Dict{String,Any}("status"=>"FAIL","scope"=>"synthetic_closure","theory_scope"=>"reconstructed_theory",
         "contract_id"=>"KPSY-BOUNDED-JOINT-FIT-001","production_ready"=>false,"physical_extraction"=>false,
         "G2PERF_pass"=>false,"experimental_data_admitted"=>false,"real_data_fit_implemented"=>false,
-        "interval_coverage_verified"=>false,"algorithm"=>String(algorithm),"maxeval_per_start"=>budget,
+        "interval_coverage_verified"=>false,"matrix_encoding"=>"outer arrays are Julia matrix columns",
+        "algorithm"=>String(algorithm),"maxeval_per_start"=>budget,
         "checks"=>Dict{String,Any}[],"julia_version"=>string(VERSION))
     try
         run_checks!(report,budget,algorithm)
