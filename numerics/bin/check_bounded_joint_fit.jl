@@ -90,8 +90,9 @@ function main()
     finally
         report["completed_at"]=string(now(UTC));writejson(output,report)
     end
+    failed=[entry["name"] for entry in report["checks"] if !entry["passed"]]
     println(JSON.json(Dict("status"=>report["status"],"scope"=>report["scope"],"checks"=>length(report["checks"]),
-        "error"=>get(report,"error",nothing),"failed"=>[check["name"] for check in report["checks"] if !check["passed"])))
+        "error"=>get(report,"error",nothing),"failed"=>failed)))
     report["status"]=="PASS" || exit(2)
 end
 if abspath(PROGRAM_FILE)==(@__FILE__);main();end
