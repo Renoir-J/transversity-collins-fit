@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-BOUNDED-SOLVER-COMPARISON-001",
+  "scope": "synthetic_closure_operational_solver_comparison",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "parent_contract": "config/bounded-joint-fit-contract.json",
+  "scientific_acceptance_thresholds_changed": false,
+  "motivation": "The retained Subplex jobs at 4000 and 20000 evaluations per start both exhausted their budgets. The 20000 job's best chi2 is 8.363343340777407e-7, prediction error 1.2272090262368239e-6 and scaled parameter error 0.5494724142867459. It remains INCOMPLETE. The covariance-whitened local Jacobian has rank13 and its smallest singular value is 0.0007326727542050382. This justifies comparing an explicitly selected local quadratic-model method on the same fixed problem, without selecting new physical bounds or weakening recovery criteria.",
+  "prospective_rule": "Commit this policy before any BOBYQA fitting candidate. Keep every earlier failure/incomplete report and the original Subplex contract unchanged. This policy neither retroactively admits old reports nor changes their termination labels.",
+  "algorithms": {
+    "LN_SBPLX": "Keep the original default, settings and resource ladder from the parent contract. Do not silently replace it.",
+    "LN_BOBYQA": {
+      "selection": "Explicit Symbol algorithm setting; never an automatic fallback that hides a failed start",
+      "method": "NLopt bound-constrained derivative-free local quadratic interpolation, using the same pinned wrapper/native artifact. No Python/model callback, penalty, fabricated gradient, parameter transformation or finite surrogate bound.",
+      "initial_step": [0.1, 0.1, 0.2, 0.2, 0.3, 0.3, 0.1, 0.1, 0.2, 0.2, 0.3, 0.3, 0.003],
+      "xtol_step_fraction": 1e-9,
+      "ftol_abs": 1e-18,
+      "ftol_rel": 0.0,
+      "xtol_rel": 0.0,
+      "default_maxeval": 20000,
+      "resource_ladder_maxeval": [4000, 20000, 80000],
+      "precision": "The operational tolerances are stricter than the parent's Subplex defaults to resolve the weak directions. They are not new scientific acceptance thresholds, do not certify parameter recovery, and must remain visible in every report. Native stop tolerances are algorithm dependent, so this is not a matched-tolerance performance ranking."
+    }
+  },
+  "unchanged_scientific_policy": "Use the parent's exact physical domains, 52 observations, covariance/nuisance model, truth, two starts, sign ambiguity, scales, rank rule and independent augmented QR. Keep chi2<=1e-8, max prediction error<=1e-6 and max scaled13-parameter error<=0.005. Do not canonicalize signs, add a global optimum claim or infer experimental covariance.",
+  "termination": "Inherit the parent's FTOL/XTOL tolerance-stop requirement for every supplied start. MAXEVAL/MAXTIME is INCOMPLETE. Negative/unknown native codes, including roundoff limitation, are FAIL even if a useful candidate remains. Retain each native algorithm name, all iterates/counters and the existing finite/objective/source checks.",
+  "controls_before_closure": "Run both algorithms on the independent13-dimensional interior and active closed-boundary quadratics; check all physical direct boundaries and unbounded Collins normalizations. For each algorithm retain one-evaluation/time resource stops, callback/nonfinite/mutation failures, and complete multi-start scope/data/source rejection controls. A one-evaluation physical zero-transversity-shape check must remain finite and INCOMPLETE; BOBYQA is not assumed smooth or guaranteed to converge there.",
+  "limitations": [
+    "BOBYQA's quadratic local model can perform poorly on functions that are not twice differentiable; no boundary smoothness or guaranteed convergence is asserted",
+    "A synthetic solver comparison does not select or certify a production optimizer",
+    "Local rank and tolerance stops do not establish global identifiability, coverage, a historical fit or new extraction",
+    "Real-data loading/admission, acceptance/covariance/overlap, author code, failed paper centers, full-x lattice and production performance remain unresolved"
+  ],
+  "primary_software_references": [
+    "https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/#bobyqa",
+    "https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/#comparing-algorithms",
+    "https://nlopt.readthedocs.io/en/latest/NLopt_Reference/#stopping-criteria"
+  ]
+}

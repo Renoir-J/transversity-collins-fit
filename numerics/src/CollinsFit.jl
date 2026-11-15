@@ -3,6 +3,7 @@ module CollinsFit
 using LinearAlgebra, Random, Statistics
 using ForwardDiff, Optim, QuadGK, JSON
 using SHA, Libdl
+import NLopt
 
 export Context, load_context, coefficients, predict, predict!, objective, value_and_gradient!,
        fit, gradient_report, benchmark_report, closure_report, performance_report,
@@ -36,6 +37,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        JointObservation, JointPredictionModel, JointGaussianLikelihood, predict_joint,
        joint_profile, joint_objective, joint_value_and_gradient!, joint_subset, joint_holdout,
        joint_model_metadata, joint_likelihood_metadata,
+       BoundedJointSettings, kpsy_parameter_bounds, fit_joint,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -153,6 +155,7 @@ include("LeptonicBins.jl")
 include("JetBorn.jl")
 include("StarEvolved.jl")
 include("JointLikelihood.jl")
+include("BoundedJointFit.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)

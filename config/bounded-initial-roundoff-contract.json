@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-BOUNDED-INITIAL-IEEE-001",
+  "scope": "synthetic_fitting_reader_initial_coordinate_integrity",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "scientific_acceptance_thresholds_changed": false,
+  "parent_contracts": ["config/bounded-joint-fit-contract.json", "config/bounded-solver-comparison-contract.json"],
+  "retained_failure": "The first private reader of the 4000-evaluation BOBYQA report rejected exact equality between the supplied start and first callback. One shape value3.1 is delivered as3.0999999999999996 by the library. Keep that reader FAIL and the producer INCOMPLETE; do not alter their raw operands or treat a reader repair as fit convergence.",
+  "pinned_native_source": {
+    "repository": "https://github.com/stevengj/nlopt",
+    "commit": "88c424d4f458412787df96fcc95218acbca224fd",
+    "native_version": "2.11.0",
+    "manifest_jll_version": "2.11.0+0",
+    "manifest_jll_git_tree_sha1": "afe9c70ead884bf4cbb887f188d2db6d8f09d49c",
+    "recipe_git_blob_sha1": "b04203a843f8f962f42a5c0d4577de363a5ec741",
+    "recipe_sha256": "b6722086bec551d41bd8f007193c927588fa911b47417f83c73784643f8093d2",
+    "recipe_url": "https://github.com/JuliaPackaging/Yggdrasil/blob/master/N/NLopt/build_tarballs.jl",
+    "files": {
+      "src/util/rescale.c": {"git_blob_sha1": "3c1f8d0a48b7cdc8f2ac1e250cb1e7516a33ee77", "sha256": "2681664ccc48d10d17ee2f4553dae62343bd47cd08b3be484496b22ef481abcb"},
+      "src/algs/bobyqa/bobyqa.c": {"git_blob_sha1": "0290abef506b185a9a4e3affd9561c50471e8feb", "sha256": "a1733948888e927a861197b9c8f4a84b561439fbe286d8020e6078e10135d95d"}
+    }
+  },
+  "native_behavior": "BOBYQA internally makes unequal initial steps isotropic: s[1]=1, s[j]=dx[j]/dx[1], then x/s and rescaled bounds. In scaled coordinates it prepares starts within its trust-region radius of a finite bound as specified by the pinned source. The first callback unscales by multiplication. Even an interior x can therefore change its final binary64 bit. This is native internal geometry; the Julia numerical callback still receives physical coordinates and applies the unchanged physical-domain checks. No Julia surrogate coordinate transform or post-hoc candidate clipping is introduced.",
+  "reader_rule": "Reconstruct the pinned initial map using the same individual basic binary64 division/addition/subtraction/multiplication and min/max operations in an independent Julia reference. Compare the first callback's UInt64 bit patterns exactly; add no relative/absolute/ULP tolerance. SBPLX retains its unchanged initial vector. This reference audits the initial callback only and never modifies a candidate, prediction or likelihood.",
+  "controls": "Twelve one-evaluation native jobs cover both frozen starts, truth, closed and near bounds, signed zero, unequal and equal steps. All51 assertions match exact bits and retain INCOMPLETE. A one-ULP altered first callback must reject. Keep the separate all-trace finite/domain/count checks and every scientific closure criterion.",
+  "prospective_rule": "Commit before the next full fitting candidate. The earlier incomplete report may receive a separately labelled retained arithmetic review under this source-derived rule; it gains no current-source accepted receipt and its parameter recovery remains failed.",
+  "limitations": ["This is a library-protocol/reader correction, not a scientific accuracy threshold change", "It certifies no optimizer convergence, global optimum, coverage, physical extraction or production admission", "Unsupported native versions/scaling ranges require separate review; do not introduce a general initial-drift tolerance"]
+}

@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "71141c4adcd7fa608add92ac28b9f049a80d99d0"
+project_hash = "d7572899496a4cc3e3055c9d6bc99d1b6fd67e8c"
 
 [[deps.ADTypes]]
 deps = ["PrecompileTools"]
@@ -77,8 +77,13 @@ version = "7.30.2"
 uuid = "56f22d72-fd6d-98f1-02f0-08ddc0907c33"
 version = "1.11.0"
 
+[[deps.CEnum]]
+git-tree-sha1 = "389ad5c84de1ae7cf0e28e381131c98ea87d54fc"
+uuid = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+version = "0.5.0"
+
 [[deps.CollinsFit]]
-deps = ["ForwardDiff", "JSON", "Libdl", "LinearAlgebra", "Optim", "QuadGK", "Random", "SHA", "SpecialFunctions", "Statistics"]
+deps = ["ForwardDiff", "JSON", "Libdl", "LinearAlgebra", "NLopt", "Optim", "QuadGK", "Random", "SHA", "SpecialFunctions", "Statistics"]
 path = "."
 uuid = "03c98a50-17ab-4f5c-85cf-0f3d449a5a19"
 version = "0.1.0"
@@ -310,6 +315,24 @@ deps = ["ADTypes", "DifferentiationInterface", "FiniteDiff", "LinearAlgebra"]
 git-tree-sha1 = "f96d38936d92d610318dec4d3b5ef37b0373c20f"
 uuid = "d41bc354-129a-5804-8e4c-c37616107c6c"
 version = "8.0.1"
+
+[[deps.NLopt]]
+deps = ["CEnum", "NLopt_jll"]
+git-tree-sha1 = "624785b15005a0e0f4e462b27ee745dbe5941863"
+uuid = "76087f3c-5699-56af-9a33-bf431cd00edd"
+version = "1.2.1"
+
+    [deps.NLopt.extensions]
+    NLoptMathOptInterfaceExt = ["MathOptInterface"]
+
+    [deps.NLopt.weakdeps]
+    MathOptInterface = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
+
+[[deps.NLopt_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "afe9c70ead884bf4cbb887f188d2db6d8f09d49c"
+uuid = "079eb43e-fd8e-5478-9966-2cf3e3edb778"
+version = "2.11.0+0"
 
 [[deps.NaNMath]]
 deps = ["OpenLibm_jll"]

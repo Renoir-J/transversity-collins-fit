@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-STAR-IMMUTABLE-BORN-CACHE-001",
+  "scope": "reconstructed_numerical_cache_optimization",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "motivation": "A 52-observation objective profile at unchanged source measured about 0.044 seconds per evaluation; 3928/4753 sampled stacks include numerical_snapshot and 3544 include star_point_valid. Repeated immutable Born payload hashing is a measured hotspot, not a changed physical approximation.",
+  "immutable_domain": "JetBornKinematics contains only Float64 fields. JetBornTerm contains Int, Symbol and Float64 fields. JetBornPlan contains that immutable kinematics object, Tuple{Vararg{Int}}, Symbol and Tuple{Vararg{JetBornTerm}}; its constructor copies supplied flavor/term collections into tuples. These values have no mutable array/dictionary leaves through supported Julia operations.",
+  "cache": "An inner StarPointPlan constructor must derive the immutable Born payload fingerprint from its actual owned tuple. No caller-supplied digest or trusted Boolean is accepted. The point's signature binds that fingerprint and every previously checked mutable field. Its source/schema change invalidates older point/cache receipts.",
+  "unchanged_mutation_checks": "Every normal prediction continues to validate all mutable matrices, vectors, operator/sample rows, fragmentation settings and provenance. No general validation bypass, mutable-data memoization, task-local guard suppression or skipped end-of-job source check is introduced.",
+  "unchanged_physics": "No prediction arithmetic, signs, normalization/mass/z factors, coupling/evolution, likelihood, cuts, overlap or accepted dataset is changed. Keep the solver/convolution/Fortran sources and external/ unchanged.",
+  "validation": {
+    "baseline": "Before cache implementation, capture six fixed parameter cases on the 52-observation model: truth, two frozen starts, the finite 4000-evaluation candidate, simultaneous global sign flip and the closed-Nh/zero-transversity-shape boundary. Store prediction/objective values and interior gradients/HVPs with source/lock/contract bindings.",
+    "matching_targets": "Inherit parent algebra/prediction 1e-11 and gradient/HVP 1e-7 scaled targets with 1e-8 floor, without alteration. Record bitwise agreement separately; do not require a different machine's BLAS reduction to have identical bits.",
+    "immutable_constructor_checks": "Check the cached payload against independent complete enumeration, show that normal supported mutation is unavailable, reject supplied fake cache fields, and verify constructor ownership of mutable input collections.",
+    "mutable_controls": "Retain and run all existing STAR/point/bin/cache mutation tests; independently mutate every still-mutable StarPointPlan data family and provenance and require rejection.",
+    "timing": "Repeat the same complete objective measurement and record the difference as informational only, not a physical G2PERF certificate.",
+    "fitting": "Preserve the initial 4000-evaluation INCOMPLETE report. Continue the already frozen 20000/80000 resource ladder with unchanged closure thresholds and explicit termination handling."
+  },
+  "limitations": ["An immutable-source fingerprint is an integrity/cache property, not independent physics validation", "Original paper-center failures, covariance/acceptance/overlap, author-code and production admission limitations persist", "No inference coverage or physical fitting throughput claim is introduced"]
+}
