@@ -2,6 +2,17 @@ using Test, JSON
 include("../bin/JointLikelihoodAudit.jl")
 length(ARGS)==1 || error("usage: joint_report_controls.jl REPORT")
 report=JSON.parsefile(only(ARGS))
+@testset "report matrix products use a proved roundoff bound" begin
+    H=[1.e16 1. -1.e16];v=ones(3)
+    @test JointLikelihoodAudit.verified_matrix_product([0.],H,v)["passed"]
+    proof=JointLikelihoodAudit.verified_matrix_product([1.],H,v)
+    @test proof["passed"]
+    @test_throws ErrorException JointLikelihoodAudit.verified_matrix_product([100.],H,v)
+    @test_throws ErrorException JointLikelihoodAudit.verified_matrix_product([NaN],H,v)
+    @test_throws ErrorException JointLikelihoodAudit.verified_matrix_product([1.],H,ones(2))
+    @test_throws ErrorException JointLikelihoodAudit.verified_matrix_product([1.],fill(1.e308,1,3),v)
+    @test proof["operation_bound"]==6 && proof["absolute_error"]==[0.]
+end
 @testset "joint evidence rejects altered reports" begin
     @test JointLikelihoodAudit.audit_joint_report(report)["status"]=="PASS"
     alterations=(
@@ -19,6 +30,7 @@ report=JSON.parsefile(only(ARGS))
         r->(r["profile"]["chi2"]+=.01),
         r->(r["derivatives"]["finite_difference_trials"][1]["gradient_function_values_decimal"][1][1]="99"),
         r->(r["derivatives"]["hvp"][1]+=.01),
+        r->(r["derivatives"]["hessian"][1][1]+=.01),
         r->pop!(r["checks"]),
         r->push!(r["checks"],deepcopy(first(r["checks"]))),
         r->begin c=first(r["checks"]);c["actual"].+=1.;c["reference"].+=1.;c["error"]=0.;c["passed"]=true;end,

@@ -4,6 +4,7 @@ include("JointLikelihoodReference.jl")
 using .JointLikelihoodReference: augmented_reference
 
 const ROOT=normpath(joinpath(@__DIR__,"../.."))
+const FP_CONTRACT=joinpath(ROOT,"config/joint-report-roundoff-contract.json")
 require(condition,message)=condition || error(message)
 matrix(value)=hcat((Float64.(column) for column in value)...)
 function close(actual,expected,tolerance=1e-11;floor=1e-8)
@@ -12,9 +13,32 @@ function close(actual,expected,tolerance=1e-11;floor=1e-8)
     require(maximum(abs.(a-b)./max.(abs.(b),floor))<=tolerance,"numerical operand differs")
 end
 
+"Check a binary64 dot product by exact rational arithmetic and the fixed IEEE model."
+function verified_matrix_product(actual,H,v)
+    m,n=size(H)
+    require(1<=m && 1<=n<=4096 && length(actual)==m && length(v)==n,"invalid matrix-product dimensions")
+    require(all(isfinite,actual) && all(isfinite,H) && all(isfinite,v),"nonfinite matrix-product operand")
+    exact(x)=Rational{BigInt}(Float64(x))
+    a=exact.(actual);M=exact.(H);d=exact.(v)
+    u=BigInt(1)//big(2)^53;eta=BigInt(1)//big(2)^1074;k=2n
+    gamma=k*u/(1-k*u);errors=Rational{BigInt}[];bounds=Rational{BigInt}[]
+    for i in 1:m
+        terms=[M[i,j]*d[j] for j in 1:n];norm=sum(abs,terms)
+        require(norm<exact(floatmax(Float64))/2,"unsupported matrix-product overflow range")
+        difference=abs(a[i]-sum(terms));bound=gamma*norm+k*eta/(1-k*u)
+        require(difference<=bound,"matrix product violates the fixed IEEE roundoff bound")
+        push!(errors,difference);push!(bounds,bound)
+    end
+    Dict("passed"=>true,"method"=>"exact rational arithmetic on stored binary64 operands",
+        "operation_bound"=>k,"absolute_error"=>Float64.(errors),"absolute_bound"=>Float64.(bounds))
+end
+
 function audit_joint_report(report)
     contract=JSON.parsefile(joinpath(ROOT,"config/joint-likelihood-contract.json"))
     input_contract=JSON.parsefile(joinpath(ROOT,"config/joint-pinned-input-contract.json"))
+    roundoff_contract=JSON.parsefile(FP_CONTRACT)
+    require(roundoff_contract["id"]=="KPSY-JOINT-REPORT-FP-001" &&
+        roundoff_contract["scientific_acceptance_thresholds_changed"]===false,"invalid report arithmetic contract")
     policy=contract["validation_policy"]
     require(report["status"]=="PASS" && !haskey(report,"error"),"failed or incomplete producer")
     require(report["scope"]=="synthetic_closure" && report["theory_scope"]=="reconstructed_theory","wrong scientific scope")
@@ -114,7 +138,7 @@ function audit_joint_report(report)
     close(derivative["reference_gradient"],gradient,0.);close(derivative["reference_hvp"],hvp,0.)
     H=matrix(derivative["hessian"])
     require(size(H)==(13,13),"incomplete Hessian")
-    close(derivative["hvp"],H*direction,0.)
+    roundoff=verified_matrix_product(derivative["hvp"],H,direction)
     controls=report["negative_controls"]
     control_names=vcat(["reject production","reject experimental_candidate","reject historical_benchmark_candidate",
         "wrong point order","unsupported lattice recipe","duplicate source phase"],["mutated $f" for f in
@@ -165,6 +189,8 @@ function audit_joint_report(report)
     Dict("status"=>"PASS","scope"=>"synthetic_closure_report_audit","theory_scope"=>"reconstructed_theory",
         "kind"=>kind,"production_ready"=>false,"physical_extraction"=>false,"G2PERF_pass"=>false,
         "comparison_count"=>length(checks),"native_input_runtime_revalidated"=>(kind=="inputs"),
+        "roundoff_contract_id"=>roundoff_contract["id"],"roundoff_contract_sha256"=>bytes2hex(sha256(read(FP_CONTRACT))),
+        "hvp_roundoff_identity"=>roundoff,
         "process_predictions_replayed"=>false,"finite_difference_function_values_replayed"=>false,
         "limitations"=>["Recomputes retained profile/FD algebra and checks current sources/builds; does not replay process predictions or FD function calls",
             "Synthetic observations remain synthetic with pinned physical inputs; no accuracy, fit, coverage or production admission"])

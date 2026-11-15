@@ -6,12 +6,12 @@ function check_joint_cache(report_path,audit_path,accepted_path)
     read(audit_path)==read(accepted_path) || error("changed accepted joint audit")
     accepted=JSON.parsefile(accepted_path)
     accepted["input_sha256"]==bytes2hex(sha256(read(report_path))) || error("changed joint report input")
-    for (key,value) in result
-        accepted[key]==value || error("stale or changed joint audit field: $key")
-    end
     expected=Dict(name=>bytes2hex(sha256(read(joinpath(@__DIR__,name)))) for name in
         ("audit_joint_likelihood.jl","JointLikelihoodAudit.jl"))
     accepted["auditor_sources"]==expected || error("stale joint report auditor")
+    for (key,value) in result
+        haskey(accepted,key) && accepted[key]==value || error("stale or changed joint audit field: $key")
+    end
     println(JSON.json(Dict("status"=>"PASS","scope"=>"synthetic_closure_cached_report_revalidation",
         "kind"=>result["kind"],"production_ready"=>false,"physical_extraction"=>false,"G2PERF_pass"=>false)))
 end
