@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-BOUNDED-JOINT-FIT-001",
+  "scope": "synthetic_closure_with_reconstructed_joint_predictions",
+  "production_ready": false,
+  "physical_extraction": false,
+  "G2PERF_pass": false,
+  "purpose": "Implement a complete Julia bounded fitting job for the actual common thirteen-parameter prepared prediction/profile interface; retain the separate real-data admission requirement.",
+  "parent_contract": "config/joint-likelihood-contract.json",
+  "numerical_owner": "Julia constructs and owns each NLopt Opt and its Julia objective callback. No Python callback, language-model call, native HOPPET context or provider query enters optimization. Native preparation closes before fitting.",
+  "algorithm": "LN_SBPLX via the registered NLopt Julia package and native artifact pinned in numerics/Manifest.toml. This is deterministic local derivative-free optimization, not a global-optimum certificate.",
+  "coordinates": {
+    "names": ["Nh_u", "Nh_d", "a_u", "a_d", "b_u", "b_d", "Nc_u", "Nc_d", "alpha_u", "alpha_d", "beta_u", "beta_d", "gc"],
+    "domain": "Nh_u,Nh_d in closed [-1,1]; a_u,a_d,b_u,b_d,alpha_u,alpha_d,beta_u,beta_d >=0; Nc_u,Nc_d unbounded; gc<fixed gh. Every iterate and returned candidate must also pass KPSYParameters.",
+    "binary64_gc_upper": "prevfloat(gh), the largest representable allowed binary64 value; this does not introduce a new continuous physical bound",
+    "no_surrogate_bounds": "No tanh/exp reparameterization, arbitrary finite shape/Collins bounds, clamp, penalty value or fabricated boundary gradient",
+    "singular_derivatives": "The transversity peak-normalization derivatives at a_u,a_d,b_u,b_d=0 are unsupported. Derivative-free optimization must retain finite objective evaluations there. This does not assert singularity of the unnormalized Collins alpha/beta derivatives."
+  },
+  "settings": {
+    "initial_step": [0.1, 0.1, 0.2, 0.2, 0.3, 0.3, 0.1, 0.1, 0.2, 0.2, 0.3, 0.3, 0.003],
+    "xtol_step_fraction": 1e-7,
+    "ftol_abs": 1e-12,
+    "ftol_rel": 0.0,
+    "xtol_rel": 0.0,
+    "default_maxeval": 20000,
+    "resource_ladder_maxeval": [4000, 20000, 80000],
+    "time_limit": "Optional operational resource limit only; no wall-clock performance acceptance claim",
+    "settings_ownership": "Own finite fixed positive step/tolerance vectors and explicit start vectors; reject Bool, fitted settings, nonfinite or out-of-domain starts before any fit"
+  },
+  "termination": {
+    "tolerance_stops": ["FTOL_REACHED", "XTOL_REACHED"],
+    "resource_stops": ["MAXEVAL_REACHED", "MAXTIME_REACHED"],
+    "rules": "A positive NLopt return code alone is insufficient. Budget/time exhaustion is INCOMPLETE; negative/unknown codes or callback/source failures are FAIL. Every requested start is retained. Overall PASS requires all requested starts to reach configured tolerance stops and pass independent finite/bounds/objective/source checks. No returned candidate proves global optimality, experimental accuracy or inference coverage.",
+    "failure": "Do not replace invalid objective evaluations with Inf, a penalty or a synthetic fallback. Retain error, evaluation count and any finite candidate; abort that start and keep overall FAIL. A failed start is never silently dropped.",
+    "audit": "Re-evaluate reported candidate objective in Julia; verify bounds, all supplied starts, callback/evaluation accounting, unmodified likelihood and current source/dependency receipts. Retain evaluation theta/chi2 traces when requested."
+  },
+  "validation": {
+    "quadratic": "Independent diagonal 13-dimensional quadratics with known interior and active closed-boundary optima, including zero transversity shapes and large unbounded Collins normalizations; objective and coordinate errors <=1e-5",
+    "resource_and_failure_controls": ["one-evaluation budget remains INCOMPLETE", "callback failure remains FAIL", "nonfinite/out-of-domain/mutated input rejects", "each supplied start and its stop remains visible"],
+    "closure_truth": [0.5, -0.7, 0.8, 0.9, 2.8, 3.4, 0.25, -0.4, 0.7, 0.9, 1.5, 2.1, 0.02],
+    "closure_starts": [[0.42, -0.62, 0.9, 1.0, 2.6, 3.1, 0.22, -0.36, 0.85, 1.05, 1.35, 1.9, 0.018], [0.58, -0.78, 0.7, 0.8, 3.1, 3.7, 0.29, -0.44, 0.6, 0.8, 1.7, 2.3, 0.023]],
+    "parameter_scales": [1.0, 1.0, 1.0, 1.0, 3.0, 3.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 0.02],
+    "closure_chi2_max": 1e-8,
+    "closure_max_absolute_prediction_error": 1e-6,
+    "closure_max_scaled_parameter_error": 0.005,
+    "sign_branch": "Compare to the supplied truth and its simultaneous Nh_u/Nh_d/Nc_u/Nc_d sign flip. Never canonicalize the fitted sign or claim a lattice sign constraint.",
+    "identifiability": "Require more observations than thirteen parameters and full local rank of the covariance-whitened prediction Jacobian at the interior truth, with relative singular-value threshold 1e-10. Retain singular values. This is local information, not global identifiability or coverage.",
+    "independent_profile": "Recompute the best candidate using the existing independent augmented least-squares QR reference; inherit its algebra 1e-11/relative-floor 1e-8 policy unchanged.",
+    "geometry": {
+      "SIDIS_x": [0.08, 0.18, 0.35, 0.55],
+      "SIDIS_z": [0.2, 0.4, 0.65],
+      "SIDIS_charges": [1, -1],
+      "SIDIS_Q2": [4.0, 9.0],
+      "SIDIS_P": [0.12, 0.3],
+      "SIA_z1": [0.15, 0.3, 0.55, 0.75],
+      "SIA_z2": [0.2, 0.4, 0.65],
+      "SIA_ratios": ["UL", "UC"],
+      "SIA_Q2": [25.0, 110.0],
+      "SIA_P": [0.12, 0.3],
+      "STAR": "200/510 GeV, jT=0.2/0.4 at the existing explicitly synthetic three-node geometry; quark-only, fixed z=0.3, pT=20, eta=0.3, R=0.6, standard axis and historical_pT_C11",
+      "enumeration": "SIDIS cartesian x,z,charge (24), alternating Q2/P by index; SIA cartesian z1,z2,ratio (24), alternating Q2/P by index; four STAR point observations, total 52. No physical acceptance or bin edges are inferred."
+    },
+    "observations": "Noiseless t(truth). Explicit synthetic C_ij=sigma_i*sigma_j*0.2^abs(i-j), sigma_i=0.002+0.00001*i; A_ij=0.0001*sin(i*j), R_ij=0.01*cos(0.3*i+j); S=[[1,0.35],[0.35,1.4]]. No experimental nuisance is inferred.",
+    "boundary_path": "A separate physical-family zero-shape/closed-Nh initial evaluation with a deliberately one-evaluation budget verifies finite direct-coordinate behavior and retained INCOMPLETE status; it is not parameter recovery or a coverage test.",
+    "scope": "The current eight-point fixture is not used as evidence of thirteen-parameter recovery. All 52-observation fitting evidence remains synthetic; pinned physical inputs require a separately frozen preparation job before claiming that path."
+  },
+  "limitations": [
+    "No experimental or historical candidate is admitted by this optimizer",
+    "No original MINUIT bounds or unrounded optimum are recovered",
+    "No replica/interval coverage, marginalized posterior, full-x lattice moment or new extraction is established",
+    "Production data/acceptance/covariance/overlap and the failed original paper-center benchmarks remain unresolved",
+    "A solver tolerance stop and a finite synthetic closure cannot authorize production or certify global optimality"
+  ],
+  "primary_software_references": ["https://github.com/jump-dev/NLopt.jl", "https://nlopt.readthedocs.io/en/latest/NLopt_Algorithms/", "https://nlopt.readthedocs.io/en/latest/NLopt_Reference/"]
+}
