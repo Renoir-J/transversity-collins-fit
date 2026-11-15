@@ -173,7 +173,7 @@ function audit_bounded_report(report)
     expected_status=fit_status=="FAIL" || qr_error>1e-11 ? "FAIL" : fit_status=="INCOMPLETE" ? "INCOMPLETE" : all(values(expected)) ? "PASS" : "FAIL"
     require(report["status"]==expected_status,"false producer status")
     sources_current(report)
-    Dict("review_status"=>"RETAINED_report_ARITHMETIC_VERIFIED","producer_status"=>report["status"],
+    Dict("status"=>report["status"],"review_status"=>"RETAINED_REPORT_ARITHMETIC_VERIFIED","producer_status"=>report["status"],
         "accepted_fitting_gate"=>report["status"]=="PASS","scope"=>"synthetic_closure_retained_report_review",
         "production_ready"=>false,"physical_extraction"=>false,"G2PERF_pass"=>false,
         "algorithm"=>String(algorithm),"source_bindings"=>length(EXPECTED),"trace_counts"=>trace_counts,"all_trace_parameter_domains_verified"=>true,
