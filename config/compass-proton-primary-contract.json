@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-COMPASS-PROTON-PRIMARY-001",
+  "scope": "partial_primary_transcription_crosscheck",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "purpose": "Automate the already observed primary-source comparison for six historical COMPASS proton pion views without certifying unresolved kinematics or uncertainty semantics.",
+  "publication": "1408.4405",
+  "primary_source": {
+    "official_index": "https://wwwcompass.cern.ch/compass/publications/papers/",
+    "url": "https://wwwcompass.cern.ch/compass/publications/papers/cern-ph-ep_2014-213/HEPdata_tables.tar.gz",
+    "archive_sha256": "a4d593c50b9814d53dd10cb7a5fe48e27aac03dfb52808436698669369183c8f",
+    "member": "HEPdata_tables/20140313_std_pions.txt",
+    "member_sha256": "ba8389446b9ffe021d38d3d574864ed57e7f54bbcecb603763390aa56e037580",
+    "snapshot_limit": "The archive was served with Last-Modified 8 May 2024. Its filename does not establish the exact original KPSY author inputs."
+  },
+  "selection": {
+    "harmonics_in_member": ["Collins", "Sivers"],
+    "selected_harmonic": "Collins",
+    "hadrons": ["pi+", "pi-"],
+    "projections": {"x": 9, "pt": 9, "z": 8},
+    "source_groups": 12,
+    "selected_views": 6,
+    "raw_rows": 52,
+    "retained_historical_rows": 46,
+    "cut": "Keep the existing strict reported-mean pT<0.8 GeV cut for pT projections only; compare all raw rows including excluded rows."
+  },
+  "identity": "Require the complete primary section labels, pion charges, full-range selection and ordered numeric/units header. Select Collins by its label, never by resemblance of values. Read the archive as bounded text; never execute or extract archive members to the filesystem.",
+  "exact_comparison": {
+    "fields_per_row": ["projection coordinate", "central value", "column labeled Sigma"],
+    "numeric_cells": 156,
+    "policy": "Exact Decimal equality before normalization, with unique coordinate matching and complete coverage. No sign, scale, error, cut, data value or kinematic replacement. No rounding tolerance or acceptance-threshold adjustment."
+  },
+  "means": {
+    "fields": ["Q2", "y", "pT", "x", "z", "W"],
+    "policy": "Preserve all six literal primary means and their exact/unequal comparisons with the legacy decimals. Unequal means remain unverified; do not round, substitute, certify extra digits, impose a display-interval acceptance gate or count them as exact crosschecks.",
+    "observed_prior_diagnostic": {"exact": 215, "unequal_unverified": 97},
+    "counts_are_not_thresholds": true
+  },
+  "bins": "Record literal left-closed/right-open primary projection bounds separately from legacy means. Encode the source's inf. upper endpoint as null with upper_unbounded=true and its literal preserved, never as an inferred finite endpoint or JSON Infinity. This is source metadata, not a prediction integration prescription.",
+  "uncertainty": "Sigma exactly matches legacy error_u but its statistical/total composition is not established. Keep statistical_error=null, reported_error_u unchanged, systematic components empty with explicit unresolved status. Do not manufacture zero systematics, per-point 0.6*stat errors, covariance or a normalization nuisance.",
+  "source_version_limit": "Preprint 3% and final-journal 5% scale statements remain distinct. This crosscheck selects neither as a likelihood prescription and does not recover the original fit.",
+  "validation_policy": {
+    "controls": ["changed primary archive/member", "unsafe/duplicate/oversized archive member", "Sivers substituted for Collins", "changed charge/range/header/units", "duplicate/missing coordinate or section", "changed central value or Sigma", "nonpositive Sigma or invalid bin/mean", "unequal means remain unverified", "open-ended pT bin retained", "excluded source rows crosschecked", "rehashed source-derived candidate metadata and report-count tampering"],
+    "regression": "All existing normalized scientific scalars, errors, reported means, source rows and historical selections must be unchanged. New source metadata and narrower primary-crosscheck blockers are the only candidate differences.",
+    "required_checks": ["python -m pytest", "python scripts/plan_workflow.py validate", "Julia tests", "Linux Snakemake closure and historical-intake/cache verification"],
+    "evidence_scope": "Small fixtures are explicitly synthetic; the separately acquired primary archive is real source evidence. Neither authorizes a real-data fit or changes a failed scientific gate."
+  },
+  "limitations": [
+    "Partial primary numerical agreement, not complete mean-kinematic validation",
+    "Unresolved Sigma composition, systematic and normalization covariance, projection overlap and acceptance",
+    "No phase/depolarization transformation, nuclear prescription, likelihood, fit or experimental admission",
+    "Original author fitting code/modified HOPPET and unrounded inputs remain unlocated",
+    "Existing KPSY partial-moment center failures and production prerequisites remain unchanged"
+  ]
+}
