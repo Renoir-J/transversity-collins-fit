@@ -53,6 +53,7 @@ jobs:
           julia --project=numerics numerics/bin/check_css.jl runs/ci/css-validation.json
           julia --project=numerics numerics/bin/check_leptonic.jl runs/ci/leptonic-validation.json
           julia --project=numerics numerics/bin/check_initial.jl runs/ci/initial-validation.json
+          julia --project=numerics numerics/bin/check_sia_qt_windows.jl runs/ci/sia-qt-window-validation.json
       - name: Pinned STAR Born source and numerical checks
         run: |
           python scripts/prepare_star_born_references.py

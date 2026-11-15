@@ -29,6 +29,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        polarized_leptonic_plan, prepare_polarized_sidis, prepare_polarized_sia, polarized_structure, with_momentum, with_pion_charges,
        MomentumRule, SIAAngularFactor, SIAMeanOfRatio, SIDISAsymmetryConvention, LeptonicObservablePlan, depolarization_factor,
        sia_charge_sums, sia_double_ratio, sidis_observable, sia_observable, predict_observable,
+       SIAQTWindow, sia_qt_observable,
        LeptonicBinPlan, leptonic_bin, predict_bin,
        JetBornKinematics, JetBornPlan, jet_born_xmin, jet_born_prefactor,
        jet_born_contractions, jet_born_structure, jet_born_integrals, jet_born_asymmetry, jet_collins_fourier_moment,
@@ -151,6 +152,7 @@ include("CacheSnapshots.jl")
 include("Hoppet.jl")
 include("PolarizedLeptonic.jl")
 include("LeptonicObservables.jl")
+include("SIAQTWindows.jl")
 include("LeptonicBins.jl")
 include("JetBorn.jl")
 include("StarEvolved.jl")

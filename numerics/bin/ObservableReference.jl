@@ -12,11 +12,15 @@ charge2(q)=abs(q) in (2,4) ? 4/9 : 1/9
 charge_value(f,q,c)=c==1 ? f(q) : c==-1 ? f(-q) : (f(q)+f(-q))/2
 angular_y(y)=2(1-y)/(1+(1-y)^2)
 
-function reference_weights(context,interval)
+function reference_weights(context,interval;coordinate=:P)
     plan=context.leptonic;z=plan.z1;n=plan.process==:SIDIS ? 1 : 2
+    coordinate in (:P,:qT) || error("reference momentum coordinate must be P or qT")
+    coordinate==:qT && (plan.process!=:SIA || interval===nothing) &&
+        error("adaptive qT reference requires a finite SIA window")
     prefactor=plan.process==:SIDIS ? -inv(2z^3) : inv(4z^3*plan.z2)
     kernel(k,b)=interval===nothing ? besselj(k,plan.P*b/z) :
-        quadgk(p->p*besselj(k,p*b/z),interval...;rtol=1e-12,atol=1e-14)[1]
+        coordinate==:P ? quadgk(p->p*besselj(k,p*b/z),interval...;rtol=1e-12,atol=1e-14)[1] :
+        quadgk(q->z^2*q*besselj(k,q*b),interval...;rtol=1e-12,atol=1e-14)[1]
     uu=[db*b*kernel(0,b)/(2pi*z^2) for (b,db) in zip(plan.radial.b,plan.radial.db)]
     pol=[prefactor*db*b^(n+1)*kernel(n,b)/(2pi) for (b,db) in zip(plan.radial.b,plan.radial.db)]
     uu,pol
@@ -29,9 +33,9 @@ Scalar initial functions, charge loops, CSS and adaptive P integration are
 separate from the optimized observable assembly. BigFloat-backed row products
 use generic Julia arithmetic rather than Float64 tangent batching.
 """
-function prepare_generic_reference(context;momentum_interval=nothing,y=.4,angular=.6)
+function prepare_generic_reference(context;momentum_interval=nothing,momentum_coordinate=:P,y=.4,angular=.6)
     plan=context.leptonic;model=plan.model
-    weights,polweights=reference_weights(context,momentum_interval)
+    weights,polweights=reference_weights(context,momentum_interval;coordinate=momentum_coordinate)
     shape=[b^2*(plan.process==:SIDIS ? inv(plan.z1^2) : inv(plan.z1^2)+inv(plan.z2^2)) for b in plan.radial.b]
     fixed=[reference_sudakov(model,b,plan.Q2)+
         model.g2*log(sqrt(1+(b/model.bmax)^2))*log(sqrt(plan.Q2/model.Q02))+
@@ -91,7 +95,8 @@ function prepare_generic_reference(context;momentum_interval=nothing,y=.4,angula
         end
     end
     (predict=prediction,polarized_integrals=polarized_integrals,denominators=denominators,uu_weights=weights,collins_weights=polweights,
-     scope="generic_fixed_row_scalar_assembly_and_adaptive_P_reference")
+     scope=momentum_coordinate==:P ? "generic_fixed_row_scalar_assembly_and_adaptive_P_reference" :
+         "generic_fixed_row_scalar_assembly_and_adaptive_qT_reference")
 end
 
 "Mellin/adaptive values and amplitude/gc moments combined directly by paper equations."
