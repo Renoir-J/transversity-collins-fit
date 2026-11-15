@@ -8,6 +8,8 @@ import tarfile
 from pathlib import Path, PurePosixPath
 
 from .babar_primary import compare_row as compare_babar_row, parse_tables as parse_babar_tables
+from .compass_proton_primary import (COORDINATES, compare_row as compare_proton_row,
+                                    legacy_decimal, read_primary as proton_primary)
 from .experimental import NUMBER, acquire, scalar, xlsx_records
 from .provenance import atomic_json, file_hash, read_json, source_fingerprint, utc_now
 
@@ -247,7 +249,8 @@ def sia_point(row, adapter):
             "angular_source": {"column": angular_column, "value": angular, "average_type": "publication_review_pending"}}
 
 
-def parse_historical_xlsx(path, source, contract, primary, deuteron_tables=None, babar_tables=None):
+def parse_historical_xlsx(path, source, contract, primary, deuteron_tables=None, babar_tables=None,
+                          proton_tables=None, proton_policy=None):
     if file_hash(path) != source["sha256"]:
         raise ValueError("historical source checksum mismatch")
     config = source["adapter"]
@@ -271,7 +274,27 @@ def parse_historical_xlsx(path, source, contract, primary, deuteron_tables=None,
                 any(babar_view[k] != config[k] for k in ("ratio", "projection")) or
                 len(babar_view["points"]) != len(records)):
             raise ValueError("missing or mismatched primary BaBar frame/ratio/projection")
-    if config.get("uncertainty_layout") not in ("stat_exp_model_remap", "primary_stat_only") and babar is None:
+    proton = proton_view = None
+    if (config.get("primary_crosscheck_kind") == "COMPASS_proton_partial" or
+            (proton_policy and sidis and source["publication"] == proton_policy["publication"] and
+             config.get("target") == "proton")):
+        proton = (proton_tables or {}).get(config.get("primary_crosscheck_id"))
+        if (proton is None or proton_policy is None or not sidis or config["experiment"] != "compass" or
+                config.get("primary_crosscheck_kind") != "COMPASS_proton_partial" or
+                config["uncertainty_layout"] != "reported_unspecified" or config["target"] != "proton" or
+                proton["publication"] != source["publication"] or proton["publication"] != proton_policy["publication"] or
+                proton["target"] != "proton" or proton["harmonic"] != "Collins" or
+                proton["contract_id"] != proton_policy["id"]):
+            raise ValueError("missing or mismatched primary COMPASS proton identity")
+        proton_view = proton["views"].get((config["hadron"], config["projection"]))
+        if (proton_view is None or proton_view["harmonic"] != "Collins" or
+                any(proton_view[k] != config[k] for k in ("hadron", "projection")) or
+                len(proton_view["points"]) != len(records)):
+            raise ValueError("missing or mismatched primary COMPASS proton charge/projection")
+        blockers.extend(["partial primary crosscheck only; unequal legacy means and their extra digits remain unverified",
+                         "primary Sigma composition and systematic/normalization covariance remain unresolved"])
+    if (config.get("uncertainty_layout") not in ("stat_exp_model_remap", "primary_stat_only") and
+            babar is None and proton is None):
         blockers.append("secondary transcription primary numerical crosscheck pending")
     deuteron = None
     if config.get("uncertainty_layout") == "primary_stat_only":
@@ -317,7 +340,11 @@ def parse_historical_xlsx(path, source, contract, primary, deuteron_tables=None,
     else:
         dataset.update(ratio=config["ratio"], frame="hadron2",
                        prediction_prescription="reported P mean" if config["projection"] == "pT" else "P-integrated source view; theory adapter pending")
-    babar_cells = 0
+    babar_cells = proton_exact_means = 0
+    used_proton_coordinates = set()
+    proton_rows = {} if proton_view is None else {p["coordinate"]: p for p in proton_view["points"]}
+    if proton_view is not None and len(proton_rows) != len(records):
+        raise ValueError("duplicate primary COMPASS proton coordinate")
     for i, record in enumerate(records, start=2):
         if record["obs"] != config["source_obs"] or str(record["col"]).lower() != config["experiment"]:
             raise ValueError("historical experiment/harmonic identity changed")
@@ -330,6 +357,20 @@ def parse_historical_xlsx(path, source, contract, primary, deuteron_tables=None,
             reference = babar_view["points"][i - 2]
             babar_cells += compare_babar_row(record, reference, config)
         point = sidis_point(record, config, contract, primary) if sidis else sia_point(record, config)
+        proton_metadata = {}
+        if proton_view is not None:
+            coordinate = legacy_decimal(record, COORDINATES[config["projection"]])
+            if coordinate in used_proton_coordinates or coordinate not in proton_rows:
+                raise ValueError("missing or duplicate secondary COMPASS proton coordinate")
+            used_proton_coordinates.add(coordinate)
+            reference = proton_rows[coordinate]
+            mean_checks = compare_proton_row(record, reference, config["projection"])
+            proton_exact_means += sum(m["exact_decimal_equal"] for m in mean_checks.values())
+            proton_metadata = {"primary_locator": {"source_id": proton["id"], "publication": proton["publication"],
+                "member": proton["member"], "harmonic": "Collins", "hadron": config["hadron"],
+                "projection": config["projection"], "source_line": reference["source_line"]},
+                "primary_projection_bin": reference["bin"], "primary_reported_means": mean_checks}
+            point.update(proton_metadata, systematic_uncertainty_status="composition_and_systematics_unresolved")
         if deuteron is not None:
             reference = deuteron["points"][i - 2]
             if any(point[k] != reference[k] for k in ("averages", "central_value", "statistical_error")):
@@ -347,11 +388,25 @@ def parse_historical_xlsx(path, source, contract, primary, deuteron_tables=None,
         point.update(id=f"{source['id']}:r{i}", locator={"sheet": config["sheet"], "excel_row": i})
         if sidis and config["projection"] == "pt" and point["averages"]["pT_GeV"] >= contract["SIDIS_projection_cut"]["upper_GeV"]:
             dataset["excluded"].append({"locator": point["locator"], "reported_pT_GeV": point["averages"]["pT_GeV"],
-                "reason": "fails published strict pT<0.8 GeV projection cut"})
+                "reason": "fails published strict pT<0.8 GeV projection cut", **proton_metadata})
         else:
             dataset["points"].append(point)
     if len(dataset["points"]) != config["expected_points"]:
         raise ValueError("historical point selection disagrees with reviewed count")
+    if proton_view is not None:
+        if used_proton_coordinates != set(proton_rows):
+            raise ValueError("incomplete primary COMPASS proton coordinate coverage")
+        dataset["primary_numeric_crosscheck"] = {"id": proton["id"], "publication": proton["publication"],
+            "sha256": proton["sha256"], "member": proton["member"], "member_sha256": proton["member_sha256"],
+            "contract_id": proton["contract_id"], "crosscheck_kind": "COMPASS_proton_partial",
+            "status": "PARTIAL_PRIMARY_MATCH_UNVERIFIED_MEANS", "harmonic": "Collins", "target": "proton",
+            "raw_points": len(records), "numeric_cells": 3*len(records),
+            "comparison": "exact Decimal equality of projection coordinate, central value and column labeled Sigma",
+            "compared_columns": [COORDINATES[config["projection"]], "value", "error_u"],
+            "mean_cells_compared": 6*len(records), "exact_mean_cells": proton_exact_means,
+            "unequal_mean_cells_unverified": 6*len(records)-proton_exact_means,
+            "not_certified": ["unequal mean kinematics and extra legacy digits", "Sigma statistical/total composition",
+                              "systematics and normalization", "covariance/overlap", "acceptance", "original author inputs"]}
     if babar_view is not None:
         columns = {"statistical": config["error_columns"]["statistical"],
                    "reported_systematic": config["error_columns"]["reported_systematic"],
@@ -393,6 +448,13 @@ def validate_historical_candidate(candidate, contract):
                     p.get("systematic_uncertainty_status") != "publication_reports_small_but_not_tabulated" or
                     p["systematic_components"] or "primary_locator" not in p):
                 raise ValueError("primary stat-only error cannot certify missing systematic uncertainty")
+            if view.get("primary_numeric_crosscheck", {}).get("crosscheck_kind") == "COMPASS_proton_partial":
+                if (p["statistical_error"] is not None or p["systematic_components"] or
+                        p.get("systematic_uncertainty_status") != "composition_and_systematics_unresolved" or
+                        "primary_locator" not in p or "primary_projection_bin" not in p or
+                        set(p.get("primary_reported_means", {})) != {"Q2", "y", "pT", "x", "z", "W"} or
+                        any(m.get("unequal_mean_verified") is not False for m in p["primary_reported_means"].values())):
+                    raise ValueError("partial primary COMPASS proton evidence cannot certify means or uncertainties")
             if view["process"] == "SIA" and view.get("primary_numeric_crosscheck"):
                 angular = p.get("angular_source", {})
                 if (view["frame"] != "hadron2" or "primary_locator" not in p or "primary_bins" not in p or
@@ -413,15 +475,18 @@ def validate_historical_candidate(candidate, contract):
 
 def historical_sources(manifest):
     return [manifest["primary_crosscheck"], *manifest.get("deuteron_primary_tables", []),
-            *manifest.get("sia_primary_sources", []), *manifest["sources"]]
+            *manifest.get("sia_primary_sources", []), *manifest.get("proton_primary_sources", []), *manifest["sources"]]
 
 
-def historical_views(manifest, paths, contract):
+def historical_views(manifest, paths, contract, proton_policy=None):
     """Rebuild deterministic source-derived candidates, including cached decisions."""
     primary = halla_primary(paths[manifest["primary_crosscheck"]["id"]], manifest["primary_crosscheck"])
     deuteron_tables = {s["id"]: deuteron_primary(paths[s["id"]], s) for s in manifest.get("deuteron_primary_tables", [])}
     babar_tables = {s["id"]: babar_primary(paths[s["id"]], s) for s in manifest.get("sia_primary_sources", [])}
-    views = [parse_historical_xlsx(paths[s["id"]], s, contract, primary, deuteron_tables, babar_tables)
+    proton_tables = {s["id"]: proton_primary(paths[s["id"]], s, proton_policy)
+                     for s in manifest.get("proton_primary_sources", [])}
+    views = [parse_historical_xlsx(paths[s["id"]], s, contract, primary, deuteron_tables, babar_tables,
+                                  proton_tables, proton_policy)
              for s in manifest["sources"]]
     checked_sia = [v for v in views if v["process"] == "SIA" and v.get("primary_numeric_crosscheck")]
     decisions = {"primary_HallA_points_crosschecked": len(primary),
@@ -433,7 +498,33 @@ def historical_views(manifest, paths, contract):
             decisions["primary_BaBar_raw_points_crosschecked"] != contract["BaBar_primary"]["raw_points"] or
             decisions["primary_BaBar_numeric_cells_crosschecked"] != contract["BaBar_primary"]["numeric_cells"]):
         raise ValueError("primary BaBar coverage does not match the scientific contract")
+    if proton_tables:
+        checked = [v for v in views if v.get("primary_numeric_crosscheck", {}).get("crosscheck_kind") == "COMPASS_proton_partial"]
+        crosschecks = [v["primary_numeric_crosscheck"] for v in checked]
+        raw = sum(c["raw_points"] for c in crosschecks)
+        cells = sum(c["numeric_cells"] for c in crosschecks)
+        if (len(checked) != proton_policy["selection"]["selected_views"] or
+                raw != proton_policy["selection"]["raw_rows"] or
+                sum(len(v["points"]) for v in checked) != proton_policy["selection"]["retained_historical_rows"] or
+                cells != proton_policy["exact_comparison"]["numeric_cells"]):
+            raise ValueError("primary COMPASS proton coverage does not match the scientific contract")
+        decisions.update(primary_COMPASS_proton_raw_points_crosschecked=raw,
+            primary_COMPASS_proton_exact_numeric_cells=cells,
+            primary_COMPASS_proton_exact_mean_cells=sum(c["exact_mean_cells"] for c in crosschecks),
+            primary_COMPASS_proton_unequal_mean_cells_unverified=sum(c["unequal_mean_cells_unverified"] for c in crosschecks))
     return views, decisions
+
+
+def proton_contract(root, contract):
+    definition = contract.get("COMPASS_proton_primary")
+    if definition is None:
+        return None, None
+    path = root / definition["contract"]
+    policy = read_json(path)
+    if (policy["id"] != definition["id"] or policy["scope"] != "partial_primary_transcription_crosscheck" or
+            any(policy.get(k) is not False for k in ("production_ready", "physical_extraction", "historical_fit_ready"))):
+        raise ValueError("unreviewed primary COMPASS proton contract")
+    return path, policy
 
 
 def run_historical_intake(manifest_path, cache, output, *, seed_root=None, offline=False):
@@ -442,10 +533,12 @@ def run_historical_intake(manifest_path, cache, output, *, seed_root=None, offli
     manifest = read_json(manifest_path)
     contract_path = root / manifest["contract"]
     contract = read_json(contract_path)
+    proton_path, proton_policy = proton_contract(root, contract)
     if manifest.get("scope") != SCOPE or manifest.get("production_ready") is not False or manifest.get("physical_extraction") is not False:
         raise ValueError("invalid historical manifest scope")
     fingerprint = source_fingerprint(root)
-    hashes = {str(p): file_hash(p) for p in (manifest_path, contract_path)}
+    contract_paths = [manifest_path, contract_path] + ([proton_path] if proton_path else [])
+    hashes = {str(p): file_hash(p) for p in contract_paths}
     paths = {}
     for source in historical_sources(manifest):
         seed = Path(seed_root) / source["seed_path"] if seed_root else None
@@ -454,7 +547,7 @@ def run_historical_intake(manifest_path, cache, output, *, seed_root=None, offli
         path = acquire(source, cache, seed=seed if seed is not None and seed.is_file() else None, offline=offline)
         paths[source["id"]] = path
         hashes[str(path.resolve())] = file_hash(path)
-    views, decisions = historical_views(manifest, paths, contract)
+    views, decisions = historical_views(manifest, paths, contract, proton_policy)
     candidate = {"schema_version": 1, "scope": SCOPE, "production_ready": False, "physical_extraction": False,
         "historical_fit_ready": False, "contract_id": contract["id"], "views": views,
         "manifest_sha256": file_hash(manifest_path), "contract_sha256": file_hash(contract_path), "source_fingerprint": fingerprint}
@@ -480,6 +573,7 @@ def verify_historical_intake(manifest_path, cache, output):
     manifest = read_json(manifest_path)
     contract_path = root / manifest["contract"]
     contract = read_json(contract_path)
+    proton_path, proton_policy = proton_contract(root, contract)
     report, candidate = read_json(output / "report.json"), read_json(output / "candidates.json")
     if report.get("status") != "CANDIDATES_VALIDATED" or report.get("scope") != SCOPE or any(
             report.get(k) is not False for k in ("production_ready", "physical_extraction", "historical_fit_ready")):
@@ -496,6 +590,8 @@ def verify_historical_intake(manifest_path, cache, output):
     sources = historical_sources(manifest)
     expected = {str(manifest_path): file_hash(manifest_path), str(contract_path): file_hash(contract_path),
                 **{str(cache / source["filename"]): source["sha256"] for source in sources}}
+    if proton_path:
+        expected[str(proton_path)] = file_hash(proton_path)
     if report["manifest"] != str(manifest_path) or report["cache_root"] != str(cache) or report["source_hashes"] != expected:
         raise ValueError("missing or changed historical input bindings")
     if any(file_hash(path) != value for path, value in expected.items()):
@@ -506,7 +602,7 @@ def verify_historical_intake(manifest_path, cache, output):
     if report.get("primary_COMPASS_deuteron_raw_points_crosschecked", 0) != contract.get("COMPASS_deuteron_primary", {}).get("raw_points", 0):
         raise ValueError("changed primary deuteron decisions")
     paths = {s["id"]: cache / s["filename"] for s in sources}
-    views, decisions = historical_views(manifest, paths, contract)
+    views, decisions = historical_views(manifest, paths, contract, proton_policy)
     if candidate["views"] != views or any(report.get(k) != v for k, v in decisions.items()):
         raise ValueError("changed source-derived historical candidates or primary decisions")
     if source_fingerprint(root) != current or any(file_hash(path) != value for path, value in expected.items()):
