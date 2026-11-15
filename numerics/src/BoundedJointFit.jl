@@ -1,6 +1,8 @@
 const BOUNDED_JOINT_CONTRACT=normpath(joinpath(@__DIR__,"../../config/bounded-joint-fit-contract.json"))
+const BOUNDED_SOLVER_COMPARISON_CONTRACT=normpath(joinpath(@__DIR__,"../../config/bounded-solver-comparison-contract.json"))
 
 struct BoundedJointSettings
+    algorithm::Symbol
     initial_step::NTuple{13,Float64}
     xtol_abs::NTuple{13,Float64}
     ftol_abs::Float64
@@ -8,9 +10,11 @@ struct BoundedJointSettings
     maxtime::Float64
     trace::Bool
     source::String
-    function BoundedJointSettings(;initial_step=nothing,xtol_step_fraction=nothing,ftol_abs=nothing,
+    function BoundedJointSettings(;algorithm=:LN_SBPLX,initial_step=nothing,xtol_step_fraction=nothing,ftol_abs=nothing,
             maxeval=nothing,maxtime=0.,trace=true,source)
-        policy=JSON.parsefile(BOUNDED_JOINT_CONTRACT)["settings"]
+        algorithm isa Symbol && algorithm in (:LN_SBPLX,:LN_BOBYQA) || error("explicit supported bounded algorithm required")
+        policy=algorithm==:LN_SBPLX ? JSON.parsefile(BOUNDED_JOINT_CONTRACT)["settings"] :
+            JSON.parsefile(BOUNDED_SOLVER_COMPARISON_CONTRACT)["algorithms"]["LN_BOBYQA"]
         steps=initial_step===nothing ? policy["initial_step"] : initial_step
         steps isa Union{AbstractVector,Tuple} && length(steps)==13 || error("13 explicit initial steps required")
         owned=Tuple(fixed_scalar(v,"optimizer initial step") for v in steps)
@@ -24,7 +28,7 @@ struct BoundedJointSettings
         trace isa Bool || error("explicit Bool trace setting required")
         absolute=Tuple(v*fraction for v in owned)
         all(v->isfinite(v) && v>0,absolute) || error("finite positive absolute coordinate tolerances required")
-        new(owned,absolute,tolerance,Int(budget),time,trace,joint_text(source,"optimizer settings source"))
+        new(algorithm,owned,absolute,tolerance,Int(budget),time,trace,joint_text(source,"optimizer settings source"))
     end
 end
 
@@ -45,7 +49,9 @@ end
 function bounded_settings_metadata(s::BoundedJointSettings,gh)
     bounds=kpsy_parameter_bounds(gh)
     encode(v)=isinf(v) ? (v<0 ? "-Inf" : "Inf") : v
-    Dict("algorithm"=>"LN_SBPLX","initial_step"=>collect(s.initial_step),"xtol_abs"=>collect(s.xtol_abs),
+    Dict("algorithm"=>String(s.algorithm),
+        "algorithm_contract_id"=>s.algorithm==:LN_SBPLX ? "KPSY-BOUNDED-JOINT-FIT-001" : "KPSY-BOUNDED-SOLVER-COMPARISON-001",
+        "initial_step"=>collect(s.initial_step),"xtol_abs"=>collect(s.xtol_abs),
         "ftol_abs"=>s.ftol_abs,"ftol_rel"=>0.,"xtol_rel"=>0.,"maxeval"=>s.maxeval,"maxtime"=>s.maxtime,
         "trace"=>s.trace,"source"=>s.source,"parameter_names"=>string.(INITIAL_PARAMETER_NAMES),
         "lower_bounds"=>encode.(collect(bounds.lower)),"upper_bounds"=>encode.(collect(bounds.upper)),
@@ -67,9 +73,11 @@ end
 "One owned native optimizer. The callback is Julia and never requests a gradient."
 function bounded_joint_start(f,start,s::BoundedJointSettings,gh)
     x0=bounded_start(start,gh);bounds=kpsy_parameter_bounds(gh)
-    opt=NLopt.Opt(:LN_SBPLX,13)
+    opt=NLopt.Opt(s.algorithm,13)
     algorithm_name=NLopt.algorithm_name(opt)
-    occursin("subplex",lowercase(algorithm_name)) || occursin("sbplx",lowercase(algorithm_name)) || error("native algorithm identity mismatch")
+    name=lowercase(algorithm_name)
+    identity=s.algorithm==:LN_SBPLX ? occursin("subplex",name) || occursin("sbplx",name) : occursin("bobyqa",name)
+    identity || error("native algorithm identity mismatch")
     NLopt.lower_bounds!(opt,collect(bounds.lower));NLopt.upper_bounds!(opt,collect(bounds.upper))
     NLopt.initial_step!(opt,collect(s.initial_step));NLopt.xtol_abs!(opt,collect(s.xtol_abs))
     NLopt.xtol_rel!(opt,0.);NLopt.ftol_abs!(opt,s.ftol_abs);NLopt.ftol_rel!(opt,0.)
@@ -130,7 +138,12 @@ function fit_joint(likelihood::JointGaussianLikelihood,starts;settings::BoundedJ
     starts isa Union{AbstractVector,Tuple} && !isempty(starts) || error("nonempty explicit start vectors required")
     owned=[bounded_start(start,likelihood.model.gh) for start in starts]
     before=likelihood.signature;runtime=bounded_runtime_metadata();metadata=joint_likelihood_metadata(likelihood)
-    candidates=[bounded_joint_start(t->joint_objective(likelihood,t),start,settings,likelihood.model.gh) for start in owned]
+    candidates=Dict{String,Any}[]
+    for (index,start) in enumerate(owned)
+        candidate=bounded_joint_start(t->joint_objective(likelihood,t),start,settings,likelihood.model.gh)
+        push!(candidates,candidate)
+        @info "bounded joint start completed" start_index=index algorithm=String(settings.algorithm) status=candidate["status"] stop=candidate["solver_stop"] evaluations=candidate["solver_evaluations"]
+    end
     stable=false;failure=nothing
     try
         joint_likelihood_valid(likelihood)
@@ -152,6 +165,7 @@ function fit_joint(likelihood::JointGaussianLikelihood,starts;settings::BoundedJ
     end
     result=Dict{String,Any}("status"=>status,"scope"=>"synthetic_closure","theory_scope"=>"reconstructed_theory",
         "contract_id"=>"KPSY-BOUNDED-JOINT-FIT-001","production_ready"=>false,"physical_extraction"=>false,
+        "solver_contract_id"=>settings.algorithm==:LN_SBPLX ? "KPSY-BOUNDED-JOINT-FIT-001" : "KPSY-BOUNDED-SOLVER-COMPARISON-001",
         "G2PERF_pass"=>false,"real_data_fit_implemented"=>false,"experimental_data_admitted"=>false,
         "global_optimum_certified"=>false,"interval_coverage_verified"=>false,
         "settings"=>bounded_settings_metadata(settings,likelihood.model.gh),"likelihood"=>metadata,

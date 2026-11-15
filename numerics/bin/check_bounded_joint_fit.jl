@@ -10,11 +10,17 @@ const SOURCES=vcat([@__FILE__,joinpath(@__DIR__,"BoundedJointReference.jl"),join
     filter(p->endswith(p,"-contract.json"),readdir(joinpath(ROOT,"config");join=true)))
 source_hashes()=Dict(replace(relpath(path,ROOT),'\\'=>'/')=>bytes2hex(sha256(read(path))) for path in SOURCES)
 
-function run_checks!(report,budget)
+function run_checks!(report,budget,algorithm)
     contract=JSON.parsefile(CONTRACT);p=contract["validation"]
-    budget in contract["settings"]["resource_ladder_maxeval"] || error("use an explicit frozen resource-ladder budget")
+    comparison_path=joinpath(ROOT,"config/bounded-solver-comparison-contract.json")
+    comparison=JSON.parsefile(comparison_path)
+    algorithm in (:LN_SBPLX,:LN_BOBYQA) || error("explicit supported bounded algorithm required")
+    operational=algorithm==:LN_SBPLX ? contract["settings"] : comparison["algorithms"]["LN_BOBYQA"]
+    budget in operational["resource_ladder_maxeval"] || error("use an explicit frozen resource-ladder budget")
     before=source_hashes();report["sources"]=before;report["contract"]=contract
     report["contract_sha256"]=bytes2hex(sha256(read(CONTRACT)))
+    report["solver_comparison_contract"]=comparison
+    report["solver_comparison_contract_sha256"]=bytes2hex(sha256(read(comparison_path)))
     println(JSON.json(Dict("stage"=>"preparing 52 synthetic observations","status"=>"IN_PROGRESS_NOT_A_GATE")));flush(stdout)
     fixture=closure_fixture();l=fixture.likelihood
     report["truth"]=fixture.truth;report["starts_requested"]=fixture.starts
@@ -32,8 +38,9 @@ function run_checks!(report,budget)
     report["objective_timing_informational"]=Dict("samples"=>10,"median_seconds"=>median(times),
         "maximum_seconds"=>maximum(times),"production_performance_accepted"=>false)
     println(JSON.json(Dict("stage"=>"bounded multistart fit","observations"=>52,"parameters"=>13,
-        "maxeval_per_start"=>budget,"objective_median_seconds_informational"=>median(times),"status"=>"IN_PROGRESS_NOT_A_GATE")));flush(stdout)
-    settings=BoundedJointSettings(maxeval=budget,trace=true,source="frozen synthetic 52-observation closure")
+        "maxeval_per_start"=>budget,"algorithm"=>String(algorithm),
+        "objective_median_seconds_informational"=>median(times),"status"=>"IN_PROGRESS_NOT_A_GATE")));flush(stdout)
+    settings=BoundedJointSettings(algorithm=algorithm,maxeval=budget,trace=true,source="frozen synthetic 52-observation closure")
     result=fit_joint(l,fixture.starts;settings=settings);report["fit"]=result
     check("every requested start retained",length(result["starts"])==length(fixture.starts))
     check("every start reaches configured tolerance stop",result["status"]=="PASS";details=[r["solver_stop"] for r in result["starts"]])
@@ -67,7 +74,7 @@ function run_checks!(report,budget)
     by=predict_joint(l.model,boundary)
     bl=JointGaussianLikelihood(l.model,l.point_ids,by,l.covariance;additive=l.additive,relative=l.relative,
         nuisance_prior=l.nuisance_prior,nuisance_ids=l.nuisance_ids,scope="synthetic_closure",source="explicit synthetic boundary path")
-    boundary_result=fit_joint(bl,[boundary];settings=BoundedJointSettings(maxeval=1,source="deliberate physical-family boundary resource stop"))
+    boundary_result=fit_joint(bl,[boundary];settings=BoundedJointSettings(algorithm=algorithm,maxeval=1,source="deliberate physical-family boundary resource stop"))
     report["boundary_resource_control"]=boundary_result
     check("closed physical-family boundary stays finite and INCOMPLETE",boundary_result["status"]=="INCOMPLETE" &&
         boundary_result["chi2"]!==nothing && isfinite(boundary_result["chi2"]) && boundary_result["starts"][1]["start"]==boundary)
@@ -77,14 +84,16 @@ function run_checks!(report,budget)
 end
 
 function main()
-    length(ARGS)==2 || error("usage: check_bounded_joint_fit.jl FROZEN_MAXEVAL OUTPUT")
-    budget=parse(Int,ARGS[1]);output=ARGS[2];ispath(output) && error("use a fresh fitting report path")
+    length(ARGS) in (2,3) || error("usage: check_bounded_joint_fit.jl [LN_SBPLX|LN_BOBYQA] FROZEN_MAXEVAL OUTPUT")
+    algorithm=length(ARGS)==3 ? Symbol(ARGS[1]) : :LN_SBPLX
+    budget=parse(Int,ARGS[end-1]);output=ARGS[end];ispath(output) && error("use a fresh fitting report path")
     report=Dict{String,Any}("status"=>"FAIL","scope"=>"synthetic_closure","theory_scope"=>"reconstructed_theory",
         "contract_id"=>"KPSY-BOUNDED-JOINT-FIT-001","production_ready"=>false,"physical_extraction"=>false,
         "G2PERF_pass"=>false,"experimental_data_admitted"=>false,"real_data_fit_implemented"=>false,
-        "interval_coverage_verified"=>false,"maxeval_per_start"=>budget,"checks"=>Dict{String,Any}[],"julia_version"=>string(VERSION))
+        "interval_coverage_verified"=>false,"algorithm"=>String(algorithm),"maxeval_per_start"=>budget,
+        "checks"=>Dict{String,Any}[],"julia_version"=>string(VERSION))
     try
-        run_checks!(report,budget)
+        run_checks!(report,budget,algorithm)
     catch exception
         report["status"]="FAIL";report["error"]=sprint(showerror,exception,catch_backtrace())
     finally
