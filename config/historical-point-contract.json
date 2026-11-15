@@ -1,5 +1,8 @@
 {
   "schema_version": 1,
+  "revision": 2,
+  "previous_contract_commit": "b21965f1e6b932f72558312db9251b39af66e51b",
+  "revision_reason": "Correct the request representation of the existing HallA historical source label: both locked candidate views already have depolarization_removed=false, not null. Preserve that label without promoting experimental acceptance/correction-chain validation. The fixed parameters, conditional prediction formula and all numerical acceptance thresholds remain unchanged. No real-point numerical prediction preceded this correction.",
   "id": "KPSY-HISTORICAL-POINT-001",
   "scope": "historical_reconstructed_point_prediction_diagnostic",
   "theory_scope": "reconstructed_theory",
@@ -15,8 +18,8 @@
     "target": "neutron",
     "target_result": "published extracted neutron; no second nuclear extraction",
     "source_views": [
-      {"id": "KPSY15_SIDIS_3002", "hadron": "pi+", "charge": 1, "points": 4, "sha256": "bb4526a9f4835977f3d3af5f60ecacff9b43fc547db540a912bd7dcc912c8881"},
-      {"id": "KPSY15_SIDIS_3001", "hadron": "pi-", "charge": -1, "points": 4, "sha256": "7a768787c749c41ddcd816f13696272b0da0c0f483c5ffc31c1b5e19249dd63c"}
+      {"id": "KPSY15_SIDIS_3002", "hadron": "pi+", "charge": 1, "points": 4, "depolarization_removed": false, "sha256": "bb4526a9f4835977f3d3af5f60ecacff9b43fc547db540a912bd7dcc912c8881"},
+      {"id": "KPSY15_SIDIS_3001", "hadron": "pi-", "charge": -1, "points": 4, "depolarization_removed": false, "sha256": "7a768787c749c41ddcd816f13696272b0da0c0f483c5ffc31c1b5e19249dd63c"}
     ],
     "total_points": 8,
     "kinematics": "Use each primary-checked reported x,y,z,Q2,pT mean exactly, with no new cuts or identities imposed on products of means. Other historical views remain candidates and are not silently selected or dropped from a requested job.",
@@ -40,7 +43,7 @@
     "geometry": "SIDIS fixed reported means and existing pi+/pi- charge maps; NucleonTarget(:neutron) uses the inherited proton/neutron isospin prescription",
     "formula": "A=DNN(y)*Collins/UU with DNN(y)=2*(1-y)/(1+(1-y)^2). Apply the phase/DNN factor to the predicted observable once; preserve all measured scalars unchanged.",
     "source_mapping_status": "conditional_historical_assumption_not_experimental_average_admission",
-    "data_convention_fields": "Keep the historical candidate's unresolved depolarization/mapping fields unchanged; a diagnostic model convention cannot overwrite a source-review status.",
+    "data_convention_fields": "Preserve each selected historical candidate's existing depolarization_removed=false label and all source blockers. This configured source label does not validate the complete experimental correction/acceptance chain; the fixed-mean model mapping remains conditional.",
     "context_reuse": "Reuse native/provider preparation only for exactly equal full fixed geometry/target/settings. The two pion charges may share a pi+ basis through with_pion_charges. Preserve every requested point identifier and source row; no rounding-based grouping or parameter-response cache.",
     "inputs": "Pinned CT10/DSSV08/DSS14 with strict Q0 samples and explicitly labeled reference extrapolation at unsupported Fourier scales; verify build hashes and require the retained bridge source to match the current project bridge before use.",
     "loop": "Julia owns prepared predictions, fixed-parameter values, comparisons and residual arithmetic. Python/Snakemake schedules whole jobs and renders completed outputs. No provider/native/Python/language-model callback inside a parameter evaluation."
