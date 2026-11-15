@@ -17,6 +17,7 @@ include("native_coupling_tests.jl")
 include("paper_moment_tests.jl")
 include("prepared_time_tests.jl")
 include("joint_likelihood_tests.jl")
+include("bounded_joint_tests.jl")
 
 @testset "LO transversity moments and fixed-operator AD" begin
     @test transversity_moment(1) ≈ -2/3
