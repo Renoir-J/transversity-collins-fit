@@ -286,7 +286,9 @@
         ],
         "sheet": "Sheet1",
         "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "depolarization_status": "publication_review_pending",
+        "primary_crosscheck_id": "COMPASS_proton_primary_standard_pions_2014_archive",
+        "primary_crosscheck_kind": "COMPASS_proton_partial"
       }
     },
     {
@@ -325,7 +327,9 @@
         ],
         "sheet": "Sheet1",
         "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "depolarization_status": "publication_review_pending",
+        "primary_crosscheck_id": "COMPASS_proton_primary_standard_pions_2014_archive",
+        "primary_crosscheck_kind": "COMPASS_proton_partial"
       }
     },
     {
@@ -364,7 +368,9 @@
         ],
         "sheet": "Sheet1",
         "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "depolarization_status": "publication_review_pending",
+        "primary_crosscheck_id": "COMPASS_proton_primary_standard_pions_2014_archive",
+        "primary_crosscheck_kind": "COMPASS_proton_partial"
       }
     },
     {
@@ -403,7 +409,9 @@
         ],
         "sheet": "Sheet1",
         "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "depolarization_status": "publication_review_pending",
+        "primary_crosscheck_id": "COMPASS_proton_primary_standard_pions_2014_archive",
+        "primary_crosscheck_kind": "COMPASS_proton_partial"
       }
     },
     {
@@ -442,7 +450,9 @@
         ],
         "sheet": "Sheet1",
         "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "depolarization_status": "publication_review_pending",
+        "primary_crosscheck_id": "COMPASS_proton_primary_standard_pions_2014_archive",
+        "primary_crosscheck_kind": "COMPASS_proton_partial"
       }
     },
     {
@@ -481,7 +491,9 @@
         ],
         "sheet": "Sheet1",
         "uncertainty_layout": "reported_unspecified",
-        "depolarization_status": "publication_review_pending"
+        "depolarization_status": "publication_review_pending",
+        "primary_crosscheck_id": "COMPASS_proton_primary_standard_pions_2014_archive",
+        "primary_crosscheck_kind": "COMPASS_proton_partial"
       }
     },
     {
@@ -1302,6 +1314,19 @@
         "tab:totZuc": 36,
         "tab:totPt": 9
       }
+    }
+  ],
+  "proton_primary_sources": [
+    {
+      "id": "COMPASS_proton_primary_standard_pions_2014_archive",
+      "filename": "COMPASS_proton_primary_tables.tar.gz",
+      "publication": "1408.4405",
+      "version": "Official COMPASS archive; observed Last-Modified8May2024",
+      "url": "https://wwwcompass.cern.ch/compass/publications/papers/cern-ph-ep_2014-213/HEPdata_tables.tar.gz",
+      "sha256": "a4d593c50b9814d53dd10cb7a5fe48e27aac03dfb52808436698669369183c8f",
+      "seed_path": ".runtime/papers/compass-proton-primary-20261112/HEPdata_tables.tar.gz",
+      "member": "HEPdata_tables/20140313_std_pions.txt",
+      "member_sha256": "ba8389446b9ffe021d38d3d574864ed57e7f54bbcecb603763390aa56e037580"
     }
   ]
 }

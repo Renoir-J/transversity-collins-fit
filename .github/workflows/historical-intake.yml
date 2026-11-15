@@ -5,7 +5,10 @@ on:
     paths:
       - config/historical-sources.json
       - config/historical-data-contract.json
+      - config/compass-proton-primary-contract.json
       - src/collinsflow/historical.py
+      - src/collinsflow/compass_proton_primary.py
+      - tests/test_historical_proton.py
       - src/collinsflow/experimental.py
       - src/collinsflow/cli.py
       - src/collinsflow/provenance.py

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "id": "KPSY15-HISTORICAL-DATA-003",
+  "id": "KPSY15-HISTORICAL-DATA-004",
   "scope": "historical_benchmark_candidate",
   "production_ready": false,
   "physical_extraction": false,
@@ -162,5 +162,10 @@
       "Belle manual web comparison is not an automated pinned-source crosscheck",
       "No historical likelihood, physical fit, production or historical-fit admission"
     ]
+  },
+  "COMPASS_proton_primary": {
+    "id": "KPSY-COMPASS-PROTON-PRIMARY-001",
+    "contract": "config/compass-proton-primary-contract.json",
+    "status": "Partial numerical crosscheck only; unequal mean digits and Sigma semantics remain unresolved"
   }
 }
