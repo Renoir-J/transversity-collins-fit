@@ -6,14 +6,27 @@ RUN = config.get("run_dir", "runs/joint-likelihood")
 NATIVE = config.get("native_build", ".runtime/hoppet/build.json")
 PARTON = config.get("parton_build", ".runtime/parton-inputs/build.json")
 JULIA = config.get("julia", "julia")
+KIND = config.get("kind", "all")
+if KIND not in ("all", "analytic", "inputs"):
+    raise ValueError("joint validation kind must be all, analytic or inputs")
+KINDS = ["analytic", "inputs"] if KIND == "all" else [KIND]
 CODE = [str(p) for folder in ("numerics/src", "numerics/bin", "numerics/test", "config")
         for p in sorted((ROOT / folder).glob("*")) if p.suffix in (".jl", ".json")]
 CODE += [str(ROOT / p) for p in ("numerics/Project.toml", "numerics/Manifest.toml",
-          "workflow/joint-likelihood.smk")]
+          "workflow/joint-likelihood.smk", "scripts/check_cached_joint_workflow.py")]
 
 rule all:
     input:
-        expand(f"{RUN}/{{kind}}/accepted.json", kind=["analytic", "inputs"])
+        expand(f"{RUN}/{{kind}}/accepted.json", kind=KINDS)
+    params:
+        root=str(ROOT), julia=JULIA,
+        directories=lambda w, input: [str(Path(p).parent) for p in input]
+    # This rule has no output and runs on cached invocations too.
+    shell:
+        "cd {params.root:q} && export JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 && "
+        "for directory in {params.directories:q}; do "
+        "{params.julia:q} --startup-file=no --project=numerics numerics/bin/check_joint_cache.jl "
+        "\"$directory/validation.json\" \"$directory/audit.json\" \"$directory/accepted.json\"; done"
 
 rule validate_joint:
     input:

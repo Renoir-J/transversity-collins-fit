@@ -14,6 +14,7 @@ on:
       - src/collinsflow/provenance.py
       - scripts/prepare_parton_inputs.py
       - scripts/prepare_hoppet.py
+      - scripts/check_cached_joint_workflow.py
       - workflow/joint-likelihood.smk
       - requirements.lock
       - .github/workflows/joint-likelihood.yml
@@ -66,7 +67,8 @@ jobs:
       - name: Validate and independently audit joint profile algebra
         run: |
           snakemake --snakefile workflow/joint-likelihood.smk --cores 1 \
-            --config run_dir=runs/ci-joint -- runs/ci-joint/${{ matrix.kind }}/accepted.json
+            --config run_dir=runs/ci-joint kind=${{ matrix.kind }}
+          python scripts/check_cached_joint_workflow.py runs/ci-joint --kind ${{ matrix.kind }}
       - name: Upload scoped evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
