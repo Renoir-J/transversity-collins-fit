@@ -56,7 +56,8 @@ def request_points(candidate, contract, initial):
                 selected["charge"] not in (-1, 1) or isinstance(selected["charge"], bool) or
                 {1: "pi+", -1: "pi-"}[selected["charge"]] != selected["hadron"] or
                 view["source_sha256"] != selected["sha256"] or view["source_observable"] != "AUTcollins" or
-                view["output_units"] != "fraction" or view.get("depolarization_removed") is not None or
+                view["output_units"] != "fraction" or selected.get("depolarization_removed") is not False or
+                view.get("depolarization_removed") is not selected["depolarization_removed"] or
                 view["production_ready"] is not False or view["historical_fit_ready"] is not False or
                 not view["blockers"] or len(view["points"]) != selected["points"] or view["excluded"]):
             raise ValueError("missing or mismatched primary HallA point selection")

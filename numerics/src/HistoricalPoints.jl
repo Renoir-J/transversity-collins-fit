@@ -71,7 +71,8 @@ function load_historical_point_request(path)
             view["source_sha256"]==selected["sha256"] && view["hadron"]==selected["hadron"] &&
             view["source_observable"]=="AUTcollins" && view["output_units"]=="fraction" &&
             view["production_ready"]===false && view["historical_fit_ready"]===false && !isempty(view["blockers"]) &&
-            view["depolarization_removed"]===nothing && length(view["points"])==selected["points"] &&
+            selected["depolarization_removed"]===false && view["depolarization_removed"]===selected["depolarization_removed"] &&
+            length(view["points"])==selected["points"] &&
             isempty(view["excluded"]) || error("mismatched primary HallA selection")
         for (offset,row) in enumerate(view["points"])
             row["id"]==selected["id"]*":r"*string(offset+1) && row["locator"]["excel_row"]==offset+1 ||
@@ -85,7 +86,7 @@ function load_historical_point_request(path)
                 point["publication"]==view["publication"] && point["source_sha256"]==selected["sha256"] &&
                 point["kinematics"]==row["averages"] && point["source_locator"]==row["locator"] &&
                 point["source_remap"]==row["source_remap"] && point["source_blockers"]==view["blockers"] &&
-                point["original_depolarization_removed"]===nothing || error("changed source-derived historical point")
+                point["original_depolarization_removed"]===view["depolarization_removed"] || error("changed source-derived historical point")
             all(point["measured"][key]==row[key] for key in
                 ("central_value","statistical_error","systematic_components")) || error("changed measured historical scalar/error")
             k=point["kinematics"]

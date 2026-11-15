@@ -29,7 +29,7 @@ def synthetic_candidate():
             publication=contract['selection']['publication'], target='neutron', target_material='3He',
             target_result=contract['selection']['target_result'], hadron=selected['hadron'],
             source_sha256=selected['sha256'], source_observable='AUTcollins', output_units='fraction',
-            depolarization_removed=None, production_ready=False, historical_fit_ready=False,
+            depolarization_removed=False, production_ready=False, historical_fit_ready=False,
             blockers=['synthetic layout fixture; no primary-source replay or experimental admission'],
             points=points, excluded=[]))
     candidate = dict(scope='historical_benchmark_candidate', production_ready=False,
@@ -46,7 +46,7 @@ def test_representation_preserves_configured_order_means_signs_and_separate_erro
     assert [p['charge'] for p in points] == [1]*4+[-1]*4
     assert points[1]['measured']['central_value'] == -.0125
     assert points[0]['measured']['systematic_components'] == dict(experimental=.002, model=.003)
-    assert all(p['original_depolarization_removed'] is None for p in points)
+    assert all(p['original_depolarization_removed'] is False for p in points)
     assert all('synthetic layout fixture' in p['source_blockers'][0] for p in points)
     points[0]['measured']['systematic_components']['model'] = 100.
     assert candidate == before
@@ -71,11 +71,19 @@ def test_diagnostic_contract_cannot_self_approve_any_fit_or_production_flag(flag
 
 @pytest.mark.parametrize('field,value', [
     ('target', '3He'), ('hadron', 'pi-'), ('publication', 'other-version'),
-    ('source_sha256', '0'*64), ('depolarization_removed', False),
+    ('source_sha256', '0'*64), ('depolarization_removed', None),
     ('depolarization_removed', True), ('source_observable', 'AUTsivers'), ('output_units', 'percent')])
-def test_primary_identity_and_unresolved_source_status_are_required(field, value):
+def test_primary_identity_and_preserved_source_label_are_required(field, value):
     candidate, contract, initial = synthetic_candidate()
     candidate['views'][0][field] = value
+    with pytest.raises(ValueError, match='selection'):
+        request_points(candidate, contract, initial)
+
+
+@pytest.mark.parametrize('changed', [None, True])
+def test_contract_cannot_erase_or_promote_the_existing_historical_source_label(changed):
+    candidate, contract, initial = synthetic_candidate()
+    contract['selection']['source_views'][0]['depolarization_removed'] = changed
     with pytest.raises(ValueError, match='selection'):
         request_points(candidate, contract, initial)
 

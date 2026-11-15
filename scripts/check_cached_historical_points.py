@@ -27,7 +27,7 @@ for mutation in ("figure", "rehashed_request_geometry", "rehashed_source_mapping
             if mutation == "rehashed_request_geometry":
                 data["points"][0]["kinematics"]["x"] += .001
             else:
-                data["points"][0]["original_depolarization_removed"] = False
+                data["points"][0]["original_depolarization_removed"] = None
             atomic_json(request, data)
             invocation["input_hashes"][str(request)] = file_hash(request)
         elif mutation == "rehashed_prediction":

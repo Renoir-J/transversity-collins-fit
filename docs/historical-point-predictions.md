@@ -23,8 +23,9 @@ extraction.
 
 Under the inherited **conditional massless, same-axis, fixed-y model**, the
 comparison is `A_C = DNN(mean_y) * F_UT / F_UU`, with
-`DNN(y) = 2(1-y)/(1+(1-y)^2)`. This is a declared approximation. The measured
-depolarization-status field remains unresolved. Low-Q² finite-mass/leptonic and
+`DNN(y) = 2(1-y)/(1+(1-y)^2)`. This is a declared approximation. The historical
+intake's existing `depolarization_removed=false` label is preserved; it does not
+establish the complete experimental correction chain. Low-Q² finite-mass/leptonic and
 spin-axis effects, the experimental acceptance average and the original treatment
 of model-systematic errors remain unverified. A function evaluated at reported
 means is not a demonstrated bin average.

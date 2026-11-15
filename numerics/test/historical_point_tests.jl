@@ -25,14 +25,14 @@ function historical_layout_fixture(directory)
                 "hadron"=>selected["hadron"],"charge"=>selected["charge"],"kinematics"=>deepcopy(means),
                 "measured"=>Dict(key=>deepcopy(row[key]) for key in ("central_value","statistical_error","systematic_components")),
                 "source_locator"=>deepcopy(row["locator"]),"source_remap"=>deepcopy(row["source_remap"]),
-                "original_depolarization_removed"=>nothing,
+                "original_depolarization_removed"=>false,
                 "source_blockers"=>["synthetic layout; no primary replay or experimental admission"]))
         end
         push!(views,Dict("id"=>selected["id"],"source_id"=>selected["id"],"process"=>"SIDIS","projection"=>"x",
             "publication"=>contract["selection"]["publication"],"target"=>"neutron","target_material"=>"3He",
             "target_result"=>contract["selection"]["target_result"],"source_sha256"=>selected["sha256"],
             "hadron"=>selected["hadron"],"source_observable"=>"AUTcollins","output_units"=>"fraction",
-            "production_ready"=>false,"historical_fit_ready"=>false,"depolarization_removed"=>nothing,
+            "production_ready"=>false,"historical_fit_ready"=>false,"depolarization_removed"=>false,
             "blockers"=>copy(last(points)["source_blockers"]),"points"=>rows,"excluded"=>[]))
     end
     fingerprint="explicitly_synthetic_layout_no_source_replay"
@@ -69,7 +69,7 @@ end
         @test [p["charge"] for p in request.data["points"]]==vcat(fill(1,4),fill(-1,4))
         @test request.data["points"][1]["measured"]["systematic_components"]==Dict("experimental"=>.002,"model"=>.003)
         @test request.data["points"][1]["measured"]["central_value"]==-.0125
-        @test all(p["original_depolarization_removed"]===nothing for p in request.data["points"])
+        @test all(p["original_depolarization_removed"]===false for p in request.data["points"])
         @test historical_request_valid(request)===request
         request.data["points"][1]["kinematics"]["x"]+=.001
         @test_throws ErrorException historical_request_valid(request)
@@ -83,7 +83,8 @@ end
         d->d["model_convention"]["normalization"]="DNN_removed",
         d->d["source_preparation"]["verification_kind"]="Julia_primary_replay_claim",
         d->pop!(d["points"]),d->reverse!(d["points"]),d->d["points"][1]["charge"]=-1,
-        d->d["points"][1]["target"]="proton",d->d["points"][1]["original_depolarization_removed"]=false,
+        d->d["points"][1]["target"]="proton",d->d["points"][1]["original_depolarization_removed"]=nothing,
+        d->d["points"][1]["original_depolarization_removed"]=true,
         d->d["points"][1]["kinematics"]["x"]+=.001,
         d->d["points"][1]["measured"]["central_value"]*=2,
         d->delete!(d["points"][1]["measured"]["systematic_components"],"model"),
