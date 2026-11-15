@@ -7,6 +7,7 @@ import sys
 from .data import normalize_table, plan_update, validate_dataset
 from .experimental import run_intake
 from .historical import run_historical_intake
+from .historical_points import prepare_request, run_point_job
 from .pipeline import Blocked, execute, production_readiness, root_path, run_stage
 from .provenance import read_json
 
@@ -27,6 +28,17 @@ def main():
     historical.add_argument("--output", default="data/normalized/historical")
     historical.add_argument("--seed-root")
     historical.add_argument("--offline", action="store_true")
+    historical_points = commands.add_parser("historical-point-request")
+    historical_points.add_argument("--manifest", default="config/historical-sources.json")
+    historical_points.add_argument("--cache", default="data/raw/historical")
+    historical_points.add_argument("--candidates", default="data/normalized/historical")
+    historical_points.add_argument("--output", required=True)
+    point_job = commands.add_parser("historical-point-predictions")
+    point_job.add_argument("--request", required=True)
+    point_job.add_argument("--native-build", required=True)
+    point_job.add_argument("--parton-build", required=True)
+    point_job.add_argument("--output", required=True)
+    point_job.add_argument("--julia", default="julia")
     validate = commands.add_parser("validate-data")
     validate.add_argument("data")
     normalize = commands.add_parser("normalize")
@@ -55,6 +67,10 @@ def main():
         elif args.command == "historical-intake":
             result = run_historical_intake(args.manifest, args.cache, args.output,
                                           seed_root=args.seed_root, offline=args.offline)
+        elif args.command == "historical-point-request":
+            result = prepare_request(args.manifest, args.cache, args.candidates, args.output)
+        elif args.command == "historical-point-predictions":
+            result = run_point_job(args.request, args.native_build, args.parton_build, args.output, julia=args.julia)
         elif args.command == "validate-data":
             result = validate_dataset(read_json(args.data))
         elif args.command == "normalize":

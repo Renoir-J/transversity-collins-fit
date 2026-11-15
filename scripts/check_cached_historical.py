@@ -1,5 +1,6 @@
 """Check cached candidate integrity without authorizing a fit."""
 import sys
+import os
 from pathlib import Path
 
 from collinsflow.historical import verify_historical_intake
@@ -8,8 +9,9 @@ from collinsflow.provenance import atomic_json, file_hash, read_json
 manifest, cache, output = sys.argv[1:]
 verify_historical_intake(manifest, cache, output)
 path = Path(output) / "candidates.json"
-original = path.read_bytes()
 report_path = Path(output) / "report.json"
+timestamps = {p: (p.stat().st_atime_ns, p.stat().st_mtime_ns) for p in (path, report_path)}
+original = path.read_bytes()
 original_report = report_path.read_bytes()
 for mutation in ("value", "rehashed_value", "rehashed_angular_definition", "primary_decision",
                  "rehashed_proton_mean_provenance", "rehashed_proton_unbounded_bin", "proton_primary_decision"):
@@ -46,6 +48,8 @@ for mutation in ("value", "rehashed_value", "rehashed_angular_definition", "prim
     finally:
         path.write_bytes(original)
         report_path.write_bytes(original_report)
+        for p in (path, report_path):
+            os.utime(p, ns=timestamps[p])
     if not rejected:
         raise ValueError("cached historical intake accepted changed "+mutation)
     verify_historical_intake(manifest, cache, output)
