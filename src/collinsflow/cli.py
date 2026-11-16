@@ -11,6 +11,7 @@ from .historical_points import prepare_request, run_point_job
 from . import historical_sia_points
 from . import historical_sia_integrals
 from . import historical_sidis_points
+from . import historical_sidis_pilot
 from .pipeline import Blocked, execute, production_readiness, root_path, run_stage
 from .provenance import read_json
 
@@ -71,6 +72,26 @@ def main():
     sidis_points.add_argument("--candidates", required=True)
     sidis_points.add_argument("--primary-cache", required=True)
     sidis_points.add_argument("--output", required=True)
+    sidis_primary = commands.add_parser("historical-sidis-primary")
+    sidis_primary.add_argument("--manifest", default="config/historical-sidis-primary-sources.json")
+    sidis_primary.add_argument("--cache", default="data/raw/historical-sidis-primary")
+    sidis_primary.add_argument("--output", required=True)
+    sidis_primary.add_argument("--offline", action="store_true")
+    sidis_pilot = commands.add_parser("historical-sidis-pilot")
+    sidis_pilot.add_argument("--request", required=True)
+    sidis_pilot.add_argument("--case", required=True)
+    sidis_pilot.add_argument("--native-build", required=True)
+    sidis_pilot.add_argument("--parton-build", required=True)
+    sidis_pilot.add_argument("--output", required=True)
+    sidis_pilot.add_argument("--julia", default="julia")
+    sidis_pilot.add_argument("--time-binary", default="/usr/bin/time")
+    sidis_ledger = commands.add_parser("historical-sidis-pilot-ledger")
+    sidis_ledger.add_argument("--request", required=True)
+    sidis_ledger.add_argument("--run-dir", required=True)
+    sidis_ledger.add_argument("--output", required=True)
+    sidis_ledger.add_argument("--julia", default="julia")
+    sidis_ledger.add_argument("--time-binary", default="/usr/bin/time")
+    sidis_ledger.add_argument("--verify", action="store_true")
     validate = commands.add_parser("validate-data")
     validate.add_argument("data")
     normalize = commands.add_parser("normalize")
@@ -115,6 +136,20 @@ def main():
         elif args.command == "historical-sidis-point-request":
             result = historical_sidis_points.prepare_request(args.manifest, args.cache, args.candidates,
                 args.primary_cache, args.output)
+        elif args.command == "historical-sidis-primary":
+            result = historical_sidis_pilot.prepare_primary_cache(args.manifest, args.cache, args.output, offline=args.offline)
+        elif args.command == "historical-sidis-pilot":
+            result = historical_sidis_pilot.run_pilot_job(args.request, args.case, args.native_build, args.parton_build,
+                args.output, julia=args.julia, time_binary=args.time_binary)
+        elif args.command == "historical-sidis-pilot-ledger":
+            if args.verify:
+                result = historical_sidis_pilot.verify_pilot_ledger(args.request, args.run_dir, args.output,
+                    julia=args.julia, time_binary=args.time_binary)
+            else:
+                ledger = historical_sidis_pilot.build_pilot_ledger(args.request, args.run_dir, args.output,
+                    julia=args.julia, time_binary=args.time_binary)
+                result = {"status": ledger["status"], "scope": ledger["scope"], "pilot_cases": len(ledger["pilot_cases"]),
+                          **{k: False for k in historical_sidis_pilot.FALSE_FLAGS}}
         elif args.command == "validate-data":
             result = validate_dataset(read_json(args.data))
         elif args.command == "normalize":
