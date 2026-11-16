@@ -10,6 +10,7 @@ from .historical import run_historical_intake
 from .historical_points import prepare_request, run_point_job
 from . import historical_sia_points
 from . import historical_sia_integrals
+from . import historical_sidis_points
 from .pipeline import Blocked, execute, production_readiness, root_path, run_stage
 from .provenance import read_json
 
@@ -64,6 +65,12 @@ def main():
     sia_integral_job.add_argument("--output", required=True)
     sia_integral_job.add_argument("--julia", default="julia")
     sia_integral_job.add_argument("--timeout-seconds", type=float)
+    sidis_points = commands.add_parser("historical-sidis-point-request")
+    sidis_points.add_argument("--manifest", default="config/historical-sources.json")
+    sidis_points.add_argument("--cache", default="data/raw/historical")
+    sidis_points.add_argument("--candidates", required=True)
+    sidis_points.add_argument("--primary-cache", required=True)
+    sidis_points.add_argument("--output", required=True)
     validate = commands.add_parser("validate-data")
     validate.add_argument("data")
     normalize = commands.add_parser("normalize")
@@ -105,6 +112,9 @@ def main():
         elif args.command == "historical-sia-integral-predictions":
             result = historical_sia_integrals.run_integral_job(args.request, args.native_build, args.parton_build,
                 args.output, julia=args.julia, timeout_seconds=args.timeout_seconds)
+        elif args.command == "historical-sidis-point-request":
+            result = historical_sidis_points.prepare_request(args.manifest, args.cache, args.candidates,
+                args.primary_cache, args.output)
         elif args.command == "validate-data":
             result = validate_dataset(read_json(args.data))
         elif args.command == "normalize":

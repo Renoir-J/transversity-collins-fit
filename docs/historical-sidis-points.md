@@ -1,6 +1,6 @@
 # Historical SIDIS fixed-mean diagnostic contract
 
-`KPSY-HISTORICAL-SIDIS-POINT-001` specifies the remaining 132 historical SIDIS amplitudes before their adapter or new physical predictions. It covers all 18 HERMES/COMPASS proton/deuteron views; the already separate eight Hall A neutron points stay outside this selection. The contract and separate nine-file primary convention manifest are prospective. No new request, numerical adapter, fit or experimental admission is implemented by these files.
+`KPSY-HISTORICAL-SIDIS-POINT-001` was frozen at `c2d2281` before this source/model implementation. It covers the remaining 132 historical SIDIS amplitudes in all 18 HERMES/COMPASS proton/deuteron views; the already separate eight Hall A neutron points stay outside this selection. Source preparation, strict Julia request loading and composition of existing Julia observable plans are implemented. A complete numerical producer/auditor, resource-calibrated full-coverage workflow, physical predictions and fitting remain pending. The frozen contract and nine-file primary manifest are unchanged.
 
 The verified source inventory contains HERMES 40, COMPASS proton 46 and COMPASS deuteron 46 retained points, with all 14 existing reported-P exclusions preserved. There are 132 distinct target/x/z/Q2/P source tuples. Charge or projection labels do not authorize merging unequal means into a shared context. All source values, uncertainties, labels, primary/legacy unequal digits and cuts remain unchanged.
 
@@ -17,3 +17,19 @@ The four native/matching/radial levels and minimum third-level acceptance retain
 Separate explicitly synthetic Fourier/target/stencil controls check the source mapping; they cannot authorize production. The eventual whole-job workflow must retain failed and interrupted evidence, revalidate source/numerical caches and reject forged completion markers. No numerical or performance PASS is established by this contract. Complete Julia jobs may be sharded only with deterministic disjoint identities, all 132 points, the same globally accepted native level and an independent complete ledger. A partial receipt cannot replace the full result.
 
 HERMES statistical/systematic components remain separate. Deuteron systematics are unquantified. All 46 proton statistical errors remain null because the source Sigma composition is unresolved. Projection correlations, covariance, acceptance, original code and earlier paper-center/coupling FAILs remain open. No likelihood, chi2, pulls, refit, tensor charge or coverage is produced. B0-B4/V1, uncertainty and publication remain the full project objective.
+
+## Source request and Julia composition
+
+After the existing complete historical intake, prepare the source-only request:
+
+```sh
+python -m collinsflow.cli historical-sidis-point-request \
+  --cache data/raw/historical --candidates data/normalized/historical \
+  --primary-cache data/raw/historical-sidis-primary --output runs/sidis-source/request.json
+```
+
+All nine checksum-locked convention files must already be present in the separate primary cache. Missing, changed or nearest-version bytes are rejected; no synthetic fallback is available. This command replays historical source preparation and preserves the entire retained source row, all selected-view metadata and exclusions, original unresolved labels, error composition and unequal means. The Python verifier rebuilds the complete request without changing its bytes. There is no theory calculation or numerical callback in this source job.
+
+`load_historical_sidis_point_request` separately checks the current contract, parents, primary manifest, nine pinned primary files, candidate/report bindings and every represented point. The raw table replay remains an explicit Python preparation attestation; Julia loading is not independent experimental transcription. `historical_sidis_point_model` requires all 132 exact target/x/z/Q2/P contexts and uses unchanged Julia structure functions with one final source phase/DNN factor. It never consumes measurements or errors in parameter evaluation. `historical_sidis_point_observable` identifies one member of the full request for a complete Julia pilot/shard job; its existence certifies no full-coverage result.
+
+Explicitly synthetic unit controls check all 132 source factors and all 13 Jacobian coordinates against separately summed proton/neutron yields, reject an average of asymmetries, and retain unknown errors and all exclusions. Their invented representation bypasses raw loading only inside the unit fixture; the strict source loader rejects it. These tests do not execute physical predictions, HVP references, the frozen full132 refinement/tail policy, cache controls or performance/coverage gates. Actual SIDIS payload/RSS and complete-job budgets still require a measured pilot before the full workflow is launched.
