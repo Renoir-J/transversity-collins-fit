@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "revision": 2,
+  "previous_contract_commit": "b21965f1e6b932f72558312db9251b39af66e51b",
+  "revision_reason": "Correct the request representation of the existing HallA historical source label: both locked candidate views already have depolarization_removed=false, not null. Preserve that label without promoting experimental acceptance/correction-chain validation. The fixed parameters, conditional prediction formula and all numerical acceptance thresholds remain unchanged. No real-point numerical prediction preceded this correction.",
+  "id": "KPSY-HISTORICAL-POINT-001",
+  "scope": "historical_reconstructed_point_prediction_diagnostic",
+  "theory_scope": "reconstructed_theory",
+  "observation_scope": "historical_benchmark_candidate",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "purpose": "Connect verified real historical source rows to Julia point predictions at the literal published parameter vector, as a prerequisite to a real-data fitting executor. Numerical/source validation of this diagnostic does not approve an experimental likelihood or bin-average interpretation.",
+  "selection": {
+    "publication": "1106.0363v4",
+    "target": "neutron",
+    "target_result": "published extracted neutron; no second nuclear extraction",
+    "source_views": [
+      {"id": "KPSY15_SIDIS_3002", "hadron": "pi+", "charge": 1, "points": 4, "depolarization_removed": false, "sha256": "bb4526a9f4835977f3d3af5f60ecacff9b43fc547db540a912bd7dcc912c8881"},
+      {"id": "KPSY15_SIDIS_3001", "hadron": "pi-", "charge": -1, "points": 4, "depolarization_removed": false, "sha256": "7a768787c749c41ddcd816f13696272b0da0c0f483c5ffc31c1b5e19249dd63c"}
+    ],
+    "total_points": 8,
+    "kinematics": "Use each primary-checked reported x,y,z,Q2,pT mean exactly, with no new cuts or identities imposed on products of means. Other historical views remain candidates and are not silently selected or dropped from a requested job.",
+    "source_integrity": "Rebuild and verify the complete current historical intake before preparing a request; bind raw inputs, primary sources, candidate/report, contracts, code fingerprint, source rows and exact point order. Rebuild requests again when checking cached products."
+  },
+  "primary_definition": {
+    "url": "https://arxiv.org/abs/1106.0363v4",
+    "archive_sha256": "18c47dd93bb110a5dc6acf45cfc1feebe37f03357548719be8dff86aa2e151f5",
+    "member": "jlab_e06010_prl_sub.tex",
+    "member_sha256": "9281833143a2dfb678de220c86f9db96472f2c3a1951588d443123aa75fec6fc",
+    "locations": "Active Eq1/eq:asy and Trento-angle definition, source lines463-480; separate statistical/experimental/model errors,1102-1109; effective-polarization extraction and tabulated neutron results,1123-1169",
+    "source_fact": "The polarization-normalized yield asymmetry has Collins coefficient multiplying sin(phi_h+phi_S). The selected data are the already extracted neutron moments.",
+    "conditional_mapping": "Under the existing massless, same-axis, fixed-y KPSY approximation, N_up/down=1+/-P*DNN(y)*R*sin(phi_h+phi_S) gives A_C=DNN(y)*R. This is a conditional theory-to-source comparison, not a verified experimental acceptance average or complete correction-chain audit."
+  },
+  "prediction": {
+    "parent_contracts": ["config/initial-contract.json", "config/polarized-process-contract.json", "config/leptonic-observable-contract.json", "config/sidis-convention-contract.json"],
+    "parameters": "Literal config/initial-contract.json published_parameters, in its unchanged13-coordinate order. These rounded Table1 values are fixed inputs, not recovered optimizer states or fitted parameters.",
+    "phase": "sin_phi_sum",
+    "normalization": "fixed_y_DNN_included",
+    "model_y": "the reported mean y, explicitly treated as fixed",
+    "geometry": "SIDIS fixed reported means and existing pi+/pi- charge maps; NucleonTarget(:neutron) uses the inherited proton/neutron isospin prescription",
+    "formula": "A=DNN(y)*Collins/UU with DNN(y)=2*(1-y)/(1+(1-y)^2). Apply the phase/DNN factor to the predicted observable once; preserve all measured scalars unchanged.",
+    "source_mapping_status": "conditional_historical_assumption_not_experimental_average_admission",
+    "data_convention_fields": "Preserve each selected historical candidate's existing depolarization_removed=false label and all source blockers. This configured source label does not validate the complete experimental correction/acceptance chain; the fixed-mean model mapping remains conditional.",
+    "context_reuse": "Reuse native/provider preparation only for exactly equal full fixed geometry/target/settings. The two pion charges may share a pi+ basis through with_pion_charges. Preserve every requested point identifier and source row; no rounding-based grouping or parameter-response cache.",
+    "inputs": "Pinned CT10/DSSV08/DSS14 with strict Q0 samples and explicitly labeled reference extrapolation at unsupported Fourier scales; verify build hashes and require the retained bridge source to match the current project bridge before use.",
+    "loop": "Julia owns prepared predictions, fixed-parameter values, comparisons and residual arithmetic. Python/Snakemake schedules whole jobs and renders completed outputs. No provider/native/Python/language-model callback inside a parameter evaluation."
+  },
+  "numerical_policy": {
+    "relative_floor": 1e-8,
+    "physical_value_max_scaled": 1e-4,
+    "observable_algebra_max_scaled": 1e-12,
+    "source_projection_max_scaled": 1e-10,
+    "source_projection_reference_bits": 256,
+    "refinements": [
+      {"matching_order": 4, "radial_order": 8, "intervals": 512},
+      {"matching_order": 8, "radial_order": 16, "intervals": 1024},
+      {"matching_order": 16, "radial_order": 32, "intervals": 2048},
+      {"matching_order": 32, "radial_order": 32, "intervals": 4096}
+    ],
+    "minimum_refinement_level": 3,
+    "radial_refinement_bound_inverse_GeV": 24,
+    "radial_bounds_inverse_GeV": [12,24,32],
+    "acceptance": "At least three frozen joint native/matching/radial levels are required. Every selected point's UU, signed Collins numerator and final amplitude must meet the unchanged1e-4 adjacent-level target. Compare the final24-to32 radial extension at the same target; retain all coarse values and failures. Exhausting the declared ladder is FAIL.",
+    "independent_reference": "At the final fixed native rows, use the existing ObservableReference separate scalar charge/CSS/Bessel assembly to compare every requested point at1e-4. This shares native/source rows and initial-function definitions; it is not an independent evolution solution. Parent Mellin/native/input checks remain separate.",
+    "source_convention_check": "Use256-bit independent two-angle Fourier projection of explicitly synthetic positive counts under the primary Eq1 yield definition, testing both signs and the actual selected y values. Use P=1/2, R=+/-1/8 and nonzero Sivers coefficient1/16, uniform mathematical phi_h/phi_S integration over[0,2pi]^2 and normalization1/(2pi^2). The source-definition fixture is separate from the real pinned-input calculation and experimental acceptance. Retain wrong-phase, omitted/repeated-DNN and factor2 counterfactuals; do not infer convention from measured signs.",
+    "fixed_value_controls": "Check algebra against the context's signed numerator/positive denominator, global transversity-Collins sign invariance and exact charge reuse. No asymmetry clamp or absolute-value numerator.",
+    "derivative_scope": "The current job reports fixed-parameter predictions only. It creates no new production-gradient/performance/coverage certificate; inherited all-parameter derivative validation remains separate."
+  },
+  "observations_and_products": {
+    "errors": "Preserve statistical, experimental-systematic and model-systematic source components separately. Construct no covariance, combined error, normalization nuisance, chi2, pulls or likelihood.",
+    "residual": "An optional unweighted observed-minus-predicted difference is a diagnostic scalar, not a statistical test or fit.",
+    "artifacts": "Source-bound request, complete Julia diagnostic report with raw refinement/reference operands, and a clearly labeled fixed-parameter theory/data comparison. Source data and generated outputs remain out of Git.",
+    "numerical_cache": "No serialized production numerical cache or fit admission. Current inputs/source/request/output hashes and source-derived request reconstruction must be checked on cached workflow products; rehashing altered provenance does not approve it."
+  },
+  "validation_policy": {
+    "controls": ["missing/changed primary or raw source", "candidate/request rehashing and changed source geometry", "point omission/order/charge/target errors", "production/synthetic scope substitution", "changed fixed parameters or model convention", "data/uncertainty modification", "changed build/contract/source bytes", "unresolved source conventions promoted by a model choice", "numerical/resource failure retained"],
+    "required_checks": ["python -m pytest", "python scripts/plan_workflow.py validate", "Julia tests", "Linux Snakemake closure", "real-source historical intake and diagnostic pipeline"],
+    "status_policy": "Only the declared source/numerical diagnostic can pass. Absent, stale or failed required checks remain FAIL. No synthetic fixture, hypothetical mapping or partial source note authorizes a real-data fit or production gate."
+  },
+  "limitations": [
+    "Eight-point HallA historical diagnostic only; the complete262-point historical fit and updated global fits remain unfinished",
+    "Low-Q2 finite-mass/leptonic corrections, beam/photon spin treatment and joint experimental acceptance averages remain unresolved",
+    "DNN(mean(y)) need not equal the appropriate measured average; the selected model is an explicit approximation",
+    "Original KPSY treatment of HallA model-systematic errors, covariance and exact author optimizer states remain unknown",
+    "Homogeneous Collins evolution and pinned-input extrapolation limitations remain; original author code/modified HOPPET remain unlocated",
+    "Existing printed-center benchmark FAIL results and production prerequisites remain unchanged",
+    "No fit, experimental admission, tensor-charge extraction, uncertainty interval, global optimum, production performance or coverage claim"
+  ]
+}
