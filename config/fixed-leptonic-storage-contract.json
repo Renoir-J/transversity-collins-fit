@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-FIXED-LEPTONIC-STORAGE-001",
+  "scope": "fixed_leptonic_context_storage_integrity",
+  "theory_scope": "reconstructed_theory",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "accepted_prediction_diagnostic": false,
+  "accepted_fitting_gate": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "equation_change": false,
+  "purpose": "Persist parameter-independent prepared SIDIS/SIA contexts for later Julia-owned evaluation and recovery. This component cannot admit a physical prediction, likelihood, fit or production job.",
+  "base_commit": "bec12db0d65ed67a74de80bca949e21b80a99757",
+  "parent_sha256": {
+    "config/numerical-cache-contract.json": "c9cb983416ec210f8282cd1d66ed3cf7544f4196ade4990481cf1043fbe56481",
+    "config/polarized-process-contract.json": "829e5474ce7f51e7b9701ce14f449d66e49d12702d85b0f3e184a8de9bc874a9",
+    "config/initial-contract.json": "c782b979c5b9a1ff3a94072433f7307e8d922976c48e3036abd9de6118ac9ff7",
+    "config/hoppet-point-contract.json": "7a94dfcf43127023b3f79b60e23f930ab106ae18e91ec130f741bee06f9eaaf2"
+  },
+  "allowed_root": "PolarizedLeptonicPlan",
+  "allowed_components": [
+    "AsymptoticTwoLoopCoupling",
+    "KPSYCSS",
+    "RadialRule",
+    "LeptonicPlan",
+    "NucleonTarget",
+    "PolarizedInitialSamples",
+    "HoppetMatchingPlan",
+    "HoppetPointBlock",
+    "FixedRowMatrix"
+  ],
+  "contents": "Fixed grids, source bases/logarithms, detached matching rows, quadrature/CSS arrays, fixed unpolarized denominator, target/charge and provenance metadata. No fitted parameter vector, prediction, gradient, HVP, optimization state, replica or native/provider handle.",
+  "format": {
+    "id": "KPSY-FIXED-CONTEXT-BINARY-001",
+    "manifest_filename": "fixed-context-manifest.json",
+    "payload_filename": "fixed-context-payload.bin",
+    "encoding": "Bounded JSON with an explicit whitelisted typed object table plus one native-endian primitive-array payload. Preserve full Float64 bits, scalar types, dimensions and repeated row-object aliases. No eval, executable serialization, pickle or arbitrary type lookup.",
+    "maximum_manifest_bytes": 16777216,
+    "maximum_payload_bytes": 1073741824,
+    "maximum_objects": 100000,
+    "maximum_nesting_depth": 64,
+    "maximum_array_dimensions": 2,
+    "supported_primitive_types": [
+      "Float64",
+      "Int64",
+      "UInt64",
+      "Bool"
+    ],
+    "platform": "Require matching Julia version, 64-bit integer layout and explicit native-endian marker. Cross-version or cross-endian conversion is not implemented.",
+    "completion": "Use a fresh destination. Hash and validate the complete payload before publishing the final manifest; partial files have no accepted receipt. Preserve failed writes.",
+    "reader": "Require an out-of-band expected manifest SHA256 and the exact expected bindings/input kind. Verify manifest, payload, all array spans/types/dimensions, alias references, reconstructed component signatures and complete logical fixed-data identity. Load owned read-only row storage; public mutation guards remain active."
+  },
+  "required_binding_fields": [
+    "source_fingerprint",
+    "physics_contract_bundle_sha256",
+    "native_build_sha256",
+    "parton_build_sha256",
+    "raw_source_binding_sha256",
+    "geometry_binding_sha256",
+    "storage_contract_sha256"
+  ],
+  "input_kind": "The caller must explicitly select analytic or pinned_inputs; both initial sample legs must match. Analytic/synthetic storage evidence cannot be read as pinned physical input.",
+  "preservation": "Keep all signs, masses/z factors, Fourier measures, matching/evolution, range continuation, cuts, angular definitions, targets, data/error fields, likelihoods, bounds and numerical acceptance policies unchanged. The existing full132 frozen job policy continues to prohibit new query caches; this isolated component is not inserted into those running jobs.",
+  "loop_ownership": "Julia writes and reads numerical contexts and owns all predictions/derivatives/optimization. Python/Snakemake schedules only complete jobs. Load/reuse fixed contexts within Julia; never call a model or a Python callback inside numerical evaluation.",
+  "validation": {
+    "software": "Linux Python tests, workflow-plan validation, complete Julia tests and Snakemake closure/cache remain required after implementation. Small analytic fixtures are explicitly synthetic.",
+    "roundtrip": "Require identical fixed-data signatures, every array bit, row-alias structure, owned-row mutation behavior and bitwise identical Float64 values, all13 gradients and directional HVPs before/after reload. Preserve the SIA first-six zero columns and target/charge composition.",
+    "counterfactuals": "Reject changed/truncated payload, changed manifest, wrong external digest or bindings, mismatched input kind/version/endian, unsupported types, nonfinite data, invalid/overlapping array spans, dimensions, missing objects, broken aliases and production claims. Preserve each original failed attempt.",
+    "physical_cases": [
+      "KPSY15_SIDIS_3000:r2",
+      "KPSY15_SIDIS_3025:r2",
+      "KPSY15_SIDIS_4000:r2",
+      "KPSY15_SIA_1000:r2"
+    ],
+    "physical_case_selection": "Use freshly source-bound requests for the same pinned historical rows and literal published13 parameters. SIDIS covers HERMES proton, COMPASS proton and free-isoscalar deuteron; SIA covers source hadron2 UL/UC composition. These four storage roundtrips are not all132 or all72 scientific validation.",
+    "native_setting": {
+      "matching_order": 32,
+      "radial_order": 32,
+      "intervals": 4096,
+      "bound_inverse_GeV": 24
+    },
+    "physical_job_resources": {
+      "maximum_parallel_cases": 1,
+      "Julia_threads": 1,
+      "minimum_available_memory_bytes": 8589934592,
+      "maximum_observed_direct_child_RSS_KiB": 3145728,
+      "whole_producer_auditor_time_budget_seconds": 3600
+    },
+    "resources": "Keep cold preparation, writing, verification, loading and warm evaluation timings separate. Record whole-command resources and interruptions; unavailable prerequisites remain unaccepted. No production throughput, full-fit ETA, parameter-domain accuracy or G2PERF claim follows."
+  },
+  "limitations": [
+    "The original interrupted diagnostic attempts remain incomplete and cannot authorize replacement attempts.",
+    "Source covariance/overlap, author-code and unrounded-state limitations and existing scientific benchmark failures remain unresolved.",
+    "Storage identity is not independent evolution or derivative-accuracy validation, parameter-domain closure or uncertainty coverage.",
+    "No STAR context, bounded-fit execution, data admission or parameter-response cache is implemented by this format.",
+    "B0 historical262, B1 updated SIDIS/SIA, B2/B3 STAR200/510, B4 paired full-x lattice, V1 robustness, uncertainty and publication all remain required."
+  ]
+}

@@ -1,0 +1,15 @@
+# Fixed leptonic context storage
+
+This prospective contract is frozen before implementation and physical roundtrip jobs. The branch starts from `bec12db`; [the contract](../config/fixed-leptonic-storage-contract.json) binds the unchanged numerical-cache, polarized-process, initial-family and detached-row contracts.
+
+The earlier three-case source pilot spent roughly 575-593 seconds preparing each finest fixed context, while its warm gradient calls took roughly 0.06-0.22 seconds in an uncontrolled shared workload. These are retained observations from the parent implementation, not a fitting-throughput estimate. A later Linux session loss interrupted the full132 and72 jobs; their in-memory contexts were not persisted. The original outputs remain retained, and replacement attempts use unchanged frozen numerical code.
+
+The storage component will save parameter-independent `PolarizedLeptonicPlan` objects as a typed manifest and one binary payload. It will preserve source grids/bases, detached native rows, quadrature/CSS arrays, target/charge metadata and all Float64 bits, including repeated row-object aliases. It will restore owned read-only rows. Fitted parameters, parameter responses, gradients, replicas, native library handles and provider objects are excluded.
+
+The loader must receive an external expected manifest digest, all seven current binding digests and an explicit initial-input kind. It must verify every payload byte and array span before returning a validated context. The format uses the producer's Julia version and native byte order; it has no cross-platform conversion or executable deserialization. Interrupted or altered files stay unaccepted.
+
+Julia owns writing, reading, prediction, differentiation and later optimization. Python/Snakemake schedules complete jobs. Future Julia fitting may load fixed contexts one geometry at a time to avoid retaining every context in memory; its I/O cost, peak memory and full-fit performance still require measurement. This component is not inserted into the currently frozen full132 policy, which continues to prohibit new query caches.
+
+Implementation must pass the required Linux Python/plan/Julia/closure checks and meaningful file-corruption, binding, type, shape, alias and scope controls. Small analytic fixtures are synthetic. The four prospectively selected physical rows cover HERMES proton, COMPASS proton, free-isoscalar deuteron and BaBar hadron2 UL/UC. Each physical producer/auditor pair has a one-hour budget, a3GiB direct-child RSS limit, an8GiB available-memory prerequisite and one Julia thread. Compare every retained array and the fixed-center value, all13 gradient components and directional HVP bitwise across cold and reloaded contexts.
+
+These checks establish storage identity only. They do not establish independent evolution, parameter-domain accuracy, accepted historical diagnostics, data covariance, fitting, production performance or interval coverage. Existing paper-center failures and source/range/acceptance limitations remain explicit. Every B0-B4/V1, uncertainty and publication deliverable remains required.
