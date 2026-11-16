@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HISTORICAL-SIDIS-COMPLETE-JOBS-001",
+  "scope": "historical_reconstructed_sidis_complete_point_jobs",
+  "theory_scope": "reconstructed_theory",
+  "observation_scope": "historical_benchmark_candidate",
+  "parent_contract": "config/historical-sidis-point-contract.json",
+  "parent_contract_sha256": "831d4f3435a1eea61b0ca664b7b61b1fa56b19f930d0e516d7e23bcb7c61ba45",
+  "resource_basis": {
+    "source_commit": "5f6f59a3aa3b678a6a6d6ae7836bdc9a42b32247",
+    "pilot_policy_sha256": "395854b73f595fb361141f3993320ba5c127ff313dc0943e261346ae9ea19f4a",
+    "independent_measurement_review_sha256": "c4b4fa309b645bf78b5900b3b9e25b208c8a5f0e70ea6efd01c4114f47cdb3e3",
+    "scope": "Three source-order native-level4 Float64 value/AD resource cases and their complete cached workflow; run products remain outside git.",
+    "unmeasured_costs": "Full physical256-bit independent Jacobian and inward-reference workloads were not executed in the resource pilot. Their initial larger engineering budgets below are prospective limits, not calibrated throughput or G2PERF acceptance."
+  },
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "accepted_prediction_diagnostic": false,
+  "accepted_fitting_gate": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "all132_coverage_verified": false,
+  "execution": {
+    "numerical_owner": "Julia",
+    "orchestrator": "Python/Snakemake complete jobs only",
+    "source_points": 132,
+    "point_order": "Exact order of the fully verified source request; p0001..p0132 are scheduling indices, never replacements for source IDs or rounded geometries.",
+    "maximum_parallel_jobs_per_checkout": 1,
+    "threads": {"JULIA_NUM_THREADS": 1, "OPENBLAS_NUM_THREADS": 1, "OMP_NUM_THREADS": 1},
+    "parameter_or_response_or_query_cache_added": false,
+    "model_or_Python_or_provider_or_native_callbacks_in_parameter_evaluation": false,
+    "fixed_geometry_preparation_only": "Existing pinned native/provider calls may prepare each fixed geometry before Julia-only parameter evaluation. Hold one geometry at a time; discard it before preparing the next."
+  },
+  "phases": {
+    "native123": "One complete Julia producer/auditor pair per source point records all first3 declared native levels at bound24. Coarse target misses remain unaccepted observations. A global Julia decision requires every132 source identity before selecting level3 or requesting level4.",
+    "native4": "Only when global level3 misses, run every132 point at declared level4. A global Julia decision accepts one common level for all132 or fails after exhausting the unchanged ladder.",
+    "tailref123": "At the common native level, each point job prepares bound12 then discards that context, prepares bound32, checks the bound24-to32 tail, independent scalar composition, all13 candidate gradients/HVP, independent256-bit Jacobian and all first3 declared inward reference steps. Keep full decimal256-bit value/Jacobian samples and every coarse miss.",
+    "reference4": "Only when the global third-step derivative decision misses, run every132 point at the fourth declared step, reprepare bound32 at the common native level and bind its adjacent third-step operands to the original point report. No threshold, parameter, native level or source identity changes.",
+    "global_derivative": "Use one common third or fourth derivative refinement level after all132/all13 candidate/reference/inward and adjacent comparisons meet the unchanged contract. A subset, missing sample or mixed native level cannot authorize the complete diagnostic.",
+    "source_math": "Separate explicitly synthetic positive-count two-angle Fourier, target-sum and closed-stencil controls use the actual source metadata and unchanged scientific policy. They cannot substitute for any physical point/reference record.",
+    "final": "An independent complete Julia reader validates the exact132 coverage, all original job resources/source/build/code/output bindings, current arithmetic and the common native/derivative decisions before comparison CSV and separate experiment figures are generated."
+  },
+  "resources": {
+    "measurement": "Retain GNU time direct-child maximum RSS, wall/user/system time and child exit for complete commands; separately retain wrapper outcome, interruption, monotonic duration, tool hash/version and Julia phase observations. This is not simultaneous process-tree peak RSS.",
+    "native123": {"whole_Julia_jobs_time_budget_seconds": 3600, "maximum_command_RSS_KiB": 3145728, "minimum_available_memory_bytes": 4294967296},
+    "native4": {"whole_Julia_jobs_time_budget_seconds": 3600, "maximum_command_RSS_KiB": 3145728, "minimum_available_memory_bytes": 4294967296},
+    "tailref123": {"whole_Julia_jobs_time_budget_seconds": 28800, "maximum_command_RSS_KiB": 6291456, "minimum_available_memory_bytes": 8589934592},
+    "reference4": {"whole_Julia_jobs_time_budget_seconds": 14400, "maximum_command_RSS_KiB": 6291456, "minimum_available_memory_bytes": 8589934592},
+    "global": {"whole_Julia_jobs_time_budget_seconds": 3600, "maximum_command_RSS_KiB": 3145728, "minimum_available_memory_bytes": 4294967296},
+    "exhaustion_or_missing_measurement_is_FAIL": true,
+    "cooperative_child_exit0_after_interruption_is_success": false,
+    "RSS_limits_are_observed_command_limits_not_hard_OS_reservations": true
+  },
+  "retention": {
+    "fresh_outputs_required": true,
+    "initial_sentinel_role": "initial_sentinel_not_an_executed_failure",
+    "atomic_progress_and_original_failures_preserved": true,
+    "cached_marker_alone_is_sufficient": false,
+    "current_source_and_independent_saved_arithmetic_review_required_on_cache": true,
+    "cached_metadata_may_select_executable": false,
+    "synthetic_control_may_authorize_physical_or_production_results": false
+  },
+  "reporting": {
+    "fixed_center_only": true,
+    "scientific_tolerances_or_parameter_values_changed": false,
+    "native_evolution_independently_reimplemented": false,
+    "physical_gradient_reference_scope": "Independent generic fixed-row assembly and256-bit arithmetic; native rows and initial functions remain shared.",
+    "likelihood_or_covariance_or_fit_constructed": false,
+    "source_errors_combined_or_missing_covariance_filled": false,
+    "acceptance": "Complete fixed-center132-point reconstructed-theory diagnostic only, after every required physical and source-math check. No fitting, production, full-x moment, performance or coverage approval.",
+    "limitations": "Preserve every parent missing-code, rounded-state, source-range, source-phase/transcription, target-model, covariance/overlap, acceptance and existing scientific benchmark FAIL limitation."
+  }
+}
