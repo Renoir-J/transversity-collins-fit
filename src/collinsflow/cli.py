@@ -9,6 +9,7 @@ from .experimental import run_intake
 from .historical import run_historical_intake
 from .historical_points import prepare_request, run_point_job
 from . import historical_sia_points
+from . import historical_sia_integrals
 from .pipeline import Blocked, execute, production_readiness, root_path, run_stage
 from .provenance import read_json
 
@@ -51,6 +52,18 @@ def main():
     sia_job.add_argument("--parton-build", required=True)
     sia_job.add_argument("--output", required=True)
     sia_job.add_argument("--julia", default="julia")
+    sia_integrals = commands.add_parser("historical-sia-integral-request")
+    sia_integrals.add_argument("--manifest", default="config/historical-sources.json")
+    sia_integrals.add_argument("--cache", default="data/raw/historical")
+    sia_integrals.add_argument("--candidates", required=True)
+    sia_integrals.add_argument("--output", required=True)
+    sia_integral_job = commands.add_parser("historical-sia-integral-predictions")
+    sia_integral_job.add_argument("--request", required=True)
+    sia_integral_job.add_argument("--native-build", required=True)
+    sia_integral_job.add_argument("--parton-build", required=True)
+    sia_integral_job.add_argument("--output", required=True)
+    sia_integral_job.add_argument("--julia", default="julia")
+    sia_integral_job.add_argument("--timeout-seconds", type=float)
     validate = commands.add_parser("validate-data")
     validate.add_argument("data")
     normalize = commands.add_parser("normalize")
@@ -87,6 +100,11 @@ def main():
             result = historical_sia_points.prepare_request(args.manifest, args.cache, args.candidates, args.output)
         elif args.command == "historical-sia-point-predictions":
             result = historical_sia_points.run_point_job(args.request, args.native_build, args.parton_build, args.output, julia=args.julia)
+        elif args.command == "historical-sia-integral-request":
+            result = historical_sia_integrals.prepare_request(args.manifest, args.cache, args.candidates, args.output)
+        elif args.command == "historical-sia-integral-predictions":
+            result = historical_sia_integrals.run_integral_job(args.request, args.native_build, args.parton_build,
+                args.output, julia=args.julia, timeout_seconds=args.timeout_seconds)
         elif args.command == "validate-data":
             result = validate_dataset(read_json(args.data))
         elif args.command == "normalize":

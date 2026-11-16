@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HISTORICAL-SIA-INTEGRAL-001",
+  "scope": "historical_reconstructed_sia_integral_prediction_diagnostic",
+  "theory_scope": "reconstructed_theory",
+  "observation_scope": "historical_benchmark_candidate",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "declaration_scope": "Prospective scientific contract declared before integral implementation and new numerical candidates",
+  "purpose": "Connect the remaining 72 primary-crosschecked BaBar RF0 z1/z2 amplitudes to separate finite-momentum integrals at literal rounded KPSY parameters. This diagnostic is a prerequisite for historical reconstruction, not an accepted likelihood, recovered author fit or production extraction.",
+  "selection": {
+    "publication": "1309.5278v2",
+    "frame": "hadron2",
+    "harmonic": "cos_2phi0",
+    "projection": "z1_z2",
+    "source_views": [
+      {"id": "KPSY15_SIA_1002", "ratio": "UC", "points": 36, "sha256": "bdb0f8886e66e8cee9ff33d065fa3282d502e351bee8a82654f9816b6c79e204", "primary_table": "tab:totZuc"},
+      {"id": "KPSY15_SIA_1003", "ratio": "UL", "points": 36, "sha256": "65f41c538565e6a4b6113e5a7ebcafc191d5aff1278ab02cb80f66da2fc57cbe", "primary_table": "tab:totZul"}
+    ],
+    "total_points": 72,
+    "exact_geometry_count": 36,
+    "geometry_key": ["z1", "z2", "Q2_GeV2"],
+    "kinematics": "Retain literal reported z1/z2 means and legacy Q2=112.36 GeV2, all primary z-bin edges, source order and locators. Q2 is conditional and not verified by these primary tables. Do not replace it by 10.58^2. The primary-crosschecked reported P mean is metadata, not an evaluation point or an integration limit.",
+    "units": "Preserve normalized fraction-valued central values and separate statistical/reported-systematic errors. Historical intake applies the original percentage conversion exactly once. No Belle correction or second percentage conversion.",
+    "cuts": "Retain all 72 selected rows and the historical source selection. The source event-level qT<3.5 cut informs the declared model window; neither a cut on mean(P)/mean(z1) nor an additional row exclusion is inferred.",
+    "source_integrity": "Rebuild and verify all current historical intake outputs and primary decisions. Bind the complete raw/primary input set, candidate/report files, scientific contracts, source fingerprint, literal rows and order. Cached requests must be reconstructed from sources; rehashing edited fields does not validate them."
+  },
+  "primary_definition": {
+    "url": "https://arxiv.org/abs/1309.5278v2",
+    "archive_sha256": "a471da0c932fb6e253c4533c79e0e89be6f6bbfd0332d8abf9481bd614896de7",
+    "member": "paper.tex",
+    "member_sha256": "d09a5e123c96a5aa12ecd0e95e4f134021f48126b74b8aeac19df101263ec61b",
+    "tables": ["tab:totZuc", "tab:totZul"],
+    "checked_cells": 792,
+    "checked_fields": "Each of 72 rows has exact primary checks of both z means, four z-bin endpoints, reported P mean, angular mean, central value, statistical error and reported systematic error.",
+    "upper_cut": {"qT_GeV": 3.5, "source_line": 753, "definition": "Event-level Q_t cut in the primary selection; the same selection is applied to all charge pairs."},
+    "angular": "Use the primary hadron2 mean[sin^2(theta2)/(1+cos^2(theta2))] scalar as SIAMeanOfRatio, once, preserving its publication averaging measure and joint_acceptance_unresolved status.",
+    "KPSY_equations": {"url": "https://arxiv.org/html/1505.05589v1", "sha256": "65bfdfaa9b221741b9d724fd637f85f6595cb7ccfdeead1874963ab09e9e5cb2", "anchors": ["S2.E82", "S2.E85", "S2.E86", "S2.E91", "S2.E92"]},
+    "scope": "Equation, source-row and upper-cut provenance only. These sources do not recover the original fitter, a full joint acceptance, exact finite-amplitude double-ratio extraction or an experimental lower acceptance boundary."
+  },
+  "prediction": {
+    "parent_contracts": ["config/initial-contract.json", "config/polarized-process-contract.json", "config/leptonic-observable-contract.json", "config/sia-qt-window-contract.json"],
+    "parameters": "The unchanged 13-coordinate initial-contract.json published_parameters, retained as literal rounded Table1 inputs, not unrounded author optimizer states or a new optimum.",
+    "qT_window_GeV": [0.0, 3.5],
+    "lower_limit_source": "Caller-declared radial origin for this conditional reconstruction; not an independently certified experimental lower acceptance.",
+    "map": "At each fixed reported mean z1 use Pmin=z1*0 and Pmax=z1*3.5. Retain P*dP=z1^2*qT*dqT in absolute polarized and unpolarized integrals. This is not a bin/event integral in varying z1 and does not equate means of ratios with ratios of means.",
+    "acceptance": "Uniform momentum acceptance and factorization of the reported angular scalar from fixed-z kinematic integrals are explicit reconstruction assumptions. No full z-bin, angle/kinematic or detector acceptance is certified.",
+    "categories": "Retain all pp,pm,mp,mm charge-pair integrals separately. U=pm+mp, L=pp+mm and C=U+L, separately for signed Collins and positive UU integrals.",
+    "formula": "A_UL=Ftheta*(I_CU/I_DU-I_CL/I_DL); A_UC=Ftheta*(I_CU/I_DU-(I_CU+I_CL)/(I_DU+I_DL)), where each I is a separate P*dP integral. Do not average pointwise normalized amplitudes or replace the integral by the reported P mean.",
+    "physics": "Reuse the inherited hadron2 J0/J2, z/mass, matching, CSS and homogeneous Collins evolution conventions without modification. DSS14 is the active pinned parton input; other build inputs may be verified but are not used by SIA.",
+    "source_range": "Strict Q0 initial samples with explicit inherited reference continuation at radial scales; no production range admission.",
+    "preparation_reference_P_GeV": 0.0,
+    "preparation_reference_scope": "The context's reference momentum is a preparation setting, not a measurement or a point approximation. The observable's finite momentum weights determine every integrated prediction.",
+    "numerical_loop": "Julia initial-parameter arithmetic, retained fixed-row products, CSS damping and integrated Fourier weights only. No native/provider, Python or language-model calls inside parameter evaluation."
+  },
+  "preparation_reuse": {
+    "source_inventory": {"unique_z_queries": 14, "query_occurrences_without_reuse": 72, "scope": "Source inventory only; not a timing, memory or production throughput certificate."},
+    "optional_reuse": "Fixed query blocks may be reused only under identical native/source/binary/initial-sample/coupling identities, exact query value, complete radial scale list, matching/native settings and range policy. Preserve each query's existing grid and the complete retained evolution/convolution/interpolation/coupling path. Combining queries alone does not remove per-unique-query native construction.",
+    "comparators": "Before admitting a new preparation cache, compare every reused query's rows and all 36 geometry outputs against the unchanged separate-query construction at the same declared settings. Retain source-bound operators, comparison operands and mutation controls. Reuse remains outside parameter evaluation; no cross-parameter response cache is authorized.",
+    "isolation": "Serialize native construction within a worker; retained Fortran module state is not thread-safe by assumption. Separate worker processes own their complete contexts. Never modify external pins."
+  },
+  "numerical_policy": {
+    "relative_floor": 1e-8,
+    "physical_value_max_scaled": 1e-4,
+    "observable_algebra_max_scaled": 1e-12,
+    "source_projection_max_scaled": 1e-10,
+    "source_projection_reference_bits": 256,
+    "refinements": [
+      {"matching_order": 4, "radial_order": 8, "intervals": 512},
+      {"matching_order": 8, "radial_order": 16, "intervals": 1024},
+      {"matching_order": 16, "radial_order": 32, "intervals": 2048},
+      {"matching_order": 32, "radial_order": 32, "intervals": 4096}
+    ],
+    "minimum_refinement_level": 3,
+    "radial_refinement_bound_inverse_GeV": 24,
+    "radial_bounds_inverse_GeV": [12, 24, 32],
+    "momentum_orders": [16, 32, 64, 128, 256],
+    "minimum_momentum_order": 64,
+    "momentum_max_scaled": 1e-7,
+    "momentum_acceptance": "For each distinct native/radial preparation and each finite radial bound, retain momentum refinements. Accept only at order>=64 when adjacent orders agree within 1e-7 for all four pair UU/Collins integrals, U/L/C sums and both UL/UC amplitudes. Exhaustion is FAIL. Native and tail comparisons use converged momentum values; retain the actual order per preparation.",
+    "native_acceptance": "Require at least three joint native/matching/radial levels at bound24. All selected pair yields, category sums and amplitudes must satisfy the unchanged adjacent-level 1e-4 target. Keep each coarse miss and every resource stop. Do not widen a threshold or report a missing check as passing.",
+    "tail_acceptance": "At the selected fine native setting retain bounds12/24/32 and require the converged-momentum bound24-to32 difference <=1e-4 for every absolute pair/category integral and amplitude. This is finite extension evidence, not a proof of the infinite tail.",
+    "independent_reference": "At final fixed native rows compare every charge-pair integral, category sum and amplitude with existing independent scalar charge/CSS/Bessel assembly using adaptive qT integration at 1e-4. Preserve P*dP=z1^2*qT*dqT in absolute yields. Shared rows/initial functions are not independent evolution.",
+    "source_projection": "Retain the existing 256-bit normalized-yield first-derivative Fourier fixture, both numerator signs, UL/UC, positive-count bound and all seven angular/harmonic/category/sign counterfactuals for every source angular scalar. Label this fixture synthetic, not experimental validation.",
+    "fixed_value_controls": "Verify exact category and ratio algebra, positive UU integrals, point IDs/order, literal source/error fields, shared UL/UC fixed preparation, global simultaneous Collins-sign invariance and independence of the first six transversity coordinates. Keep object-reuse and temporal checks as producer attestations."
+  },
+  "representative_derivative_policy": {
+    "source_geometry_ids": ["KPSY15_SIA_1002:r2", "KPSY15_SIA_1002:r16", "KPSY15_SIA_1002:r37"],
+    "scope": "Both UL/UC outputs at these three prospectively selected low/middle/high diagonal geometries, not a global production derivative or all72-geometry certificate.",
+    "relative_floor": 1e-8,
+    "derivative_max_scaled": 1e-7,
+    "HVP_max_scaled": 1e-7,
+    "reference_bits": 256,
+    "steps": [0.0001, 0.00005],
+    "direction": [0.02, 0.03, 0.01, 0.02, 0.01, 0.01, 0.02, -0.02, 0.01, 0.02, 0.03, 0.03, 0.001],
+    "stencil": "Use the inward fourth-order one-sided derivative (-25*f(0)+48*f(h)-36*f(2h)+16*f(3h)-3*f(4h))/(12*h), for positive coordinate directions and the fixed listed direction. Never cross literal Table1 boundaries to apply an interior central stencil.",
+    "reference": "Compare all13 Julia AD gradient columns and HVPs against independent scalar/adaptive-qT reference derivatives and the two retained 256-bit one-sided stencil levels. Each level and their adjacent difference must meet 1e-7. First six SIA gradient columns remain exactly zero. Retain all operands and misses.",
+    "stencil_controls": "Before physical use, verify the one-sided formula on independently differentiated polynomials through degree5 and exp(7*x), including the signed truncation and halving behavior. Label these controls synthetic and keep them separate from the physical-source checks."
+  },
+  "observations_and_products": {
+    "errors": "Keep statistical and reported systematic components separate, with original column labels including syt_u. Preserve UL/UC and projection overlap, missing covariance and all source limitations. No combined errors, likelihood, chi2, pulls, normalization nuisance or uncertainty intervals.",
+    "products": "Source-bound request, whole Julia prediction report with all refinement/integral/reference operands and failed levels, separate Julia audit, ordered CSV and a discrete UL/UC fixed-model comparison against the measured z-bin amplitudes. Preserve reported P solely as source metadata. Raw sources, contexts, logs and run outputs stay out of Git.",
+    "audit": "Verify exact current source/request/contract/build bindings and independently recompute stored scalar arithmetic. Explicitly distinguish retained producer object/temporal attestations and any operation not reexecuted. A checksum or completion marker alone never accepts a diagnostic or a fit.",
+    "failure_retention": "Use fresh request and numerical output paths. Declare completion-only scheduler outputs, preserving FAIL reports, audits, invocations, progress and logs. Test an explicitly synthetic complete-job failure and forged-marker rejection without claiming numerical validation.",
+    "cache_controls": "Reject source/value/unit/covariance edits, rehashed geometry or angular definition, window bounds/provenance or Jacobian changes, integrated-to-point substitution, source P treated as a bound, Q2 relabeled primary-verified, stale operators/builds/source fingerprints, edited predictions/figures/derivative operands and production-scope substitution. Restore original bytes and timestamps and verify again."
+  },
+  "validation_policy": {
+    "required_checks": ["python -m pytest", "python scripts/plan_workflow.py validate", "Julia tests", "Linux Snakemake closure", "Complete real-source integral workflow with numerical/audit/source/cache/failure-retention controls"],
+    "status_policy": "Only the complete declared diagnostic may pass. Absent, failed, stale, exhausted or unimplemented checks remain unaccepted. A source-only review, toy closure, partial derivative sample or point-prediction receipt cannot authorize the integral diagnostic, production job or fitting."
+  },
+  "limitations": [
+    "The 72-point integral diagnostic alone does not reproduce the full historical fit or provide experimental admission",
+    "Uniform momentum acceptance, caller-declared zero lower bound, fixed z means and angular factorization do not recover event/bin acceptance",
+    "Legacy Q2=112.36 is conditional and not checked by the selected primary tables",
+    "UL/UC and other-view overlap/covariance, corrected Belle32 primary/version and species/target prescriptions remain separate work",
+    "Homogeneous Collins evolution and reference input continuation remain reconstructed; author fitter/modified HOPPET/unrounded states remain unlocated",
+    "The original point-refinement misses, paper-center/coupling FAILs and all production prerequisites remain unchanged",
+    "No real-data fit, physical extraction, full-x lattice constraint, global optimum, production throughput or interval coverage",
+    "B0 historical262, B1 updated SIDIS/SIA, B2/B3 STAR200/510, B4 paired full-x lattice, V1 robustness, uncertainty and publication products remain required"
+  ]
+}

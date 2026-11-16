@@ -1,0 +1,97 @@
+name: Historical SIA integral diagnostics
+
+on:
+  pull_request:
+    paths:
+      - config/**
+      - numerics/**
+      - src/**
+      - workflow/**
+      - fortran/hoppet_bridge.f90
+      - bridges/lhapdf.cpp
+      - requirements.lock
+      - references/source-inventory.json
+      - references/code-review.json
+      - scripts/check_cached_historical.py
+      - scripts/check_cached_historical_sia_integrals.py
+      - scripts/check_historical_sia_integral_failure_retention.py
+      - .github/workflows/historical-sia-integrals.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: historical-sia-integrals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  historical:
+    name: seventy-two conditional BaBar RF0 integrals at fixed parameters
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JULIA_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v3.0.3
+        with:
+          version: '1.12.6'
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
+        with:
+          delete-old-caches: 'false'
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+          julia --project=numerics -e 'using Pkg; Pkg.instantiate()'
+      - name: Replay sources and predict complete conditional integrals
+        timeout-minutes: 315
+        run: |
+          snakemake --snakefile workflow/historical-sia-integrals.smk --cores 2 \
+            --config run_dir=runs/ci-historical-sia-integrals timeout_seconds=18000
+      - name: Reject changed sources, windows and stored numerical operands
+        timeout-minutes: 12
+        run: |
+          python scripts/check_cached_historical.py config/historical-sources.json \
+            data/raw/historical runs/ci-historical-sia-integrals/historical
+          python scripts/check_cached_historical_sia_integrals.py \
+            runs/ci-historical-sia-integrals/request.json runs/ci-historical-sia-integrals/diagnostic
+          snakemake --snakefile workflow/historical-sia-integrals.smk --cores 2 \
+            --config run_dir=runs/ci-historical-sia-integrals timeout_seconds=18000
+      - name: Verify explicitly synthetic failure, timeout and signal retention
+        if: always()
+        timeout-minutes: 8
+        run: |
+          python scripts/check_historical_sia_integral_failure_retention.py \
+            --mode failure --run-dir runs/ci-integral-failure-control
+          python scripts/check_historical_sia_integral_failure_retention.py \
+            --mode timeout --run-dir runs/ci-integral-timeout-control
+          python scripts/check_historical_sia_integral_failure_retention.py \
+            --mode signal --run-dir runs/ci-integral-signal-control
+      - name: Upload scoped evidence including failed and interrupted jobs
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: historical-sia-integrals-${{ github.sha }}
+          path: |
+            runs/ci-historical-sia-integrals
+            runs/ci-integral-failure-control
+            runs/ci-integral-timeout-control
+            runs/ci-integral-signal-control
+            .runtime/hoppet/build.json
+            .runtime/hoppet/build.log
+            .runtime/hoppet/upstream-tests.log
+            .runtime/parton-inputs/build.json
+            .runtime/parton-inputs/build.log
+          include-hidden-files: true
+          retention-days: 30
