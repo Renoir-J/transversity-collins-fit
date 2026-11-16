@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HISTORICAL-SIA-POINT-001",
+  "scope": "historical_reconstructed_sia_point_prediction_diagnostic",
+  "theory_scope": "reconstructed_theory",
+  "observation_scope": "historical_benchmark_candidate",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "purpose": "Connect the 18 primary-crosschecked BaBar RF0 transverse-momentum candidate amplitudes to fixed-parameter Julia predictions at reported means. This prerequisite diagnostic supplies no likelihood, optimizer, experimental acceptance, historical-fit reproduction or production admission.",
+  "selection": {
+    "publication": "1309.5278v2",
+    "frame": "hadron2",
+    "projection": "pT",
+    "harmonic": "cos_2phi0",
+    "source_views": [
+      {
+        "id": "KPSY15_SIA_1000",
+        "ratio": "UL",
+        "points": 9,
+        "sha256": "afb14a0b5ac390b73b18efacef3d50921fd77563d999613aca9b7dd7c1b345f1"
+      },
+      {
+        "id": "KPSY15_SIA_1001",
+        "ratio": "UC",
+        "points": 9,
+        "sha256": "cb0857ec6ab3f06756360e2500354de9e9f61a16aeab128c5501fe83ea717564"
+      }
+    ],
+    "total_points": 18,
+    "exact_shared_geometry_count": 9,
+    "kinematics": "Use literal candidate z1,z2,Q2,pT means in source order. The primary table crosscheck includes z1,z2,pT, pT bin edges and the angular scalar. The legacy Q2=112.36 GeV2 is retained as a conditional source-literal input, not a newly primary-verified beam-energy value; do not replace it with 10.58^2 or refit it.",
+    "cuts": "Retain all 18 selected candidates and existing exclusions. Record the source qT<3.5 GeV requirement and each fixed-model pT/z1 value separately. Do not infer an event average or apply a new cut on a ratio of means. Other P-integrated SIA views remain pending and are not replaced by point evaluations.",
+    "units": "Use the existing normalized fraction-valued amplitudes/errors. Original BaBar percent conversion is applied exactly once by source preparation; no further percent or Belle-erratum correction.",
+    "source_integrity": "Rebuild and verify all current historical intake outputs. Bind all raw/primary inputs, candidate/report hashes, scientific contracts, code fingerprint, source rows and exact order. Reconstruct source-derived requests during cache verification; changed or merely rehashed provenance must reject."
+  },
+  "primary_definition": {
+    "url": "https://arxiv.org/abs/1309.5278v2",
+    "archive_sha256": "a471da0c932fb6e253c4533c79e0e89be6f6bbfd0332d8abf9481bd614896de7",
+    "member": "paper.tex",
+    "member_sha256": "d09a5e123c96a5aa12ecd0e95e4f134021f48126b74b8aeac19df101263ec61b",
+    "table": "tab:totPt, uniquely identified RF0 section with theta2 and A0 columns",
+    "checked_columns": [
+      "S2/1+C2",
+      "pT",
+      "pTmax",
+      "pTmin",
+      "stat_u",
+      "sys_u",
+      "value",
+      "z1",
+      "z2"
+    ],
+    "checked_cells": 162,
+    "source_fact": "The RF0 hadron-2 observable is the cos(2phi0) modulation of unlike/like (UL) and unlike/all (UC) normalized-yield double ratios. The source angular table reports mean[sin^2(theta2)/(1+cos^2(theta2))].",
+    "model_parent": "KPSY arXiv:1505.05589v1 Eqs76-86 and the existing polarized-process/leptonic-observable contracts",
+    "conditional_mapping": "Factor the reported mean-of-angular-ratio scalar from charge-category structure-function ratios evaluated at fixed reported kinematic means, using the inherited linearized double-ratio model. This is not recovery of a joint angle/kinematic acceptance average or exact nonlinear experimental double-ratio fitting."
+  },
+  "prediction": {
+    "parent_contracts": [
+      "config/initial-contract.json",
+      "config/polarized-process-contract.json",
+      "config/leptonic-observable-contract.json",
+      "config/leptonic-contract.json"
+    ],
+    "parameters": "Literal initial-contract.json published_parameters in the unchanged 13-coordinate order; fixed rounded Table1 inputs, not recovered author optimizer states or a new fitted optimum.",
+    "angular_source_type": "SIAMeanOfRatio with the primary-table scalar, source identifier and retained publication averaging-measure/acceptance limitation. Do not substitute a ratio of separate means or reconstruct an angle from it.",
+    "categories": "For pi+/pi- pairs retain all four inherited charge-conjugate flavor sums: unlike U=(+,-)+(-,+), like L=(+,+)+(-,-), all C=U+L. Assemble each signed Collins numerator and positive unpolarized denominator separately.",
+    "formula": "A_UL=Ftheta*(C_U/D_U-C_L/D_L); A_UC=Ftheta*(C_U/D_U-(C_U+C_L)/(D_U+D_L)). Preserve the inherited SIA J2/mass/z factors and physical Wilson/CSS conventions. Apply Ftheta once, with no SIDIS DNN factor, new factor2, absolute-value numerator or asymmetry clamp.",
+    "momentum": "Evaluate the fixed-P hadron2 SIA point plan at each reported pT mean. This contract supplies no P-bin or P-integrated acceptance approximation.",
+    "context_reuse": "Reuse the exact same prepared SIA context across UL/UC and the four charge categories only for exactly equal z1,z2,Q2,pT/model/input settings. Preserve all point identities. No rounding-based geometry grouping, parameter-response cache or caller-supplied trusted digest.",
+    "inputs": "Current pinned CT10/DSSV08/DSS14 and retained HOPPET receipts, strict Q0 samples, explicit reference continuation/extrapolation audits at unsupported Fourier scales, and current bridge source/binary hash checks. Original author-modified HOPPET remains unavailable.",
+    "loop": "Julia owns predictions, category assembly, reference arithmetic and any derivatives/optimization/uncertainty. Python/Snakemake schedules complete jobs and renders their completed outputs. No Python, provider/native or language-model callback inside a numerical parameter evaluation."
+  },
+  "numerical_policy": {
+    "relative_floor": 1e-8,
+    "physical_value_max_scaled": 0.0001,
+    "observable_algebra_max_scaled": 1e-12,
+    "source_projection_max_scaled": 1e-10,
+    "source_projection_reference_bits": 256,
+    "refinements": [
+      {
+        "matching_order": 4,
+        "radial_order": 8,
+        "intervals": 512
+      },
+      {
+        "matching_order": 8,
+        "radial_order": 16,
+        "intervals": 1024
+      },
+      {
+        "matching_order": 16,
+        "radial_order": 32,
+        "intervals": 2048
+      },
+      {
+        "matching_order": 32,
+        "radial_order": 32,
+        "intervals": 4096
+      }
+    ],
+    "minimum_refinement_level": 3,
+    "radial_refinement_bound_inverse_GeV": 24,
+    "radial_bounds_inverse_GeV": [
+      12,
+      24,
+      32
+    ],
+    "acceptance": "Require at least three frozen joint native/matching/radial levels. For every selected point, all four charge-pair UU and signed Collins yields, U/L/C sums and the final linearized amplitude must meet the unchanged 1e-4 adjacent-level target. At the accepted setting compare the 24-to32 finite radial extension at the same target. Retain every coarse value/target miss; exhausted refinement or resource budgets remain FAIL. No infinite-tail proof is inferred.",
+    "independent_reference": "At final fixed native rows use the existing independent scalar charge/CSS/Bessel assembly for all four pair yields, category sums and both normalized amplitudes at every geometry, under 1e-4. Shared native rows, initial functions and source inputs are not independent evolution. Retain reference and implementation operands.",
+    "source_convention_check": "Use 256-bit independent uniform phi0 projection over [0,2pi] of the first derivative at epsilon=0 of positive normalized-yield double ratios. Freeze D_U=2,D_L=1,C_U=+/-1/8,C_L=-/+1/16,C_C=C_U+C_L, with N_i(phi0,epsilon)=D_i+epsilon*Ftheta*C_i*cos(2phi0); N_C=N_U+N_L. Project the analytic quotient derivative with cos(2phi0)/pi for UL and UC at every actual Ftheta. This explicitly synthetic linearization fixture does not validate finite-amplitude experimental extraction or acceptance. Retain omitted/repeated-Ftheta, factor2, wrong category, cos(phi0)/sin(2phi0) harmonic and sign counterfactuals.",
+    "fixed_value_controls": "Verify exact category/yield algebra and positivity, all point IDs/order, shared UL/UC charge-row preparation, independence of the first six transversity coordinates and invariance under simultaneous sign reversal of both Collins normalizations. Retain producer object-reuse and temporal checks as attestations, separate from recomputable arithmetic.",
+    "derivative_scope": "Fixed-parameter diagnostic only. It does not establish production gradients, fitting throughput or interval coverage. Inherited all-parameter derivative validation remains separate."
+  },
+  "observations_and_products": {
+    "errors": "Preserve statistical_error and reported_systematic separately. Retain UL/UC sample overlap and all covariance/acceptance blockers. Construct no covariance, combined errors, normalization nuisance, chi2, pulls, likelihood or parameter intervals.",
+    "residual": "Only optional unweighted observed-minus-predicted differences, labeled as diagnostic scalars.",
+    "artifacts": "Source-bound request; complete Julia report retaining raw refinement, tail, charge/category, angular and independent-reference operands; a CSV preserving source values and numerical fields, and a discrete UL/UC data/fixed-theory figure. Raw sources, build products and outputs stay out of Git.",
+    "audit": "A separately invoked Julia auditor must check exact current request/source/contract/build bindings and independently recompute retained scalar arithmetic. Explicitly identify any producer attestations and operations not replayed. A marker alone cannot approve a cached result.",
+    "failure_retention": "Declare completion-only scheduler outputs; retain original numerical/audit/invocation/log artifacts on failure. Fresh paths are required. Explicitly synthetic whole-job failure controls and forged-marker rejection authorize no numerical or production result."
+  },
+  "validation_policy": {
+    "required_checks": [
+      "python -m pytest",
+      "python scripts/plan_workflow.py validate",
+      "Julia tests",
+      "Linux Snakemake closure",
+      "real-source complete SIA point pipeline and source/point-cache controls"
+    ],
+    "controls": [
+      "raw/primary source mutation",
+      "source geometry/angular definition rehashing",
+      "wrong UL/UC frame/category/order/point omission",
+      "source-unit/error changes",
+      "conditional Q2 relabeled as primary-verified",
+      "integrated view replaced by its mean P",
+      "fixed parameter/model/cut changes",
+      "stale build/contract/source bytes",
+      "forged pass/completion marker",
+      "synthetic/candidate/production scope substitution",
+      "numerical failure and exhausted refinement retained"
+    ],
+    "status_policy": "Only this complete declared diagnostic may pass. Missing, stale, failed or unimplemented checks remain FAIL. Synthetic receipts and source-only reviews cannot authorize experimental data or production fits."
+  },
+  "limitations": [
+    "18-point fixed-parameter BaBar diagnostic only; historical 262-point fitting and B1-B4/V1 remain incomplete",
+    "Linearized double-ratio and factorized angular/fixed-mean model do not recover event-level joint acceptance or finite-amplitude extraction",
+    "Source-literal legacy Q2=112.36 is not independently checked by the selected primary table; no replacement by a nominal beam energy is implied",
+    "P-integrated SIA views, corrected Belle primary bytes/precision, and full bin/acceptance weighting remain separate unresolved work",
+    "UL/UC covariance, overlapping views, historical weighting and updated-fit nuisance choices remain unresolved",
+    "Homogeneous Collins evolution and reference input extrapolation remain reconstructed choices; author fitter/modified HOPPET/unrounded states remain unlocated",
+    "Existing paper-center and coupling-sensitivity scientific FAIL results and all production prerequisites remain unchanged",
+    "No real-data fit, physical extraction, tensor-charge interval, global optimum, production performance or coverage claim"
+  ]
+}

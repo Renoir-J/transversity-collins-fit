@@ -8,6 +8,7 @@ from .data import normalize_table, plan_update, validate_dataset
 from .experimental import run_intake
 from .historical import run_historical_intake
 from .historical_points import prepare_request, run_point_job
+from . import historical_sia_points
 from .pipeline import Blocked, execute, production_readiness, root_path, run_stage
 from .provenance import read_json
 
@@ -39,6 +40,17 @@ def main():
     point_job.add_argument("--parton-build", required=True)
     point_job.add_argument("--output", required=True)
     point_job.add_argument("--julia", default="julia")
+    sia_points = commands.add_parser("historical-sia-point-request")
+    sia_points.add_argument("--manifest", default="config/historical-sources.json")
+    sia_points.add_argument("--cache", default="data/raw/historical")
+    sia_points.add_argument("--candidates", default="data/normalized/historical")
+    sia_points.add_argument("--output", required=True)
+    sia_job = commands.add_parser("historical-sia-point-predictions")
+    sia_job.add_argument("--request", required=True)
+    sia_job.add_argument("--native-build", required=True)
+    sia_job.add_argument("--parton-build", required=True)
+    sia_job.add_argument("--output", required=True)
+    sia_job.add_argument("--julia", default="julia")
     validate = commands.add_parser("validate-data")
     validate.add_argument("data")
     normalize = commands.add_parser("normalize")
@@ -71,6 +83,10 @@ def main():
             result = prepare_request(args.manifest, args.cache, args.candidates, args.output)
         elif args.command == "historical-point-predictions":
             result = run_point_job(args.request, args.native_build, args.parton_build, args.output, julia=args.julia)
+        elif args.command == "historical-sia-point-request":
+            result = historical_sia_points.prepare_request(args.manifest, args.cache, args.candidates, args.output)
+        elif args.command == "historical-sia-point-predictions":
+            result = historical_sia_points.run_point_job(args.request, args.native_build, args.parton_build, args.output, julia=args.julia)
         elif args.command == "validate-data":
             result = validate_dataset(read_json(args.data))
         elif args.command == "normalize":
@@ -95,4 +111,3 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

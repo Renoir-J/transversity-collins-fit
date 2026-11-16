@@ -1,0 +1,92 @@
+name: Historical SIA point diagnostics
+
+on:
+  pull_request:
+    paths:
+      - config/historical-sia-point-contract.json
+      - config/initial-contract.json
+      - config/historical-sources.json
+      - config/historical-data-contract.json
+      - numerics/**
+      - fortran/hoppet_bridge.f90
+      - bridges/lhapdf.cpp
+      - src/collinsflow/historical_sia_points.py
+      - src/collinsflow/historical_points.py
+      - src/collinsflow/historical.py
+      - src/collinsflow/cli.py
+      - src/collinsflow/provenance.py
+      - workflow/historical-sia-points.smk
+      - scripts/check_cached_historical_sia_points.py
+      - scripts/check_historical_sia_point_failure_retention.py
+      - requirements.lock
+      - .github/workflows/historical-sia-points.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: historical-sia-points-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  historical:
+    name: eighteen BaBar RF0 means at fixed published parameters
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      JULIA_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: julia-actions/setup-julia@da908477b5db94c10ffce8cfea9f2b3b9d5db687 # v3.0.3
+        with:
+          version: '1.12.6'
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
+        with:
+          delete-old-caches: 'false'
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r requirements.lock
+          python -m pip install --no-deps -e .
+          julia --project=numerics -e 'using Pkg; Pkg.instantiate()'
+      - name: Replay sources and predict fixed historical means
+        run: |
+          snakemake --snakefile workflow/historical-sia-points.smk --cores 2 \
+            --config run_dir=runs/ci-historical-sia-points
+      - name: Reject changed source and diagnostic cache products
+        run: |
+          python scripts/check_cached_historical.py config/historical-sources.json \
+            data/raw/historical runs/ci-historical-sia-points/historical
+          python scripts/check_cached_historical_sia_points.py \
+            runs/ci-historical-sia-points/request.json runs/ci-historical-sia-points/diagnostic
+          snakemake --snakefile workflow/historical-sia-points.smk --cores 2 \
+            --config run_dir=runs/ci-historical-sia-points
+      - name: Verify raw failure retention with an explicit synthetic control
+        if: always()
+        run: |
+          python scripts/check_historical_sia_point_failure_retention.py \
+            --run-dir runs/ci-historical-sia-point-failure-control
+      - name: Upload scoped evidence including failures
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: historical-sia-points-${{ github.sha }}
+          path: |
+            runs/ci-historical-sia-points
+            runs/ci-historical-sia-point-failure-control
+            .runtime/hoppet/build.json
+            .runtime/hoppet/build.log
+            .runtime/hoppet/upstream-tests.log
+            .runtime/parton-inputs/build.json
+            .runtime/parton-inputs/build.log
+          include-hidden-files: true
+          retention-days: 30
