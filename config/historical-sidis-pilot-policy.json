@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HISTORICAL-SIDIS-RESOURCE-PILOT-001",
+  "scope": "historical_reconstructed_sidis_resource_pilot",
+  "theory_scope": "reconstructed_theory",
+  "observation_scope": "historical_benchmark_candidate",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "accepted_prediction_diagnostic": false,
+  "accepted_fitting_gate": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "all132_coverage_verified": false,
+  "parent_interface_commit": "452fef3395b9b101b525ba085d06092c9c0bc390",
+  "parent_contract": "config/historical-sidis-point-contract.json",
+  "parent_contract_sha256": "831d4f3435a1eea61b0ca664b7b61b1fa56b19f930d0e516d7e23bcb7c61ba45",
+  "selection": {
+    "rule": "First retained source row in the first selected view of each publication, fixed before pilot predictions; no measured signs or prediction-dependent selection.",
+    "full_request_points": 132,
+    "cases": [
+      {
+        "id": "hermes-first",
+        "point_id": "KPSY15_SIDIS_3000:r2",
+        "publication": "1006.4221v1",
+        "target": "proton"
+      },
+      {
+        "id": "compass-proton-first",
+        "point_id": "KPSY15_SIDIS_3025:r2",
+        "publication": "1408.4405",
+        "target": "proton"
+      },
+      {
+        "id": "compass-deuteron-first",
+        "point_id": "KPSY15_SIDIS_4000:r2",
+        "publication": "0802.2160",
+        "target": "deuteron"
+      }
+    ],
+    "partial_coverage_only": true
+  },
+  "numerics": {
+    "native_level": 4,
+    "setting": {
+      "matching_order": 32,
+      "radial_order": 32,
+      "intervals": 4096
+    },
+    "radial_bound_inverse_GeV": 24,
+    "range_policy": "reference",
+    "native_construction": "batched_probes",
+    "unchanged_parameter_vector": true,
+    "physical_value_max_scaled": 0.0001,
+    "relative_floor": 1e-8,
+    "value_reference": "Independent generic fixed-row scalar assembly for UU, signed FUT and source amplitude; shared native rows and initial functions are explicitly not independent evolution.",
+    "derivative_evaluations": {
+      "coordinates": 13,
+      "warm_repetitions": 3,
+      "gradient": true,
+      "HVP": true,
+      "direction_source": "parent_contract.derivative_policy.direction",
+      "independent_derivative_reference_executed": false,
+      "derivative_accuracy_accepted": false
+    },
+    "no_native_or_provider_or_Python_or_model_callbacks_in_parameter_evaluation": true,
+    "no_query_cache_or_cross_parameter_response_cache": true
+  },
+  "resources": {
+    "whole_Julia_jobs_time_budget_seconds": 3600,
+    "maximum_command_RSS_KiB": 3145728,
+    "minimum_available_memory_bytes": 4294967296,
+    "threads": {
+      "JULIA_NUM_THREADS": 1,
+      "OPENBLAS_NUM_THREADS": 1,
+      "OMP_NUM_THREADS": 1
+    },
+    "max_parallel_pilots_per_checkout": 1,
+    "measurement": "GNU time around each complete Julia producer/auditor command: direct-child maximum RSS, wall/user/system seconds and exit. Retain tool hash/version and raw resource text. This is not simultaneous process-tree peak memory.",
+    "cold_preparation_and_warm_evaluation_times_informational": true,
+    "resource_exhaustion_is_FAIL": true,
+    "interrupted_zero_exit_is_never_success": true
+  },
+  "retention": {
+    "fresh_output_paths_required": true,
+    "partial_progress_and_initial_failure_records_preserved": true,
+    "forged_or_stale_completion_marker_never_sufficient": true,
+    "source_replay_and_independent_saved_arithmetic_audit_required_on_cached_use": true
+  },
+  "reporting": {
+    "successful_status": "PILOT_COMPLETED_NOT_DIAGNOSTIC_GATE",
+    "audit_status": "PILOT_REVIEWED_NOT_DIAGNOSTIC_GATE",
+    "products": "Three individual resource/value/AD sample reports, separate arithmetic audits and a complete three-case measurement ledger; no experimental comparison plot, chi2, pulls, refit or uncertainty interval.",
+    "full132_native_tail_reference_derivative_policy_completed": false,
+    "all_production_admission_flags_remain_false": true
+  },
+  "limitations": [
+    "Three deterministically chosen source rows do not certify all132 observations, a fit domain, accepted derivatives, native convergence, tails or performance.",
+    "This single declared finest native level measures resources; the full132 workflow still requires its unchanged native ladder, finite tails and all132/all13 independent derivative policy.",
+    "AD values are unvalidated timing samples until independent physical gradient/HVP references satisfy the separately frozen full contract.",
+    "Competing workloads, JIT and filesystem/cache state affect timings; no speedup or production-throughput claim is established.",
+    "Original author fitter/modified HOPPET/unrounded states, paper-center/coupling FAILs, source-range, acceptance, covariance and overlap limitations persist."
+  ]
+}
