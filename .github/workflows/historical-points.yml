@@ -68,6 +68,11 @@ jobs:
             runs/ci-historical-points/request.json runs/ci-historical-points/diagnostic
           snakemake --snakefile workflow/historical-points.smk --cores 2 \
             --config run_dir=runs/ci-historical-points
+      - name: Verify raw failure retention with an explicit synthetic control
+        if: always()
+        run: |
+          python scripts/check_historical_point_failure_retention.py \
+            --run-dir runs/ci-historical-point-failure-control
       - name: Upload scoped evidence including failures
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -75,6 +80,7 @@ jobs:
           name: historical-points-${{ github.sha }}
           path: |
             runs/ci-historical-points
+            runs/ci-historical-point-failure-control
             .runtime/hoppet/build.json
             .runtime/hoppet/build.log
             .runtime/hoppet/upstream-tests.log

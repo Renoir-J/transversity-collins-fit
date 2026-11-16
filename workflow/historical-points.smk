@@ -12,6 +12,7 @@ CACHE = config.get("cache", "data/raw/historical")
 CANDIDATES = f"{RUN}/historical"
 REQUEST = f"{RUN}/request.json"
 NUMERICAL = f"{RUN}/diagnostic"
+COMPLETED = f"{NUMERICAL}/job.completed"
 NATIVE = str(ROOT / config.get("native_build", ".runtime/hoppet/build.json"))
 PARTON = str(ROOT / config.get("parton_build", ".runtime/parton-inputs/build.json"))
 JULIA = config.get("julia", "julia")
@@ -22,11 +23,7 @@ CODE = [str(path) for path in computational_sources(ROOT)]
 
 rule all:
     input:
-        f"{NUMERICAL}/predictions.json",
-        f"{NUMERICAL}/audit.json",
-        f"{NUMERICAL}/invocation.json",
-        f"{NUMERICAL}/point-comparison.csv",
-        f"{NUMERICAL}/point-comparison.png"
+        COMPLETED
     run:
         verify_point_job(REQUEST, NUMERICAL, julia=JULIA)
 
@@ -104,11 +101,7 @@ rule historical_point_diagnostic:
         parton=PARTON,
         code=CODE
     output:
-        report=f"{NUMERICAL}/predictions.json",
-        audit=f"{NUMERICAL}/audit.json",
-        invocation=f"{NUMERICAL}/invocation.json",
-        table=f"{NUMERICAL}/point-comparison.csv",
-        figure=f"{NUMERICAL}/point-comparison.png"
+        completion=touch(COMPLETED)
     params:
         root=str(ROOT), output=NUMERICAL, julia=JULIA
     threads: 1

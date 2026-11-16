@@ -76,6 +76,12 @@ is used.
 | `diagnostic/invocation.json` and logs | Whole-job commands, exit codes, source/commit identity and product hashes |
 | `diagnostic/point-comparison.csv` | Measured values, separate errors, fixed theory and unweighted differences |
 | `diagnostic/point-comparison.png` | Discrete fixed-mean theory/data comparison with statistical bars |
+| `diagnostic/job.completed` | Scheduler bookkeeping only; all source/numerical products are still verified by the terminal rule |
+
+Only the completion marker is a declared output of the numerical Snakemake rule.
+It is touched after a successful complete job. Raw reports and logs remain on
+disk when the job fails, rather than being deleted by scheduler output cleanup.
+The marker never substitutes for the source, invocation or numerical audit.
 
 The frozen joint native/matching/radial ladder requires at least three levels;
 all eight points' `F_UU`, signed Collins numerator and final amplitude must meet
@@ -105,6 +111,20 @@ a figure, rehashing altered geometry or a source-status field, rehashing a chang
 prediction, or promoting the scope must be rejected.
 The CI workflow then repeats the terminal Snakemake target to exercise cached
 source/operand revalidation without rerunning the prediction job.
+
+An explicit negative control exercises failure handling with a synthetic whole
+job that exits before Julia or numerical prediction. It must retain its original
+failed report/invocation, produce no completion marker, and reject a forged marker
+through the actual cached verifier. It creates no accepted numerical result:
+
+```sh
+python scripts/check_historical_point_failure_retention.py \
+  --run-dir runs/historical-point-failure-control
+```
+
+Run this after the pinned build receipts and raw sources are available. Missing
+prerequisites fail explicitly; the synthetic failure is never a substitute for
+the real eight-point calculation.
 
 ## Interpretation and remaining work
 
