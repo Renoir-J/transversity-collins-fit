@@ -23,6 +23,7 @@ include("bounded_initial_roundoff_tests.jl")
 include("historical_point_tests.jl")
 include("historical_audit_cli_tests.jl")
 include("historical_sia_point_tests.jl")
+include("historical_sia_integral_tests.jl")
 
 @testset "LO transversity moments and fixed-operator AD" begin
     @test transversity_moment(1) ≈ -2/3

@@ -41,6 +41,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        BoundedJointSettings, kpsy_parameter_bounds, fit_joint,
        HistoricalPointRequest, load_historical_point_request, historical_request_valid, historical_geometry_key, historical_point_model,
        HistoricalSIAPointRequest, load_historical_sia_point_request, historical_sia_request_valid, historical_sia_geometry_key, historical_sia_point_model,
+       HistoricalSIAIntegralRequest, load_historical_sia_integral_request, historical_sia_integral_request_valid, historical_sia_integral_geometry_key, historical_sia_integral_model,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -162,6 +163,7 @@ include("JointLikelihood.jl")
 include("BoundedJointFit.jl")
 include("HistoricalPoints.jl")
 include("HistoricalSIAPoints.jl")
+include("HistoricalSIAIntegrals.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)
