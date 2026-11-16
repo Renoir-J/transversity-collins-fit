@@ -1,0 +1,531 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HISTORICAL-SIDIS-POINT-001",
+  "scope": "historical_reconstructed_sidis_point_prediction_diagnostic",
+  "theory_scope": "reconstructed_theory",
+  "observation_scope": "historical_benchmark_candidate",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "parents": [
+    "config/historical-data-contract.json",
+    "config/leptonic-observable-contract.json",
+    "config/sidis-convention-contract.json",
+    "config/initial-contract.json"
+  ],
+  "source_manifest": "config/historical-sources.json",
+  "primary_manifest": "config/historical-sidis-primary-sources.json",
+  "selection": {
+    "source_views": [
+      {
+        "id": "KPSY15_SIDIS_3000",
+        "publication": "1006.4221v1",
+        "target": "proton",
+        "hadron": "pi+",
+        "projection": "x",
+        "points": 7,
+        "source_sha256": "316bf2ac47bc19078bedb1c48943d573f70f46a9502b1a64e30ea5303f24e1a4",
+        "source_convention_id": "HERMES2010",
+        "original_depolarization_removed": false
+      },
+      {
+        "id": "KPSY15_SIDIS_3003",
+        "publication": "1006.4221v1",
+        "target": "proton",
+        "hadron": "pi+",
+        "projection": "z",
+        "points": 7,
+        "source_sha256": "6f9c8673242b32e83dbc296539ad3fa861de8651ce6c521659d7bcca57a1ae8a",
+        "source_convention_id": "HERMES2010",
+        "original_depolarization_removed": false
+      },
+      {
+        "id": "KPSY15_SIDIS_3026",
+        "publication": "1006.4221v1",
+        "target": "proton",
+        "hadron": "pi+",
+        "projection": "pt",
+        "points": 6,
+        "source_sha256": "6df3ebd88e25d070f6311e8f1ed2aae1f6c083b35a9f3f087e9527bf262315fa",
+        "source_convention_id": "HERMES2010",
+        "original_depolarization_removed": false
+      },
+      {
+        "id": "KPSY15_SIDIS_3004",
+        "publication": "1006.4221v1",
+        "target": "proton",
+        "hadron": "pi-",
+        "projection": "x",
+        "points": 7,
+        "source_sha256": "b7c805e80a0a02cc927df177bb6a41bef4448a47077c59dc70e4d11946e869ab",
+        "source_convention_id": "HERMES2010",
+        "original_depolarization_removed": false
+      },
+      {
+        "id": "KPSY15_SIDIS_3018",
+        "publication": "1006.4221v1",
+        "target": "proton",
+        "hadron": "pi-",
+        "projection": "z",
+        "points": 7,
+        "source_sha256": "95862803dd42704f3b29e54821cc3a0daf2c5b827b91a58744f0dcb9680b8f35",
+        "source_convention_id": "HERMES2010",
+        "original_depolarization_removed": false
+      },
+      {
+        "id": "KPSY15_SIDIS_3016",
+        "publication": "1006.4221v1",
+        "target": "proton",
+        "hadron": "pi-",
+        "projection": "pt",
+        "points": 6,
+        "source_sha256": "c0cabfc589a265741ed7e54deeb687a98e3e233ea89412ff1793f796e16cb3ef",
+        "source_convention_id": "HERMES2010",
+        "original_depolarization_removed": false
+      },
+      {
+        "id": "KPSY15_SIDIS_3025",
+        "publication": "1408.4405",
+        "target": "proton",
+        "hadron": "pi+",
+        "projection": "x",
+        "points": 9,
+        "source_sha256": "0dd049543408fd7bd1aad1ac07b27cab96b0a543177ed3a4721c51725c693542",
+        "source_convention_id": "COMPASS2014",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_3010",
+        "publication": "1408.4405",
+        "target": "proton",
+        "hadron": "pi+",
+        "projection": "z",
+        "points": 8,
+        "source_sha256": "a6b9442f7c053581346129e53ae891ddb10203d3415b378018cc34f2f6ab6e2f",
+        "source_convention_id": "COMPASS2014",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_3027",
+        "publication": "1408.4405",
+        "target": "proton",
+        "hadron": "pi+",
+        "projection": "pt",
+        "points": 6,
+        "source_sha256": "9eef5e293acd23134193e9c0acdd75e3014981d6d9f1648ad05d051558f24d14",
+        "source_convention_id": "COMPASS2014",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_3005",
+        "publication": "1408.4405",
+        "target": "proton",
+        "hadron": "pi-",
+        "projection": "x",
+        "points": 9,
+        "source_sha256": "aea8082b519e52f0ec08406d6a259c6364d916b03a6c3a0f8cfa3d48443f5bb4",
+        "source_convention_id": "COMPASS2014",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_3013",
+        "publication": "1408.4405",
+        "target": "proton",
+        "hadron": "pi-",
+        "projection": "z",
+        "points": 8,
+        "source_sha256": "3a5d2099d6f216734946909a7ef91e32948fc4c242d56fd6f33f9ca57230f03e",
+        "source_convention_id": "COMPASS2014",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_3012",
+        "publication": "1408.4405",
+        "target": "proton",
+        "hadron": "pi-",
+        "projection": "pt",
+        "points": 6,
+        "source_sha256": "93b3f071277aec09ac2aec4c1af3c1dc21de673634b084c5b5d063c00aae262a",
+        "source_convention_id": "COMPASS2014",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_4000",
+        "publication": "0802.2160",
+        "target": "deuteron",
+        "hadron": "pi+",
+        "projection": "x",
+        "points": 9,
+        "source_sha256": "3a5c253d42e595480ff12462b0ede09582b75a07fe035c53b1f11e7fa33037e6",
+        "source_convention_id": "COMPASS2008",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_4002",
+        "publication": "0802.2160",
+        "target": "deuteron",
+        "hadron": "pi+",
+        "projection": "z",
+        "points": 8,
+        "source_sha256": "96b686e6e11e8d1af0a5fa94fbb54dc5009cc90e27edaf8e475c749e7c4b6a62",
+        "source_convention_id": "COMPASS2008",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_4001",
+        "publication": "0802.2160",
+        "target": "deuteron",
+        "hadron": "pi+",
+        "projection": "pt",
+        "points": 6,
+        "source_sha256": "a52f1144a01756f0a8c24dda58597a5f288073fb09337be9d379df0de9b29f4a",
+        "source_convention_id": "COMPASS2008",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_4003",
+        "publication": "0802.2160",
+        "target": "deuteron",
+        "hadron": "pi-",
+        "projection": "x",
+        "points": 9,
+        "source_sha256": "31d053263ae6b6262d57fff9ca9c6b177e07a38b26f503d9b71409cec1d50d43",
+        "source_convention_id": "COMPASS2008",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_4005",
+        "publication": "0802.2160",
+        "target": "deuteron",
+        "hadron": "pi-",
+        "projection": "z",
+        "points": 8,
+        "source_sha256": "d9062eab50f904ea26f92906c15f01e656ab715b6581b813168df235e882070e",
+        "source_convention_id": "COMPASS2008",
+        "original_depolarization_removed": null
+      },
+      {
+        "id": "KPSY15_SIDIS_4004",
+        "publication": "0802.2160",
+        "target": "deuteron",
+        "hadron": "pi-",
+        "projection": "pt",
+        "points": 6,
+        "source_sha256": "b5c3ca39ab97b53a1f0f460b8ad48ce4ae79b610ca35948656b3c05de81bf210",
+        "source_convention_id": "COMPASS2008",
+        "original_depolarization_removed": null
+      }
+    ],
+    "views": 18,
+    "points": 132,
+    "raw_points": 146,
+    "excluded_points": 14,
+    "counts_by_publication": {
+      "0802.2160": 46,
+      "1006.4221v1": 40,
+      "1408.4405": 46
+    },
+    "excluded_neutron_points": 8,
+    "source_policy": "Preserve the existing strict reported-mean P<0.8 cut for P-projected views, every source row/error and all 14 exclusions. No new event cut, rounding, primary-mean replacement or selection."
+  },
+  "primary_definitions": [
+    {
+      "id": "HERMES2010",
+      "publication": "1006.4221v1",
+      "pdf_sha": "89b84aec4847572cae3e6c9c044b75130df3bb3bd3dfe006320669cb9b1176be",
+      "source_sha": "0ed123f53fe401c7e61f141dd7ff5d1a54f0ddf46b177dd814b9bc9c8fe75cb6",
+      "member": "collins.tex",
+      "member_sha": "b5568669ba4ba2f2b048ab1b4b15e6fba722db512e7fa99dce3c8775b495d918",
+      "locations": "PDF 3-4, Eqs 1-4; TeX 143,172-220"
+    },
+    {
+      "id": "COMPASS2008",
+      "publication": "0802.2160v2",
+      "pdf_sha": "7bdcae73e26cfc80fdf6edeb7f36e9c03d3d3f97cccacc955329ab9f0ed40045",
+      "source_sha": "9b7466979e718dcfbdfac8f1f239d516fcfbe3d6b55aaed7cbe2cc686bf75aa6",
+      "member": "081216_transversity.tex",
+      "member_sha": "9056490a2b29fd051864e3c17b045f36046e831718697c50319cf23802a09aed",
+      "locations": "Collins angle; TeX 185-215,611-623"
+    },
+    {
+      "id": "COMPASS2014",
+      "publication": "1408.4405v1",
+      "pdf_sha": "ae8975382e0502e582dd0ff44aeee127fcaed5da44a6690a0f01040f66812050",
+      "source_sha": "4ffe782fd5dd0d0e61405f02eacb4850f6200e5ca72e11860acadb6c8e0a622d",
+      "member": "phep_2014_213_arxiv.tex",
+      "member_sha": "fcb3039c7d0d360b3bda980aa2db40351a38e6a409dddd74043f32419b9a81ae",
+      "locations": "PDF 8, TeX 106-109,318-345; references ref:transvp/ref:transvpsiv"
+    },
+    {
+      "id": "COMPASS2012Method",
+      "publication": "1205.5121v1",
+      "pdf_sha": "672a775c92fd8d713ef00957b43f5b870541b4e39cbcf6622cb460867bc2c15a",
+      "source_sha": "4853fdddd398dedf418fcf5c5888b113aae75fde39dd1b3fdb150c26de0acc10",
+      "member": "phep-2012-146.tex",
+      "member_sha": "0d3e293d719fd1cdd17cd90038cf9100c03bb85bb6947cb914e68b063de07df5",
+      "locations": "PDF 5-6, TeX 153-158,284-289; DOI 10.1016/j.physletb.2012.09.055"
+    }
+  ],
+  "model_conventions": {
+    "1006.4221v1": {
+      "id": "HERMES2010",
+      "phase": "sin_phi_sum",
+      "normalization": "fixed_y_DNN_included",
+      "formula": "DNN(reported_y)*R",
+      "source_binding_kind": "explicit_primary_Eqs 1_2_with_secondary_table_amplitude_identity_unverified",
+      "original_depolarization_removed": false,
+      "scope": "Use the secondary Collins amplitude as the published 2*moment coefficient; do not multiply measured values or predictions by another 2. Exact primary numerical transcription remains unverified."
+    },
+    "0802.2160": {
+      "id": "COMPASS2008",
+      "phase": "sin_phi_sum_minus_pi",
+      "normalization": "DNN_removed",
+      "formula": "-R",
+      "source_binding_kind": "explicit_primary_angle_and_extraction_equations",
+      "original_depolarization_removed": null,
+      "scope": "Primary A_Coll is divided by DNN, spin and dilution. Preserve the original unresolved candidate label; make the conditional model mapping explicit without a second correction."
+    },
+    "1408.4405": {
+      "id": "COMPASS2014",
+      "phase": "sin_phi_sum_minus_pi",
+      "normalization": "DNN_removed",
+      "formula": "-R",
+      "source_binding_kind": "conditional_inference_from_explicitly_cited_2012_A_Coll_extraction_definition",
+      "original_depolarization_removed": null,
+      "scope": "The 2014 paragraph names the sin(sum) harmonic span and references the 2012 extraction procedure. Bind A_Coll to the explicit Phi_C=sum-pi and epsilon_C=DNN*f*PT*A_Coll definition in 1205.5121v1; retain the 2014 shorthand and this inference. Do not infer from data signs or change source values."
+    }
+  },
+  "prediction": {
+    "canonical_ratio": "R=FUT^sin(phi_h+phi_s)/FUU under the unchanged parent kernel",
+    "kinematics": "fixed reported x,z,Q2,P; reported y only enters DNN-included mode; keep all means and unequal primary literals separate",
+    "source_tuple_key": [
+      "target",
+      "x",
+      "z",
+      "Q2_GeV2",
+      "pT_GeV"
+    ],
+    "distinct_source_tuples": 132,
+    "model_y": "Pass exact reported y only for HERMES. DNN-removed mode rejects y; retain reported y as source metadata.",
+    "target_weights": {
+      "proton": {
+        "unpolarized": [
+          1.0,
+          0.0
+        ],
+        "polarized": [
+          1.0,
+          0.0
+        ]
+      },
+      "deuteron": {
+        "unpolarized": [
+          0.5,
+          0.5
+        ],
+        "polarized": [
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "deuteron_prescription": "Conditional unbound isoscalar p+n per-nucleon sum, with exact isospin swapping and no D-state/binding correction. Sum separate UU/FUT before division; no average of asymmetries.",
+    "unchanged_conventions": "Apply only the final source phase/DNN factor once. Preserve the parent J1 minus sign, Hhat3=-2*z*M_h*H1perp(1), all mass/z factors, evolution, inputs and CSS settings.",
+    "range_policy": "reference; retain initial-source and extrapolation limitations",
+    "new_query_cache": false,
+    "direct_parameter_role": "Table 1 rounded central values, not a new fit or an exact historical optimizer state",
+    "parameter_order": [
+      "Nh_u",
+      "Nh_d",
+      "a_u",
+      "a_d",
+      "b_u",
+      "b_d",
+      "Nc_u",
+      "Nc_d",
+      "alpha_u",
+      "alpha_d",
+      "beta_u",
+      "beta_d",
+      "gc_GeV2"
+    ],
+    "parameter_values": [
+      0.85,
+      -1.0,
+      0.69,
+      1.79,
+      0.05,
+      7.0,
+      -0.262,
+      0.195,
+      1.69,
+      0.32,
+      0.0,
+      0.0,
+      0.0236
+    ],
+    "target_spin_and_dilution": "Already removed source amplitude; no second f or PT correction; no raw-count experimental correction API"
+  },
+  "numerical_policy": {
+    "relative_floor": 1e-08,
+    "physical_value_max_scaled": 0.0001,
+    "observable_algebra_max_scaled": 1e-12,
+    "source_projection_max_scaled": 1e-12,
+    "source_projection_reference_bits": 256,
+    "refinements": [
+      {
+        "matching_order": 4,
+        "radial_order": 8,
+        "intervals": 512
+      },
+      {
+        "matching_order": 8,
+        "radial_order": 16,
+        "intervals": 1024
+      },
+      {
+        "matching_order": 16,
+        "radial_order": 32,
+        "intervals": 2048
+      },
+      {
+        "matching_order": 32,
+        "radial_order": 32,
+        "intervals": 4096
+      }
+    ],
+    "minimum_refinement_level": 3,
+    "radial_bounds_inverse_GeV": [
+      12,
+      24,
+      32
+    ],
+    "acceptance": "All 132 signed UU,FUT and final amplitudes must meet the unchanged adjacent-level 1e-4 target at or after level 3. Retain every coarse result; exhausting level 4 is FAIL. Compare final 24-to-32 tails at the same target.",
+    "independent_reference": "All 132 parent fixed-row generic scalar/BigFloat assemblies, source phase/DNN and target sums. Native rows and initial functions are shared; no independent evolution claim.",
+    "source_fixture": "Explicitly synthetic positive counts, R=+/-1/8, PT=1/2 and a Sivers coefficient 1/16 at each actual source y; independent 256-bit two-angle Fourier projection. HERMES 2*moment and COMPASS DNN removal are checked separately, with wrong phase/DNN/factor2 counterfactuals.",
+    "target_fixture": "Independent positive-denominator rational p/n fixture with unequal UU; compare weighted yields before ratios and reject an average of asymmetries.",
+    "source_fixture_parameters": {
+      "reference_bits": 256,
+      "R": [
+        -0.125,
+        0.125
+      ],
+      "PT": 0.5,
+      "sivers": 0.0625,
+      "relative_floor": 1e-08,
+      "max_scaled": 1e-12,
+      "source_y_domain": "0<reported_y<1; no replacement or new cut",
+      "dilution": 1.0
+    }
+  },
+  "derivative_policy": {
+    "scope": "all 132_fixed_center_observations_all 13_derivatives_not_a_fit_domain_certificate",
+    "observations": 132,
+    "coordinates": 13,
+    "reference_bits": 256,
+    "steps": [
+      0.0001,
+      1e-05,
+      1e-06,
+      1e-07
+    ],
+    "direction": [
+      0.02,
+      0.03,
+      0.01,
+      0.02,
+      0.01,
+      0.01,
+      0.02,
+      -0.02,
+      0.01,
+      0.02,
+      0.03,
+      0.03,
+      0.001
+    ],
+    "relative_floor": 1e-08,
+    "gradient_max_scaled": 1e-07,
+    "HVP_max_scaled": 1e-07,
+    "stencil": "Fourth-order inward five-sample derivative (-25*f0+48*f1-36*f2+16*f3-3*f4)/(12*h); positive coordinate directions at closed boundaries; HVP differentiates the complete all 13 reference Jacobian along the declared inward direction.",
+    "retained_operands": "Store full decimal256-bit value/Jacobian samples for independent cancellation-sensitive arithmetic recomputation, both steps and adjacent comparisons.",
+    "closed_formula_controls": "Degrees 0..5 and exp(7*x) at x=.01 and both declared steps. Degree5 bias=-24*h^4; exponential signed error negative and fourth-order step-ratio error within the inherited 1 percent mathematical-control rule. These controls are explicitly synthetic.",
+    "closed_formula_control": {
+      "reference_bits": 256,
+      "x": 0.01,
+      "degrees": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "exponential_rate": 7,
+      "monomial_residual_abs_max": 1e-60,
+      "expected_convergence_order": 4,
+      "step_ratio_relative_tolerance": 0.01,
+      "gradient_max_scaled": 1e-07,
+      "width_fixture": {
+        "scope": "explicitly_synthetic_closed_function_not_TMD_prediction",
+        "formula": "f(t)=(0.042-t)^(-2)",
+        "point": 0.0236,
+        "analytic_gradient": "2*(0.042-t)^(-3)",
+        "analytic_Hessian": "6*(0.042-t)^(-4)",
+        "steps": [
+          0.0001,
+          1e-05,
+          1e-06,
+          1e-07
+        ],
+        "minimum_refinement_level": 3,
+        "gradient_max_scaled": 1e-07,
+        "HVP_max_scaled": 1e-07,
+        "policy": "Apply the same frozen fine-and-adjacent acceptance rule; preserve all coarse errors, including any unaccepted reference."
+      }
+    },
+    "inherited_initial_steps": [
+      0.0001,
+      1e-05
+    ],
+    "minimum_refinement_level": 3,
+    "acceptance": "Retain every coarse Jacobian/HVP and error. At or after the third declared step accept only when all 132 / all 13 candidate-vs-independent-reference and inward-reference comparisons, and adjacent inward gradient/HVP differences, meet the unchanged 1e-7 target. Unaccepted coarse references remain visible; exhausting the fourth step is FAIL. No parameter value or acceptance threshold is adjusted.",
+    "refinement_reason": "Prescribed before new physical predictions: fourth-order truncation depends on nonlinear parameter curvature and small widths. Keep the inherited first two steps and add two fixed decade refinements rather than assume every coarse stencil is already an accurate derivative reference."
+  },
+  "reporting": {
+    "likelihood_constructed": false,
+    "covariance_constructed": false,
+    "normalization_uncertainty_applied": false,
+    "errors": "Keep HERMES statistical and experimental systematic components separate; deuteron statistical-only with unquantified systematics; proton Sigma/error_u composition unresolved and statistical_error null for all 46 points.",
+    "products": "Source-bound numerical/derivative report and independent audit, CSV and separate experiment comparison figures after diagnostic acceptance. No chi2, pulls, parameter refit, tensor charge or coverage result.",
+    "raw_retention": "Atomic in-progress reports and initial FAIL invocations; preserve failures/timeouts/signals and reject absent/stale/forged completion markers. No synthetic receipt authorizes production."
+  },
+  "limitations": [
+    "Original fitter, modified HOPPET and unrounded optimizer states remain unlocated by bounded searches; earlier paper-center and coupling FAILs persist",
+    "HERMES primary numerical transcription is unverified; COMPASS proton additional means, Sigma composition and extra digits remain unresolved",
+    "COMPASS2014 source phase mapping is an explicit same-axis inference through its cited extraction method; retain the shorthand difference",
+    "Deuteron free-isoscalar model is a reconstruction assumption; no nuclear, target-mass/longitudinal-spin or acceptance admission",
+    "Projection overlap, covariance, systematic normalization and complete likelihood remain unresolved; no missing covariance is replaced by zero",
+    "All 132 fixed-center derivatives do not certify the fit domain, optimizer, G2PERF or interval coverage",
+    "B0 historical262, B1 updated SIDIS/SIA, B2/B3 STAR200/510, B4 paired full-x lattice, V1 robustness, uncertainty and publication remain required"
+  ],
+  "primary_manifest_sha256": "3f9f70bed5ac5bf1b389ca154b99d8eba834b49fc541e8d9522dbd1a951e44b6",
+  "parent_sha256": {
+    "config/historical-data-contract.json": "f5404753a1523e07d93cc188d2605782e63e3815116cb895cc7a37d73d705f25",
+    "config/leptonic-observable-contract.json": "f39aab371dd88f303b3b5b8623eb39d2380fa35625ae0af1cadcf6d7c894c679",
+    "config/sidis-convention-contract.json": "ca39139bdad5d87484c43559aaf4ef814b652d0e8287cac58f9aa3259d7adb99",
+    "config/initial-contract.json": "c782b979c5b9a1ff3a94072433f7307e8d922976c48e3036abd9de6118ac9ff7"
+  },
+  "execution_policy": {
+    "numerical_owner": "Julia",
+    "orchestrator": "Python/Snakemake complete jobs",
+    "model_or_Python_callbacks_in_numerical_loop": false,
+    "fixed_source": "Freeze request, all primary/data hashes, parameter vector and policy before workers start",
+    "sharding": "Allowed only as complete Julia jobs with deterministic disjoint source identities, all 132 coverage and an independent global ledger. Every point uses the same globally accepted native level, full native/tail/reference/derivative policy and original tolerances; a subset receipt never replaces the full result.",
+    "resources": "Calibrate budgets from actual pilot workloads; report actual RSS separately from row payload and current timing separately from peak/performance certification. Exhaustion or missing evidence is FAIL; retain available raw progress."
+  }
+}

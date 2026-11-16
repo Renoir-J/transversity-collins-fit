@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HISTORICAL-SIDIS-PRIMARY-001",
+  "scope": "primary_source_evidence_not_data_admission",
+  "production_ready": false,
+  "physical_extraction": false,
+  "sources": [
+    {
+      "id": "HERMES2010_pdf",
+      "filename": "1006.4221v1.pdf",
+      "format": "pdf",
+      "url": "https://arxiv.org/pdf/1006.4221v1",
+      "sha256": "89b84aec4847572cae3e6c9c044b75130df3bb3bd3dfe006320669cb9b1176be"
+    },
+    {
+      "id": "HERMES2010_source",
+      "filename": "1006.4221v1.src",
+      "format": "source",
+      "url": "https://arxiv.org/src/1006.4221v1",
+      "sha256": "0ed123f53fe401c7e61f141dd7ff5d1a54f0ddf46b177dd814b9bc9c8fe75cb6"
+    },
+    {
+      "id": "COMPASS2008_pdf",
+      "filename": "0802.2160v2.pdf",
+      "format": "pdf",
+      "url": "https://arxiv.org/pdf/0802.2160v2",
+      "sha256": "7bdcae73e26cfc80fdf6edeb7f36e9c03d3d3f97cccacc955329ab9f0ed40045"
+    },
+    {
+      "id": "COMPASS2008_source",
+      "filename": "0802.2160v2.src",
+      "format": "source",
+      "url": "https://arxiv.org/src/0802.2160v2",
+      "sha256": "9b7466979e718dcfbdfac8f1f239d516fcfbe3d6b55aaed7cbe2cc686bf75aa6"
+    },
+    {
+      "id": "COMPASS2014_pdf",
+      "filename": "1408.4405v1.pdf",
+      "format": "pdf",
+      "url": "https://arxiv.org/pdf/1408.4405v1",
+      "sha256": "ae8975382e0502e582dd0ff44aeee127fcaed5da44a6690a0f01040f66812050"
+    },
+    {
+      "id": "COMPASS2014_source",
+      "filename": "1408.4405v1.src",
+      "format": "source",
+      "url": "https://arxiv.org/src/1408.4405v1",
+      "sha256": "4ffe782fd5dd0d0e61405f02eacb4850f6200e5ca72e11860acadb6c8e0a622d"
+    },
+    {
+      "id": "COMPASS2012Method_pdf",
+      "filename": "1205.5121v1.pdf",
+      "format": "pdf",
+      "url": "https://arxiv.org/pdf/1205.5121v1",
+      "sha256": "672a775c92fd8d713ef00957b43f5b870541b4e39cbcf6622cb460867bc2c15a"
+    },
+    {
+      "id": "COMPASS2012Method_source",
+      "filename": "1205.5121v1.src",
+      "format": "source",
+      "url": "https://arxiv.org/src/1205.5121v1",
+      "sha256": "4853fdddd398dedf418fcf5c5888b113aae75fde39dd1b3fdb150c26de0acc10"
+    },
+    {
+      "id": "COMPASS2014_journal_pdf",
+      "filename": "COMPASS2014_journal.pdf",
+      "format": "pdf",
+      "url": "https://mediatum.ub.tum.de/doc/1349896/document.pdf",
+      "sha256": "0bafaf2bf6c6ddca2490357a21a02bdf433de36cde792dd867decf32482925ed",
+      "DOI": "10.1016/j.physletb.2015.03.056"
+    }
+  ],
+  "policy": "Separate convention-source cache. Preserve historical-sources.json and all 35 existing raw inputs unchanged. Verify exact bytes; no nearest-version or synthetic fallback."
+}
