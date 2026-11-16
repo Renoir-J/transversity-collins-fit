@@ -22,6 +22,7 @@ include("bounded_joint_tests.jl")
 include("bounded_initial_roundoff_tests.jl")
 include("historical_point_tests.jl")
 include("historical_audit_cli_tests.jl")
+include("historical_sia_point_tests.jl")
 
 @testset "LO transversity moments and fixed-operator AD" begin
     @test transversity_moment(1) ≈ -2/3
@@ -102,4 +103,3 @@ end
     @test chi2 ≈ dot(residual, (C + B * B') \ residual)
     @test length(nuisance) == 1
 end
-

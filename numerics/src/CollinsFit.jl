@@ -40,6 +40,7 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        joint_model_metadata, joint_likelihood_metadata,
        BoundedJointSettings, kpsy_parameter_bounds, fit_joint,
        HistoricalPointRequest, load_historical_point_request, historical_request_valid, historical_geometry_key, historical_point_model,
+       HistoricalSIAPointRequest, load_historical_sia_point_request, historical_sia_request_valid, historical_sia_geometry_key, historical_sia_point_model,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -160,6 +161,7 @@ include("StarEvolved.jl")
 include("JointLikelihood.jl")
 include("BoundedJointFit.jl")
 include("HistoricalPoints.jl")
+include("HistoricalSIAPoints.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)
@@ -353,4 +355,3 @@ function run_job(job)
 end
 
 end
-
