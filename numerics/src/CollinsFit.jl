@@ -50,6 +50,8 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        historical_sidis_job_policy, sidis_job_point_key, sidis_job_five_point,
        sidis_job_derivatives,
        sidis_job_reference_step, sidis_job_native_decision, sidis_job_derivative_decision,
+       fixed_context_storage_contract, fixed_leptonic_storage_signature,
+       save_fixed_leptonic_context, load_fixed_leptonic_context,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -162,6 +164,7 @@ include("InitialConditions.jl")
 include("CacheSnapshots.jl")
 include("Hoppet.jl")
 include("PolarizedLeptonic.jl")
+include("FixedContextStorage.jl")
 include("LeptonicObservables.jl")
 include("SIAQTWindows.jl")
 include("LeptonicBins.jl")
