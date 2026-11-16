@@ -47,6 +47,9 @@ export Context, load_context, coefficients, predict, predict!, objective, value_
        historical_sidis_pilot_policy, sidis_pilot_current_sources, sidis_pilot_source_fingerprint,
        sidis_pilot_case, sidis_pilot_source_factor, sidis_pilot_value_checks,
        sidis_pilot_measure, sidis_pilot_evaluations,
+       historical_sidis_job_policy, sidis_job_point_key, sidis_job_five_point,
+       sidis_job_derivatives,
+       sidis_job_reference_step, sidis_job_native_decision, sidis_job_derivative_decision,
        profile_nuisance, writejson, run_job
 
 struct Context
@@ -171,6 +174,7 @@ include("HistoricalSIAPoints.jl")
 include("HistoricalSIAIntegrals.jl")
 include("HistoricalSIDISPoints.jl")
 include("HistoricalSIDISPilot.jl")
+include("HistoricalSIDISJobs.jl")
 
 function fit(context; seed=20261111, starts=4, replicas=0, observations=nothing, indices=nothing)
     rng = MersenneTwister(seed)
