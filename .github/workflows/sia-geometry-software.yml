@@ -2,7 +2,7 @@ name: Synthetic SIA geometry software checks
 
 on:
   push:
-    branches: [feat/sia72-geometry]
+    branches: [feat/sia72-geometry, feat/sia72-execution]
   pull_request:
     paths:
       - numerics/bin/SIAGeometry*.jl

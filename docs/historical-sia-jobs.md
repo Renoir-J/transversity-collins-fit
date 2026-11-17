@@ -91,3 +91,9 @@ julia --project=numerics numerics/test/sia_geometry_reference_tests.jl
 ```
 
 The additive `Synthetic SIA geometry software checks` GitHub workflow runs these standalone Julia checks, the inherited suite, Python/source checks and synthetic closure/cache controls. Its branch trigger runs software fixtures only. It downloads no experimental tables, creates no physical geometry jobs and cannot authorize fitting. Physical dispatch and its independent complete ledger still require their own reviewed implementation.
+
+## Host resource observation
+
+The standalone host guard checks an explicit PID/start/boot/command tuple, the retained run namespace and known physical worker/reader programs. A replacement or orphan still blocks dispatch. An owner observed before scanning remains a blocker if it exits during the scan; missing or ambiguous process observations never release the host. Synthetic process fixtures retain a separate scope and cannot claim a live-host observation.
+
+A fixed per-user Linux lock can cover the complete producer/auditor pair. It is an administrative resource lease, not a scientific admission receipt. The scheduler, worker lease verification and complete invocation ledger remain pending; this module neither starts physical jobs nor turns a clear resource observation into a fitting gate.
