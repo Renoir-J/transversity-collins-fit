@@ -3,10 +3,27 @@ include("SIAJobBindings.jl")
 include("SIASourceControls.jl")
 module FrozenSIAControlsProducer
 end
+const LEGACY_ROOT=Ref{Union{Nothing,String}}(nothing)
 
 function load_legacy(frozen)
-    Base.include(FrozenSIAControlsProducer,joinpath(frozen,"numerics/bin/predict_historical_sia_integrals.jl"))
+    if LEGACY_ROOT[]===nothing
+        Base.include(FrozenSIAControlsProducer,joinpath(frozen,"numerics/bin/predict_historical_sia_integrals.jl"))
+        LEGACY_ROOT[]=frozen
+    else
+        LEGACY_ROOT[]==frozen || error("do not mix frozen numerical libraries in one worker")
+    end
     FrozenSIAControlsProducer
+end
+
+function produce_loaded(legacy,data,parent,binding)
+    SIASourceControls.produce(data,parent,binding,legacy.HSP.source_projection,legacy.HIR.mathematical_controls)
+end
+
+function produce_controls(context)
+    legacy=load_legacy(context.frozen)
+    # Enter the new method world once, outside the mathematical loop. The
+    # included files were verified before loading; no data selects executable code.
+    Base.invokelatest(produce_loaded,legacy,context.request.data,context.parent,context.binding)
 end
 
 function main(args=ARGS)
@@ -18,9 +35,7 @@ function main(args=ARGS)
         "theory_scope"=>"synthetic_closure","source_controls_success"=>false,"started_at"=>string(now(UTC))))
     SIAJobBindings.atomic_report(output,report)
     try
-        legacy=load_legacy(context.frozen)
-        report=SIASourceControls.produce(context.request.data,context.parent,context.binding,
-            legacy.HSP.source_projection,legacy.HIR.mathematical_controls)
+        report=produce_controls(context)
         SIAJobBindings.recheck(context)
     catch exception
         report["status"]="FAIL";report["source_controls_success"]=false

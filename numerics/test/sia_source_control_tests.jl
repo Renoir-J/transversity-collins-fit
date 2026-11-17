@@ -3,7 +3,6 @@ module RuntimeSourceProducerUnderTest
 include("../bin/run_sia_source_controls.jl")
 end
 const C=RuntimeSourceProducerUnderTest.SIASourceControls
-const L=RuntimeSourceProducerUnderTest.load_legacy(dirname(dirname(@__DIR__)))
 
 function fixture_source_data()
     points=Any[]
@@ -19,10 +18,13 @@ end
 
 @testset "Synthetic SIA source controls retain scope and independent saved arithmetic" begin
     parent=JSON.parsefile(joinpath(@__DIR__,"../../config/historical-sia-integral-contract.json"))
-    @test isdefined(L,:include)
     data=fixture_source_data();before=deepcopy(data)
     binding=Dict("fixture_id"=>"explicitly_synthetic_source_control_unit_test_not_primary_data")
-    report=C.produce(data,parent,binding,L.HSP.source_projection,L.HIR.mathematical_controls)
+    context=(frozen=dirname(dirname(@__DIR__)),request=(data=data,),parent=parent,binding=binding)
+    # This first runtime call loads methods after the caller has started. A
+    # top-level include would not cover the real worker's method-world boundary.
+    report=RuntimeSourceProducerUnderTest.produce_controls(context)
+    @test isdefined(RuntimeSourceProducerUnderTest.FrozenSIAControlsProducer,:include)
     @test report["status"]==C.COMPUTED
     @test report["theory_scope"]=="synthetic_closure"
     @test length(report["source_projection"])==144
@@ -66,8 +68,8 @@ end
         @test_throws ErrorException C.audit(data,parent,binding,changed)
     end
     changed=deepcopy(parent);changed["numerical_policy"]["source_projection_max_scaled"]=1.
-    @test_throws ErrorException C.produce(data,changed,binding,L.HSP.source_projection,L.HIR.mathematical_controls)
+    @test_throws ErrorException RuntimeSourceProducerUnderTest.produce_controls(merge(context,(parent=changed,)))
     @test_throws ErrorException C.audit(data,changed,binding,report)
     changeddata=deepcopy(data);pop!(changeddata["points"])
-    @test_throws ErrorException C.produce(changeddata,parent,binding,L.HSP.source_projection,L.HIR.mathematical_controls)
+    @test_throws ErrorException RuntimeSourceProducerUnderTest.produce_controls(merge(context,(request=(data=changeddata,),)))
 end
