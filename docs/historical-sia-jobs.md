@@ -73,3 +73,11 @@ The standalone Julia comparison uses explicitly synthetic native-row fixtures. A
 ```sh
 julia --project=numerics numerics/test/sia_geometry_model_tests.jl
 ```
+
+The native value computation and saved-arithmetic functions retain native1/2/3 or native4 at B24, both source ratios and all five momentum orders. Preparation uses the unchanged pinned DSS14/native routine; tests substitute explicitly synthetic Julia row fixtures and do not call it. The independent leaf reader checks exact settings, source kind, absolute pair/category yields, angular/window algebra and complete order coverage. A common normalization change that cancels in the ratio is still rejected if the two source ratios no longer retain identical absolute pair integrals. Intermediate checkpoints remain nonterminal and do not select a local momentum or native level.
+
+These functions have no physical dispatcher or completed-job marker. The complete source/command/resource ledger, tail/reference and derivative workers, independent global reader and cached products remain pending. A successful leaf arithmetic result explicitly leaves complete provenance verification and global selection false.
+
+```sh
+julia --project=numerics numerics/test/sia_geometry_native_tests.jl
+```
