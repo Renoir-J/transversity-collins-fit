@@ -19,3 +19,20 @@ The final independent reader requires the entire ledger, common selections, sour
 The prospective resource limits apply to each complete producer/auditor pair and are not throughput measurements. Physical dispatch waits for a frozen, reviewed implementation and for the existing SIDIS continuation to release the host. This work does not modify that running job or retry the old monolithic cloud command with the same budget.
 
 Missing original code, failed paper-center moments, source/acceptance assumptions, covariance/overlap and the complete B0-B4/V1 uncertainty/publication scope remain open.
+
+## Current implementation scope
+
+The source-only planner and Julia complete72 arithmetic reducers are implemented. Numerical geometry producers, independent per-job auditors, the complete execution ledger and physical cached products remain pending. This command cannot dispatch Julia numerical jobs:
+
+```sh
+python scripts/plan_sia_geometry_jobs.py plan \
+  --frozen /absolute/path/to/frozen-sia-checkout \
+  --request /absolute/path/to/source-request.json \
+  --output runs/sia-geometry-source-plan/attempt-1
+python scripts/plan_sia_geometry_jobs.py verify \
+  runs/sia-geometry-source-plan/attempt-1/plan.json \
+  --expected-sha256 EXTERNALLY_RETAINED_PLAN_SHA256
+julia --project=numerics numerics/test/sia_geometry_selection_tests.jl
+```
+
+Planning requires committed, unchanged raw Git blobs and replays all72 source rows below a fresh new directory. Verification requires an externally retained hash and a fresh source replay below that same directory. Neither a rehashed forged plan nor a successful source replay can authorize a physical job. The Julia reducers retain every declared momentum order, preserve all72 source identities, recompute absolute yields/category/ratio checks and apply the global common-order/native/finite-tail rules. Their tests use explicitly synthetic arithmetic and compare the packed values and error operands with the inherited numerical helpers; they are not physical predictions or an independent global job audit.
