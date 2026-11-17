@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-SIDIS-IMMUTABLE-CONTINUATION-001",
+  "scope": "same_attempt_reconstructed_full132_continuation_not_fitting",
+  "theory_scope": "reconstructed_theory",
+  "frozen_numerical_head": "bec12db0d65ed67a74de80bca949e21b80a99757",
+  "frozen_numerical_fingerprint": "5fc9b6b5602292875634402a52544a8a8d4942e6703b7d36322764efec462040",
+  "frozen_policy_sha256": "7ce5d19f131c573caceaf64d24b2cc09fe589aaa4b628137d73d2b56df995911",
+  "frozen_scientific_contract_sha256": "831d4f3435a1eea61b0ca664b7b61b1fa56b19f930d0e516d7e23bcb7c61ba45",
+  "supported_origin": {
+    "attempt_name": "attempt-2",
+    "completed_native123_prefix": 13,
+    "original_files": 141,
+    "interrupted_point_index": 14,
+    "outer_invocation_sha256": "51646d3952469dd703854aa520e2377823c5273fbf69c4e8f5b28f09114e007f",
+    "independent_prefix_review_sha256": "b1ae8d2f57791eddac0f742e8f7008402dfa9887469010195c513412ca95ae0e",
+    "post_review_integrity_sha256": "eb39cdc9ab651cd7664938baae8e60745497bf577e845e3da0fe6506f8957c46",
+    "original_loss_inventory_sha256": "fd9342c1f3ce0ae0fde04b8391815db19795fb99c8b3c658b57d54415f1df30c",
+    "prior_attempt1_records_accepted": false
+  },
+  "immutable_origin": {
+    "old_sources": "Verify every committed blob, clean HEAD, numerical fingerprint, contracts, original request, native/provider builds and original source bindings before dispatch and after each whole job.",
+    "old_outputs": "Verify the exact original141-file inventory and hashes before and after each whole job, including stale outer receipt and partial point14. Never overwrite, relocate, rename, delete, touch or repair an original file.",
+    "path_resolution": "A typed Julia continuation-path argument resolves only the original13 complete native123 folders to their actual original paths. Every other point/global folder resolves inside a fresh ignored run namespace. Add methods for this new argument type only; do not replace existing methods, monkey-patch globals, create filesystem aliases or rewrite receipts.",
+    "partial_point14": "Do not alias the partial folder. Recompute point14 from the beginning into a fresh real folder in the new namespace; retain every original partial operand and log.",
+    "executable_selection": "Explicit command arguments select the clean frozen checkout and trusted adapter. Cached data may not select arbitrary executables or code. Bind the committed adapter files separately from the unchanged numerical source fingerprint.",
+    "old_job_verification": "Verify each reused job at its actual original canonical path, including original invocation, resources and a fresh separate Julia arithmetic audit. Aliased paths do not rewrite or counterfeit original receipts."
+  },
+  "continuation": {
+    "numerical_owner": "Julia",
+    "orchestrator": "Python/Snakemake complete jobs only",
+    "source_request": "Use the exact original attempt2 request and source/build receipts. All132 source IDs, order, parameters, cuts, factors, uncertainties, target assumptions and refinement thresholds remain unchanged.",
+    "new_point_jobs": "Include the unchanged frozen Julia point producer/auditor sources as trusted libraries and pass the typed continuation-path argument to their existing functions. Run points14..132 and subsequent required phases in serial. Retain fresh initial/terminal invocations, progress, logs, raw GNU-time measurements and all failures.",
+    "global_jobs": "An explicitly bound adapter resolves old13 packets at their original paths and new packets at new paths. Use the unchanged Julia producer decisions and separate frozen native/decimal readers over all132 identities. No monkey-patching of frozen modules or forged/relocated receipts.",
+    "all_phases_required": "All132 native123 pairs, a global third-level decision, all132 native4 pairs if requested, common-native selection, explicit synthetic source-math controls, all132 finite-tail/all13 independent256-bit center/first3 inward references, all132 reference4 pairs if requested, and the complete independent final ledger before CSV/three experiment figures.",
+    "resources": "Use the unchanged phase-specific whole-Julia-job time, command RSS and available-memory limits from the frozen policy. Cached reviews use the global limits. No limit or acceptance target may be relaxed.",
+    "cache_review": "Current source, original inventory, exact path resolver and full metadata must be checked on cached use. A fresh complete-Julia prefix reader validates the new resolver before point14 dispatch. Fresh Julia readers write only into unique new cache-review directories. A marker, stale IN_PROGRESS, saved PASS or prior review alone is insufficient.",
+    "failure": "A failed, interrupted or occupied new job folder is retained and rejected. Never silently resume an individual Julia process, reuse its incomplete report, or recompute another attempt's completed jobs as this attempt's evidence. No automatic fitting follows this diagnostic.",
+    "origin_shutdown": "An observation timeout is not a shutdown. Dispatch requires confirmed absence of the old owner; record boot/process identity and the immutable interruption evidence separately from job success."
+  },
+  "reporting": {
+    "new_transport_provenance_required": true,
+    "old_measurements_reexecuted": false,
+    "new_query_or_parameter_response_cache": false,
+    "synthetic_receipts_authorize_physics": false,
+    "native_evolution_independently_reimplemented": false,
+    "scope": "A completed continuation can establish only the original conditional fixed-center full132 diagnostic after all frozen checks. It cannot authorize a likelihood, production fitting, G2PERF, tensor-charge interval or parameter-domain coverage.",
+    "limitations": "Retain original author-code/unrounded-state gaps, paper-center/coupling FAILs, source transcription, target/acceptance, covariance/projection overlap and shared-native-row limitations. All B0 historical262 fitting, B1 updated SIDIS/SIA, B2/B3 STAR200/510, B4 paired full-x lattice, V1 robustness, uncertainty and publication work remains required."
+  },
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "accepted_prediction_diagnostic": false,
+  "accepted_fitting_gate": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "all132_coverage_verified": false
+}
