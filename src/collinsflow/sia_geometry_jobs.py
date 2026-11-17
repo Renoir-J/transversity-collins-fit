@@ -176,7 +176,8 @@ def prepare_plan(frozen, request_path, output, *, adapter=ROOT):
                                              "fresh cached physical diagnostic and products"]}
         if (verify_checkout(frozen, head=old_head)[1] != old_files or
                 verify_checkout(adapter, head=new_head)[1] != new_files or
-                any(file_hash(path) != sha for path, sha in request["source_inputs"].items())):
+                any(file_hash(path) != sha for path, sha in request["source_inputs"].items()) or
+                file_hash(request_path) != request_sha or file_hash(fresh) != plan["request_sha256"]):
             raise ValueError("source identities changed during planning")
         provenance.atomic_json(folder / "plan.json", plan)
         invocation.update(status=PLAN_STATUS, plan_sha256=file_hash(folder / "plan.json"), geometries=36, points=72)
@@ -244,7 +245,9 @@ def verify_plan(path, *, expected_sha256):
                 file_hash(path) != expected_sha256 or
                 any(file_hash(p) != sha for p, sha in request["source_inputs"].items()) or
                 verify_checkout(frozen, head=old_head)[1] != old_files or
-                verify_checkout(adapter, head=new_head)[1] != new_files):
+                verify_checkout(adapter, head=new_head)[1] != new_files or
+                file_hash(request_path) != plan["request_sha256"] or
+                file_hash(original) != plan["source_request_sha256"]):
             raise ValueError("source replay or current complete source identities differ")
         receipt.update(status="SOURCE_PLAN_REPLAY_VERIFIED_NOT_NUMERICAL_DISPATCH_OR_GATE",
                        fresh_request_sha256=file_hash(fresh), geometries=36, points=72)

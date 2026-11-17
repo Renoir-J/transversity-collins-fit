@@ -1,12 +1,14 @@
 """Explicitly synthetic source-planning and raw-source identity controls."""
 import copy
 import json
+from pathlib import Path
 import subprocess
+from types import SimpleNamespace
 
 import pytest
 
 from collinsflow import sia_geometry_jobs as jobs
-from collinsflow.provenance import read_json
+from collinsflow.provenance import atomic_json, read_json
 from test_historical_sia_integrals import synthetic_candidate
 from collinsflow.historical_sia_integrals import request_points
 
@@ -148,3 +150,76 @@ def test_plan_schema_rejects_rehashed_boolean_or_other_versions(tmp_path, versio
         "numerical_dispatch_ready", "physical_jobs_started"), False))), encoding="utf-8")
     with pytest.raises(ValueError, match="cannot admit"):
         jobs.verify_plan(path, expected_sha256=jobs.file_hash(path))
+
+
+@pytest.fixture
+def synthetic_planning_context(tmp_path, monkeypatch):
+    """Mock only source/Git boundaries; write no real source or numerical file."""
+    policy_data = jobs.load_policy()
+    parent = (jobs.ROOT / "config/historical-sia-integral-contract.json").read_bytes()
+    frozen, adapter = tmp_path / "frozen", tmp_path / "adapter"
+    (frozen / "config").mkdir(parents=True)
+    (frozen / "config/historical-sia-integral-contract.json").write_bytes(parent)
+    files = {f"explicitly-synthetic-source-{i}": str(i) for i in range(302)}
+
+    def checkout(path, **kwargs):
+        return (jobs.FROZEN_HEAD if Path(path) == frozen else "synthetic-additive-head", copy.deepcopy(files))
+
+    monkeypatch.setattr(jobs, "ROOT", adapter)
+    monkeypatch.setattr(jobs, "load_policy", lambda *args: policy_data)
+    monkeypatch.setattr(jobs, "verify_checkout", checkout)
+    request = fixture_request()
+    request.update(source_preparation=dict(manifest="synthetic", cache="synthetic", candidates="synthetic"),
+                   source_inputs={}, limitations=["explicitly synthetic metadata race fixture"])
+    original = tmp_path / "source.json"
+    atomic_json(original, request)
+
+    def prepare(manifest, cache, candidates, output):
+        atomic_json(output, request)
+
+    api = SimpleNamespace(prepare_request=prepare)
+    provenance = SimpleNamespace(atomic_json=atomic_json, source_fingerprint=lambda path: jobs.FROZEN_FP)
+    monkeypatch.setattr(jobs, "_trusted_api", lambda path: (api, provenance))
+    return dict(original=original, folder=adapter / "runs/attempt-1", adapter=adapter, frozen=frozen,
+                api=api, checkout=checkout, prepare=prepare)
+
+
+@pytest.mark.parametrize("target", ["original", "saved"])
+def test_request_bytes_changed_during_final_replay_are_rejected(synthetic_planning_context, target):
+    context = synthetic_planning_context
+    original, folder = context["original"], context["folder"]
+    jobs.prepare_plan(context["frozen"], original, folder, adapter=context["adapter"])
+    plan = folder / "plan.json"
+    bound_sha = jobs.file_hash(plan)
+
+    def mutate(manifest, cache, candidates, output):
+        context["prepare"](manifest, cache, candidates, output)
+        changed = original if target == "original" else folder / "request.json"
+        changed.write_text(changed.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+
+    context["api"].prepare_request = mutate
+    with pytest.raises(ValueError, match="source replay|request bytes"):
+        jobs.verify_plan(plan, expected_sha256=bound_sha)
+    receipts = list((folder / "source-replays").glob("*/replay.json"))
+    assert len(receipts) == 1 and read_json(receipts[0])["status"] == "FAIL"
+    assert read_json(plan)["numerical_dispatch_ready"] is False
+
+
+@pytest.mark.parametrize("target", ["original", "saved"])
+def test_request_bytes_changed_during_final_source_scan_are_rejected(synthetic_planning_context, monkeypatch, target):
+    context = synthetic_planning_context
+    calls = 0
+
+    def mutate(path, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 4:
+            changed = context["original"] if target == "original" else context["folder"] / "request.json"
+            changed.write_text(changed.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+        return context["checkout"](path, **kwargs)
+
+    monkeypatch.setattr(jobs, "verify_checkout", mutate)
+    with pytest.raises(ValueError, match="source identities changed"):
+        jobs.prepare_plan(context["frozen"], context["original"], context["folder"], adapter=context["adapter"])
+    assert read_json(context["folder"] / "invocation.json")["status"] == "FAIL"
+    assert not (context["folder"] / "plan.json").exists()
