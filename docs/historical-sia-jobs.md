@@ -63,3 +63,13 @@ python scripts/run_sia_source_controls.py verify SOURCE_PLAN CONTROL_FOLDER \
 ```
 
 Cache verification also starts a fresh independent Julia saved-arithmetic reader in a separate new review directory, with its own resource record. Rehashing a changed report and marker cannot replace this arithmetic check. These commands run explicitly synthetic controls only. Their completion marker never authorizes physical geometry dispatch or fitting.
+
+## Selected geometry model
+
+`SIAGeometryModel.SelectedSIAGeometry` owns an explicit two-row view and retains the unchanged complete72 request. It is a distinct type, rather than a shortened `HistoricalSIAIntegralRequest`. Every construction and use checks the full request, the exact geometry partition, the source-specific UC/UL rows and the owned view snapshot. Its model method uses the inherited window, angular source types and observable construction without replacing the existing full-request method. It accepts exactly one matching prepared geometry context.
+
+The standalone Julia comparison uses explicitly synthetic native-row fixtures. At all36 geometries and all five momentum orders it compares complete saved pair/category/amplitude outputs with the unchanged full72 producer. At the same three derivative geometries it compares all13 gradients and HVPs, including exact first-six zeros. It also checks that measured values and reported mean P do not enter predictions. These are model-composition checks, not real-data geometry calculations, native-evolution accuracy or a complete-job certificate.
+
+```sh
+julia --project=numerics numerics/test/sia_geometry_model_tests.jl
+```
