@@ -58,6 +58,18 @@ original committed files must match in both checkouts; the adapter only adds
 files. The explicit frozen-checkout argument selects trusted source code.
 Cached manifests cannot select an executable or an alternative checkout.
 
+Each fresh raw-source replay writes its request and receipt under the new
+namespace's `source-replays/` directory. The original request remains an input.
+The adapter does not call the legacy Python request verifier, which creates a
+temporary directory beside its input request. Original job metadata receives
+the same source/input/output/resource checks without those temporary writes;
+the unchanged complete Julia reader still audits every original packet.
+
+A per-job `job.completed` marker is created only after both complete commands
+and all metadata checks succeed. The original Julia global reader requires it.
+Cached verification requires the marker plus the full source, resource, output
+and arithmetic evidence. A forged marker never repairs a failed invocation.
+
 Prepare a fresh directory under the frozen checkout's ignored `runs/` tree:
 
 ```sh

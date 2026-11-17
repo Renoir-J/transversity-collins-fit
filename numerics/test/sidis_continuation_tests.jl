@@ -6,6 +6,7 @@ const original_string_method=which(HistoricalSIDISJobRecords.point_folder,Tuple{
 include("../bin/SIDISContinuationDispatch.jl")
 
 @testset "Explicitly synthetic continuation path dispatch" begin
+    @test Paths.ADAPTER==realpath(joinpath(@__DIR__,"../.."))
     mktempdir() do temp
         root=joinpath(temp,"new");original=joinpath(temp,"old")
         mkpath(root);mkpath(original)

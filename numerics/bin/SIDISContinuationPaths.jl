@@ -1,7 +1,7 @@
 module SIDISContinuationPaths
 using JSON, SHA, Dates
 
-const ADAPTER=normpath(joinpath(@__DIR__,"../.."))
+const ADAPTER=dirname(dirname(@__DIR__))
 const FROZEN_HEAD="bec12db0d65ed67a74de80bca949e21b80a99757"
 const CONTRACT_SHA="47059f3236115d0c171bb7b487929b13ca579d876e61839cb33632f0a62a2417"
 const POLICY_COMMIT="e9f86df76ab5f1bedbea52290a0aad5f70be7a2e"

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 import hashlib
+import importlib
 import json
 import os
 from pathlib import Path
@@ -146,6 +147,72 @@ def owner_absent():
             "matching_original_owners": [], "original_processes_signaled": False}
 
 
+def verify_source_request(m):
+    """Replay raw sources into the new namespace, without legacy temp writes."""
+    path = Path(m["request"])
+    original = read_json(path)
+    source = original["source_preparation"]
+    module = importlib.import_module("collinsflow.historical_sidis_points")
+    if Path(module.__file__).resolve().parents[2] != Path(m["frozen"]):
+        raise ValueError("source replay must use the explicit frozen library")
+    folder = Path(m["run"])/"source-replays"/uuid.uuid4().hex
+    folder.mkdir(parents=True, exist_ok=False)
+    if folder.resolve() != folder:
+        raise ValueError("source replay output must not be aliased")
+    rec = {"status": "FAIL", "scope": "reconstructed_source_replay_only_not_numerical_admission",
+           "original_request_sha256": file_hash(path), **dict.fromkeys(FLAGS, False)}
+    try:
+        fresh = folder/"request.json"
+        module.prepare_request(source["manifest"], source["cache"], source["candidates"], source["primary_cache"], fresh)
+        if (read_json(fresh) != original or file_hash(path) != rec["original_request_sha256"] or
+                any(file_hash(p) != h for p, h in original["source_inputs"].items())):
+            raise ValueError("changed source-derived original SIDIS request")
+        rec.update(status="CURRENT_RAW_SOURCE_REPLAY_VERIFIED_NEW_OUTPUT_ONLY_NOT_NUMERICAL_GATE",
+                   fresh_request_sha256=file_hash(fresh))
+    except BaseException as error:
+        rec["error"] = type(error).__name__+": "+str(error)
+        raise
+    finally:
+        atomic_json(folder/"replay.json", rec)
+    return original
+
+
+def _verify_original_job(m, index, request, api):
+    """The frozen metadata checks, using an already fresh replay and actual paths.
+
+    The legacy verify_metadata calls verify_request, which creates a temporary
+    directory under the old request parent. Do not invoke that writing helper.
+    The complete original Julia reader remains mandatory and unchanged.
+    """
+    folder = point_folder(m, "native123", index)
+    inv = read_json(folder/"invocation.json")
+    if (inv.get("status") != api.COMPLETED or inv.get("source_fingerprint") != m["numerical_source_fingerprint"] or
+            inv.get("phase") != "native123" or type(inv.get("point_index")) is not int or inv["point_index"] != index or
+            not api._flags(inv) or inv.get("policy_sha256") != api.POLICY_SHA or
+            inv.get("time_binary") != str(api.TIME_BINARY) or inv.get("code_commit") != FROZEN_HEAD or not inv.get("completed_at")):
+        raise ValueError("stale, failed or wrong original native123 job")
+    expected = api.input_paths(Path(m["request"]), Path(m["native"]), Path(m["parton"]), Path(m["original"])/"full",
+                               "native123", index, request, m["numerical_source_fingerprint"])
+    if (inv["input_hashes"] != {str(p): file_hash(p) for p in expected} or
+            set(inv["outputs"]) != api._products(folder) or
+            any(file_hash(p) != h for p, h in inv["outputs"].items()) or
+            file_hash(folder/"initial-invocation.json") != inv["initial_record_sha256"] or
+            read_json(folder/"initial-invocation.json")["record_role"] != "initial_sentinel_not_an_executed_failure" or
+            [s["name"] for s in inv["steps"]] != ["producer", "audit"]):
+        raise ValueError("changed or incomplete original input/output/sentinel inventory")
+    budget = {"resources": api.load_policy()["resources"]["native123"]}
+    for s in inv["steps"]:
+        api._require_command_success(s, budget)
+        if (file_hash(folder/(s["name"]+".log")) != s["log_sha256"] or
+                file_hash(folder/(s["name"]+".resources.txt")) != s["resource_sha256"] or
+                api.parse_resource_file(folder/(s["name"]+".resources.txt")) != s["resource"]):
+            raise ValueError("changed original complete-command measurements")
+    if sum(s["wrapper_elapsed_seconds"] for s in inv["steps"]) > budget["resources"]["whole_Julia_jobs_time_budget_seconds"]:
+        raise ValueError("original whole-job budget exhausted")
+    api._report_audit(folder, "native123", index, request, m["numerical_source_fingerprint"], m["request_sha256"])
+    return inv
+
+
 def verify_manifest(path, frozen, adapter, api, *, expected_sha=None):
     path, frozen, adapter = map(lambda p: Path(p).resolve(), (path, frozen, adapter))
     if expected_sha is not None and file_hash(path) != expected_sha:
@@ -192,13 +259,14 @@ def verify_manifest(path, frozen, adapter, api, *, expected_sha=None):
     if any(file_hash(p) != h for p, h in deps.items()):
         raise ValueError("changed frozen native/provider receipt")
     request_path = original/"full/request.json"
-    request = api.verify_request(request_path)
+    request = verify_source_request(m)
     if str(request_path) != m["request"] or file_hash(request_path) != m["request_sha256"]:
         raise ValueError("changed exact original source request")
     for i in range(1, PREFIX+1):
-        api.verify_metadata(request_path, m["native"], m["parton"], original/"full", "native123", i)
+        _verify_original_job(m, i, request, api)
     if request["source_fingerprint"] != c["frozen_numerical_fingerprint"]:
         raise ValueError("wrong numerical source fingerprint")
+    verify_inventory(original, inventory)
     owner_absent()
     return m
 
@@ -286,10 +354,10 @@ def input_paths(m, path, phase, index, api):
     return sorted({p.resolve() for p in paths})
 
 
-def verify_job(m, path, phase, index, api):
+def _verify_job_metadata(m, path, phase, index, api):
     folder = point_folder(m, phase, index)
     if phase == "native123" and index <= PREFIX:
-        return api.verify_metadata(m["request"], m["native"], m["parton"], Path(m["original"])/"full", phase, index)[3]
+        return _verify_original_job(m, index, read_json(m["request"]), api)
     inv = read_json(folder/"invocation.json")
     final = phase == "diagnostic"
     if (inv.get("status") != api.COMPLETED or inv.get("phase") != phase or
@@ -323,6 +391,14 @@ def verify_job(m, path, phase, index, api):
         raise ValueError("unbound continuation producer/reader")
     if final and (folder/"point-comparison.csv").read_text() != api.comparison_csv(report):
         raise ValueError("changed comparison CSV")
+    return inv
+
+
+def verify_job(m, path, phase, index, api):
+    inv = _verify_job_metadata(m, path, phase, index, api)
+    marker = point_folder(m, phase, index)/"job.completed"
+    if not marker.is_file() or marker.is_symlink():
+        raise ValueError("missing canonical completion marker; metadata alone cannot replace workflow completion")
     return inv
 
 
@@ -453,14 +529,15 @@ def run_job(m, path, phase, index, api, julia, timeout_seconds=None):
             inv.update(scope=api.SCIENTIFIC_SCOPE, accepted_prediction_diagnostic=True, all132_coverage_verified=True)
         inv["completed_at"] = api.utc_now()
         atomic_json(folder/"invocation.json", inv)
-        verify_job(m, path, phase, index, api)
+        _verify_job_metadata(m, path, phase, index, api)
+        (folder/"job.completed").touch(exist_ok=False)
     except BaseException as error:
         inv["status"] = "FAIL"
         inv.update(dict.fromkeys(FLAGS, False))
         inv["error"] = type(error).__name__+": "+str(error)
         raise
     finally:
-        inv["completed_at"] = api.utc_now()
+        inv.setdefault("completed_at", api.utc_now())
         atomic_json(folder/"invocation.json", inv)
     return verify_job(m, path, phase, index, api)
 

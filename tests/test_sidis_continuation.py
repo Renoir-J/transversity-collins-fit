@@ -203,3 +203,94 @@ def test_real_complete_command_failures_retain_new_files_and_original_bytes(name
         assert inv["steps"][0]["returncode"] == 7
     else:
         assert len(inv["steps"]) == 2 and all(s["returncode"] == 0 for s in inv["steps"])
+
+
+def test_successful_synthetic_transport_creates_marker_only_after_both_commands(namespace, tmp_path, monkeypatch):
+    """The unchanged full Julia reader also requires the per-job marker."""
+    from collinsflow import historical_sidis_jobs as jobs
+    m = dict(namespace, frozen=str(tmp_path/"synthetic-kernel"), adapter=str(tmp_path/"synthetic-adapter"),
+        numerical_source_fingerprint="EXPLICITLY_SYNTHETIC_TRANSPORT_METADATA", adapter_commit="SYNTHETIC", adapter_files={})
+    path = Path(m["run"])/"continuation.json"
+    path.write_text('{"scope":"explicitly_synthetic_transport_test_not_a_physical_manifest"}')
+    m.update(request=str(tmp_path/"request.json"), native=str(tmp_path/"native.json"), parton=str(tmp_path/"parton.json"))
+    request = {"parameters": {"role": "explicitly_synthetic_transport_metadata"},
+               "points": [{"id": "SYNTHETIC:"+str(i)} for i in range(1, 133)]}
+    budget = dict(whole_Julia_jobs_time_budget_seconds=10, maximum_command_RSS_KiB=3*1024**2,
+                  minimum_available_memory_bytes=0)
+    keys = ("SCOPE", "POLICY_SHA", "TIME_BINARY", "COMPLETED", "_pilot_lock", "_timed_job", "_require_command_success",
+            "_deadline", "_report_audit", "utc_now", "_flags", "_products", "parse_resource_file")
+    api = SimpleNamespace(**{name: getattr(jobs, name) for name in keys})
+    api.load_policy = lambda: {"resources": {"native123": budget}}
+    for item in c.input_paths(m, path, "native123", 14, api):
+        if item in (jobs.TIME_BINARY, path):
+            continue
+        item.parent.mkdir(parents=True, exist_ok=True)
+        item.write_text('{"scope":"EXPLICITLY_SYNTHETIC"}')
+    c.atomic_json(m["request"], request)
+    m["request_sha256"] = c.file_hash(m["request"])
+    shared = Path(m["frozen"])/".runtime/sidis-pilot.lock"
+    shared.parent.mkdir()
+    shared.write_text("SYNTHETIC_READ_ONLY_LOCK")
+    monkeypatch.setattr(c, "verify_manifest", lambda *a: m)
+    monkeypatch.setattr(c, "verify_prefix", lambda *a: {})
+    actual_verify = c.verify_job
+    monkeypatch.setattr(c, "verify_job", lambda *a: {} if a[3] == 13 else actual_verify(*a))
+    folder = c.point_folder(m, "native123", 14)
+    marker = folder/"job.completed"
+    common = dict(scope=jobs.SCOPE, source_fingerprint=m["numerical_source_fingerprint"],
+        request_sha256=m["request_sha256"], policy_sha256=jobs.POLICY_SHA,
+        continuation=c.provenance(m, path), **dict.fromkeys(c.FLAGS, False))
+    report = dict(common, status="POINT_JOB_RECORDED_NOT_DIAGNOSTIC_GATE", phase="native123", point_index=14,
+        point=request["points"][13], source_points=132, parameters=request["parameters"],
+        fixture_scope="EXPLICITLY_SYNTHETIC_HEADERS_NO_NUMERICAL_PREDICTION")
+    def command(m, path, julia, program, *args):
+        prefix = f"from pathlib import Path; import json,hashlib; assert not Path({str(marker)!r}).exists();"
+        if program.startswith("run_"):
+            code = prefix+f"Path({str(folder/'report.json')!r}).write_text({json.dumps(report)!r})"
+        else:
+            audit = dict(common, status=jobs.AUDITED)
+            code = (prefix+f"a=json.loads({json.dumps(audit)!r});"
+                f"a['report_sha256']=hashlib.sha256(Path({str(folder/'report.json')!r}).read_bytes()).hexdigest();"
+                f"Path({str(folder/'audit.json')!r}).write_text(json.dumps(a))")
+        return [sys.executable, "-c", code]
+    monkeypatch.setattr(c, "_julia_command", command)
+    inv = c.run_job(m, path, "native123", 14, api, sys.executable)
+    assert inv["status"] == jobs.COMPLETED and marker.is_file()
+    assert c.verify_job(m, path, "native123", 14, api) == inv
+    marker.unlink()  # Only this explicitly synthetic tmp_path fixture is changed.
+    with pytest.raises(ValueError, match="completion marker"):
+        c.verify_job(m, path, "native123", 14, api)
+
+
+@pytest.mark.parametrize("changed", (False, True))
+def test_raw_source_replay_never_uses_original_directory_for_output(namespace, tmp_path, monkeypatch, changed):
+    original = Path(namespace["original"])
+    request_path = original/"request.json"
+    raw = tmp_path/"synthetic-raw.txt"
+    raw.write_text("EXPLICITLY_SYNTHETIC_RAW_SOURCE")
+    payload = dict(scope="explicitly_synthetic_source_isolation_fixture", source_inputs={str(raw): c.file_hash(raw)},
+        source_preparation=dict(manifest="SYNTHETIC", cache="SYNTHETIC", candidates="SYNTHETIC", primary_cache="SYNTHETIC"))
+    c.atomic_json(request_path, payload)
+    before = {str(p): c.file_hash(p) for p in original.rglob("*") if p.is_file()}
+    m = dict(namespace, request=str(request_path), frozen=str(tmp_path/"synthetic-frozen"))
+    def prepare(*args):
+        output = Path(args[-1])
+        assert output.is_relative_to(Path(namespace["run"])/"source-replays")
+        assert not output.is_relative_to(original)
+        data = dict(payload)
+        if changed:
+            data["scope"] = "CHANGED_SYNTHETIC_SOURCE"
+        c.atomic_json(output, data)
+    fake = SimpleNamespace(__file__=str(Path(m["frozen"])/"src/collinsflow/historical_sidis_points.py"), prepare_request=prepare)
+    monkeypatch.setattr(c.importlib, "import_module", lambda name: fake)
+    if changed:
+        with pytest.raises(ValueError, match="changed source-derived"):
+            c.verify_source_request(m)
+    else:
+        assert c.verify_source_request(m) == payload
+    assert {str(p): c.file_hash(p) for p in original.rglob("*") if p.is_file()} == before
+    receipts = list((Path(namespace["run"])/"source-replays").glob("*/replay.json"))
+    assert len(receipts) == 1
+    rec = c.read_json(receipts[0])
+    assert rec["status"] == ("FAIL" if changed else "CURRENT_RAW_SOURCE_REPLAY_VERIFIED_NEW_OUTPUT_ONLY_NOT_NUMERICAL_GATE")
+    assert all(rec[f] is False for f in c.FLAGS)
