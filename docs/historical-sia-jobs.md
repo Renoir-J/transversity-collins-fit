@@ -36,3 +36,30 @@ julia --project=numerics numerics/test/sia_geometry_selection_tests.jl
 ```
 
 Planning requires committed, unchanged raw Git blobs and replays all72 source rows below a fresh new directory. Verification requires an externally retained hash and a fresh source replay below that same directory. Neither a rehashed forged plan nor a successful source replay can authorize a physical job. The Julia reducers retain every declared momentum order, preserve all72 source identities, recompute absolute yields/category/ratio checks and apply the global common-order/native/finite-tail rules. Their tests use explicitly synthetic arithmetic and compare the packed values and error operands with the inherited numerical helpers; they are not physical predictions or an independent global job audit.
+
+## Synthetic source-control workers
+
+Separate Julia source-control and saved-record audit workers implement the inherited angular Fourier and inward-stencil controls before physical geometry jobs. All72 source angular scalars and both signs are retained. The reader recomputes 433 saved comparison/decision entries and reevaluates the closed monomial/exponential controls. It does not rerun Fourier quadrature, native evolution, physical SIA integrals or AD. Both reports remain explicitly synthetic and leave every physical-dispatch, diagnostic-admission and fitting flag false.
+
+The workers require the explicit frozen numerical Julia project, an externally bound current source plan and an additive adapter commit. They recheck every committed raw source blob, the full request, source inputs and final request/plan bytes. Source-control reports and audits require fresh output paths below the plan's run. The complete source-control pair scheduler records both GNU-time measurements and raw/effective outcomes, uses the prospective global resource budget, retains initial/failure records and writes a bound completion marker only after both commands and fresh source verification succeed. Cache verification requires the external plan/hash/launcher tuple and the complete inputs/outputs/resources. Physical geometry scheduling and its complete ledger remain pending.
+
+```sh
+julia --project=/absolute/path/to/frozen-sia-checkout/numerics \
+  numerics/bin/run_sia_source_controls.jl \
+  /absolute/path/to/frozen-sia-checkout SOURCE_PLAN PLAN_SHA FRESH_REPORT
+julia --project=/absolute/path/to/frozen-sia-checkout/numerics \
+  numerics/bin/audit_sia_source_controls.jl \
+  /absolute/path/to/frozen-sia-checkout SOURCE_PLAN PLAN_SHA REPORT REPORT_SHA FRESH_AUDIT
+julia --project=numerics numerics/test/sia_source_control_tests.jl
+```
+
+The complete source-control pair can be scheduled and checked with:
+
+```sh
+python scripts/run_sia_source_controls.py run SOURCE_PLAN \
+  --expected-sha256 PLAN_SHA --output FRESH_CONTROL_FOLDER --julia /absolute/path/to/julia
+python scripts/run_sia_source_controls.py verify SOURCE_PLAN CONTROL_FOLDER \
+  --expected-sha256 PLAN_SHA --julia /absolute/path/to/julia
+```
+
+Cache verification also starts a fresh independent Julia saved-arithmetic reader in a separate new review directory, with its own resource record. Rehashing a changed report and marker cannot replace this arithmetic check. These commands run explicitly synthetic controls only. Their completion marker never authorizes physical geometry dispatch or fitting.
