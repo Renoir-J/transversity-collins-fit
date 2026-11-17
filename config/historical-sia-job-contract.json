@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-HISTORICAL-SIA-JOBS-001",
+  "scope": "historical_reconstructed_sia_complete_geometry_jobs",
+  "theory_scope": "reconstructed_theory",
+  "declaration_scope": "Prospective complete-job decomposition declared before implementation or new physical candidates",
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "accepted_fitting_gate": false,
+  "purpose": "Replace one long 72-amplitude command with source-bound complete Julia geometry jobs and a complete global ledger. This is a new run family; no interrupted SIA command or saved partial level is promoted to a completed geometry job.",
+  "frozen_numerics": {
+    "head": "6c88d12516074889f49a0dfeae456d6cc63491b4",
+    "source_fingerprint": "01be55cc1449679f6dc26bd43ea9788604938c1fecbb25d276acaa35bc4bae47",
+    "tracked_files": 302,
+    "contract": "config/historical-sia-integral-contract.json",
+    "contract_sha256": "29830e78c4e48d2eb8e5a70711885fc961b2b94e0ec3303315befd59a65fdf97",
+    "rule": "All 302 frozen files remain byte-identical in the numerical checkout and as inherited files in the additive adapter checkout. Verify raw Git blobs, both heads, complete inventories and the frozen numerical fingerprint before dispatch and verification. Load the explicit frozen numerical project and libraries; a manifest cannot select arbitrary executable code."
+  },
+  "source_request": {
+    "scope": "historical_reconstructed_sia_integral_prediction_diagnostic",
+    "points": 72,
+    "geometries": 36,
+    "geometry_key": ["z1", "z2", "Q2_GeV2"],
+    "geometry_order": "First occurrence in the unchanged full 72-point request; compare exact Float64 source values, never rounded strings or inferred bin centers.",
+    "point_order": "Retain all 36 UC source rows followed by all 36 UL source rows in the parent's declared order; preserve the source-specific angular scalar for each ratio.",
+    "per_geometry": "Exactly one UL and one UC source point; geometry equality alone never permits exchanging angular factors, measured values, errors or locators.",
+    "replay": "Use the frozen prepare_request with an explicit fresh output below the new run. Compare the entire source-derived request and every raw/candidate/contract binding. Do not call legacy verify_request because it creates temporary files beside its input request.",
+    "original_partial_policy": "Keep interrupted original attempts immutable, inventoried and outside the new run. No native levels, prepared geometry, checks, completion markers, resource outcomes or gates transfer from them."
+  },
+  "physics_unchanged": {
+    "parameters": "Literal rounded 13-coordinate published_parameters from the frozen initial contract; no optimizer or tuning.",
+    "integrals": "Fixed reported z means, literal conditional Q2=112.36 GeV2, uniform qT from0 to3.5 GeV, P*dP=z1^2*qT*dqT, separate absolute pp/pm/mp/mm signed Collins and positive UU integrals, then the inherited ratio-of-integrals UL/UC algebra with each source angular scalar applied once.",
+    "scope": "The source event cut supplies only the upper qT selection. Zero remains a declared lower radial origin. Full z-bin, joint angular/kinematic and detector acceptance are unvalidated. The reported P mean is metadata, not an evaluation point.",
+    "implementation": "Reuse the unchanged retained evolution/convolution/interpolation/coupling, J0/J2, flavor, mass/z, matching, CSS and homogeneous Collins conventions. Numerical preparation, integration, derivatives and independent references stay in Julia.",
+    "cache": "No new fixed-query, context-storage or cross-parameter response cache is inserted by this decomposition. The separate storage component does not authorize this path."
+  },
+  "global_selection": {
+    "relative_floor": 1e-8,
+    "physical_value_max_scaled": 1e-4,
+    "momentum_max_scaled": 1e-7,
+    "observable_algebra_max_scaled": 1e-12,
+    "source_projection_max_scaled": 1e-10,
+    "momentum_orders": [16, 32, 64, 128, 256],
+    "minimum_momentum_order": 64,
+    "native_levels": [1, 2, 3, 4],
+    "minimum_native_level": 3,
+    "native_bound_inverse_GeV": 24,
+    "tail_bounds_inverse_GeV": [12, 24, 32],
+    "operands": "Every pair UU/Collins integral, U/L/C sum and both source-specific UL/UC amplitudes, in the inherited packed field order. Preserve absolute yields and their Jacobian, even when a common factor cancels in a ratio.",
+    "momentum_rule": "For each native level and finite bound, assemble all72 points at all five momentum orders. Select the first common order>=64 whose adjacent-order maximum over all72 packed points is<=1e-7. A per-geometry successful order cannot replace this global selection. Later stored orders are extra evidence, not a reason to alter the first accepted order. Exhaustion is FAIL.",
+    "native_rule": "Require complete producer/auditor pairs for all36 geometries at native1/2/3. Compare consecutive native levels at each level's common accepted momentum order. Select native3 only if the all72 maximum is<=1e-4. Otherwise require all36 native4 pairs and the same all72 native3-to4 test. No partial selector, mixture of native levels, early subset acceptance or threshold change.",
+    "tails": "Use one common selected native level. For B12 and B32 compute all36 geometries and select the common momentum order separately at each bound. B24 operands refer to the exact selected native job outputs. Require the complete all72 B24-to32 maximum<=1e-4. This is finite-tail evidence only.",
+    "source_controls": "Retain the inherited 256-bit synthetic Fourier source-projection controls for every angular scalar and all sign/category/harmonic counterfactuals; keep synthetic fixtures distinct from physical geometry results.",
+    "fixed_value_controls": "Retain positive UU, exact category/ratio algebra, simultaneous Collins-sign invariance, first-six-transversity-coordinate value independence and source order. Object identity and temporal observations remain producer attestations."
+  },
+  "independent_and_derivative_checks": {
+    "all72_reference": "At selected-native B32 compare every pair/category/amplitude against the unchanged scalar/CSS/Bessel adaptive-qT reference at1e-4. Shared rows and initial functions are explicit; this is not independent evolution.",
+    "representative_source_ids": ["KPSY15_SIA_1002:r2", "KPSY15_SIA_1002:r16", "KPSY15_SIA_1002:r37"],
+    "representative_scope": "Both ratio outputs and all13 gradient/HVP coordinates at these same three prospectively selected geometries only. No all72 production derivative certificate.",
+    "derivative_max_scaled": 1e-7,
+    "HVP_max_scaled": 1e-7,
+    "reference_bits": 256,
+    "steps": [0.0001, 0.00005],
+    "direction": [0.02, 0.03, 0.01, 0.02, 0.01, 0.01, 0.02, -0.02, 0.01, 0.02, 0.03, 0.03, 0.001],
+    "rule": "Reuse the unchanged parent inward fourth-order five-sample stencil, independent reference AD, both retained step levels, adjacent-step checks and synthetic analytic stencil controls. Retain first-six-column zeros, all operands and every miss."
+  },
+  "job_phases": [
+    {"name": "native123", "geometry_jobs": 36, "content": "Native1/2/3 at B24, retaining all five momentum orders and both ratio outputs for each setting."},
+    {"name": "native4", "geometry_jobs": 36, "conditional": "Only if the complete all72 native3 selector requests native4.", "content": "Native4 at B24 with all five momentum orders; no old partial operands."},
+    {"name": "tailref", "geometry_jobs": 36, "content": "Selected native level at B12/B32, all momentum orders, complete scalar/adaptive-qT reference operands and fixed-value controls."},
+    {"name": "derivative", "geometry_jobs": 3, "content": "Selected-native B32 preparations and the unchanged representative all13 gradient/HVP/inward reference policy."}
+  ],
+  "complete_job_protocol": {
+    "owner": "One Julia producer process followed by one fresh independent Julia saved-record auditor process; Python schedules complete jobs only.",
+    "binding": "Explicit frozen and adapter paths/heads/raw-source inventories, externally bound run-manifest SHA, full72 request and raw inputs, native/parton receipts and binaries, parent and operational contracts, point IDs/settings/phase, exact commands and resource policy.",
+    "completion": "Write an initial nonterminal FAIL sentinel. A final completion record and job.completed marker require both commands to exit0 without interruption, validated saved arithmetic, exact input/output/log/resource hashes, false admission flags and the whole-job budget. A marker or status string alone never authorizes cache reuse.",
+    "retention": "Use fresh canonical output folders. Keep initial sentinels, coarse misses, partial reports, logs and effective/raw exit distinctions. Reject occupied interrupted or failed folders. Do not overwrite or invent terminal outcomes for old attempts.",
+    "resume": "Only whole completed producer/auditor pairs from this exact run, source/policy/manifest identity and selected prerequisites can be retained. A changed source or interrupted partial job needs a new reviewed namespace; no automatic migration or cross-attempt promotion.",
+    "global_reader": "After every required geometry and representative derivative job is complete, a separate Julia reader verifies the complete ledger, source/setting/point coverage, common selection rules, saved scalar/derivative/refinement arithmetic and false flags. It does not claim a cold native evolution, independent raw-table replay or repeated physical AD/integration.",
+    "products": "Only a complete globally accepted diagnostic plus a fresh cached-workflow verification can produce the ordered72-row CSV and two source-z1-binned UL/UC figures. Preserve separate measured statistical/systematic fields, conditional theory scope and no chi2 or fit claim."
+  },
+  "resources": {
+    "status": "Prospective finite per-job engineering limits, not measured throughput or G2PERF admission",
+    "maximum_simultaneous_geometry_Julia_jobs": 1,
+    "threads": {"JULIA_NUM_THREADS": 1, "OPENBLAS_NUM_THREADS": 1, "OMP_NUM_THREADS": 1},
+    "native123": {"whole_Julia_jobs_time_budget_seconds": 28800, "maximum_command_RSS_KiB": 6291456, "minimum_available_memory_bytes": 8589934592},
+    "native4": {"whole_Julia_jobs_time_budget_seconds": 14400, "maximum_command_RSS_KiB": 6291456, "minimum_available_memory_bytes": 8589934592},
+    "tailref": {"whole_Julia_jobs_time_budget_seconds": 28800, "maximum_command_RSS_KiB": 6291456, "minimum_available_memory_bytes": 8589934592},
+    "derivative": {"whole_Julia_jobs_time_budget_seconds": 28800, "maximum_command_RSS_KiB": 6291456, "minimum_available_memory_bytes": 8589934592},
+    "global": {"whole_Julia_jobs_time_budget_seconds": 3600, "maximum_command_RSS_KiB": 3145728, "minimum_available_memory_bytes": 4294967296},
+    "measurement": "Retain complete producer and auditor GNU-time records and wrapper monotonic durations separately. Command maximum RSS is not simultaneous process-tree peak. Include both commands in each job's time budget; interruptions remain nonzero even if a cooperative child exits0.",
+    "execution_boundary": "No new physical SIA job is launched by publishing this contract or by a plan. Finish source/software review and a frozen dispatch record first. Do not start this physical job family while the existing SIDIS continuation owns the host. No same-budget retry of the old monolithic cloud job."
+  },
+  "validation_required": [
+    "All302 inherited Git blobs and the original numerical fingerprint remain unchanged; bind the additive adapter separately.",
+    "Real-source planning reconstructs the full72 request in the new namespace and proves exact36-geometry coverage, both source-specific angular scalars and the same three derivative geometries.",
+    "Python tests reject forged completion, wrong source/manifest/phase/index, altered fields, incomplete global coverage, per-geometry order substitution, overwritten failures and cooperative timeout promotion.",
+    "Julia checks compare complete-ledger reducers with the inherited packed all72 arithmetic on explicit synthetic fixtures and verify missing/stale/self-admitting/geometry-substituted records fail.",
+    "Run Linux pytest, plan validation, repository checks, Julia tests, Snakemake closure and cache-tamper controls; synthetic success never admits physical jobs.",
+    "A new real geometry comparison must retain the exact parent mathematics and numerical settings; no proxy mean-P, threshold adjustment, source selection change or physical-cache insertion.",
+    "Complete all required physical jobs, independent global audit and fresh cached ledger before claiming the reconstructed72 diagnostic."
+  ],
+  "limitations": [
+    "No original author fitter, modified HOPPET or unrounded optimizer state has been recovered.",
+    "The failed literal paper-center tensor moments remain failed; this SIA decomposition cannot repair or override them.",
+    "Exact primary BaBar fields do not resolve covariance, overlapping UL/UC or joint acceptance.",
+    "The source-literal Q2, fixed-z/uniform-window/factorized-angle assumptions and finite-tail limitations remain conditional.",
+    "Representative SIA derivatives, saved-record arithmetic and synthetic controls are distinct from global production accuracy, performance and uncertainty coverage.",
+    "B0 historical262, B1 updates, STAR200/510, paired full-x lattice, V1 robustness, uncertainty and publication remain the full project scope."
+  ]
+}
