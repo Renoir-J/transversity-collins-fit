@@ -1,6 +1,13 @@
 using CollinsFit, JSON, SHA, Dates
 include("SIAJobBindings.jl")
 include("SIASourceControls.jl")
+module FrozenSIAControlsProducer
+end
+
+function load_legacy(frozen)
+    Base.include(FrozenSIAControlsProducer,joinpath(frozen,"numerics/bin/predict_historical_sia_integrals.jl"))
+    FrozenSIAControlsProducer
+end
 
 function main(args=ARGS)
     length(args)==4 || error("usage: run_sia_source_controls.jl FROZEN SOURCE_PLAN EXTERNAL_SHA FRESH_REPORT")
@@ -11,8 +18,7 @@ function main(args=ARGS)
         "theory_scope"=>"synthetic_closure","source_controls_success"=>false,"started_at"=>string(now(UTC))))
     SIAJobBindings.atomic_report(output,report)
     try
-        legacy=Module(:FrozenSIAControlsProducer)
-        Base.include(legacy,joinpath(context.frozen,"numerics/bin/predict_historical_sia_integrals.jl"))
+        legacy=load_legacy(context.frozen)
         report=SIASourceControls.produce(context.request.data,context.parent,context.binding,
             legacy.HSP.source_projection,legacy.HIR.mathematical_controls)
         SIAJobBindings.recheck(context)

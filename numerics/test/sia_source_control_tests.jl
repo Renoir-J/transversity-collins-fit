@@ -1,10 +1,9 @@
 using Test, JSON
-include("../bin/SIASourceControls.jl")
-const C=SIASourceControls
-module InheritedSyntheticSourceControls
-include("../bin/predict_historical_sia_integrals.jl")
+module RuntimeSourceProducerUnderTest
+include("../bin/run_sia_source_controls.jl")
 end
-const L=InheritedSyntheticSourceControls
+const C=RuntimeSourceProducerUnderTest.SIASourceControls
+const L=RuntimeSourceProducerUnderTest.load_legacy(dirname(dirname(@__DIR__)))
 
 function fixture_source_data()
     points=Any[]
@@ -20,6 +19,7 @@ end
 
 @testset "Synthetic SIA source controls retain scope and independent saved arithmetic" begin
     parent=JSON.parsefile(joinpath(@__DIR__,"../../config/historical-sia-integral-contract.json"))
+    @test isdefined(L,:include)
     data=fixture_source_data();before=deepcopy(data)
     binding=Dict("fixture_id"=>"explicitly_synthetic_source_control_unit_test_not_primary_data")
     report=C.produce(data,parent,binding,L.HSP.source_projection,L.HIR.mathematical_controls)
