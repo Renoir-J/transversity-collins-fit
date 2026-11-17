@@ -49,3 +49,61 @@ Missing author code/unrounded states, paper-center/coupling failures, source
 transcription, conditional target/acceptance, covariance and projection overlap
 remain limitations. The full historical262 fit and B1–B4/V1, uncertainty and
 publication deliverables remain unfinished.
+
+## Execution
+
+Use Linux and the existing locked Python/Julia environments. Keep two clean
+checkouts: this adapter branch and the exact frozen numerical head. All335
+original committed files must match in both checkouts; the adapter only adds
+files. The explicit frozen-checkout argument selects trusted source code.
+Cached manifests cannot select an executable or an alternative checkout.
+
+Prepare a fresh directory under the frozen checkout's ignored `runs/` tree:
+
+```sh
+python scripts/run_sidis_continuation.py prepare \
+  --frozen-checkout "$FROZEN" \
+  --original "$FROZEN/runs/historical-sidis-jobs-real-data/attempt-2" \
+  --review "$REVIEW" --integrity "$INTEGRITY" --loss "$LOSS" \
+  --native-build "$NATIVE" --parton-build "$PARTON" \
+  --output "$FROZEN/runs/sidis-immutable-continuation/attempt-1"
+```
+
+The review, integrity and loss files must have the exact prospectively pinned
+digests. Preparation checks original process absence, source bytes, native/input
+receipt identities, complete source replay and each original job's metadata.
+It dispatches no numerical job and grants no scientific acceptance.
+
+Inspect the plan, then run the fresh typed-path Julia prefix reader:
+
+```sh
+python scripts/run_sidis_continuation.py plan \
+  --frozen-checkout "$FROZEN" --manifest "$MANIFEST"
+python scripts/run_sidis_continuation.py prefix \
+  --frozen-checkout "$FROZEN" --manifest "$MANIFEST"
+```
+
+Each numerical job writes only into its canonical new folder. For example,
+the first remaining source point can be run and freshly reviewed with:
+
+```sh
+python scripts/run_sidis_continuation.py run --phase native123 --point-index 14 \
+  --frozen-checkout "$FROZEN" --manifest "$MANIFEST"
+python scripts/run_sidis_continuation.py verify --phase native123 --point-index 14 \
+  --frozen-checkout "$FROZEN" --manifest "$MANIFEST"
+```
+
+Run the complete serial phase policy through Snakemake:
+
+```sh
+snakemake --snakefile workflow/sidis-continuation.smk --cores 1 \
+  --config frozen_checkout="$FROZEN" manifest="$MANIFEST"
+```
+
+The standalone `all` action schedules the same complete jobs. Completion markers
+are bookkeeping only; cached workflow use invokes the fresh complete Julia
+ledger audit again. The existing shared numerical-checkout lock is opened
+read-only, and additional lock/log/report files live in the new directory.
+An incomplete job remains occupied and explicitly stops subsequent use; this
+version does not automatically migrate a later interrupted continuation into a
+third run. Every such recovery needs its own provenance and retention review.
