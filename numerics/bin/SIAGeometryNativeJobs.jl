@@ -46,21 +46,86 @@ function inputs_stable(inputs)
         CollinsFit.verify_parton_build(inputs.inputfile)==inputs.inputs,"native or parton build changed during job")
 end
 
-"The parent's exact preparation for one geometry/native setting at B24."
-function prepare_native(view,parent,inputs,level)
+"The parent's exact preparation for one geometry/native setting and finite bound."
+function prepare_geometry(view,parent,inputs,level,B)
     M.valid(view);S.validate_parent(parent)
-    require(level isa Int && level in 1:4,"undeclared native level")
+    require(level isa Int && level in 1:4 && B isa Int && B in (12,24,32),"undeclared native level or finite bound")
     setting=parent["numerical_policy"]["refinements"][level];k=first(view.data["points"])["kinematics"]
-    radial=RadialRule(parton_radial_edges(inputs.css,inputs.ff,inputs.inputs["input_root"],24);order=setting["radial_order"])
+    radial=RadialRule(parton_radial_edges(inputs.css,inputs.ff,inputs.inputs["input_root"],B);order=setting["radial_order"])
     context=nothing
     elapsed=@elapsed context=prepare_polarized_sia(inputs.ff,inputs.nativefile,inputs.css,radial,k["Q2_GeV2"],0.,k["z1"],k["z2"],1,1;
         matching_order=setting["matching_order"],intervals=setting["intervals"],range_policy=:reference)
     require(context.first_samples.input_kind==:pinned_inputs && context.first_samples.kind==:KPSY_Hhat3_homogeneous &&
         context.second_samples===nothing,"pinned fragmentation-only initial samples required")
     resource=Dict{String,Any}("geometry"=>collect(historical_sia_integral_geometry_key(first(view.data["points"]))),
+        "bound_inverse_GeV"=>B,
         "radial_nodes"=>length(radial.b),"row_coefficient_payload_bytes"=>context.first_operator.coefficient_payload_bytes,
         "cold_seconds_informational"=>elapsed,"context_provenance"=>deepcopy(context.provenance))
     context,resource
+end
+prepare_native(view,parent,inputs,level)=prepare_geometry(view,parent,inputs,level,24)
+
+function value_record(view,parent,level,B,context,resource)
+    M.valid(view);S.validate_parent(parent)
+    require(level isa Int && level in 1:4 && B isa Int && B in (12,24,32),"undeclared native level or finite bound")
+    theory=S.declaration(view.full.data)
+    require(context.first_samples.input_kind==(theory=="synthetic_closure" ? :analytic : :pinned_inputs),
+        "synthetic rows and pinned physical inputs must remain distinct")
+    key=historical_sia_integral_geometry_key(first(view.data["points"]))
+    merge(flags(),Dict{String,Any}("status"=>S.VALUES_STATUS,"scope"=>S.SCOPE,"theory_scope"=>theory,
+        "geometry_index"=>view.index,"geometry"=>collect(key),"native_level"=>level,"bound_inverse_GeV"=>B,
+        "setting"=>deepcopy(parent["numerical_policy"]["refinements"][level]),"momentum_levels"=>Any[],
+        "resources"=>[deepcopy(resource)],"initial_source_kind"=>string(context.first_samples.input_kind),
+        "same_native_rows_across_ratios_producer_attestation"=>true))
+end
+
+function fill_values!(value,view,parent,legacy,context,theta;progress=stage->nothing,checkpoint=()->nothing)
+    require(S.same_json(theta,literal_theta(view.full.data)),"fixed parameter source changed")
+    key=historical_sia_integral_geometry_key(first(view.data["points"]));models=Dict{Int,Any}()
+    for order in parent["numerical_policy"]["momentum_orders"]
+        progress(Dict("native_level"=>value["native_level"],"bound_inverse_GeV"=>value["bound_inverse_GeV"],
+            "momentum_order"=>order,"operation"=>"evaluate both source ratios"))
+        result=legacy.predictions(view,Dict(key=>context),theta,order)
+        require(all(observation.plan.context.first_operator===context.first_operator && observation.plan.context.second_operator===nothing
+            for observation in result.model.observations),"expected unchanged native row objects")
+        for (row,point) in zip(result.points,view.data["points"])
+            S.validate_point(row,point,order,parent["numerical_policy"])
+        end
+        require(S.same_json(result.points[1]["pairs"],result.points[2]["pairs"]),"both source ratios must retain the same absolute pair integrals")
+        push!(value["momentum_levels"],Dict("order"=>order,"points"=>result.points));models[order]=result.model
+        checkpoint()
+    end
+    models
+end
+
+"Recompute leaf value arithmetic; convergence selection remains a complete72 operation."
+function audit_value(data,parent,record,index,level,B)
+    S.validate_parent(parent);groups,keys=S.geometry_groups(data)
+    require(index isa Int && 1<=index<=36 && level isa Int && level in 1:4 && B isa Int && B in (12,24,32),
+        "undeclared value geometry/native setting")
+    theory=S.declaration(data);points=data["points"][groups[index]];geometry=collect(keys[index])
+    require(record["status"]==S.VALUES_STATUS && record["scope"]==S.SCOPE && record["theory_scope"]==theory &&
+        all(get(record,key,nothing)===false for key in FLAGS),"wrong native value scope or admission")
+    require(record["geometry_index"]===index && S.same_json(record["geometry"],geometry) &&
+        record["native_level"]===level && record["bound_inverse_GeV"]===B &&
+        S.same_json(record["setting"],parent["numerical_policy"]["refinements"][level]),"changed geometry/native setting")
+    require(record["initial_source_kind"]==(theory=="synthetic_closure" ? "analytic" : "pinned_inputs") &&
+        record["same_native_rows_across_ratios_producer_attestation"]===true,"changed source kind or preparation attestation")
+    resources=record["resources"]
+    require(length(resources)==1 && S.same_json(resources[1]["geometry"],geometry) && resources[1]["bound_inverse_GeV"]===B &&
+        all(resources[1][key] isa Int && resources[1][key]>0 for key in ("radial_nodes","row_coefficient_payload_bytes")) &&
+        S.finite_number(resources[1]["cold_seconds_informational"]) && resources[1]["cold_seconds_informational"]>=0 &&
+        resources[1]["context_provenance"] isa AbstractDict,"incomplete preparation observations")
+    orders=record["momentum_levels"];expected=parent["numerical_policy"]["momentum_orders"]
+    require(length(orders)==5 && S.same_json([row["order"] for row in orders],expected),"all five momentum orders required")
+    for (row,order) in zip(orders,expected)
+        require(length(row["points"])==2,"both ordered source ratios required")
+        for (point,source) in zip(row["points"],points)
+            S.validate_point(point,source,order,parent["numerical_policy"])
+        end
+        require(S.same_json(row["points"][1]["pairs"],row["points"][2]["pairs"]),"absolute pair yields changed between source ratios")
+    end
+    10
 end
 
 "Julia callbacks select fixed test or physical preparation outside prediction loops."
@@ -78,28 +143,10 @@ function compute(view,parent,spec,binding,legacy,prepare;progress=stage->nothing
     for level in spec["native_levels"]
         progress(Dict("native_level"=>level,"operation"=>"prepare one fixed geometry"))
         context,resource=prepare(view,parent,level)
-        require(context.first_samples.input_kind==(theory=="synthetic_closure" ? :analytic : :pinned_inputs),
-            "synthetic rows and pinned physical inputs must remain distinct")
-        key=historical_sia_integral_geometry_key(first(view.data["points"]))
-        value=merge(flags(),Dict{String,Any}("status"=>S.VALUES_STATUS,"scope"=>S.SCOPE,"theory_scope"=>theory,
-            "geometry_index"=>view.index,"geometry"=>collect(key),"native_level"=>level,"bound_inverse_GeV"=>24,
-            "setting"=>deepcopy(parent["numerical_policy"]["refinements"][level]),"momentum_levels"=>Any[],
-            "resources"=>[deepcopy(resource)],"initial_source_kind"=>string(context.first_samples.input_kind),
-            "same_native_rows_across_ratios_producer_attestation"=>true))
+        value=value_record(view,parent,level,24,context,resource)
         push!(report["native_values"],value)
         checkpoint(report)
-        for order in spec["momentum_orders"]
-            progress(Dict("native_level"=>level,"momentum_order"=>order,"operation"=>"evaluate both source ratios"))
-            result=legacy.predictions(view,Dict(key=>context),theta,order)
-            require(all(observation.plan.context.first_operator===context.first_operator && observation.plan.context.second_operator===nothing
-                for observation in result.model.observations),"expected unchanged native row objects")
-            for (row,point) in zip(result.points,view.data["points"])
-                S.validate_point(row,point,order,parent["numerical_policy"])
-            end
-            require(S.same_json(result.points[1]["pairs"],result.points[2]["pairs"]),"both source ratios must retain the same absolute pair integrals")
-            push!(value["momentum_levels"],Dict("order"=>order,"points"=>result.points))
-            checkpoint(report)
-        end
+        fill_values!(value,view,parent,legacy,context,theta;progress=progress,checkpoint=()->checkpoint(report))
     end
     M.valid(view);report["status"]=COMPUTED;checkpoint(report)
     report
@@ -118,27 +165,7 @@ function audit(data,parent,spec,binding,report)
     require(length(values)==length(spec["native_levels"]),"all declared native levels required")
     count=0
     for (record,level) in zip(values,spec["native_levels"])
-        require(record["status"]==S.VALUES_STATUS && record["scope"]==S.SCOPE && record["theory_scope"]==theory &&
-            all(get(record,key,nothing)===false for key in FLAGS),"wrong native value scope or admission")
-        require(record["geometry_index"]===spec["geometry_index"] && S.same_json(record["geometry"],spec["geometry"]) &&
-            record["native_level"]===level && record["bound_inverse_GeV"]===24 &&
-            S.same_json(record["setting"],parent["numerical_policy"]["refinements"][level]),"changed geometry/native setting")
-        require(record["initial_source_kind"]==(theory=="synthetic_closure" ? "analytic" : "pinned_inputs") &&
-            record["same_native_rows_across_ratios_producer_attestation"]===true,"changed source kind or preparation attestation")
-        resources=record["resources"]
-        require(length(resources)==1 && S.same_json(resources[1]["geometry"],spec["geometry"]) &&
-            all(resources[1][key] isa Int && resources[1][key]>0 for key in ("radial_nodes","row_coefficient_payload_bytes")) &&
-            S.finite_number(resources[1]["cold_seconds_informational"]) && resources[1]["cold_seconds_informational"]>=0 &&
-            resources[1]["context_provenance"] isa AbstractDict,"incomplete preparation observations")
-        orders=record["momentum_levels"]
-        require(length(orders)==5 && S.same_json([row["order"] for row in orders],spec["momentum_orders"]),"all five momentum orders required")
-        for (row,order) in zip(orders,spec["momentum_orders"])
-            require(length(row["points"])==2,"both ordered source ratios required")
-            for (point,source) in zip(row["points"],points)
-                S.validate_point(point,source,order,parent["numerical_policy"]);count+=1
-            end
-            require(S.same_json(row["points"][1]["pairs"],row["points"][2]["pairs"]),"absolute pair yields changed between source ratios")
-        end
+        count+=audit_value(data,parent,record,spec["geometry_index"],level,24)
     end
     merge(flags(),Dict{String,Any}("schema_version"=>1,"status"=>REVIEWED,"scope"=>S.SCOPE,"theory_scope"=>theory,
         "source_context"=>deepcopy(binding),"definition"=>deepcopy(spec),"saved_value_points_recomputed"=>count,

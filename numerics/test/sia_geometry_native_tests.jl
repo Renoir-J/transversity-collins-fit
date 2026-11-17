@@ -20,7 +20,7 @@ include("sia_geometry_fixtures.jl")
         function prepare(view,parent,level)
             push!(calls,(view.index,level))
             key=historical_sia_integral_geometry_key(first(view.data["points"]));context=contexts[key]
-            context,Dict("geometry"=>collect(key),"radial_nodes"=>length(context.leptonic.radial.b),
+            context,Dict("geometry"=>collect(key),"bound_inverse_GeV"=>24,"radial_nodes"=>length(context.leptonic.radial.b),
                 "row_coefficient_payload_bytes"=>context.first_operator.coefficient_payload_bytes,
                 "cold_seconds_informational"=>0.,"context_provenance"=>deepcopy(context.provenance))
         end

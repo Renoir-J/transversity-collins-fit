@@ -81,3 +81,13 @@ These functions have no physical dispatcher or completed-job marker. The complet
 ```sh
 julia --project=numerics numerics/test/sia_geometry_native_tests.jl
 ```
+
+The tail/reference functions retain B12/B32 at one common selected native level and all five momentum orders. Every scalar adaptive-qT reference retains separate charge/category operands and each source angular scalar. Saved comparisons cover every stored order; selecting a common order and judging its all72 reference accuracy remain global operations. Scalar references carry their adaptive scope and have no Gauss momentum-order label. B24 must come from the exact selected native outputs in the complete ledger.
+
+The representative derivative functions use the same three source geometries, UL/UC order, all13 coordinates, direction, 256-bit inward stencils and two step sizes as the parent. The leaf reader reuses the unchanged independent inward arithmetic helper and checks all nine comparison decisions. The numerical reference shares native rows and initial functions; its reader does not rerun native evolution or cold AD. Complete commands/resources/provenance, global selection, physical dispatch and cached products remain pending.
+
+```sh
+julia --project=numerics numerics/test/sia_geometry_reference_tests.jl
+```
+
+The additive `Synthetic SIA geometry software checks` GitHub workflow runs these standalone Julia checks, the inherited suite, Python/source checks and synthetic closure/cache controls. Its branch trigger runs software fixtures only. It downloads no experimental tables, creates no physical geometry jobs and cannot authorize fitting. Physical dispatch and its independent complete ledger still require their own reviewed implementation.
