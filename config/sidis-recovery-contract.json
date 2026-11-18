@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "KPSY-SIDIS-IMMUTABLE-RECOVERY-002",
+  "scope": "same_attempt_reconstructed_full132_recovery_not_fitting",
+  "theory_scope": "reconstructed_theory",
+  "declaration_scope": "Prospective complete-job recovery declared before implementation or new numerical candidates",
+  "frozen_numerics": {
+    "head": "bec12db0d65ed67a74de80bca949e21b80a99757",
+    "source_fingerprint": "5fc9b6b5602292875634402a52544a8a8d4942e6703b7d36322764efec462040",
+    "tracked_files": 335,
+    "job_policy_sha256": "7ce5d19f131c573caceaf64d24b2cc09fe589aaa4b628137d73d2b56df995911",
+    "scientific_contract_sha256": "831d4f3435a1eea61b0ca664b7b61b1fa56b19f930d0e516d7e23bcb7c61ba45",
+    "rule": "Keep every frozen numerical file unchanged in its explicit numerical checkout and in this additive adapter. Julia retains all numerical preparation, predictions, references, derivatives and acceptance arithmetic. Python schedules complete jobs only."
+  },
+  "trusted_predecessor": {
+    "adapter_head": "b524304c005091a5717de33141fc842fa07fbee1",
+    "tracked_files": 348,
+    "contract_sha256": "47059f3236115d0c171bb7b487929b13ca579d876e61839cb33632f0a62a2417",
+    "manifest_sha256": "8743c5052a7b950812f21db35c83ae2008c43f2d32dbd6cfd12c602808fea83a",
+    "interruption_inventory_sha256": "2afc9d062c0124897b45ed7507d09603fc9cfb0c6b7c781bb9064caa8bf7d1b7",
+    "stopped_run_files": 404,
+    "recorded_complete_native123_prefix": 37,
+    "original_prefix_pairs": 13,
+    "completed_continuation_pairs": 24,
+    "incomplete_point_index": 38,
+    "rule": "These are recorded completed pairs and an immutable interruption inventory, not a new native-level or diagnostic acceptance. Verify all348 predecessor blobs, the exact original141-file anchor, all404 stopped-run entries and actual completed-job paths before using them. Preserve the original partial14 and the stopped partial38."
+  },
+  "logical_attempt": {
+    "origin": "historical-sidis-jobs-real-data/attempt-2",
+    "original_outer_invocation_sha256": "51646d3952469dd703854aa520e2377823c5273fbf69c4e8f5b28f09114e007f",
+    "original_loss_inventory_sha256": "fd9342c1f3ce0ae0fde04b8391815db19795fb99c8b3c658b57d54415f1df30c",
+    "independent_original13_review_sha256": "b1ae8d2f57791eddac0f742e8f7008402dfa9887469010195c513412ca95ae0e",
+    "post_review_original141_integrity_sha256": "eb39cdc9ab651cd7664938baae8e60745497bf577e845e3da0fe6506f8957c46",
+    "source_identity": "Use the exact original request, all132 source IDs in order, literal13 coordinates, native/provider build receipts, cuts, target weights, signs, mass/z factors and source inputs. No attempt1 gate, reweighted source view or changed numerical family may enter this recovery.",
+    "subsequent_recovery": "Later interrupted namespaces of this same recovery protocol may be ancestors only under the same original anchor, frozen numerical fingerprint and scientific/job policies. Bind every ancestor manifest and complete interruption inventory externally. Reject cycles, repeated roots, aliases and ancestry deeper than64."
+  },
+  "retained_jobs": {
+    "point_phases": ["native123", "native4", "tailref123", "reference4"],
+    "eligible_unit": "Only a complete Julia producer/auditor pair with exact source/settings/point identity, both effective/raw exit0 outcomes, no interruption or signal, complete inputs/outputs/logs/resources and its original initial/completion records. A partial native level, timestamp, status string or marker alone is insufficient.",
+    "path_map": "Bind each retained phase/index to its actual canonical producing folder and producing manifest. Keep all old records, commands, resource measurements, dependency paths and provenance unchanged. Never copy, rename, relocate, alias, repair or rewrite an old scientific packet.",
+    "dependency_resolution": "A distinct typed Julia run argument may resolve each retained job and its dependencies through its producing run. Add methods only for that owned type. Do not replace String methods, monkey-patch frozen modules or substitute a shortened source request.",
+    "current_prerequisites": "A retained later-phase packet keeps its original dependency evidence. Independently compare its native/reference selection settings against freshly recomputed current global prerequisites before admitting its use. A prerequisite mismatch is FAIL, not a reason to relabel the packet.",
+    "new_jobs": "Every missing or interrupted point job writes into a fresh current namespace. Recompute point38 as a complete native123 pair. A caller cannot dispatch through a retained path or overwrite an occupied failure.",
+    "fresh_review": "Before physical dispatch, a fresh independent Julia saved-arithmetic reader verifies every retained pair through its actual producing run. Record this new reader's command, input/output hashes, effective/raw outcomes and resources in the new namespace. It does not rerun old native evolution or claim old timings were remeasured."
+  },
+  "fresh_global_jobs": {
+    "phases": ["native-select3", "native-selection", "source-math", "derivative-select3", "diagnostic"],
+    "rule": "Recompute every current global decision over the complete resolved source set. Never inherit an old global PASS or acceptance flag. Require all132 native123 pairs, all132 native4 pairs if requested, one common native level, new explicitly synthetic source controls, all132 finite-tail/all13 independent256-bit center/first3 inward references, conditional all132 reference4 pairs, and a complete independent final ledger.",
+    "outputs": "Only a fully completed original conditional diagnostic and fresh cached-workflow verification may produce the ordered132-row comparison and the three experiment figures. No likelihood, optimizer, production extraction, G2PERF or interval coverage is authorized by these outputs."
+  },
+  "immutable_boundaries": {
+    "namespace": "Use a fresh canonical ignored namespace below the explicit frozen checkout's runs directory, disjoint from every ancestor and the original run. Bind the current adapter's committed raw-file inventory separately from numerical identity.",
+    "source_replay": "Replay raw sources with the frozen prepare_request and an explicit fresh output below the current namespace. Do not call legacy verify_request, which creates temporary siblings beside its input.",
+    "inventories": "Verify original and ancestor inventories and hashes before and after every complete job and cached review. A shutdown cannot authorize rewriting the stale IN_PROGRESS receipt or inventing an exit code.",
+    "executables": "Only explicit verified numerical/predecessor/current adapter arguments select code. Cached manifests and packets may not choose arbitrary executables or libraries. Preserve the Juliaup launcher spelling while separately hashing the actual Julia runtime.",
+    "cached_review": "Cache admission requires current full provenance and a new independent Julia saved-arithmetic review in a separate fresh folder. Do not rewrite old execution paths to pretend they ran locally or in the current namespace."
+  },
+  "resources_and_ownership": {
+    "policy": "Use unchanged phase-specific whole-Julia-job budgets, command RSS, available-memory limits and single-thread settings from the frozen job policy. Cache/prefix/global readers use its unchanged global budget. No limit or numerical target is relaxed.",
+    "ownership": "Confirm old owners are absent from authoritative boot/PID/start/command evidence, inspect retained-run and known worker processes including orphans, and retain ambiguous observations as not released. An observation timeout is not termination. No signals are sent to old processes.",
+    "leases": "Hold one Linux family/driver lease across recovery scheduling and one shared physical-geometry lease across each producer/auditor pair. Persist exact owner identity and resources. Synthetic process fixtures and a clear host-resource observation cannot authorize physical dispatch or fitting."
+  },
+  "validation_required": [
+    "All335 numerical files and all348 predecessor files remain unchanged; bind the additive implementation separately.",
+    "Python tests reject duplicate/wrong source maps, cycles, aliases, stale inventories, overwritten partials, false completion, cooperative timeout promotion and mismatched current prerequisites.",
+    "Julia typed-path tests and fresh readers verify original, predecessor and current-protocol provenance without changing existing String methods or source arrays.",
+    "Run Linux pytest, plan/repository validation, Julia tests and synthetic Snakemake closure/cache rejection checks.",
+    "Verify the real37 retained native123 pairs and all original/ancestor hashes in fresh output only before recomputing point38.",
+    "Complete the unchanged full132 numerical policy and independent global/cached ledger before accepting the reconstructed diagnostic."
+  ],
+  "limitations": [
+    "Original author fitting code, modified HOPPET and unrounded optimizer state remain unrecovered.",
+    "Failed literal paper-center/coupling benchmarks, source transcription, target/acceptance and covariance/projection-overlap limitations remain explicit.",
+    "Completed old jobs, saved-record arithmetic, representative or fixed-center derivatives and resource observations are not production accuracy, parameter-domain coverage or calibrated uncertainty.",
+    "B0 historical262 fitting, B1 updated SIDIS/SIA, STAR200/510, paired full-x lattice, V1 robustness, uncertainty and publication remain the full project scope.",
+    "This recovery never starts fitting or performs an additional PR ready/merge operation."
+  ],
+  "production_ready": false,
+  "physical_extraction": false,
+  "historical_fit_ready": false,
+  "experimental_data_admitted": false,
+  "fit_performed": false,
+  "accepted_prediction_diagnostic": false,
+  "accepted_fitting_gate": false,
+  "G2PERF_pass": false,
+  "interval_coverage_verified": false,
+  "all132_coverage_verified": false
+}
