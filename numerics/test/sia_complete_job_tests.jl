@@ -6,6 +6,17 @@ include("sia_geometry_global_tests.jl")
 end
 const F=SyntheticCompleteOperands
 
+# Load the actual CLI in an isolated namespace. This catches entrypoint
+# top-level errors that loading only the numerical library would miss.
+module IsolatedReadOnlyEntrypoint
+include("../bin/inspect_sia_geometry_execution.jl")
+end
+
+@testset "Read-only source inspection entrypoint loads independently" begin
+    @test isdefined(IsolatedReadOnlyEntrypoint,:main)
+    @test_throws ErrorException IsolatedReadOnlyEntrypoint.main(String[])
+end
+
 @testset "Complete global worker arithmetic in an isolated module, synthetic only" begin
     mktempdir() do directory
         parent=JSON.parsefile(joinpath(@__DIR__,"../../config/historical-sia-integral-contract.json"))
