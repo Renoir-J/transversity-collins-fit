@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+import copy
 import importlib
 import importlib.util
 import math
@@ -20,6 +21,8 @@ def sibling(name):
 
 lineage = sibling("sidis_recovery_lineage")
 host = sibling("sidis_recovery_host")
+locations = sibling("sidis_recovery_locations")
+predecessor_records = sibling("sidis_predecessor_records")
 old, paths = lineage.old, lineage.paths
 FLAGS, POINT_PHASES, GLOBAL_PHASES = paths.FLAGS, paths.POINT_PHASES, paths.GLOBAL_PHASES
 SCOPE, PREPARED = lineage.SCOPE, lineage.PREPARED
@@ -32,8 +35,35 @@ def provenance(m, path):
     return dict(scope=SCOPE, manifest_sha256=file_hash(path), adapter_commit=m["adapter_commit"], contract_sha256=paths.POLICY_SHA)
 
 
+class RecoveryContext(dict):
+    """One owned manifest and location snapshot; never a cross-job physics cache."""
+
+    __slots__ = ("_locations", "_origins", "_predecessor_files")
+
+    def __init__(self, data, checked_view, origins=(), predecessor_files=()):
+        if data["run"] != str(checked_view.root) or data["retained_jobs"] != checked_view.entries:
+            raise ValueError("location snapshot does not belong to this verified manifest")
+        dict.__init__(self, copy.deepcopy(data))
+        object.__setattr__(self, "_locations", locations.snapshot(checked_view, paths))
+        object.__setattr__(self, "_origins", tuple(origins))
+        object.__setattr__(self, "_predecessor_files", tuple(sorted(dict(predecessor_files).items())))
+
+    @property
+    def locations(self):
+        return self._locations
+
+    def origin_context(self, path):
+        return next((context for name, context in self._origins if name == str(path)), None)
+
+    def _immutable(self, *args, **kwargs):
+        raise TypeError("owned recovery context cannot be reassigned")
+
+    __setitem__ = __delitem__ = clear = pop = popitem = setdefault = update = __ior__ = _immutable
+    __setattr__ = __delattr__ = _immutable
+
+
 def view(m):
-    return paths.RecoveryRunPaths(m["run"], m["retained_jobs"])
+    return m.locations if isinstance(m, RecoveryContext) else paths.RecoveryRunPaths(m["run"], m["retained_jobs"])
 
 
 def point_folder(m, phase, index=0):
@@ -114,7 +144,7 @@ def verify_manifest(path, frozen, predecessor, adapter, api, expected_sha):
             m.get("schema_version") != 2 or m.get("contract_sha256") != paths.POLICY_SHA or
             m.get("run") != str(path.parent) or any(m.get(key) is not False for key in FLAGS)):
         raise ValueError("wrong or self-admitting recovery manifest")
-    lineage.source_bindings(frozen, predecessor, adapter, m)
+    source_binding = lineage.source_bindings(frozen, predecessor, adapter, m)
     if not path.parent.is_relative_to(Path(frozen) / "runs"):
         raise ValueError("current namespace must be inside the explicit frozen checkout's runs")
     state = lineage.validate_ancestors(m["ancestors"], frozen, predecessor, path.parent)
@@ -123,6 +153,12 @@ def verify_manifest(path, frozen, predecessor, adapter, api, expected_sha):
     lineage.verify_original(state["first"], frozen, api)
     verify_runtime(m)
     verify_source_replay(m)
+    origins = []
+    for node, parent in zip(m["ancestors"], state["nodes"], strict=True):
+        if node["protocol"] == "recovery_v2":
+            parent_view = paths.RecoveryRunPaths(parent["run"], parent["retained_jobs"])
+            origins.append((node["manifest"], RecoveryContext(parent, parent_view, origins, source_binding["predecessor_files"])))
+    m = RecoveryContext(m, state["view"], origins, source_binding["predecessor_files"])
     for row in m["retained_jobs"]:
         verify_job(m, path, row["phase"], row["index"], api, state=state)
     return m
@@ -301,9 +337,14 @@ def verify_job(m, path, phase, index, api, *, state=None):
         inv = old._verify_original_job(m, index, read_json(m["request"]), api)
     else:
         origin_path = Path(row["producer_manifest"])
-        origin = read_json(origin_path)
+        origin = m.origin_context(origin_path) if isinstance(m, RecoveryContext) else None
+        if origin is None:
+            origin = read_json(origin_path)
         if row["protocol"] == "continuation_v1":
-            inv = old.verify_job(origin, origin_path, phase, index, api)
+            if isinstance(m, RecoveryContext) and m._predecessor_files:
+                inv = predecessor_records.verify(origin, origin_path, index, m._predecessor_files, old, api)
+            else:
+                inv = old.verify_job(origin, origin_path, phase, index, api)
         else:
             verify_runtime(origin)
             verify_source_replay(origin)
@@ -367,6 +408,10 @@ def pair_lock(m, api, family_lease):
 def recheck(m, path, api):
     if read_json(path) != m:
         raise ValueError("prepared recovery manifest changed during its owned lifetime")
+    if isinstance(m, RecoveryContext):
+        expected = tuple(tuple(row[key] for key in paths.FIELDS) for row in m["retained_jobs"])
+        if m.locations.root != Path(m["run"]) or m.locations.rows != expected:
+            raise ValueError("owned location snapshot changed during its whole-job context")
     return verify_manifest(path, m["frozen"], m["predecessor"], m["adapter"], api, file_hash(path))
 
 

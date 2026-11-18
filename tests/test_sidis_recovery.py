@@ -168,6 +168,83 @@ def test_read_only_ancestry_retains37_actual_locations_and_protects_partial38(sy
     assert L.inventory(stopped) == before
 
 
+def test_owned_whole_job_locations_avoid_per_lookup_filesystem_revalidation(synthetic_ancestry, monkeypatch):
+    frozen, predecessor, original, stopped, current, parent, node = synthetic_ancestry
+    state = L.validate_ancestors([node], frozen, predecessor, current)
+    data = dict(run=str(current), retained_jobs=state["entries"], scope="synthetic_location_context_not_admission")
+    context = r.RecoveryContext(data, state["view"])
+    data["retained_jobs"][0]["index"] = 999
+    assert context["retained_jobs"][0]["index"] == 1
+    def forbidden(*args, **kwargs):
+        raise AssertionError("filesystem revalidation inside a location lookup")
+    with monkeypatch.context() as guarded:
+        guarded.setattr(r.paths, "canonical", forbidden)
+        guarded.setattr(r.paths, "digest", forbidden)
+        guarded.setattr(r.paths, "within_directory", forbidden)
+        for phase in r.POINT_PHASES:
+            for index in range(1, 133):
+                base = original / "full" if phase == "native123" and index <= 13 else stopped if phase == "native123" and index <= 37 else current
+                assert r.point_folder(context, phase, index) == base / phase / f"p{index:04d}"
+        for phase in r.GLOBAL_PHASES:
+            assert r.point_folder(context, phase) == current / phase
+    with pytest.raises(TypeError):
+        context["scope"] = "changed"
+    with pytest.raises(TypeError):
+        context._locations = context.locations._replace(root=original)
+    with pytest.raises(AttributeError):
+        context.locations.root = original
+    returned = context.locations.retained("native123", 1)
+    returned["folder"] = "changed"
+    assert r.point_folder(context, "native123", 1) == original / "full/native123/p0001"
+
+
+def test_scoped_location_boundaries_still_reject_changed_manifests_and_new_aliases(synthetic_ancestry):
+    frozen, predecessor, original, stopped, current, parent, node = synthetic_ancestry
+    state = L.validate_ancestors([node], frozen, predecessor, current)
+    snapshot = r.locations.snapshot(state["view"], r.paths)
+    assert snapshot.verify_boundary(r.paths).signature == snapshot.signature
+    alias = current / "native123"
+    alias.symlink_to(stopped / "native123", target_is_directory=True)
+    with pytest.raises(ValueError):
+        snapshot.fresh_folder("native123", 38)
+    alias.unlink()
+    assert snapshot.fresh_folder("native123", 38) == current / "native123/p0038"
+    (Path(node["manifest"])).write_text("SYNTHETIC_CHANGED_MANIFEST")
+    # The immutable path text is still the actual old location; it carries no gate.
+    assert snapshot.folder("native123", 14) == stopped / "native123/p0014"
+    with pytest.raises(ValueError):
+        snapshot.verify_boundary(r.paths)
+
+
+def test_one_boundary_source_proof_matches_the_unchanged_predecessor_input_inventory(synthetic_ancestry):
+    frozen, predecessor, original, stopped, current, parent, node = synthetic_ancestry
+    sources = {}
+    for index in range(348):
+        name = f"synthetic-source-{index:04d}.txt"
+        path = predecessor / name
+        path.write_text("EXPLICITLY_SYNTHETIC_SOURCE_PROOF_NOT_AN_EXECUTABLE")
+        sources[name] = r.file_hash(path)
+    parent["adapter_files"] = sources
+    parent.update(request=str(original / "full/request.json"), native=str(current / "native.json"), parton=str(current / "parton.json"))
+    tool = current / "synthetic-time"
+    for path in [Path(parent[key]) for key in ("request", "native", "parton")] + [tool,
+            frozen / "config/historical-sidis-job-policy.json", frozen / "scripts/run_historical_sidis_job.py",
+            original / "full/native123/p0013/invocation.json", stopped / "prefix-review/invocation.json"]:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("EXPLICITLY_SYNTHETIC_NONNUMERICAL_INPUT")
+    api = SimpleNamespace(TIME_BINARY=tool)
+    manifest = Path(node["manifest"])
+    expected = {str(path): r.file_hash(path) for path in r.old.input_paths(parent, manifest, "native123", 14, api)}
+    actual = r.predecessor_records.input_hashes(parent, manifest, 14, tuple(sources.items()), r.old, api)
+    assert actual == expected
+    for proof in (dict(list(sources.items())[1:]), {**sources, "unexpected": "0" * 64},
+                  {**sources, next(iter(sources)): "0" * 64}):
+        with pytest.raises(ValueError):
+            r.predecessor_records.input_hashes(parent, manifest, 14, tuple(proof.items()), r.old, api)
+    with pytest.raises(ValueError):
+        r.predecessor_records.input_hashes(parent, manifest, True, tuple(sources.items()), r.old, api)
+
+
 @pytest.mark.parametrize("mutation", ("repeat", "wrong-pin", "wrong-family", "stale-inventory", "depth"))
 def test_untrusted_ancestry_cannot_relabel_sources_or_reuse_a_namespace(synthetic_ancestry, mutation):
     frozen, predecessor, original, stopped, current, parent, node = synthetic_ancestry

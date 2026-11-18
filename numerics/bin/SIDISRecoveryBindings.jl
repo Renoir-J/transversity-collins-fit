@@ -1,8 +1,10 @@
 module SIDISRecoveryBindings
 using JSON, SHA, Dates
 include("SIDISRecoveryPaths.jl")
+include("SIDISRecoveryLocations.jl")
 include("SIDISContinuationPaths.jl")
 const RP=SIDISRecoveryPaths
+const RL=SIDISRecoveryLocations
 const CP=SIDISContinuationPaths
 const ADAPTER=dirname(dirname(@__DIR__))
 const SCOPE="same_attempt_reconstructed_full132_recovery_not_fitting"
@@ -26,13 +28,21 @@ end
 
 "Owned current locations plus immutable earlier producing contexts."
 struct RecoveryRun
-    paths::RP.RecoveryRunPaths
+    paths::RL.ScopedLocations
     origins::Tuple
     transport::Dict{String,Any}
+    function RecoveryRun(paths::RP.RecoveryRunPaths,origins::Tuple,transport::Dict{String,Any})
+        new(RL.snapshot(paths,RP),origins,deepcopy(transport))
+    end
 end
+RP.retained(run::RL.ScopedLocations,phase,index)=RL.retained(run,phase,index,RP)
+RP.folder(run::RL.ScopedLocations,phase,index=0)=RL.folder(run,phase,index,RP)
+RP.fresh_folder(run::RL.ScopedLocations,phase,index=0)=RL.fresh_folder(run,phase,index,RP)
+RP.metadata(run::RL.ScopedLocations)=merge(false_flags(),Dict{String,Any}("scope"=>"immutable_whole_job_location_snapshot_not_admission",
+    "saved_numerical_arithmetic_verified"=>false,"complete_job_provenance_verified"=>false,"numerical_dispatch_ready"=>false))
 root(run::RecoveryRun)=run.paths.root
 root(run::LegacyRun)=run.root
-Base.joinpath(run::RecoveryRun,parts::AbstractString...)=RP.current_path(run.paths,parts...)
+Base.joinpath(run::RecoveryRun,parts::AbstractString...)=RL.current_path(run.paths,parts...)
 Base.joinpath(run::LegacyRun,parts::AbstractString...)=joinpath(run.root,parts...)
 
 function point_folder(run::LegacyRun,phase,index)

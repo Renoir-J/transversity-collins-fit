@@ -138,3 +138,25 @@ end
         @test Meta.parseall(read(joinpath(@__DIR__,"../bin",name),String)) isa Expr
     end
 end
+
+@testset "Immutable whole-job location snapshots retain full boundary checks" begin
+    mktempdir() do temp
+        s=synthetic_views(temp);snapshot=s.run.paths
+        @test isimmutable(snapshot)
+        @test snapshot.rows isa Tuple && all(row isa Tuple for row in snapshot.rows)
+        @test RB.RL.verify_boundary(snapshot,RP).signature==snapshot.signature
+        row=RP.retained(snapshot,"native123",14);row["folder"]="changed"
+        @test SP.point_folder(s.run,"native123",14)==joinpath(s.predecessor,"native123/p0014")
+        @test_throws ErrorException setfield!(snapshot,:root,s.original)
+        manifest=joinpath(s.predecessor,"continuation.json");original=read(manifest)
+        write(manifest,"SYNTHETIC_CHANGED_MANIFEST")
+        @test SP.point_folder(s.run,"native123",14)==joinpath(s.predecessor,"native123/p0014")
+        @test_throws ErrorException RB.RL.verify_boundary(snapshot,RP)
+        write(manifest,original)
+        alias=joinpath(s.current,"native123");symlink(joinpath(s.predecessor,"native123"),alias)
+        @test_throws ErrorException RP.fresh_folder(snapshot,"native123",38)
+        rm(alias)
+        @test RP.fresh_folder(snapshot,"native123",38)==joinpath(s.current,"native123/p0038")
+        @test RB.RL.verify_boundary(snapshot,RP).signature==snapshot.signature
+    end
+end
