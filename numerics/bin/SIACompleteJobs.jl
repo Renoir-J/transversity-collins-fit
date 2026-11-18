@@ -41,6 +41,7 @@ function load_manifest(path,external_sha)
         dirname(m["source_plan"])==m["run"],"wrong execution/source-plan namespace")
     plan=readjson(m["source_plan"])
     context=B.load(plan["frozen"],m["source_plan"],m["source_plan_sha256"])
+    require(S.declaration(context.request.data)=="reconstructed_theory","synthetic operands cannot enter the physical dispatch loader")
     policy=readjson(joinpath(B.ADAPTER,"config/historical-sia-job-contract.json"))
     require(m["adapter_head"]==context.plan["adapter_head"] && S.same_json(m["resources"],policy["resources"]) &&
         S.same_json(m["limitations"],context.plan["limitations"]),"changed adapter, limits or scientific caveats")
@@ -177,26 +178,55 @@ function verify_pair(c,phase,index,base)
     root=folder(c,phase,index);path=joinpath(root,"invocation.json");canonical(path)
     record=readjson(path);sha=digest(path)
     require(record["status"]==COMPLETE && record["scope"]=="source_bound_complete_sia_Julia_job_pair" &&
-        record["theory_scope"]=="reconstructed_theory" && record["record_role"]=="complete_job_execution_invocation" &&
+        record["theory_scope"]==S.declaration(c.source.request.data) && record["record_role"]=="complete_job_execution_invocation" &&
         record["manifest_sha256"]==c.sha && record["phase"]==phase && record["index"]===index &&
-        record["completed_at"] isa String && all(get(record,k,nothing)===false for k in FLAGS) &&
+        record["completed_at"] isa String && !isempty(record["completed_at"]) && all(get(record,k,nothing)===false for k in FLAGS) &&
         strip(read(joinpath(root,"job.completed"),String))==sha,"incomplete or substituted whole job")
     expected=job_inputs(c,phase,index,base)
     require(S.same_json(record["inputs"],expected),"incomplete or stale job input/dependency ledger")
     hashes(expected)
     initial=readjson(joinpath(root,"initial-invocation.json"))
+    budget=c.m["resources"][phase in PHYSICAL ? phase : "global"]
     require(record["initial_record_sha256"]==digest(joinpath(root,"initial-invocation.json")) && initial["status"]=="FAIL" &&
         initial["record_role"]=="initial_sentinel_not_an_executed_failure" && initial["completed_at"]===nothing &&
-        isempty(initial["steps"]) && initial["manifest_sha256"]==c.sha,"changed initial nonterminal sentinel")
+        isempty(initial["steps"]) && initial["manifest_sha256"]==c.sha && initial["scope"]=="source_bound_complete_sia_Julia_job_pair" &&
+        initial["theory_scope"]==S.declaration(c.source.request.data) && initial["phase"]==phase && initial["index"]===index &&
+        S.same_json(initial["resources"],budget) && initial["started_at"] isa String && !isempty(initial["started_at"]) &&
+        all(get(initial,k,nothing)===false for k in FLAGS),"changed initial nonterminal sentinel")
     require(Set(keys(record["outputs"]))==Set(joinpath(root,name) for name in PRODUCTS),"incomplete whole-job output inventory")
     hashes(record["outputs"])
     reportsha=digest(joinpath(root,"report.json"))
     steps(record,c.m["resources"][phase in PHYSICAL ? phase : "global"],
         [command(c,phase,index,root,"producer"),command(c,phase,index,root,"audit";report_sha=reportsha)],root)
-    audit=readjson(joinpath(root,"audit.json"))
-    require(audit["status"]==REVIEWED && audit["manifest_sha256"]==c.sha && audit["report_sha256"]==reportsha &&
-        audit["phase"]==phase && audit["index"]===index && all(get(audit,k,nothing)===false for k in FLAGS),"missing independent saved-record review")
-    readjson(joinpath(root,"report.json"))
+    report=readjson(joinpath(root,"report.json"));audit=readjson(joinpath(root,"audit.json"))
+    validate_header(c,phase,index,report,COMPUTED);validate_header(c,phase,index,audit,REVIEWED)
+    require(all(get(row,"completed_at",nothing) isa String && !isempty(row["completed_at"]) for row in (report,audit)) &&
+        audit["report_sha256"]==reportsha && audit["complete_prerequisite_pair_ledgers_verified"]===length(dependencies(c,phase)) &&
+        all(get(audit,key,nothing)===false for key in ("native_evolution_reexecuted_by_reader",
+            "cold_AD_or_integrals_reexecuted_by_reader","raw_primary_tables_replayed_in_Julia")),
+        "missing complete independent saved-record identity or enlarged reader claim")
+    phase in GLOBALS && require(get(audit,"complete72_saved_arithmetic_verified",nothing)===(phase=="diagnostic"),
+        "changed complete72 saved arithmetic scope")
+    report
+end
+
+"Verify an actual Linux descriptor; dispatch supplies its fixed expected paths."
+function resource_lease_identity(proof,expected_path)
+    require(proof["pid"] isa Int && proof["pid"]>0 && proof["start_ticks"] isa Int && proof["start_ticks"]>0 &&
+        proof["file_descriptor"] isa Int && proof["file_descriptor"]>=0,"typed positive resource process identity required")
+    boot=strip(read("/proc/sys/kernel/random/boot_id",String))
+    pid=proof["pid"]
+    text=read("/proc/$pid/stat",String);fields=split(text[findlast(')',text)+1:end])
+    require(startswith(text,string(pid)*" (") && fields[1]!="Z" && proof["boot_id"]==boot &&
+        parse(Int,fields[20])==proof["start_ticks"] && proof["lock_path"]==expected_path &&
+        isabspath(expected_path) && normpath(expected_path)==expected_path && realpath(expected_path)==expected_path,
+        "expired, aliased or substituted live resource lease")
+    fd="/proc/$pid/fd/$(proof["file_descriptor"])";info=stat(fd)
+    require(realpath(fd)==expected_path && isfile(fd) && info.inode==proof["inode"] && info.device==proof["device"] &&
+        info.uid==ccall(:getuid,Cuint,()) && info.nlink==1 && info.mode & 0o077==0 &&
+        occursin(Regex("FLOCK\\s+ADVISORY\\s+WRITE\\s+"*string(pid)*"\\s"),read("/proc/$pid/fdinfo/$(proof["file_descriptor"])",String)),
+        "resource lease is not a private live exclusive flock")
+    (pid=pid,start_ticks=proof["start_ticks"],boot_id=boot,device=info.device,inode=info.inode)
 end
 
 function live_lease(c,phase,index)
@@ -204,14 +234,7 @@ function live_lease(c,phase,index)
     boot=strip(read("/proc/sys/kernel/random/boot_id",String))
     for (key,path) in (("family","/tmp/collinsflow-sia-family-$(ccall(:getuid,Cuint,())).lock"),
         ("geometry","/tmp/collinsflow-sia-geometry-$(ccall(:getuid,Cuint,())).lock"))
-        proof=lease[key];pid=proof["pid"]
-        text=read("/proc/$pid/stat",String);fields=split(text[findlast(')',text)+1:end])
-        require(proof["boot_id"]==boot && parse(Int,fields[20])==proof["start_ticks"] && proof["lock_path"]==path,
-            "expired or substituted live resource lease")
-        fd="/proc/$pid/fd/$(proof["file_descriptor"])";info=stat(fd)
-        require(realpath(fd)==path && info.inode==proof["inode"] && info.device==proof["device"] &&
-            occursin(Regex("FLOCK\\s+ADVISORY\\s+WRITE\\s+"*string(pid)*"\\s"),read("/proc/$pid/fdinfo/$(proof["file_descriptor"])",String)),
-            "resource lease is not a live exclusive flock")
+        resource_lease_identity(lease[key],path)
     end
     require(lease["family"]["pid"]==lease["geometry"]["pid"] &&
         lease["host_observation"]["status"]=="HOST_RESOURCE_GUARD_CLEAR_NOT_SCIENTIFIC_ADMISSION" &&
@@ -297,9 +320,12 @@ function source_controls(c)
 end
 
 function common_header(c,phase,index,status)
-    merge(N.flags(),Dict{String,Any}("schema_version"=>1,"status"=>status,"scope"=>S.SCOPE,
-        "theory_scope"=>"reconstructed_theory","source_context"=>deepcopy(c.binding),"manifest_sha256"=>c.sha,
+    theory=S.declaration(c.source.request.data)
+    result=merge(N.flags(),Dict{String,Any}("schema_version"=>1,"status"=>status,"scope"=>S.SCOPE,
+        "theory_scope"=>theory,"source_context"=>deepcopy(c.binding),"manifest_sha256"=>c.sha,
         "phase"=>phase,"index"=>index))
+    theory=="synthetic_closure" && (result["fixture_scope"]="explicitly_synthetic_complete_job_arithmetic_not_physical_dispatch")
+    result
 end
 
 function validate_header(c,phase,index,report,status)
@@ -309,6 +335,10 @@ end
 
 function collect_dependencies(c,phase,legacy)
     base=base_inputs(c);hashes(base);result=Dict{Tuple{String,Int},Any}()
+    inventory=copy(base)
+    for (p,i) in dependencies(c,phase),name in (PRODUCTS...,"initial-invocation.json","invocation.json","job.completed","lease.json")
+        path=joinpath(folder(c,p,i),name);canonical(path);inventory[path]=digest(path)
+    end
     for (p,i) in dependencies(c,phase)
         report=verify_pair(c,p,i,base)
         validate_header(c,p,i,report,COMPUTED)
@@ -318,7 +348,7 @@ function collect_dependencies(c,phase,legacy)
     for ((p,i),report) in result
         if p in PHYSICAL
             leaf=report["leaf_report"];spec=leaf["definition"]
-            if p in ("native123","native4")
+            checked=if p in ("native123","native4")
                 N.audit(c.source.request.data,c.source.parent,spec,c.binding,leaf)
             elseif p=="tailref"
                 R.audit_tail(c.source.request.data,c.source.parent,spec,c.binding,leaf)
@@ -326,10 +356,12 @@ function collect_dependencies(c,phase,legacy)
                 R.audit_derivative(c.source.request.data,c.source.parent,spec,c.binding,leaf,legacy.HistoricalSIAIntegralAudit.inward_checks)
             end
             require(spec["phase"]==p && spec["geometry_index"]===i,"leaf identity differs from complete pair")
+            stored=readjson(joinpath(folder(c,p,i),"audit.json"))
+            require(S.same_json(stored["leaf_arithmetic_review"],checked),"saved leaf audit differs from the fresh arithmetic reader")
         end
     end
-    hashes(base)
-    result
+    hashes(inventory)
+    (records=result,input_hashes=inventory)
 end
 
 function native_reports(c,records;first_only=false)
@@ -441,8 +473,25 @@ function audit_global(c,phase,records,report)
     end
 end
 
+function compute_leaf(view,parent,spec,binding,legacy,prepare;progress=stage->nothing,checkpoint=report->nothing)
+    phase=spec["phase"]
+    require(phase in PHYSICAL,"undeclared leaf computation")
+    phase in ("native123","native4") ?
+        N.compute(view,parent,spec,binding,legacy,(v,p,l)->prepare(v,p,l,24);progress=progress,checkpoint=checkpoint) :
+        phase=="tailref" ? R.compute_tail(view,parent,spec,binding,legacy,prepare;progress=progress,checkpoint=checkpoint) :
+        R.compute_derivative(view,parent,spec,binding,legacy,prepare;progress=progress,checkpoint=checkpoint)
+end
+
+function audit_leaf(data,parent,spec,binding,leaf,legacy)
+    phase=spec["phase"]
+    require(phase in PHYSICAL,"undeclared leaf arithmetic audit")
+    phase in ("native123","native4") ? N.audit(data,parent,spec,binding,leaf) :
+        phase=="tailref" ? R.audit_tail(data,parent,spec,binding,leaf) :
+        R.audit_derivative(data,parent,spec,binding,leaf,legacy.HistoricalSIAIntegralAudit.inward_checks)
+end
+
 function execute_loaded(c,phase,index,output,legacy;input=nothing,input_sha=nothing)
-    records=collect_dependencies(c,phase,legacy)
+    proof=collect_dependencies(c,phase,legacy);records=proof.records
     source_controls(c)
     if input===nothing
         live_lease(c,phase,index)
@@ -453,10 +502,7 @@ function execute_loaded(c,phase,index,output,legacy;input=nothing,input_sha=noth
             checkpoint=leaf->B.atomic_report(output,merge(common_header(c,phase,index,"IN_PROGRESS_NOT_A_GATE"),Dict("leaf_report"=>leaf)))
             progress=stage->B.atomic_report(joinpath(dirname(output),"progress.json"),stage)
             prepare=(view,parent,level,B)->N.prepare_geometry(view,parent,inputs,level,B)
-            leaf=phase in ("native123","native4") ?
-                N.compute(view,c.source.parent,spec,c.binding,legacy,(v,p,l)->prepare(v,p,l,24);progress=progress,checkpoint=checkpoint) :
-                phase=="tailref" ? R.compute_tail(view,c.source.parent,spec,c.binding,legacy,prepare;progress=progress,checkpoint=checkpoint) :
-                R.compute_derivative(view,c.source.parent,spec,c.binding,legacy,prepare;progress=progress,checkpoint=checkpoint)
+            leaf=compute_leaf(view,c.source.parent,spec,c.binding,legacy,prepare;progress=progress,checkpoint=checkpoint)
             N.inputs_stable(inputs);report["leaf_report"]=leaf
         else
             merge!(report,produce_global(c,phase,records))
@@ -471,9 +517,7 @@ function execute_loaded(c,phase,index,output,legacy;input=nothing,input_sha=noth
         report=common_header(c,phase,index,REVIEWED)
         if phase in PHYSICAL
             spec=definition(c,phase,index,records);leaf=saved["leaf_report"]
-            audit=phase in ("native123","native4") ? N.audit(c.source.request.data,c.source.parent,spec,c.binding,leaf) :
-                phase=="tailref" ? R.audit_tail(c.source.request.data,c.source.parent,spec,c.binding,leaf) :
-                R.audit_derivative(c.source.request.data,c.source.parent,spec,c.binding,leaf,legacy.HistoricalSIAIntegralAudit.inward_checks)
+            audit=audit_leaf(c.source.request.data,c.source.parent,spec,c.binding,leaf,legacy)
             report["leaf_arithmetic_review"]=audit
         else
             audit_global(c,phase,records,saved)
@@ -487,6 +531,7 @@ function execute_loaded(c,phase,index,output,legacy;input=nothing,input_sha=noth
         report["complete_prerequisite_pair_ledgers_verified"]=length(records)
     end
     recheck(c)
+    hashes(proof.input_hashes)
     report
 end
 

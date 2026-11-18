@@ -22,7 +22,7 @@ Missing original code, failed paper-center moments, source/acceptance assumption
 
 ## Current implementation scope
 
-The source-only planner and Julia complete72 arithmetic reducers are implemented. Numerical geometry producers, independent per-job auditors, the complete execution ledger and physical cached products remain pending. This command cannot dispatch Julia numerical jobs:
+The source planner, Julia geometry producers, per-job auditors and complete execution ledger are implemented. Software validation uses explicitly synthetic fixtures; physical72 execution and diagnostic admission remain pending. These planning commands cannot dispatch Julia numerical jobs:
 
 ```sh
 python scripts/plan_sia_geometry_jobs.py plan \
@@ -119,3 +119,9 @@ snakemake --snakefile workflow/sia_geometry_jobs.smk --cores 1 cached_review --c
 ```
 
 The Snakemake entrypoints always invoke the controller; cached targets require a fresh Julia reader. Synthetic full36/72 fixtures and command/resource/ownership mutation controls exercise the software separately from real-source read-only inspection. Neither software tests nor synthetic source controls establish physical72 accuracy. The new physical family remains unexecuted until source/software review is complete and the current SIDIS owner releases the host. Real-data fitting and the full B0/B1/STAR/lattice/robustness/uncertainty/publication scope remain unfinished.
+
+## Complete synthetic ledger regression
+
+The standalone `numerics/test/sia_complete_ledger_tests.jl` test builds both complete schedules: 79 saved producer/auditor pairs without native4 and 115 with all36 native4 pairs. Their numerical contexts, source rows and observations are explicitly synthetic. The fixtures share the Julia leaf producers and complete saved-record reducers, then launch a fresh Julia process to inspect all72 ordered outputs. Fixture commands and resource packets are synthetic protocol shapes, not measured per-job executions; these tests do not acquire production locks or run native evolution. The physical manifest loader rejects every fixture, and plotting rejects synthetic or undeclared source scope.
+
+The reader compares complete producer/auditor headers and saved leaf arithmetic, snapshots dependency hashes across its complete work, and rejects rehashed provenance and reader-scope substitutions. A coherent yield perturbation first passes local sums, ratios and leaf arithmetic, then must fail the independent first-common-order decision. Restored files must pass again. Linux Python/Julia interoperability is checked separately using actual private exclusive flock descriptors; the production dispatcher still supplies fixed production paths. CI preserves both successful and rejected synthetic reader outputs without treating them as physical admission receipts.

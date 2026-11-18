@@ -12,7 +12,14 @@ from test_sia_geometry_host import fake_proc, add_process, OWNER
 def fixture_manifest(tmp_path):
     plan = tmp_path / "plan.json"
     atomic_json(plan, dict(frozen="/explicitly-synthetic/frozen"))
+    controls = tmp_path / "explicit-synthetic-source-controls"
+    controls.mkdir()
+    atomic_json(controls / "report.json", dict(source_context=dict(fixture_scope="explicitly_synthetic_metadata_not_dispatch")))
+    native, parton = tmp_path / "synthetic-native.json", tmp_path / "synthetic-parton.json"
+    for path in (native, parton):
+        atomic_json(path, dict(scope="explicitly_synthetic_metadata_not_a_native_build"))
     return dict(run=str(tmp_path), source_plan=str(plan), julia_launcher="/explicitly-synthetic/julia",
+        source_controls=str(controls), native=str(native), parton=str(parton),
         execution_inputs={str(plan): execution.file_hash(plan)},
         resources=execution.jobs.load_policy()["resources"],
         sidis_owner=copy.deepcopy(OWNER), sidis_run_roots=["/explicitly-synthetic/sidis-run"])
@@ -55,8 +62,11 @@ def synthetic_pair(tmp_path):
     folder = execution.location(m, "native123", 1)
     folder.mkdir(parents=True)
     atomic_json(folder / "lease.json", dict(scope="explicitly_synthetic_saved_lease_not_live_host"))
-    for name in ("report.json", "audit.json"):
-        atomic_json(folder / name, dict(status="EXPLICIT_SYNTHETIC_PLACEHOLDER_NOT_NUMERICAL_ADMISSION"))
+    header = dict(schema_version=1, scope=execution.jobs.SCOPE, theory_scope="reconstructed_theory",
+        source_context=execution.report_context(m, sha), manifest_sha256=sha, phase="native123", index=1,
+        completed_at="explicitly-synthetic-time-not-a-measurement", fixture_scope="explicitly_synthetic_protocol_shape_not_dispatch",
+        **dict.fromkeys(execution.FLAGS, False))
+    atomic_json(folder / "report.json", dict(status="COMPLETE_SIA_JOB_VALUES_COMPUTED_NOT_GATE", **header))
     steps = []
     for name in ("producer", "audit"):
         (folder / (name + ".log")).write_text("explicitly synthetic command metadata; no Julia execution\n")
@@ -66,11 +76,14 @@ def synthetic_pair(tmp_path):
             minimum_available_memory_observed_before_command=2**40, resource=execution.controls.resource_record(folder / (name + ".resources.txt")),
             log_sha256=execution.file_hash(folder / (name + ".log")), resource_sha256=execution.file_hash(folder / (name + ".resources.txt")))
         steps.append(step)
-    audit = dict(status="COMPLETE_SIA_SAVED_JOB_ARITHMETIC_REVIEWED_NOT_GATE", **dict.fromkeys(execution.FLAGS, False),
-        report_sha256=execution.file_hash(folder / "report.json"), manifest_sha256=sha, phase="native123", index=1,
-        fixture_scope="explicitly_synthetic_metadata_not_numerical_arithmetic")
+    audit = dict(status="COMPLETE_SIA_SAVED_JOB_ARITHMETIC_REVIEWED_NOT_GATE", **header,
+        report_sha256=execution.file_hash(folder / "report.json"), complete_prerequisite_pair_ledgers_verified=0,
+        native_evolution_reexecuted_by_reader=False, cold_AD_or_integrals_reexecuted_by_reader=False,
+        raw_primary_tables_replayed_in_Julia=False)
     atomic_json(folder / "audit.json", audit)
-    initial = dict(status="FAIL", record_role="initial_sentinel_not_an_executed_failure", steps=[], completed_at=None, manifest_sha256=sha)
+    initial = dict(status="FAIL", scope=execution.PAIR_SCOPE, theory_scope="reconstructed_theory", phase="native123", index=1,
+        resources=m["resources"]["native123"], started_at="explicit-synthetic-time-not-measurement", **dict.fromkeys(execution.FLAGS, False),
+        record_role="initial_sentinel_not_an_executed_failure", steps=[], completed_at=None, manifest_sha256=sha)
     atomic_json(folder / "initial-invocation.json", initial)
     record = dict(status=execution.COMPLETE, scope=execution.PAIR_SCOPE, completed_at="synthetic-time-not-measurement",
         theory_scope="reconstructed_theory", record_role="complete_job_execution_invocation",
@@ -88,8 +101,43 @@ def test_metadata_review_explicitly_does_not_claim_numerical_arithmetic(tmp_path
     assert execution.verify_pair(m, path, sha, "native123", 1) == record
     assert record["accepted_prediction_diagnostic"] is False
     assert record["accepted_fitting_gate"] is False
+    with pytest.raises(ValueError):
+        execution.load(path, sha)
     # The placeholder producer cannot pass the Julia saved-arithmetic reader;
     # this test covers only the scheduling metadata boundary.
+
+
+@pytest.mark.parametrize("field,value", [("source_context", {}), ("theory_scope", "synthetic_closure"), ("scope", "production_fit"),
+    ("schema_version", True), ("completed_at", ""), ("index", True), ("complete_prerequisite_pair_ledgers_verified", False),
+    ("native_evolution_reexecuted_by_reader", True), ("cold_AD_or_integrals_reexecuted_by_reader", True),
+    ("raw_primary_tables_replayed_in_Julia", True)])
+def test_rehashed_audit_requires_complete_identity_and_reader_scope(tmp_path, field, value):
+    m, path, sha, folder, record = synthetic_pair(tmp_path)
+    audit = read_json(folder / "audit.json")
+    audit[field] = value
+    atomic_json(folder / "audit.json", audit)
+    record["outputs"][str(folder / "audit.json")] = execution.file_hash(folder / "audit.json")
+    atomic_json(folder / "invocation.json", record)
+    (folder / "job.completed").write_text(execution.file_hash(folder / "invocation.json") + "\n")
+    with pytest.raises(ValueError):
+        execution.verify_pair(m, path, sha, "native123", 1)
+
+
+@pytest.mark.parametrize("request_scope,report_scope,fixture", [("synthetic_closure", "synthetic_closure", True),
+    ("reconstructed_theory", "synthetic_closure", False), ("synthetic_closure", "reconstructed_theory", False),
+    ("reconstructed_theory", "reconstructed_theory", True), (None, "reconstructed_theory", False)])
+def test_reconstructed_renderer_rejects_synthetic_or_undeclared_artifacts_before_writing(tmp_path, request_scope, report_scope, fixture):
+    request = dict(theory_scope=request_scope, points=[dict(id=str(i)) for i in range(72)])
+    report = dict(theory_scope=report_scope, points=request["points"], **dict.fromkeys(execution.FLAGS, False))
+    if fixture:
+        request["fixture_scope"] = "explicitly_synthetic_renderer_mutation_not_primary_data"
+    request_path, plan_path = tmp_path / "request.json", tmp_path / "plan.json"
+    atomic_json(request_path, request)
+    atomic_json(plan_path, dict(request=str(request_path)))
+    output = tmp_path / "must-remain-absent"
+    with pytest.raises(ValueError, match="cannot label synthetic"):
+        execution.render_products(dict(source_plan=str(plan_path)), report, output)
+    assert not output.exists()
 
 
 @pytest.mark.parametrize("mutation", ["effective-exit", "raw-exit", "signal", "interruption", "rss", "wall", "duration", "memory",

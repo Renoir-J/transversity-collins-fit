@@ -16,7 +16,9 @@ on:
       - numerics/bin/audit_sia_source_controls.jl
       - numerics/test/sia_geometry*.jl
       - numerics/test/sia_source_control_tests.jl
-      - numerics/test/sia_complete_job_tests.jl
+      - numerics/test/sia_complete_*.jl
+      - numerics/test/SIACompleteJobFixture.jl
+      - numerics/test/sia_resource_lease_probe.jl
       - src/collinsflow/sia_*.py
       - scripts/plan_sia_geometry_jobs.py
       - scripts/run_sia_source_controls.py
@@ -73,7 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p runs/ci-sia-geometry-software
-          for test in numerics/test/runtests.jl numerics/test/sia_geometry_selection_tests.jl numerics/test/sia_source_control_tests.jl numerics/test/sia_geometry_model_tests.jl numerics/test/sia_geometry_native_tests.jl numerics/test/sia_geometry_reference_tests.jl numerics/test/sia_complete_job_tests.jl; do
+          for test in numerics/test/runtests.jl numerics/test/sia_geometry_selection_tests.jl numerics/test/sia_source_control_tests.jl numerics/test/sia_geometry_model_tests.jl numerics/test/sia_geometry_native_tests.jl numerics/test/sia_geometry_reference_tests.jl numerics/test/sia_complete_job_tests.jl numerics/test/sia_complete_ledger_tests.jl; do
             julia --startup-file=no --project=numerics "$test" 2>&1 | tee "runs/ci-sia-geometry-software/$(basename "$test" .jl).log"
           done
       - name: Synthetic closure and cache rejection checks
@@ -85,5 +87,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: synthetic-sia-geometry-software-${{ github.sha }}
-          path: runs/ci-sia-geometry-software
+          path: |
+            runs/ci-sia-geometry-software
+            runs/sia-full-ledger-fixtures
           retention-days: 30

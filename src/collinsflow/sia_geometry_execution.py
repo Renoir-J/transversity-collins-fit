@@ -207,13 +207,29 @@ def command(m, path, sha, phase, index, folder, name, report_sha=None):
         str(ROOT / "numerics/bin" / program), *arguments]
 
 
+def report_context(m, sha):
+    binding = read_json(Path(m["source_controls"]) / "report.json")["source_context"]
+    return {**binding, "execution_manifest_sha256": sha,
+        "native_receipt_sha256": file_hash(m["native"]), "parton_receipt_sha256": file_hash(m["parton"])}
+
+
+def verify_report_header(m, sha, phase, index, data, status):
+    if (type(data.get("schema_version")) is not int or data["schema_version"] != 1 or data.get("status") != status or
+            data.get("scope") != jobs.SCOPE or data.get("theory_scope") != "reconstructed_theory" or
+            data.get("manifest_sha256") != sha or data.get("phase") != phase or type(data.get("index")) is not int or
+            data["index"] != index or not isinstance(data.get("completed_at"), str) or not data["completed_at"] or
+            data.get("source_context") != report_context(m, sha) or any(data.get(key) is not False for key in FLAGS)):
+        raise ValueError("incomplete or stale complete report identity and source context")
+
+
 def verify_pair(m, path, sha, phase, index=0, *, require_marker=True, base=None):
     """Metadata review only; a fresh Julia reader still recomputes saved arithmetic."""
     folder = location(m, phase, index)
     invpath = folder / "invocation.json"
     invsha, record = file_hash(invpath), read_json(invpath)
     expected_files = {str(folder / name) for name in PRODUCTS}
-    if (record.get("status") != COMPLETE or record.get("scope") != PAIR_SCOPE or not record.get("completed_at") or
+    if (record.get("status") != COMPLETE or record.get("scope") != PAIR_SCOPE or
+            not isinstance(record.get("completed_at"), str) or not record["completed_at"] or
             record.get("theory_scope") != "reconstructed_theory" or record.get("record_role") != "complete_job_execution_invocation" or
             record.get("manifest_sha256") != sha or record.get("phase") != phase or record.get("index") != index or
             type(record.get("index")) is not int or any(record.get(key) is not False for key in FLAGS) or
@@ -223,11 +239,15 @@ def verify_pair(m, path, sha, phase, index=0, *, require_marker=True, base=None)
     check_hashes(record["inputs"])
     check_hashes(record["outputs"])
     initial = read_json(folder / "initial-invocation.json")
+    budget = m["resources"][phase if phase in PHYSICAL else "global"]
     if (record["initial_record_sha256"] != file_hash(folder / "initial-invocation.json") or initial["status"] != "FAIL" or
             initial["record_role"] != "initial_sentinel_not_an_executed_failure" or initial["steps"] != [] or
-            initial["completed_at"] is not None or initial["manifest_sha256"] != sha):
+            initial["completed_at"] is not None or initial["manifest_sha256"] != sha or initial.get("scope") != PAIR_SCOPE or
+            initial.get("theory_scope") != "reconstructed_theory" or initial.get("phase") != phase or
+            type(initial.get("index")) is not int or initial["index"] != index or initial.get("resources") != budget or
+            not isinstance(initial.get("started_at"), str) or not initial["started_at"] or
+            any(initial.get(key) is not False for key in FLAGS)):
         raise ValueError("changed initial nonterminal sentinel")
-    budget = m["resources"][phase if phase in PHYSICAL else "global"]
     if record["resources"] != budget or [s["name"] for s in record["steps"]] != ["producer", "audit"]:
         raise ValueError("changed whole-job budget or command pair")
     for step in record["steps"]:
@@ -242,11 +262,15 @@ def verify_pair(m, path, sha, phase, index=0, *, require_marker=True, base=None)
     if any(sum(s[key] if key == "wrapper_elapsed_seconds" else s["resource"]["wall_seconds"] for s in record["steps"]) >
            budget["whole_Julia_jobs_time_budget_seconds"] for key in ("wrapper_elapsed_seconds", "wall_seconds")):
         raise ValueError("whole producer/auditor budget exceeded")
-    audit = read_json(folder / "audit.json")
-    if (audit.get("status") != "COMPLETE_SIA_SAVED_JOB_ARITHMETIC_REVIEWED_NOT_GATE" or
-            audit.get("report_sha256") != file_hash(folder / "report.json") or audit.get("manifest_sha256") != sha or
-            audit.get("phase") != phase or audit.get("index") != index or
-            any(audit.get(key) is not False for key in FLAGS)):
+    producer, audit = (read_json(folder / name) for name in ("report.json", "audit.json"))
+    verify_report_header(m, sha, phase, index, producer, "COMPLETE_SIA_JOB_VALUES_COMPUTED_NOT_GATE")
+    verify_report_header(m, sha, phase, index, audit, "COMPLETE_SIA_SAVED_JOB_ARITHMETIC_REVIEWED_NOT_GATE")
+    if (audit.get("report_sha256") != file_hash(folder / "report.json") or
+            type(audit.get("complete_prerequisite_pair_ledgers_verified")) is not int or
+            audit["complete_prerequisite_pair_ledgers_verified"] != len(dependencies(m, phase)) or
+            any(audit.get(key) is not False for key in ("native_evolution_reexecuted_by_reader",
+                "cold_AD_or_integrals_reexecuted_by_reader", "raw_primary_tables_replayed_in_Julia")) or
+            (phase in GLOBALS and audit.get("complete72_saved_arithmetic_verified") is not (phase == "diagnostic"))):
         raise ValueError("missing independent complete saved-record audit")
     return record
 
@@ -448,15 +472,17 @@ def cached_products(path, sha):
 def render_products(m, report, output):
     """Render Julia values and separate measured errors; no likelihood or fitting."""
     import csv
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-
     request = read_json(read_json(m["source_plan"])["request"])
+    if (request.get("theory_scope") != "reconstructed_theory" or report.get("theory_scope") != "reconstructed_theory" or
+            "fixture_scope" in request or "fixture_scope" in report):
+        raise ValueError("the reconstructed-data renderer cannot label synthetic or undeclared results as physical source comparisons")
     source, predicted = request["points"], report["points"]
     if (len(predicted) != 72 or [p["id"] for p in predicted] != [p["id"] for p in source] or
             any(report.get(key) is not False for key in FLAGS)):
         raise ValueError("complete ordered source-bound72 predictions required")
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
     output = canonical(output)
     output.mkdir(parents=True, exist_ok=False)
     table = output / "comparison72.csv"
