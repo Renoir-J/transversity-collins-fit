@@ -14,6 +14,11 @@ PHYSICAL_PROGRAMS = frozenset((
     "predict_historical_sia_integrals.jl", "predict_historical_sia_points.jl",
     "predict_historical_sidis_points.jl", "run_historical_sidis_point_job.jl",
     "run_historical_sidis_global_job.jl",
+    "run_sidis_continuation_point.jl", "run_sidis_continuation_global.jl",
+    "audit_sidis_continuation_job.jl", "audit_sidis_continuation_prefix.jl",
+    "run_sidis_recovery_point.jl", "run_sidis_recovery_global.jl",
+    "audit_sidis_recovery_job.jl", "audit_sidis_recovery_retained.jl",
+    "run_sidis_continuation.py", "run_sidis_recovery.py", "run_sia_geometry_jobs.py",
 ))
 
 

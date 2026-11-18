@@ -8,13 +8,20 @@ on:
       - numerics/bin/SIAGeometry*.jl
       - numerics/bin/SIASourceControls.jl
       - numerics/bin/SIAJobBindings.jl
+      - numerics/bin/SIACompleteJobs.jl
+      - numerics/bin/run_sia_geometry_job.jl
+      - numerics/bin/audit_sia_geometry_job.jl
+      - numerics/bin/inspect_sia_geometry_execution.jl
       - numerics/bin/run_sia_source_controls.jl
       - numerics/bin/audit_sia_source_controls.jl
       - numerics/test/sia_geometry*.jl
       - numerics/test/sia_source_control_tests.jl
+      - numerics/test/sia_complete_job_tests.jl
       - src/collinsflow/sia_*.py
       - scripts/plan_sia_geometry_jobs.py
       - scripts/run_sia_source_controls.py
+      - scripts/run_sia_geometry_jobs.py
+      - workflow/sia_geometry_jobs.smk
       - tests/test_sia_*.py
       - .github/workflows/sia-geometry-software.yml
   workflow_dispatch:
@@ -57,7 +64,7 @@ jobs:
           julia --project=numerics -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
       - name: Source and Python checks
         run: |
-          ruff check src tests scripts/plan_sia_geometry_jobs.py scripts/run_sia_source_controls.py
+          ruff check src tests scripts/plan_sia_geometry_jobs.py scripts/run_sia_source_controls.py scripts/run_sia_geometry_jobs.py
           python -m pytest -q
           python scripts/plan_workflow.py validate
           python scripts/check_repository.py
@@ -66,7 +73,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p runs/ci-sia-geometry-software
-          for test in numerics/test/runtests.jl numerics/test/sia_geometry_selection_tests.jl numerics/test/sia_source_control_tests.jl numerics/test/sia_geometry_model_tests.jl numerics/test/sia_geometry_native_tests.jl numerics/test/sia_geometry_reference_tests.jl; do
+          for test in numerics/test/runtests.jl numerics/test/sia_geometry_selection_tests.jl numerics/test/sia_source_control_tests.jl numerics/test/sia_geometry_model_tests.jl numerics/test/sia_geometry_native_tests.jl numerics/test/sia_geometry_reference_tests.jl numerics/test/sia_complete_job_tests.jl; do
             julia --startup-file=no --project=numerics "$test" 2>&1 | tee "runs/ci-sia-geometry-software/$(basename "$test" .jl).log"
           done
       - name: Synthetic closure and cache rejection checks

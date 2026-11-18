@@ -172,8 +172,8 @@ def prepare_plan(frozen, request_path, output, *, adapter=ROOT):
                 "point_order": [point["id"] for point in request["points"]], "geometries": geometries,
                 "derivative_geometry_indices": derivative_indices, "proposed_phases": policy["job_phases"],
                 "resources": policy["resources"], "limitations": request["limitations"],
-                "implementation_remaining": ["complete numerical producers and auditors", "global selectors and complete ledger",
-                                             "fresh cached physical diagnostic and products"]}
+                "implementation_remaining": ["complete real-source geometry/native/tail/reference/derivative execution",
+                    "fresh full72 global ledger and cached diagnostic review", "conditional diagnostic products; no fitting admission"]}
         if (verify_checkout(frozen, head=old_head)[1] != old_files or
                 verify_checkout(adapter, head=new_head)[1] != new_files or
                 any(file_hash(path) != sha for path, sha in request["source_inputs"].items()) or

@@ -76,7 +76,7 @@ julia --project=numerics numerics/test/sia_geometry_model_tests.jl
 
 The native value computation and saved-arithmetic functions retain native1/2/3 or native4 at B24, both source ratios and all five momentum orders. Preparation uses the unchanged pinned DSS14/native routine; tests substitute explicitly synthetic Julia row fixtures and do not call it. The independent leaf reader checks exact settings, source kind, absolute pair/category yields, angular/window algebra and complete order coverage. A common normalization change that cancels in the ratio is still rejected if the two source ratios no longer retain identical absolute pair integrals. Intermediate checkpoints remain nonterminal and do not select a local momentum or native level.
 
-These functions have no physical dispatcher or completed-job marker. The complete source/command/resource ledger, tail/reference and derivative workers, independent global reader and cached products remain pending. A successful leaf arithmetic result explicitly leaves complete provenance verification and global selection false.
+These leaf functions create no completed-job marker. Their successful arithmetic result explicitly leaves complete provenance verification and global selection false. The complete controller and readers below consume the leaf reports without changing those attestations.
 
 ```sh
 julia --project=numerics numerics/test/sia_geometry_native_tests.jl
@@ -84,7 +84,7 @@ julia --project=numerics numerics/test/sia_geometry_native_tests.jl
 
 The tail/reference functions retain B12/B32 at one common selected native level and all five momentum orders. Every scalar adaptive-qT reference retains separate charge/category operands and each source angular scalar. Saved comparisons cover every stored order; selecting a common order and judging its all72 reference accuracy remain global operations. Scalar references carry their adaptive scope and have no Gauss momentum-order label. B24 must come from the exact selected native outputs in the complete ledger.
 
-The representative derivative functions use the same three source geometries, UL/UC order, all13 coordinates, direction, 256-bit inward stencils and two step sizes as the parent. The leaf reader reuses the unchanged independent inward arithmetic helper and checks all nine comparison decisions. The numerical reference shares native rows and initial functions; its reader does not rerun native evolution or cold AD. Complete commands/resources/provenance, global selection, physical dispatch and cached products remain pending.
+The representative derivative functions use the same three source geometries, UL/UC order, all13 coordinates, direction, 256-bit inward stencils and two step sizes as the parent. The leaf reader reuses the unchanged independent inward arithmetic helper and checks all nine comparison decisions. The numerical reference shares native rows and initial functions; its reader does not rerun native evolution or cold AD. Physical execution and scientific acceptance still require the full run described below.
 
 ```sh
 julia --project=numerics numerics/test/sia_geometry_reference_tests.jl
@@ -96,4 +96,26 @@ The additive `Synthetic SIA geometry software checks` GitHub workflow runs these
 
 The standalone host guard checks an explicit PID/start/boot/command tuple, the retained run namespace and known physical worker/reader programs. A replacement or orphan still blocks dispatch. An owner observed before scanning remains a blocker if it exits during the scan; missing or ambiguous process observations never release the host. Synthetic process fixtures retain a separate scope and cannot claim a live-host observation.
 
-A fixed per-user Linux lock can cover the complete producer/auditor pair. It is an administrative resource lease, not a scientific admission receipt. The scheduler, worker lease verification and complete invocation ledger remain pending; this module neither starts physical jobs nor turns a clear resource observation into a fitting gate.
+A fixed per-user Linux lock covers the complete producer/auditor pair. It is an administrative resource lease, not a scientific admission receipt. Known continuation and recovery workers, replacement owners, orphans and unknown observations block dispatch. Bind the current SIDIS owner file and run root; the disappearance of an obsolete owner tuple cannot release the host.
+
+## Complete execution and saved-record audit
+
+`scripts/run_sia_geometry_jobs.py` prepares an immutable `execution.json` beside a fresh current source plan. It binds the complete code inventories, raw-source replay, native and parton receipts and binaries, Julia launcher and actual runtime, GNU time, all nine preserved original SIA files, a complete synthetic source-control pair and its fresh cache review. The externally supplied manifest SHA binds every later command. Preparation and the read-only `plan` action do not launch physical calculations. The original interrupted SIA outputs are evidence only and provide no reusable jobs.
+
+The `all` action serializes 36 native123 pairs, a complete native3 selector, conditional 36 native4 pairs, a common native selector, 36 tail/reference pairs, a tail/reference selector, three derivative pairs and the final full72 diagnostic pair. Julia produces and independently reviews each job in separate processes. Python schedules whole commands and renders reviewed values; it performs no numerical selection, likelihood, derivatives or optimization. No Python or language-model callback enters the numerical loop.
+
+One driver family lease and the shared host geometry lease remain held across each complete pair. Julia checks the live boot/PID/start identity, exclusive flock descriptors, ancestor process and bound SIDIS owner before and after physical work. Initial sentinels, prepared commands, failed/partial reports, raw and effective exit codes, logs and complete GNU-time measurements are retained. A marker is written only after the whole pair's provenance, arithmetic and fixed resource limits are checked. Same-run reuse requires the identical manifest, source and selected prerequisites. An occupied partial or failed folder is rejected; no automatic migration or same-budget retry is performed.
+
+`SIAGeometryGlobalAudit` independently reconstructs the complete72 residuals and first common momentum/native choices from all15 saved operands per point. It does not call the producer's packing, scaling or selection functions. Leaf schema and algebra validation remain shared. The global worker checks every required completed pair, all36 geometries, exact source order, complete saved scalar-reference arithmetic and the three derivative jobs. Derivative settings and values must also match the globally selected B32 outputs. Missing covariance, conditional acceptance/Q2 conventions, shared native evolution and the failed literal paper-center benchmark remain limitations.
+
+The `verify` action always creates a fresh Julia full-ledger review. It verifies the original diagnostic pair and recomputes all saved prerequisite arithmetic without rerunning native evolution, cold integration or AD. Only then does the same fresh review directory receive the ordered72 CSV and separate source-z1-binned UL/UC figures. Statistical and reported systematic errors remain separate. No chi2, fit, uncertainty interval, G2PERF or production gate is introduced.
+
+```sh
+python scripts/run_sia_geometry_jobs.py prepare --help
+python scripts/run_sia_geometry_jobs.py plan --manifest /explicit/new/run/execution.json --manifest-sha EXTERNAL_SHA
+julia --startup-file=no --project=/explicit/frozen/numerics numerics/bin/inspect_sia_geometry_execution.jl /explicit/new/run/execution.json EXTERNAL_SHA
+snakemake --snakefile workflow/sia_geometry_jobs.smk --cores 1 --config manifest=/explicit/new/run/execution.json manifest_sha256=EXTERNAL_SHA
+snakemake --snakefile workflow/sia_geometry_jobs.smk --cores 1 cached_review --config manifest=/explicit/new/run/execution.json manifest_sha256=EXTERNAL_SHA
+```
+
+The Snakemake entrypoints always invoke the controller; cached targets require a fresh Julia reader. Synthetic full36/72 fixtures and command/resource/ownership mutation controls exercise the software separately from real-source read-only inspection. Neither software tests nor synthetic source controls establish physical72 accuracy. The new physical family remains unexecuted until source/software review is complete and the current SIDIS owner releases the host. Real-data fitting and the full B0/B1/STAR/lattice/robustness/uncertainty/publication scope remain unfinished.
