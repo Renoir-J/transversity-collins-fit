@@ -46,6 +46,7 @@ jobs:
           julia --startup-file=no --project=numerics numerics/test/sidis_continuation_tests.jl | tee runs/recovery-software/julia-continuation.log
           julia --startup-file=no --project=numerics numerics/test/sidis_recovery_path_tests.jl | tee runs/recovery-software/julia-paths.log
           julia --startup-file=no --project=numerics numerics/test/sidis_recovery_tests.jl | tee runs/recovery-software/julia-recovery.log
+          julia --startup-file=no --project=numerics numerics/test/sidis_retained_entrypoint_tests.jl | tee runs/recovery-software/julia-retained-entrypoint.log
       - name: Synthetic Snakemake closure and cached tamper rejection
         run: |
           snakemake --snakefile workflow/Snakefile --cores 2 --config mode=closure run_dir=runs/recovery-software/closure
