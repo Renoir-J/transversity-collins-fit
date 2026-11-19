@@ -31,6 +31,30 @@ function canonical(path)
     path
 end
 
+"File-byte observations for one dependency review; never numerical response data."
+struct ObservedFileHashes
+    hashes::Dict{String,String}
+    ObservedFileHashes(inventory::AbstractDict)=new(Dict{String,String}(inventory))
+end
+
+observed_digest(path,::Nothing)=digest(path)
+function observed_digest(path,observed::ObservedFileHashes)
+    require(haskey(observed.hashes,path),"file is absent from this dependency observation")
+    observed.hashes[path]
+end
+
+observed_hashes(inventory,::Nothing)=hashes(inventory)
+function observed_hashes(inventory,observed::ObservedFileHashes)
+    require(inventory isa AbstractDict && !isempty(inventory) &&
+        all(haskey(observed.hashes,path) && observed.hashes[path]==sha for (path,sha) in inventory),
+        "complete file inventory differs from this dependency observation")
+end
+
+function recheck_dependencies(proof)
+    foreach(canonical,proof.canonical_files)
+    hashes(proof.input_hashes)
+end
+
 function load_manifest(path,external_sha)
     canonical(path);require(digest(path)==external_sha,"changed externally bound execution manifest")
     m=readjson(path)
@@ -103,6 +127,17 @@ function dependencies(c,phase)
     error("undeclared dependency phase")
 end
 
+function dependency_closure(c,phase)
+    pending=collect(dependencies(c,phase));seen=Set{Tuple{String,Int}}()
+    while !isempty(pending)
+        job=pop!(pending)
+        job in seen && continue
+        push!(seen,job)
+        append!(pending,dependencies(c,first(job)))
+    end
+    sort!(collect(seen))
+end
+
 function plan_inputs(c)
     plan=c.source.plan;result=Dict{String,Any}()
     for path in (c.source.planfile,plan["request"],plan["source_request"],"/usr/bin/time",c.m["julia_launcher"])
@@ -125,12 +160,14 @@ function base_inputs(c)
     result
 end
 
-function job_inputs(c,phase,index,base)
+function job_inputs(c,phase,index,base;observed::Union{Nothing,ObservedFileHashes}=nothing)
     result=copy(base)
     for (p,i) in dependencies(c,phase),name in (PRODUCTS...,"initial-invocation.json","invocation.json","job.completed","lease.json")
-        file=joinpath(folder(c,p,i),name);canonical(file);result[file]=digest(file)
+        file=joinpath(folder(c,p,i),name)
+        observed===nothing && canonical(file)
+        result[file]=observed_digest(file,observed)
     end
-    lease=joinpath(folder(c,phase,index),"lease.json");result[lease]=digest(lease)
+    lease=joinpath(folder(c,phase,index),"lease.json");result[lease]=observed_digest(lease,observed)
     result
 end
 
@@ -174,28 +211,28 @@ function steps(record,budget,expected_commands,root)
     nothing
 end
 
-function verify_pair(c,phase,index,base)
+function verify_pair(c,phase,index,base;observed::Union{Nothing,ObservedFileHashes}=nothing)
     root=folder(c,phase,index);path=joinpath(root,"invocation.json");canonical(path)
-    record=readjson(path);sha=digest(path)
+    record=readjson(path);sha=observed_digest(path,observed)
     require(record["status"]==COMPLETE && record["scope"]=="source_bound_complete_sia_Julia_job_pair" &&
         record["theory_scope"]==S.declaration(c.source.request.data) && record["record_role"]=="complete_job_execution_invocation" &&
         record["manifest_sha256"]==c.sha && record["phase"]==phase && record["index"]===index &&
         record["completed_at"] isa String && !isempty(record["completed_at"]) && all(get(record,k,nothing)===false for k in FLAGS) &&
         strip(read(joinpath(root,"job.completed"),String))==sha,"incomplete or substituted whole job")
-    expected=job_inputs(c,phase,index,base)
+    expected=job_inputs(c,phase,index,base;observed=observed)
     require(S.same_json(record["inputs"],expected),"incomplete or stale job input/dependency ledger")
-    hashes(expected)
+    observed_hashes(expected,observed)
     initial=readjson(joinpath(root,"initial-invocation.json"))
     budget=c.m["resources"][phase in PHYSICAL ? phase : "global"]
-    require(record["initial_record_sha256"]==digest(joinpath(root,"initial-invocation.json")) && initial["status"]=="FAIL" &&
+    require(record["initial_record_sha256"]==observed_digest(joinpath(root,"initial-invocation.json"),observed) && initial["status"]=="FAIL" &&
         initial["record_role"]=="initial_sentinel_not_an_executed_failure" && initial["completed_at"]===nothing &&
         isempty(initial["steps"]) && initial["manifest_sha256"]==c.sha && initial["scope"]=="source_bound_complete_sia_Julia_job_pair" &&
         initial["theory_scope"]==S.declaration(c.source.request.data) && initial["phase"]==phase && initial["index"]===index &&
         S.same_json(initial["resources"],budget) && initial["started_at"] isa String && !isempty(initial["started_at"]) &&
         all(get(initial,k,nothing)===false for k in FLAGS),"changed initial nonterminal sentinel")
     require(Set(keys(record["outputs"]))==Set(joinpath(root,name) for name in PRODUCTS),"incomplete whole-job output inventory")
-    hashes(record["outputs"])
-    reportsha=digest(joinpath(root,"report.json"))
+    observed_hashes(record["outputs"],observed)
+    reportsha=observed_digest(joinpath(root,"report.json"),observed)
     steps(record,c.m["resources"][phase in PHYSICAL ? phase : "global"],
         [command(c,phase,index,root,"producer"),command(c,phase,index,root,"audit";report_sha=reportsha)],root)
     report=readjson(joinpath(root,"report.json"));audit=readjson(joinpath(root,"audit.json"))
@@ -333,14 +370,20 @@ function validate_header(c,phase,index,report,status)
     require(all(haskey(report,k) && S.same_json(report[k],v) for (k,v) in expected),"changed complete report identity or premature admission")
 end
 
-function collect_dependencies(c,phase,legacy)
+function collect_dependencies(c,phase,legacy;reuse_observed_file_hashes::Bool=true)
     base=base_inputs(c);hashes(base);result=Dict{Tuple{String,Int},Any}()
     inventory=copy(base)
-    for (p,i) in dependencies(c,phase),name in (PRODUCTS...,"initial-invocation.json","invocation.json","job.completed","lease.json")
+    canonical_files=String[]
+    for (p,i) in dependency_closure(c,phase),name in (PRODUCTS...,"initial-invocation.json","invocation.json","job.completed","lease.json")
         path=joinpath(folder(c,p,i),name);canonical(path);inventory[path]=digest(path)
+        push!(canonical_files,path)
     end
+    # Every dependency byte was observed above. Reuse only these file hashes
+    # while checking each complete packet, then reread all actual bytes below.
+    # The raw path remains available for exact regression/performance controls.
+    observed=reuse_observed_file_hashes ? ObservedFileHashes(inventory) : nothing
     for (p,i) in dependencies(c,phase)
-        report=verify_pair(c,p,i,base)
+        report=verify_pair(c,p,i,base;observed=observed)
         validate_header(c,p,i,report,COMPUTED)
         result[(p,i)]=report
     end
@@ -360,8 +403,9 @@ function collect_dependencies(c,phase,legacy)
             require(S.same_json(stored["leaf_arithmetic_review"],checked),"saved leaf audit differs from the fresh arithmetic reader")
         end
     end
-    hashes(inventory)
-    (records=result,input_hashes=inventory)
+    proof=(records=result,input_hashes=inventory,canonical_files=canonical_files)
+    recheck_dependencies(proof)
+    proof
 end
 
 function native_reports(c,records;first_only=false)
@@ -531,7 +575,7 @@ function execute_loaded(c,phase,index,output,legacy;input=nothing,input_sha=noth
         report["complete_prerequisite_pair_ledgers_verified"]=length(records)
     end
     recheck(c)
-    hashes(proof.input_hashes)
+    recheck_dependencies(proof)
     report
 end
 

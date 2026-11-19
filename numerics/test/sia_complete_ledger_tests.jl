@@ -38,14 +38,47 @@ end
             @test report["source_point_ids"]==[p["id"] for p in c.source.request.data["points"]]
             @test all(report[key]===false for key in ("per_job_commands_measured","production_locks_acquired",
                 "native_evolution_executed","physical_SIA_jobs_started","fit_performed","production_ready","accepted_fitting_gate"))
+            legacy=C.load_library(ROOT)
+            proof=Base.invokelatest(C.collect_dependencies,c,"diagnostic",legacy)
+            raw=Base.invokelatest(C.collect_dependencies,c,"diagnostic",legacy;reuse_observed_file_hashes=false)
+            @test isequal(proof.records,raw.records)
+            @test isequal(proof.input_hashes,raw.input_hashes)
+            @test isequal(proof.canonical_files,raw.canonical_files)
+            observed=C.ObservedFileHashes(proof.input_hashes)
+            @test_throws ErrorException C.observed_digest(joinpath(directory,"unobserved-file.json"),observed)
+            if force4
+                # A native4 packet directly names the native3 selector, whose
+                # own native123 inputs must remain protected through the work.
+                nested=Base.invokelatest(C.collect_dependencies,c,"native4",legacy)
+                ancestor=joinpath(C.folder(c,"native123",1),"report.json")
+                @test haskey(nested.input_hashes,ancestor)
+                original=read(ancestor)
+                open(ancestor,"a") do stream
+                    write(stream,"\n")
+                end
+                @test_throws ErrorException C.hashes(nested.input_hashes)
+                write(ancestor,original)
+                @test C.hashes(nested.input_hashes)===true
+            end
             if !force4
-                legacy=C.load_library(ROOT)
-                proof=Base.invokelatest(C.collect_dependencies,c,"diagnostic",legacy)
                 file=joinpath(C.folder(c,"native123",1),"producer.log");old=read(file)
                 write(file,"synthetic post-reader mutation\n")
                 @test_throws ErrorException C.hashes(proof.input_hashes)
                 write(file,old)
                 @test C.hashes(proof.input_hashes)===true
+                if Sys.islinux()
+                    equivalent=joinpath(directory,"byte-identical-producer-copy.log")
+                    write(equivalent,old);rm(file)
+                    try
+                        symlink(equivalent,file)
+                        @test islink(file)
+                        @test C.hashes(proof.input_hashes)===true
+                        @test_throws ErrorException C.recheck_dependencies(proof)
+                    finally
+                        rm(file;force=true);write(file,old)
+                    end
+                    @test C.recheck_dependencies(proof)===true
+                end
                 auditfile=joinpath(C.folder(c,"native123",12),"audit.json")
                 original=read(auditfile)
                 for mutation in ("missing-audit-context","false-cold-evolution-claim","promoted-leaf-proof")

@@ -127,7 +127,7 @@ function produce_all(c,legacy)
         for key in ("native_evolution_reexecuted_by_reader","cold_AD_or_integrals_reexecuted_by_reader","raw_primary_tables_replayed_in_Julia")
             audit[key]=false
         end
-        C.hashes(proof.input_hashes)
+        C.recheck_dependencies(proof)
         save_job(c,phase,index,report,audit);push!(jobs,(phase,index))
         println("Explicit synthetic saved-job fixture: ",phase," ",index);flush(stdout)
     end
@@ -153,7 +153,7 @@ end
 function inspect_loaded(c,legacy)
     report=C.verify_pair(c,"diagnostic",0,C.base_inputs(c))
     proof=C.collect_dependencies(c,"diagnostic",legacy)
-    C.audit_global(c,"diagnostic",proof.records,report);C.hashes(proof.input_hashes)
+    C.audit_global(c,"diagnostic",proof.records,report);C.recheck_dependencies(proof)
     Dict("fixture_scope"=>FIXTURE,"theory_scope"=>"synthetic_closure","full72_saved_fixture_arithmetic_verified"=>true,
         "prerequisite_pairs"=>length(proof.records),"selected_native_level"=>report["selected_native_level"],
         "source_point_ids"=>[p["id"] for p in report["points"]],"per_job_commands_measured"=>false,
