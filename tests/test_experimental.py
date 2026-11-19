@@ -138,13 +138,51 @@ def test_real_source_manifest_locks_versions_and_corrections():
     assert len(sources) == len(manifest["sources"]) == 22
     assert sources["arxiv_1507.06824v2"]["version"] == "1507.06824v2"
     corrections = sources["HERMES_JAM_3709"]["adapter"]["corrections"]
-    assert [c["source_excel_row"] for c in corrections] == [14, 15, 16, 17]
-    assert all(c["old_value"] == 0.049 and c["new_value"] == 0.49 for c in corrections)
+    assert [c["source_excel_row"] for c in corrections] == [14, 15, 16, 17, 61]
+    boundaries = [c for c in corrections if c["column"] == "zmin"]
+    assert len(boundaries) == 4
+    assert all(c["old_value"] == 0.049 and c["new_value"] == 0.49 for c in boundaries)
+    central, = [c for c in corrections if c["column"] == "value"]
+    assert (central["old_value"], central["new_value"]) == (-0.057, -0.0575)
+    evidence = central["primary_evidence"]
+    assert evidence["archive_sha256"] == "82247b0c96d47dfa811667c7f8ffc6548486ecc3cc6c4a732ede1813fddebe38"
+    assert evidence["pdf_sha256"] == "a065416775a6db1fe7d52c2886bf3be36a373c6d7b8fc11de35ee86fae6f2925"
+    assert (evidence["pdf_page"], evidence["printed_page"], evidence["table"]) == (33, 30, 9)
+    assert evidence["bins"] == {"x": [0.138, 0.6], "z": [0.37, 0.49], "pT_GeV": [0.54, 2.0]}
     assert sources["HERMES_JAM_3710"]["adapter"]["depolarization_column"] == "depole"
     for identifier, tables, rows in [("STAR200_HEPData_v1", 44, 328), ("STAR510_HEPData_v1", 12, 76)]:
         definitions = sources[identifier]["adapter"]["tables"]
         assert len(definitions) == tables
         assert sum(d["expected_rows"] for d in definitions) == rows
+
+
+def test_hermes_central_correction_preserves_errors_raw_record_and_admission(monkeypatch):
+    """Explicitly synthetic values exercise the central-value path and its stale-source guard."""
+    record = {"obs": "AUTcollins", "hadron": "pi+", "target": "p", "col": "HERMES", "depol": False,
+              "Q2": 2.0, "x": 0.1, "y": 0.4, "z": 0.6, "pT": 0.3, "zmin": 0.49, "zmax": 0.7,
+              "value": -0.12, "stat_u": 0.03, "syst_u": 0.01}
+    original = copy.deepcopy(record)
+    monkeypatch.setattr(ex, "xlsx_records", lambda *args: [dict(record)])
+    correction = {"source_excel_row": 2, "column": "value", "old_value": -0.12,
+                  "new_value": -0.1234, "reference": "https://example.invalid/synthetic-primary"}
+    adapter = {"view_id": "synthetic_HERMES_central", "hadron": "pi+", "dimension": 1,
+               "projection": "z", "depolarization_column": "depol", "sheet": "synthetic",
+               "bins": {"z": ["zmin", "zmax"]}, "expected_rows": 1, "corrections": [correction]}
+    result = ex.parse_hermes("unused", source(adapter=adapter))[0]
+    item, = result["points"]
+    assert item["value"] == -0.1234
+    assert item["statistical_error"] == 0.03
+    assert item["systematic_components"][0]["sigma"] == 0.01
+    assert item["bins"]["z"] == [0.49, 0.7]
+    assert item["averages"] == {"Q2_GeV2": 2.0, "x": 0.1, "y": 0.4, "z": 0.6, "pT_GeV": 0.3}
+    assert item["source_corrections"] == [correction]
+    assert record == original
+    assert result["production_admission"]["status"] == "BLOCKED"
+    with pytest.raises(ValueError, match="scope"):
+        validate_dataset({"schema_version": 1, "scope": "experimental_candidate", "views": [result]})
+    record["value"] = correction["new_value"]
+    with pytest.raises(ValueError, match="no longer matches"):
+        ex.parse_hermes("unused", source(adapter=adapter))
 
 
 def test_missing_locked_source_does_not_create_a_candidate_report(tmp_path):

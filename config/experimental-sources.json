@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-11-11",
+  "as_of": "2026-11-19",
   "status": "EXPERIMENTAL_CANDIDATES_NOT_ADMITTED",
   "sources": [
     {
@@ -301,6 +301,28 @@
             "new_value": 0.49,
             "reference": "https://arxiv.org/html/2007.07755v1#S3.T5",
             "reason": "Primary Table 5 defines the upper-z interval as (0.49,0.70]; pinned secondary transcription has an extra zero."
+          },
+          {
+            "source_excel_row": 61,
+            "column": "value",
+            "old_value": -0.057,
+            "new_value": -0.0575,
+            "reference": "https://static-content.springer.com/esm/art%3A10.1007%2FJHEP12%282020%29010/MediaObjects/13130_2020_14299_MOESM1_ESM.tgz",
+            "primary_evidence": {
+              "archive_sha256": "82247b0c96d47dfa811667c7f8ffc6548486ecc3cc6c4a732ede1813fddebe38",
+              "archive_member": "hermesTMDs_SM.pdf",
+              "pdf_sha256": "a065416775a6db1fe7d52c2886bf3be36a373c6d7b8fc11de35ee86fae6f2925",
+              "pdf_page": 33,
+              "printed_page": 30,
+              "table": 9,
+              "column": "Collins SFA; epsilon prefactor removed",
+              "bins": {
+                "x": [0.138, 0.6],
+                "z": [0.37, 0.49],
+                "pT_GeV": [0.54, 2.0]
+              }
+            },
+            "reason": "Publisher supplemental Table 9 reports -0.0575 for this bin; the pinned secondary workbook stores -0.057. Point uncertainties and mean kinematics are unchanged."
           }
         ]
       }
